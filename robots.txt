@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.lumen8.ai/sitemap.xml
