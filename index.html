@@ -1110,15 +1110,6 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
     <span class="marquee-item"><b>BPDLH</b></span><span class="marquee-item">&middot;</span>
     <span class="marquee-item"><b>BPS</b></span><span class="marquee-item">&middot;</span>
     <span class="marquee-item"><b>KEMENKEU</b></span><span class="marquee-item">&middot;</span>
-    <span class="marquee-item global"><b>World Bank</b></span><span class="marquee-item">&middot;</span>
-    <span class="marquee-item global"><b>ADB</b></span><span class="marquee-item">&middot;</span>
-    <span class="marquee-item global"><b>IFC</b></span><span class="marquee-item">&middot;</span>
-    <span class="marquee-item global"><b>KfW</b></span><span class="marquee-item">&middot;</span>
-    <span class="marquee-item global"><b>JICA</b></span><span class="marquee-item">&middot;</span>
-    <span class="marquee-item global"><b>MIGA</b></span><span class="marquee-item">&middot;</span>
-    <span class="marquee-item global"><b>FMO</b></span><span class="marquee-item">&middot;</span>
-    <span class="marquee-item global"><b>GCF</b></span><span class="marquee-item">&middot;</span>
-    <span class="marquee-item global"><b>USAID</b></span><span class="marquee-item">&middot;</span>
     <span class="marquee-item global"><b>Verra</b></span><span class="marquee-item">&middot;</span>
     <span class="marquee-item global"><b>Gold Standard</b></span><span class="marquee-item">&middot;</span>
     <span class="marquee-item global"><b>ICVCM</b></span><span class="marquee-item">&middot;</span>
@@ -1128,12 +1119,6 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
     <span class="marquee-item"><b>Kementerian Desa PDT</b></span><span class="marquee-item">&middot;</span>
     <span class="marquee-item"><b>PT SMI</b></span><span class="marquee-item">&middot;</span>
     <span class="marquee-item"><b>BPDLH</b></span><span class="marquee-item">&middot;</span>
-    <span class="marquee-item global"><b>World Bank</b></span><span class="marquee-item">&middot;</span>
-    <span class="marquee-item global"><b>ADB</b></span><span class="marquee-item">&middot;</span>
-    <span class="marquee-item global"><b>IFC</b></span><span class="marquee-item">&middot;</span>
-    <span class="marquee-item global"><b>KfW</b></span><span class="marquee-item">&middot;</span>
-    <span class="marquee-item global"><b>MIGA</b></span><span class="marquee-item">&middot;</span>
-    <span class="marquee-item global"><b>GCF</b></span><span class="marquee-item">&middot;</span>
   </div>
 </div>
 
@@ -1144,7 +1129,7 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
     <div class="stat-item reveal reveal-delay-1"><div class="stat-value">&lt;2 min</div><div class="stat-label">Coordinate to bankable PDF</div><div class="stat-note">Median, production hardware</div></div>
     <div class="stat-item reveal reveal-delay-2"><div class="stat-value" data-count="30">0</div><div class="stat-label">IEC/PUIL validation rules</div><div class="stat-note">Per engineering package, signed</div></div>
     <div class="stat-item reveal reveal-delay-3"><div class="stat-value" data-count="12">0</div><div class="stat-label">Named funding instruments</div><div class="stat-note">$330M+ visible TAM</div></div>
-    <div class="stat-item reveal reveal-delay-4"><div class="stat-value">&plusmn;1.5%</div><div class="stat-label">PV simulation accuracy vs pvlib</div><div class="stat-note">Better than PVsyst, browser-native</div></div>
+    <div class="stat-item reveal reveal-delay-4"><div class="stat-value">&plusmn;1.5%</div><div class="stat-label">PV simulation accuracy vs reference</div><div class="stat-note">Browser-native physics chain</div></div>
   </div>
 </div>
 
@@ -1217,7 +1202,7 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
         <span class="problem-num">03</span>
         <div class="problem-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
         <h3>Format Asymmetry</h3>
-        <p>One project, six required formats &mdash; IFC, ADB, KfW, JICA, MIGA, Verra. Existing tools produce one document. The other five are written from scratch, by hand, every time.</p>
+        <p>One project, six required submission formats. Existing tools produce one document. The other five are written from scratch, by hand, every time.</p>
       </div>
       <div class="problem-card glass">
         <span class="problem-num">04</span>
@@ -1230,7 +1215,7 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
       <h3 style="font-family:var(--font-d);font-size:22px;font-weight:700;color:var(--text);margin-bottom:8px">What the alternatives can &mdash; and cannot &mdash; do.</h3>
       <p style="font-size:14px;color:var(--text-muted);margin-bottom:24px">None collapse the marginal cost of producing a bankable artifact. None solve format asymmetry. None operate at portfolio scale. None ship a sealed engineering package with HMAC audit chain.</p>
       <table class="matrix-table">
-        <thead><tr><th style="text-align:left">Capability</th><th>GIS Dashboards</th><th>PVsyst / HOMER</th><th>Consultancies</th><th>Donor PPFs</th><th class="col-l8">Lumen8 Engine</th></tr></thead>
+        <thead><tr><th style="text-align:left">Capability</th><th>GIS Dashboards</th><th>PV Simulation Tools</th><th>Consultancies</th><th>Project-prep Studios</th><th class="col-l8">Lumen8 Engine</th></tr></thead>
         <tbody>
           <tr><td>Spatial visualization</td><td class="m-yes">&#10003;</td><td class="m-part">partial</td><td class="m-yes">&#10003;</td><td class="m-yes">&#10003;</td><td class="col-l8 m-yes">&#10003;</td></tr>
           <tr><td>Techno-economic model</td><td class="m-no">&mdash;</td><td class="m-yes">&#10003;</td><td class="m-yes">&#10003;</td><td class="m-yes">&#10003;</td><td class="col-l8 m-yes">&#10003;</td></tr>
@@ -1238,7 +1223,7 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
           <tr><td>30-rule IEC/PUIL validation</td><td class="m-no">&mdash;</td><td class="m-no">&mdash;</td><td class="m-no">&mdash;</td><td class="m-no">&mdash;</td><td class="col-l8 m-yes">&#10003;</td></tr>
           <tr><td>Construction operations stack</td><td class="m-no">&mdash;</td><td class="m-no">&mdash;</td><td class="m-no">&mdash;</td><td class="m-no">&mdash;</td><td class="col-l8 m-yes">&#10003;</td></tr>
           <tr><td>Political &amp; ESG &amp; grant logic</td><td class="m-no">&mdash;</td><td class="m-no">&mdash;</td><td class="m-yes">&#10003;</td><td class="m-yes">&#10003;</td><td class="col-l8 m-yes">&#10003;</td></tr>
-          <tr><td>Multi-format DFI output</td><td class="m-no">&mdash;</td><td class="m-no">&mdash;</td><td class="m-part">partial</td><td class="m-yes">&#10003;</td><td class="col-l8 m-yes">&#10003;</td></tr>
+          <tr><td>Multi-format institutional output</td><td class="m-no">&mdash;</td><td class="m-no">&mdash;</td><td class="m-part">partial</td><td class="m-yes">&#10003;</td><td class="col-l8 m-yes">&#10003;</td></tr>
           <tr><td>HMAC-signed audit chain</td><td class="m-no">&mdash;</td><td class="m-no">&mdash;</td><td class="m-no">&mdash;</td><td class="m-no">&mdash;</td><td class="col-l8 m-yes">&#10003;</td></tr>
           <tr><td>Per-site cost</td><td>$0</td><td>$5&ndash;50K</td><td>$80&ndash;150K</td><td>$30&ndash;100K</td><td class="col-l8">near-zero</td></tr>
           <tr><td>Cycle time</td><td>minutes</td><td>weeks</td><td>12&ndash;18 months</td><td>12&ndash;24 months</td><td class="col-l8">&lt;2 minutes</td></tr>
@@ -1275,9 +1260,9 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
         <span class="layer-num">Layer 02 &middot; The Dataset</span>
         <div class="layer-icon-wrap"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="10" ry="4"/><path d="M2 12c0 4.418 4.477 8 10 8s10-3.582 10-8M2 12V7M22 12V7"/></svg></div>
         <div class="layer-title">Indonesia, indexed at building resolution</div>
-        <p class="layer-desc">50.9 GB of curated baselines. All 8,493 unelectrified villages joined to Google Open Buildings v3 footprints, 168 months of nightlight history, the full RUPTL Lisdes 2024&ndash;2033, every ESDM substation, BNPB hazards, ACLED conflict events, BRWA adat territories, household ability-to-pay calibration. Why no one else can do it at this resolution.</p>
+        <p class="layer-desc">50.9 GB of curated baselines. All 8,493 unelectrified villages joined to global building-footprint datasets, 168 months of nightlight history, the full RUPTL Lisdes 2024&ndash;2033, every ESDM substation, BNPB hazards, conflict-event datasets, adat-territory datasets, household ability-to-pay calibration. Why no one else can do it at this resolution.</p>
         <div class="layer-tags">
-          <span class="tag">8,493 villages</span><span class="tag">50.9 GB</span><span class="tag">GOB v3</span><span class="tag">168mo nightlight</span><span class="tag">RUPTL 2033</span><span class="tag">CMIP6</span><span class="tag">BRWA 2,208 adat</span>
+          <span class="tag">8,493 villages</span><span class="tag">50.9 GB</span><span class="tag">GOB v3</span><span class="tag">168mo nightlight</span><span class="tag">RUPTL 2033</span><span class="tag">CMIP6</span><span class="tag">2,208 adat territories</span>
         </div>
       </div>
       <div class="layer-card">
@@ -1775,11 +1760,11 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
           <div class="panel-thesis">"Does this village pencil?"</div>
           <span class="panel-badge">Layer 01 &middot; Site Bankability</span>
           <h3 class="panel-title">Composite financial picture, generated automatically</h3>
-          <p class="panel-desc">Internal rate of return, levelized cost of energy, sized capital stack, grant eligibility &mdash; computed from indexed inputs and rendered in DFI-readable form. The output is the same artifact a consultancy would deliver after twelve weeks, generated in one engine pass. Memoised &lt; 50 ms even on 10k-village portfolio sweeps.</p>
+          <p class="panel-desc">Internal rate of return, levelized cost of energy, sized capital stack, grant eligibility &mdash; computed from indexed inputs and rendered in institutional-submission form. The output is the same artifact a consultancy would deliver after twelve weeks, generated in one engine pass. Memoised &lt; 50 ms even on 10k-village portfolio sweeps.</p>
           <div class="panel-signals">
             <div class="signal-row"><span class="signal-dot"></span><span class="signal-text">Twelve composite indices ranked side-by-side: economic, climate, political, regulatory, capital-pathway</span></div>
             <div class="signal-row"><span class="signal-dot"></span><span class="signal-text">Monte Carlo IRR distribution with explicit P50 / P90 confidence bands</span></div>
-            <div class="signal-row"><span class="signal-dot"></span><span class="signal-text">Pre-filled grant eligibility checks against DAK Energi, GCF, USAID DCA, BPDLH, JETP &mdash; 12 named instruments</span></div>
+            <div class="signal-row"><span class="signal-dot"></span><span class="signal-text">Pre-filled grant eligibility checks against DAK Energi, BPDLH, JETP &mdash; 12 named instruments</span></div>
           </div>
         </div>
         <div class="panel-visual">
@@ -1844,7 +1829,7 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
           <div class="panel-thesis">"What does climate cost this asset?"</div>
           <span class="panel-badge">Layer 03 &middot; Climate &amp; Hazard</span>
           <h3 class="panel-title">9-hazard composite + CMIP6 ensemble + AAL reinsurance-calibrated</h3>
-          <p class="panel-desc">CMIP6 ensemble projections (4 SSP scenarios), 9-hazard composite (earthquake / volcanic / flood / tsunami / SLR / drought / extreme weather / landslide / wildfire), Swiss Re 2023 Asia-Pacific PV loss ratios, IEC TR 63157:2021 calibration. AAL %CAPEX, 25-yr expected loss USD, insurability grade A&ndash;F, TCFD/IFRS S2/ESRS E1 disclosure auto-fill.</p>
+          <p class="panel-desc">CMIP6 ensemble projections (4 SSP scenarios), 9-hazard composite (earthquake / volcanic / flood / tsunami / SLR / drought / extreme weather / landslide / wildfire), industry-calibrated Asia-Pacific PV loss ratios, IEC TR 63157:2021 calibration. AAL %CAPEX, 25-yr expected loss USD, insurability grade A&ndash;F, TCFD/IFRS S2/ESRS E1 disclosure auto-fill.</p>
           <div class="panel-signals">
             <div class="signal-row"><span class="signal-dot"></span><span class="signal-text">Climate-accelerated battery cell degradation modeled over 25-year project lifetime</span></div>
             <div class="signal-row"><span class="signal-dot"></span><span class="signal-text">Complete climate adaptation file ready for insurance pricing at quoted 2.3% vs 5&ndash;8% generic band</span></div>
@@ -1882,11 +1867,11 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
           <div class="panel-thesis">"What kills this project on the ground?"</div>
           <span class="panel-badge">Layer 04 &middot; Political &amp; Stakeholder</span>
           <h3 class="panel-title">Live political risk intelligence &middot; 22-step engagement playbook</h3>
-          <p class="panel-desc">Live ingestion of conflict events (ACLED), anti-corruption case tracking (KPK), electoral-window analysis (KPU Pilkada), adat territory overlap (BRWA 2,208 territories), pesantren density (Kemenag), governance percentile (WGI). 22-step engagement playbook with USD line items per stage, calendar months-to-COD, real contact list.</p>
+          <p class="panel-desc">Live ingestion of conflict events (conflict-data), anti-corruption case tracking (anti-corruption), electoral-window analysis (KPU Pilkada), adat territory overlap (2,208 territories), pesantren density (Kemenag), governance percentile. 22-step engagement playbook with USD line items per stage, calendar months-to-COD, real contact list.</p>
           <div class="panel-signals">
             <div class="signal-row"><span class="signal-dot"></span><span class="signal-text">Pre-empts the most common cause of project failure in distributed energy</span></div>
             <div class="signal-row"><span class="signal-dot"></span><span class="signal-text">Pilkada electoral calendar integrated &mdash; avoids political interference windows</span></div>
-            <div class="signal-row"><span class="signal-dot"></span><span class="signal-text">Insurance-formatted political risk narrative ready for MIGA/OPIC/NEXI submission</span></div>
+            <div class="signal-row"><span class="signal-dot"></span><span class="signal-text">Insurance-formatted political risk narrative ready for institutional PRI submission</span></div>
           </div>
         </div>
         <div class="panel-visual">
@@ -1895,7 +1880,7 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
           <div class="output-item"><span class="output-label">Conflict Events (12mo)</span><span class="output-value">0 within 50km</span></div>
           <div class="output-item"><span class="output-label">Corruption Signal</span><span class="output-value green">None flagged</span></div>
           <div class="output-item"><span class="output-label">Electoral Window</span><span class="output-value gold">2027 (3yr runway)</span></div>
-          <div class="output-item"><span class="output-label">BRWA Adat Overlap</span><span class="output-value">Otsus eligible</span></div>
+          <div class="output-item"><span class="output-label">Adat Overlap</span><span class="output-value">Otsus eligible</span></div>
           <div class="output-item"><span class="output-label">PRI Format</span><span class="output-value green">Ready</span></div>
           <div class="mini-chart">
             <div class="mini-chart-label">Stakeholder graph &middot; 18 nodes &middot; influence-weighted</div>
@@ -1948,19 +1933,19 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
 </section>
 
 <!-- ============================================================ -->
-<!-- 09. PV SIMULATION — Better than PVsyst (NEW) -->
+<!-- 09. PV SIMULATION — Browser-native physics (NEW) -->
 <!-- ============================================================ -->
 <section id="pv-section" class="section-pad">
   <div class="container">
     <div class="reveal">
       <span class="eyebrow amber">PV Simulation Engine &middot; ADR-043</span>
-      <h2 class="section-title">Better than PVsyst.<br><span class="grad-amber">In your browser.</span></h2>
-      <p class="section-lead">A full physics chain rebuilt from first principles. 12-component loss stack. Hay-Davies POA. Sandia 4-rack thermal model. 72-bin per-village horizon shading (active, not baked-unused). Bifacial dynamic ROI/GCR. 1-axis tracking with backtracking. Indonesian field-calibrated degradation rates. ±1.5–2% browser accuracy vs pvlib reference, ±0.5–1% with Finkelstein-Schafer real TMY (server path).</p>
+      <h2 class="section-title">Industry-grade PV simulation.<br><span class="grad-amber">In your browser.</span></h2>
+      <p class="section-lead">A full physics chain rebuilt from first principles. 12-component loss stack. Hay-Davies POA. Industry-standard 4-rack thermal model. 72-bin per-village horizon shading (active, not baked-unused). Bifacial dynamic ROI/GCR. 1-axis tracking with backtracking. Indonesian field-calibrated degradation rates. ±1.5–2% browser accuracy vs reference physics chain, ±0.5–1% with Finkelstein-Schafer real TMY (server path).</p>
     </div>
 
     <div class="pv-matrix-wrap reveal">
       <table class="pv-matrix">
-        <thead><tr><th style="width:24%">Feature</th><th style="width:24%">PVsyst (de facto)</th><th class="l8col" style="width:32%">Lumen8 (browser-native)</th><th style="width:20%">Advantage</th></tr></thead>
+        <thead><tr><th style="width:24%">Feature</th><th style="width:24%">Industry-standard tools</th><th class="l8col" style="width:32%">Lumen8 (browser-native)</th><th style="width:20%">Advantage</th></tr></thead>
         <tbody>
           <tr><td>Transposition model</td><td>Perez (isotropic)</td><td class="l8col"><strong>Hay-Davies</strong> circumsolar + diffuse anisotropic</td><td class="advantage">Tropics-tuned</td></tr>
           <tr><td>Horizon shading</td><td>Generic TMY bin</td><td class="l8col"><strong>72-bin per-village</strong> terrain profile (active, not baked-unused)</td><td class="advantage">+2&ndash;8% in highlands</td></tr>
@@ -1972,7 +1957,7 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
           <tr><td>Degradation rate</td><td>0.7%/yr generic</td><td class="l8col"><strong>Purba 2020 Java field</strong> 0.68/yr primary + PID risk</td><td class="advantage">Indonesian field-sourced</td></tr>
           <tr><td>BESS dispatch</td><td>Generic</td><td class="l8col">4-strategy: self-consumption / arbitrage / reserve / load-following</td><td class="advantage">Tariff-aware</td></tr>
           <tr><td>String validator</td><td>Basic</td><td class="l8col">IEC 62548:2023 full (Voc cold &le; 1000V)</td><td class="advantage">Procurement-safe</td></tr>
-          <tr><td>Bankability scorer</td><td>No</td><td class="l8col"><strong>6-component DFI score</strong> (P90/DSCR/PR/climate)</td><td class="advantage">Lender-ready</td></tr>
+          <tr><td>Bankability scorer</td><td>No</td><td class="l8col"><strong>6-component bankability score</strong> (P90/DSCR/PR/climate)</td><td class="advantage">Lender-ready</td></tr>
           <tr><td>Per-HH engineering</td><td>No (feeder-level)</td><td class="l8col"><strong>50 HH × (meter + RCBO + drop)</strong> per package</td><td class="advantage">Village-complete</td></tr>
           <tr><td>Audit trail</td><td>No</td><td class="l8col">HMAC-SHA256 chain, twin-linked</td><td class="advantage">Bankable provenance</td></tr>
           <tr><td>Offline-first</td><td>Cloud / desktop install</td><td class="l8col"><strong>PWA + IndexedDB</strong>, 8,493 villages pre-baked</td><td class="advantage">No connectivity</td></tr>
@@ -2008,13 +1993,13 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
       </div>
 
       <div class="pv-claim-card">
-        <h4>±1.5–2% browser accuracy vs pvlib.<br/>±0.5–1% server-side with FS real TMY.</h4>
+        <h4>±1.5–2% browser accuracy vs reference physics chain.<br/>±0.5–1% server-side with FS real TMY.</h4>
         <p>The PV simulation engine is the result of a 10× physics overhaul (ADR-043) that replaced a 4-loss / Klein-Duffie / Faiman-flat / fixed-bifacial pipeline with a full 12-component / Hay-Davies / Sandia / dynamic-bifacial / 1-axis-tracking / 72-bin-horizon / Indonesian-degradation chain.</p>
-        <p style="margin-top:10px">String validator catches procurement errors before BOM. BESS dispatch runs 4 strategies (self-consumption, flat-arbitrage, emergency-reserve, load-following) on a 25-yr SoH degradation curve. Bankability scorer surfaces a 6-component DFI grade.</p>
+        <p style="margin-top:10px">String validator catches procurement errors before BOM. Storage dispatch runs 4 strategies (self-consumption, flat-arbitrage, emergency-reserve, load-following) on a 25-yr SoH degradation curve. Bankability scorer surfaces a 6-component institutional grade.</p>
         <div class="src">
           ADR-043 · js/solar/pv-simulation.js (26 KB)<br>
           js/solar/bess-dispatch.js (10 KB)<br>
-          scripts/bake-solar/server.py (pvlib + pvgis + NASA POWER)<br>
+          scripts/bake-solar/server.py (server-side physics chain)<br>
           Field calibration: Purba 2020 (5 Java sites, 5-yr) + Jordan 2022 meta-analysis
         </div>
       </div>
@@ -2376,7 +2361,7 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
           </div>
         </div>
         <div class="zip-grid">
-          <div class="zip-folder" onclick="this.classList.toggle('open')"><div class="zip-folder-name">00_README/</div><div class="zip-folder-meta">1 file · 4.2 KB</div><div class="zip-folder-files">README.txt &middot; project meta + standards citations + audit hash</div></div>
+          <div class="zip-folder" onclick="this.classList.toggle('open')"><div class="zip-folder-name">00_rural-electrification agencyDME/</div><div class="zip-folder-meta">1 file · 4.2 KB</div><div class="zip-folder-files">rural-electrification agencyDME.txt &middot; project meta + standards citations + audit hash</div></div>
           <div class="zip-folder" onclick="this.classList.toggle('open')"><div class="zip-folder-name">01_SLD/</div><div class="zip-folder-meta">6 SVGs · 487 KB · A0</div><div class="zip-folder-files">sheet_01_overview.svg<br>sheet_02_feeder_F1.svg<br>sheet_03_feeder_F2.svg<br>sheet_04_earthing_LPS.svg<br>sheet_05_phase_distribution.svg<br>sheet_06_voltage_profile.svg</div></div>
           <div class="zip-folder" onclick="this.classList.toggle('open')"><div class="zip-folder-name">02_BOM/</div><div class="zip-folder-meta">3 XLSX · 28 KB</div><div class="zip-folder-files">bom_flat.xlsx (per-HH detail rows)<br>bom_grouped.xlsx (by category)<br>bom_summary.xlsx (rolled-up totals)</div></div>
           <div class="zip-folder" onclick="this.classList.toggle('open')"><div class="zip-folder-name">03_Cables/</div><div class="zip-folder-meta">1 XLSX · 14 KB</div><div class="zip-folder-files">cable_schedule.xlsx (IEC 61082-2 format)</div></div>
@@ -2516,7 +2501,7 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
         <div class="cert-card"><div class="cert-name">PT Surveyor Indonesia</div><div class="cert-scope">SNI certification · government project preference · KAN-LP</div></div>
         <div class="cert-card"><div class="cert-name">LMK PLN</div><div class="cert-scope">PLN technical compliance · SPLN standards · grid-tie cert</div></div>
         <div class="cert-card"><div class="cert-name">BKI</div><div class="cert-scope">Marine + offshore + state asset compliance · KAN-LSPro</div></div>
-        <div class="cert-card"><div class="cert-name">TÜV SÜD Indonesia</div><div class="cert-scope">IEC 61215 / 61730 PV · IEC 62109 inverter · IEC 62133 BESS</div></div>
+        <div class="cert-card"><div class="cert-name">International testing & certification</div><div class="cert-scope">IEC 61215 / 61730 PV · IEC 62109 inverter · IEC 62133 BESS</div></div>
         <div class="cert-card"><div class="cert-name">SGS Indonesia</div><div class="cert-scope">Module pre-shipment QA · cable type testing · global recognition</div></div>
       </div>
     </div>
@@ -2537,14 +2522,14 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
 
     <div class="proc-cmdty reveal">
       <div class="cmdty-card">
-        <div class="cmdty-name">Copper LME spot</div>
+        <div class="cmdty-name">Copper spot</div>
         <div class="cmdty-pct up">+15.2%</div>
         <div class="cmdty-detail">YoY · 2026 vs 2025 · cable cost +2.3% project CAPEX sensitivity · ECB / Frankfurter feed</div>
       </div>
       <div class="cmdty-card">
         <div class="cmdty-name">Steel HRC</div>
         <div class="cmdty-pct up">+8.4%</div>
-        <div class="cmdty-detail">YoY · pole + racking exposure · World Bank Commodities feed</div>
+        <div class="cmdty-detail">YoY · pole + racking exposure · global commodities feed</div>
       </div>
       <div class="cmdty-card">
         <div class="cmdty-name">Silicon (PV grade)</div>
@@ -2563,7 +2548,7 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
     <div class="reveal">
       <span class="eyebrow amber">Grant Matching &amp; Funding Stack</span>
       <h2 class="section-title">12 named windows.<br><span class="grad-amber">$330M+ visible TAM.</span></h2>
-      <p class="section-lead">A live grant scorer evaluates each village against twelve named instruments &mdash; WB EASE, ADB SRP, KfW DesaListrik, JICA, GEF, USAID DCA, APBN DAK Energi, UNDP, EU JTET, MIGA, Verra, JETP. Per-village fiscal-fit USD computed. Funding stack auto-assembled from Dana Desa + Otsus + DAK Energi + JETP + MDB catalog. Portfolio mode aggregates DFI submission-ready totals.</p>
+      <p class="section-lead">A live grant scorer evaluates each village against twelve named instruments. Per-village fiscal-fit USD computed. Funding stack auto-assembled from Dana Desa + Otsus + DAK Energi + JETP + concessional-finance catalog. Portfolio mode aggregates institutional submission-ready totals.</p>
     </div>
 
     <div class="grants-radial reveal">
@@ -2575,46 +2560,46 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
         <text x="0" y="22" font-family="IBM Plex Mono" font-size="8" fill="var(--cyan)" text-anchor="middle">$750k CAPEX</text>
 
         <!-- 12 grants in radial layout -->
-        <!-- WB EASE @ 0° -->
+        
         <g class="grant-node" data-grant="wb_ease" onclick="selectGrant('wb_ease',this)">
           <line class="grant-line lit" x1="0" y1="-48" x2="0" y2="-160"/>
           <rect class="gn-pill" x="-48" y="-200" width="96" height="40" rx="6"/>
-          <text class="gn-label" x="0" y="-184">WB EASE</text>
+          <text class="gn-label" x="0" y="-184">Grant A</text>
           <text class="gn-sub" x="0" y="-170">$50k · score 0.78</text>
         </g>
-        <!-- ADB SRP @ 30° -->
+        
         <g class="grant-node" data-grant="adb_srp" onclick="selectGrant('adb_srp',this)">
           <line class="grant-line" x1="24" y1="-42" x2="80" y2="-138"/>
           <rect class="gn-pill" x="58" y="-180" width="96" height="40" rx="6"/>
-          <text class="gn-label" x="106" y="-164">ADB SRP</text>
+          <text class="gn-label" x="106" y="-164">Concessional B</text>
           <text class="gn-sub" x="106" y="-150">$40k · score 0.61</text>
         </g>
-        <!-- KfW DesaListrik @ 60° -->
+        
         <g class="grant-node" data-grant="kfw" onclick="selectGrant('kfw',this)">
           <line class="grant-line lit" x1="42" y1="-24" x2="138" y2="-80"/>
           <rect class="gn-pill" x="138" y="-100" width="106" height="40" rx="6"/>
-          <text class="gn-label" x="191" y="-84">KfW DesaListrik</text>
+          <text class="gn-label" x="191" y="-84">Bilateral C</text>
           <text class="gn-sub" x="191" y="-70">$75k · score 0.83</text>
         </g>
-        <!-- JICA ENR @ 90° -->
+        
         <g class="grant-node" data-grant="jica" onclick="selectGrant('jica',this)">
           <line class="grant-line" x1="48" y1="0" x2="160" y2="0"/>
           <rect class="gn-pill" x="160" y="-20" width="80" height="40" rx="6"/>
-          <text class="gn-label" x="200" y="-4">JICA ENR</text>
+          <text class="gn-label" x="200" y="-4">Bilateral D</text>
           <text class="gn-sub" x="200" y="10">$35k · score 0.55</text>
         </g>
-        <!-- GEF ACC @ 120° -->
+        
         <g class="grant-node" data-grant="gef" onclick="selectGrant('gef',this)">
           <line class="grant-line" x1="42" y1="24" x2="138" y2="80"/>
           <rect class="gn-pill" x="138" y="62" width="80" height="40" rx="6"/>
-          <text class="gn-label" x="178" y="78">GEF ACC</text>
+          <text class="gn-label" x="178" y="78">Climate E</text>
           <text class="gn-sub" x="178" y="92">$25k · score 0.49</text>
         </g>
-        <!-- USAID DCA @ 150° -->
+        
         <g class="grant-node" data-grant="usaid" onclick="selectGrant('usaid',this)">
           <line class="grant-line" x1="24" y1="42" x2="80" y2="138"/>
           <rect class="gn-pill" x="58" y="142" width="96" height="40" rx="6"/>
-          <text class="gn-label" x="106" y="158">USAID DCA</text>
+          <text class="gn-label" x="106" y="158">Guarantee F</text>
           <text class="gn-sub" x="106" y="172">$30k · score 0.52</text>
         </g>
         <!-- APBN DAK Energi @ 180° -->
@@ -2624,25 +2609,25 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
           <text class="gn-label" x="0" y="176">APBN DAK Energi</text>
           <text class="gn-sub" x="0" y="190">$200k · score 0.71</text>
         </g>
-        <!-- UNDP CRF @ 210° -->
+        
         <g class="grant-node" data-grant="undp" onclick="selectGrant('undp',this)">
           <line class="grant-line" x1="-24" y1="42" x2="-80" y2="138"/>
           <rect class="gn-pill" x="-154" y="142" width="96" height="40" rx="6"/>
-          <text class="gn-label" x="-106" y="158">UNDP CRF</text>
+          <text class="gn-label" x="-106" y="158">Resilience G</text>
           <text class="gn-sub" x="-106" y="172">$15k · score 0.41</text>
         </g>
-        <!-- EU JTET @ 240° -->
+        
         <g class="grant-node" data-grant="eu" onclick="selectGrant('eu',this)">
           <line class="grant-line" x1="-42" y1="24" x2="-138" y2="80"/>
           <rect class="gn-pill" x="-218" y="62" width="80" height="40" rx="6"/>
-          <text class="gn-label" x="-178" y="78">EU JTET</text>
+          <text class="gn-label" x="-178" y="78">Transition H</text>
           <text class="gn-sub" x="-178" y="92">$40k · score 0.58</text>
         </g>
-        <!-- MIGA @ 270° -->
+        
         <g class="grant-node" data-grant="miga" onclick="selectGrant('miga',this)">
           <line class="grant-line" x1="-48" y1="0" x2="-160" y2="0"/>
           <rect class="gn-pill" x="-240" y="-20" width="80" height="40" rx="6"/>
-          <text class="gn-label" x="-200" y="-4">MIGA</text>
+          <text class="gn-label" x="-200" y="-4">PRI</text>
           <text class="gn-sub" x="-200" y="10">PRI 2.3% · 0.66</text>
         </g>
         <!-- Verra VCS @ 300° -->
@@ -2685,8 +2670,8 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
         <div class="stack-row-pro"><div class="lbl">Otsus (Papua eligible)</div><div class="stack-bar-wrap-pro"><div class="stack-bar-pro sb-otsus" style="width:6%">$25k</div></div><div class="src">UU 11/2006 · UU 2/2021</div></div>
         <div class="stack-row-pro"><div class="lbl">DAK Energi Penugasan</div><div class="stack-bar-wrap-pro"><div class="stack-bar-pro sb-dak" style="width:25%">$200k</div></div><div class="src">ESDM IDR 680B annual envelope</div></div>
         <div class="stack-row-pro"><div class="lbl">JETP concessional</div><div class="stack-bar-wrap-pro"><div class="stack-bar-pro sb-jetp" style="width:19%">$150k</div></div><div class="src">$21.7B portfolio commitment (≥$250k bundle)</div></div>
-        <div class="stack-row-pro"><div class="lbl">KfW DesaListrik grant</div><div class="stack-bar-wrap-pro"><div class="stack-bar-pro sb-kfw" style="width:9.5%">$75k</div></div><div class="src">Otsus-compatible bonus +0.08 score</div></div>
-        <div class="stack-row-pro"><div class="lbl">ADB SRP concessional</div><div class="stack-bar-wrap-pro"><div class="stack-bar-pro sb-adb" style="width:5%">$40k</div></div><div class="src">Sustainable Rural Program</div></div>
+        <div class="stack-row-pro"><div class="lbl">Bilateral grant</div><div class="stack-bar-wrap-pro"><div class="stack-bar-pro sb-kfw" style="width:9.5%">$75k</div></div><div class="src">Otsus-compatible bonus +0.08 score</div></div>
+        <div class="stack-row-pro"><div class="lbl">Multilateral concessional</div><div class="stack-bar-wrap-pro"><div class="stack-bar-pro sb-adb" style="width:5%">$40k</div></div><div class="src">Sustainable Rural Program</div></div>
         <div class="stack-total"><span>TOTAL ELIGIBLE FUNDING</span><span class="v">$790,000 <span class="pct">&middot; 105% of $750k CAPEX &middot; 0% commercial debt</span></span></div>
       </div>
     </div>
@@ -2722,13 +2707,13 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
     <div class="reveal">
       <span class="eyebrow cyan">AI Orchestration Layer</span>
       <h2 class="section-title">Multi-provider agentic intelligence.<br><span class="grad">RFP, vendor selection, build progress &mdash; automated.</span></h2>
-      <p class="section-lead">A bounded agentic loop with 40+ MCP-shape tools. Multi-provider stack: Claude Sonnet/Opus/Haiku, OpenAI, NVIDIA NIM, Ollama (local). Per-conversation cost cap $0.50, daily cap $25. 13-adapter API fabric beneath. In-flight deduplication, 5-minute negative-cache backoff. RFP autogen, vendor scorecard, satellite build verification &mdash; all auditable, all cost-bounded.</p>
+      <p class="section-lead">A bounded agentic loop with 40+ MCP-shape tools. Multi-provider LLM stack with cloud + local-inference fallback. Per-conversation cost cap $0.50, daily cap $25. 13-adapter API fabric beneath. In-flight deduplication, 5-minute negative-cache backoff. RFP autogen, vendor scorecard, satellite build verification &mdash; all auditable, all cost-bounded.</p>
     </div>
 
     <div class="ai-providers reveal">
       <div class="ai-prov-card"><div class="ai-prov-name">Claude</div><div class="ai-prov-models">Sonnet 4.5 · Opus 4.7 · Haiku 4.5</div><div class="ai-prov-status"><span class="status-dot"></span>LIVE · primary</div></div>
-      <div class="ai-prov-card"><div class="ai-prov-name">OpenAI</div><div class="ai-prov-models">GPT-4o · GPT-4o-mini · o1</div><div class="ai-prov-status"><span class="status-dot"></span>LIVE · fallback</div></div>
-      <div class="ai-prov-card"><div class="ai-prov-name">NVIDIA NIM</div><div class="ai-prov-models">Llama 3.3 · Nemotron · Mixtral</div><div class="ai-prov-status"><span class="status-dot"></span>LIVE · enterprise</div></div>
+      
+      
       <div class="ai-prov-card"><div class="ai-prov-name">Ollama (local)</div><div class="ai-prov-models">Llama 3.1 8B · Mistral 7B</div><div class="ai-prov-status"><span class="status-dot"></span>LIVE · offline</div></div>
     </div>
 
@@ -2791,7 +2776,7 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
         </div>
         <div class="ai-msg tool" id="ai-tool-3" style="display:none">
           <span class="ai-msg-role">TOOL</span>
-          <span>build_funding_stack(top 5) → portfolio CAPEX $3.6M · eligible $3.78M (105%) · Dana Desa $1.5M · DAK Energi $1.0M · JETP $1.1M · KfW $180k</span>
+          <span>build_funding_stack(top 5) → portfolio CAPEX $3.6M · eligible $3.78M (105%) · Dana Desa $1.5M · DAK Energi $1.0M · JETP $1.1M · bilateral $180k</span>
         </div>
         <div class="ai-msg tool" id="ai-tool-4" style="display:none">
           <span class="ai-msg-role">TOOL</span>
@@ -2949,7 +2934,7 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
     <div class="reveal">
       <span class="eyebrow cyan">Climate &amp; Physical Hazard</span>
       <h2 class="section-title">9 hazards. Composite to insurability.<br><span class="grad">25-year CMIP6 ensemble.</span></h2>
-      <p class="section-lead">Every village scored against a 9-hazard composite (earthquake / volcanic / flood / tsunami / SLR / drought / extreme weather / landslide / wildfire). Annual Average Loss calibrated to Swiss Re 2023 Asia-Pacific PV loss ratios. Insurability grade A&ndash;F. TCFD / IFRS S2 / ESRS E1 disclosure auto-fill. CMIP6 ensemble 4 SSP scenarios for 25-year asset planning.</p>
+      <p class="section-lead">Every village scored against a 9-hazard composite (earthquake / volcanic / flood / tsunami / SLR / drought / extreme weather / landslide / wildfire). Annual Average Loss calibrated to industry-calibrated Asia-Pacific PV loss ratios. Insurability grade A&ndash;F. TCFD / IFRS S2 / ESRS E1 disclosure auto-fill. CMIP6 ensemble 4 SSP scenarios for 25-year asset planning.</p>
     </div>
 
     <div class="climate-grid">
@@ -2995,7 +2980,7 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
           <div class="grade-letter">B+</div>
           <div class="grade-meta">
             <b>Insurability: Standard market</b>
-            <small>Premium 2.3% vs 5–8% generic band &middot; Swiss Re 2023 calibration &middot; IEC TR 63157:2021</small>
+            <small>Premium 2.3% vs 5–8% generic band &middot; industry-calibrated &middot; IEC TR 63157:2021</small>
           </div>
         </div>
         <div class="disclosure-badge">&#10003; TCFD / IFRS S2 / ESRS E1 disclosure auto-fill ready</div>
@@ -3013,7 +2998,7 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
 
     <div class="climate-sources reveal">
       Sources: <b>BNPB InaRISK</b> &middot; <b>USGS</b> &middot; <b>Smithsonian GVP</b> &middot; <b>NASA SLR</b> &middot; <b>Copernicus CMIP6</b> &middot; <b>Aqueduct</b> &middot; <b>Think Hazard</b><br>
-      Methodology: IEC TR 63157:2021 + Swiss Re 2023 Asia-Pacific PV loss ratios (0.08–0.53%/yr per hazard) + ADB TA-9150-INO 2024 CAPEX benchmark
+      Methodology: IEC TR 63157:2021 + 2023 Asia-Pacific PV loss ratios (0.08–0.53%/yr per hazard) + 2024 CAPEX benchmark
     </div>
   </div>
 </section>
@@ -3026,7 +3011,7 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
     <div class="reveal">
       <span class="eyebrow amber">Political &amp; Stakeholder Intelligence</span>
       <h2 class="section-title">22-step engagement playbook.<br><span class="grad-amber">USD line items per stage.</span></h2>
-      <p class="section-lead">Live ingestion of conflict events (ACLED), anti-corruption case tracking (KPK), electoral-window analysis (KPU Pilkada), 2,208 BRWA adat territories, pesantren density (Kemenag), governance percentile (WGI). 22-step engagement playbook with USD budget per stage, calendar months-to-COD, real contact list. Insurance-formatted political risk narrative for MIGA / OPIC / NEXI submission.</p>
+      <p class="section-lead">Live ingestion of conflict events, anti-corruption case tracking, electoral-window analysis (KPU Pilkada), 2,208 adat territories, pesantren density (Kemenag), governance percentile. 22-step engagement playbook with USD budget per stage, calendar months-to-COD, real contact list. Insurance-formatted political risk narrative for institutional PRI submission.</p>
     </div>
 
     <div class="playbook-stages reveal">
@@ -3038,8 +3023,8 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
       </div>
       <div class="stage-row">
         <div class="stage-num">Stage 2<small>M 1–3</small></div>
-        <div><div class="stage-name">Community Entry</div><div class="stage-desc">FPIC if BRWA adat overlap. Religious networks: PCNU (NU) / PDM (Muhammadiyah) / Church / adat council. Village officials: Kades, BPD. Conditional on village religious + adat profile.</div></div>
-        <div class="stage-actors">Adat FPIC · PCNU/PDM · Church · Kades<br>5–7 steps · conditional</div>
+        <div><div class="stage-name">Community Entry</div><div class="stage-desc">FPIC if adat-territory overlap. Religious networks: regional Islamic organizations / Church / adat council. Village officials: Kades, BPD. Conditional on village religious + adat profile.</div></div>
+        <div class="stage-actors">Adat FPIC · regional Islamic organizations · Church · Kades<br>5–7 steps · conditional</div>
         <div class="stage-cost">$25–55k<small>FPIC alone $25k if required</small></div>
       </div>
       <div class="stage-row">
@@ -3050,7 +3035,7 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
       </div>
       <div class="stage-row">
         <div class="stage-num">Stage 4<small>M 9–18</small></div>
-        <div><div class="stage-name">MOU / Close</div><div class="stage-desc">PPA negotiation with PLN or off-taker, EPC contract sign, lender due diligence (DFI / commercial), insurance binding, escrow setup.</div></div>
+        <div><div class="stage-name">MOU / Close</div><div class="stage-desc">PPA negotiation with PLN or off-taker, EPC contract sign, lender due diligence (institutional / commercial), insurance binding, escrow setup.</div></div>
         <div class="stage-actors">PPA · EPC · lender DD · insurance<br>4–6 steps · always</div>
         <div class="stage-cost">$65k+<small>legal + DD + advisory</small></div>
       </div>
@@ -3071,13 +3056,13 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
       <div class="pt-card">
         <div class="pt-lbl">Months to COD</div>
         <div class="pt-val">18 + δ</div>
-        <div class="pt-formula">δ = (warning-flags × 2) + (election-window × 4) + (BRWA × 3)</div>
+        <div class="pt-formula">δ = (warning-flags × 2) + (election-window × 4) + (adat-overlap × 3)</div>
       </div>
     </div>
 
     <div class="stakeholder-graph reveal">
       <div class="sg-title">Stakeholder Graph &middot; 18 nodes &middot; influence-weighted</div>
-      <div class="sg-sub">Force-directed layout. Edge weight from path-finding algorithm. Hover any node to highlight its influence chain. Sources: BRWA (2,208 adat) · KPA CATAHU · KPU Pilkada · KPK · WGI · ACLED · Walhi/LBH · Kemenag pesantren registry · AMAN.</div>
+      <div class="sg-sub">Force-directed layout. Edge weight from path-finding algorithm. Hover any node to highlight its influence chain. Sources: adat-territory dataset (2,208 records) · KPU Pilkada · governance + conflict layers · Kemenag pesantren registry.</div>
       <div class="sg-canvas">
         <svg viewBox="0 0 800 480">
           <g class="sg-edge"><line x1="400" y1="240" x2="180" y2="100"/><line x1="400" y1="240" x2="160" y2="240"/><line x1="400" y1="240" x2="200" y2="380"/><line x1="400" y1="240" x2="620" y2="100"/><line x1="400" y1="240" x2="640" y2="240"/><line x1="400" y1="240" x2="600" y2="380"/><line x1="400" y1="240" x2="380" y2="80"/><line x1="400" y1="240" x2="420" y2="400"/></g>
@@ -3094,11 +3079,11 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
           <g class="sg-node"><circle cx="200" cy="380" r="11" fill="rgba(34,211,238,0.32)" stroke="#22D3EE"/><text x="200" y="384" class="sg-node-label">BPD</text></g>
           <g class="sg-node"><circle cx="380" cy="80" r="11" fill="rgba(34,211,238,0.32)" stroke="#22D3EE"/><text x="380" y="84" class="sg-node-label">ESDM</text></g>
           <g class="sg-node"><circle cx="420" cy="400" r="11" fill="rgba(34,211,238,0.32)" stroke="#22D3EE"/><text x="420" y="404" class="sg-node-label">BUMDes</text></g>
-          <g class="sg-node"><circle cx="620" cy="100" r="11" fill="rgba(34,211,238,0.32)" stroke="#22D3EE"/><text x="620" y="104" class="sg-node-label">PCNU</text></g>
+          <g class="sg-node"><circle cx="620" cy="100" r="11" fill="rgba(34,211,238,0.32)" stroke="#22D3EE"/><text x="620" y="104" class="sg-node-label">Religious</text></g>
           <g class="sg-node"><circle cx="640" cy="240" r="11" fill="rgba(34,211,238,0.32)" stroke="#22D3EE"/><text x="640" y="244" class="sg-node-label">Kyai</text></g>
-          <g class="sg-node"><circle cx="600" cy="380" r="11" fill="rgba(34,211,238,0.32)" stroke="#22D3EE"/><text x="600" y="384" class="sg-node-label">Walhi</text></g>
-          <g class="sg-node"><circle cx="80" cy="160" r="9" fill="rgba(244,63,94,0.18)" stroke="#FB7185"/><text x="80" y="164" class="sg-node-label">KPK</text></g>
-          <g class="sg-node"><circle cx="80" cy="340" r="9" fill="rgba(244,63,94,0.18)" stroke="#FB7185"/><text x="80" y="344" class="sg-node-label">KPA</text></g>
+          <g class="sg-node"><circle cx="600" cy="380" r="11" fill="rgba(34,211,238,0.32)" stroke="#22D3EE"/><text x="600" y="384" class="sg-node-label">Civil society</text></g>
+          <g class="sg-node"><circle cx="80" cy="160" r="9" fill="rgba(244,63,94,0.18)" stroke="#FB7185"/><text x="80" y="164" class="sg-node-label">Anti-corruption</text></g>
+          <g class="sg-node"><circle cx="80" cy="340" r="9" fill="rgba(244,63,94,0.18)" stroke="#FB7185"/><text x="80" y="344" class="sg-node-label">Land-rights</text></g>
           <g class="sg-node"><circle cx="720" cy="160" r="9" fill="rgba(16,185,129,0.18)" stroke="#34D399"/><text x="720" y="164" class="sg-node-label">PT SMI</text></g>
           <g class="sg-node"><circle cx="720" cy="340" r="9" fill="rgba(16,185,129,0.18)" stroke="#34D399"/><text x="720" y="344" class="sg-node-label">BPDLH</text></g>
         </svg>
@@ -3178,7 +3163,7 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
             <div class="trace-row">↑ <b>Funding stack</b> 12 instruments scored</div>
             <div class="trace-row">↑ <b>BOM</b> $18,335 (Java baseline)</div>
             <div class="trace-row">↑ <b>PV yield</b> 168.4 MWh/yr</div>
-            <div class="trace-row">↑ <b>PV simulation</b> ±1.5–2% vs pvlib</div>
+            <div class="trace-row">↑ <b>PV simulation</b> ±1.5–2% vs reference</div>
             <div class="trace-row">↑ <b>Hay-Davies POA</b> + <b>Sandia Tc</b> + <b>72-bin horizon</b></div>
             <div class="trace-row">↑ <b>Sentinel-2 + Copernicus DEM + village 8493-baseline</b></div>
           </div>
@@ -3251,7 +3236,7 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
             <div class="report-pages">Stakeholder map + 22-step</div>
             <div class="report-desc">Coalition path, electoral calendar, anti-corruption exposure score, 22-step coalition playbook with USD line items.</div>
             <span class="report-align">BAPPENAS &middot; Kemendes PDT</span>
-            <div class="report-preview"><div class="rp-band"></div><div class="rp-h1">Political Risk Assessment<br/>Desa Beleme — Papua Pegunungan</div><div class="rp-h2">Stakeholder Graph</div><div class="rp-line"></div><div class="rp-line"></div><div class="rp-h2">22-Step Playbook</div><div class="rp-line med"></div><div class="rp-line short"></div><div class="rp-line"></div><div class="rp-h2">ACLED + KPK signals</div><div class="rp-line"></div><div class="rp-line med"></div></div>
+            <div class="report-preview"><div class="rp-band"></div><div class="rp-h1">Political Risk Assessment<br/>Desa Beleme — Papua Pegunungan</div><div class="rp-h2">Stakeholder Graph</div><div class="rp-line"></div><div class="rp-line"></div><div class="rp-h2">22-Step Playbook</div><div class="rp-line med"></div><div class="rp-line short"></div><div class="rp-line"></div><div class="rp-h2">conflict-data + anti-corruption signals</div><div class="rp-line"></div><div class="rp-line med"></div></div>
           </div>
           <div class="report-card gov">
             <div class="report-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
@@ -3272,15 +3257,15 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
             <div class="report-name">TCFD Climate Report</div>
             <div class="report-pages">Physical risk disclosure</div>
             <div class="report-desc">CMIP6-driven physical risk disclosure aligned to TCFD recommendations. IFRS S2 + ESRS E1 fields auto-fill.</div>
-            <span class="report-align">GCF &middot; GEF &middot; Climate Funds</span>
+            <span class="report-align">Climate Funds</span>
             <div class="report-preview"><div class="rp-band"></div><div class="rp-h1">TCFD Climate Disclosure<br/>Beleme · Papua</div><div class="rp-h2">Governance</div><div class="rp-line"></div><div class="rp-h2">Strategy</div><div class="rp-line"></div><div class="rp-line med"></div><div class="rp-h2">Risk Management</div><div class="rp-line"></div><div class="rp-h2">Metrics &amp; Targets</div><div class="rp-line short"></div></div>
           </div>
           <div class="report-card">
             <div class="report-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
             <div class="report-name">Grant Application Draft</div>
             <div class="report-pages">12 instruments · pre-filled</div>
-            <div class="report-desc">DAK Energi, USAID DCA, GEF, Green Climate Fund, KfW DesaListrik, ADB SRP, JICA — pre-filled, ready to submit.</div>
-            <span class="report-align">GCF &middot; USAID &middot; GEF &middot; DAK</span>
+            <div class="report-desc">DAK Energi (and 11 other named instruments) — pre-filled, ready to submit.</div>
+            <span class="report-align">DAK · climate funds</span>
             <div class="report-preview"><div class="rp-band"></div><div class="rp-h1">DAK Energi Application<br/>Tier C · Papua eligibility</div><div class="rp-h2">Project Description</div><div class="rp-line"></div><div class="rp-line"></div><div class="rp-h2">Budget Breakdown</div><div class="rp-line med"></div><div class="rp-line short"></div><div class="rp-h2">Match Funding</div><div class="rp-line med"></div></div>
           </div>
           <div class="report-card">
@@ -3295,31 +3280,31 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
       </div>
 
       <div>
-        <span class="rg-label">For DFI Underwriters</span>
+        <span class="rg-label">For Institutional Underwriters</span>
         <div class="rg-cards rg-3">
           <div class="report-card">
             <div class="report-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
             <div class="report-name">Bankable Project Report</div>
-            <div class="report-pages">63 pages · IFC PS 1–8</div>
+            <div class="report-pages">63 pages · institutional E&S standards</div>
             <div class="report-desc">Full financial model, capital stack, sensitivity analysis, risk register. Auto-generated in ~90 sec, browser-side jsPDF.</div>
-            <span class="report-align">IFC &middot; ADB &middot; KfW &middot; JICA</span>
+            <span class="report-align">Institutional submission formats</span>
             <div class="report-preview"><div class="rp-band"></div><div class="rp-h1">Bankable Project Report<br/>Beleme · 50 HH · USD 750k</div><div class="rp-h2">Executive Summary</div><div class="rp-line"></div><div class="rp-line med"></div><div class="rp-h2">Financial Model</div><div class="rp-line"></div><div class="rp-h2">Risk Register</div><div class="rp-line short"></div><div class="rp-h2">ESAP Commitments</div><div class="rp-line med"></div></div>
           </div>
           <div class="report-card">
             <div class="report-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-            <div class="report-name">DFI E&amp;S Assessment</div>
-            <div class="report-pages">IFC PS 1–8 checklist</div>
+            <div class="report-name">Institutional E&amp;S Assessment</div>
+            <div class="report-pages">institutional PS 1–8 checklist</div>
             <div class="report-desc">Land rights status, environmental triggers, E&amp;S pre-screening for portfolio and project level.</div>
-            <span class="report-align">World Bank &middot; IFC &middot; FMO</span>
-            <div class="report-preview"><div class="rp-band"></div><div class="rp-h1">E&amp;S Assessment<br/>IFC PS 1–8</div><div class="rp-h2">PS1 Assessment</div><div class="rp-line"></div><div class="rp-h2">PS5 Land Acquisition</div><div class="rp-line med"></div><div class="rp-h2">PS7 Indigenous (FPIC)</div><div class="rp-line"></div><div class="rp-h2">ESAP</div><div class="rp-line short"></div></div>
+            <span class="report-align">Multilateral submission formats</span>
+            <div class="report-preview"><div class="rp-band"></div><div class="rp-h1">E&amp;S Assessment<br/>Institutional standards</div><div class="rp-h2">PS1 Assessment</div><div class="rp-line"></div><div class="rp-h2">PS5 Land Acquisition</div><div class="rp-line med"></div><div class="rp-h2">PS7 Indigenous (FPIC)</div><div class="rp-line"></div><div class="rp-h2">ESAP</div><div class="rp-line short"></div></div>
           </div>
           <div class="report-card">
             <div class="report-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
             <div class="report-name">PRI Submission Pack</div>
             <div class="report-pages">Insurance-ready · 2.3% rate</div>
-            <div class="report-desc">MIGA, OPIC, and Nippon Export underwriter-specific political risk narratives.</div>
-            <span class="report-align">MIGA &middot; OPIC &middot; NEXI</span>
-            <div class="report-preview"><div class="rp-band"></div><div class="rp-h1">PRI Submission · MIGA<br/>Indonesia · Beleme</div><div class="rp-h2">PSN Risk Score</div><div class="rp-line"></div><div class="rp-h2">Stakeholder Matrix</div><div class="rp-line med"></div><div class="rp-h2">ACLED Proximity</div><div class="rp-line"></div><div class="rp-h2">Premium Rate 2.3%</div><div class="rp-line short"></div></div>
+            <div class="report-desc">Underwriter-specific political risk narratives.</div>
+            <span class="report-align">PRI underwriters</span>
+            <div class="report-preview"><div class="rp-band"></div><div class="rp-h1">PRI Submission<br/>Indonesia · Beleme</div><div class="rp-h2">PSN Risk Score</div><div class="rp-line"></div><div class="rp-h2">Stakeholder Matrix</div><div class="rp-line med"></div><div class="rp-h2">conflict-data Proximity</div><div class="rp-line"></div><div class="rp-h2">Premium Rate 2.3%</div><div class="rp-line short"></div></div>
           </div>
         </div>
       </div>
@@ -3363,12 +3348,12 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
         <span class="buyer-eyebrow">02 &middot; Government</span>
         <div class="buyer-headline">The country's rural electrification intelligence layer.</div>
         <p class="buyer-body">Every electrification masterplan in Indonesia &mdash; ESDM, BAPPENAS, PLN, Kemendes PDT &mdash; lists hundreds of pending sites. None are ranked by bankability. None are formatted for the financiers that would fund them. Lumen8 is not a vendor service to government. It is the country's view of its own rural electrification pipeline. Ingest the masterplan, score every site, output a five-year deployment sequence calibrated to the funding mix the country can actually mobilize.</p>
-        <div class="buyer-outcome"><em>A 30-second portfolio dashboard that survives a Cabinet briefing. A five-year tranche PDF that survives a World Bank credit committee.</em></div>
+        <div class="buyer-outcome"><em>A 30-second portfolio dashboard that survives a Cabinet briefing. A five-year tranche PDF that survives an institutional credit committee.</em></div>
       </div>
       <div class="buyer-card buyer-cap">
         <span class="buyer-eyebrow">03 &middot; Capital</span>
         <div class="buyer-headline">The screening and verification surface for every dollar going in.</div>
-        <p class="buyer-body">Every financier &mdash; DFI, climate fund, political risk insurer &mdash; is constrained by the same bottleneck: project-preparation throughput. Lumen8 licenses to these institutions as their internal pipeline-screening, due-diligence-acceleration, and MRV-verification surface. Outputs are pre-aligned to IFC, ADB, KfW, MIGA, GCF, and Verra formats. A six-month due-diligence cycle compresses to four weeks. A USD 1.5M PPF deploys 3–5&times; further.</p>
+        <p class="buyer-body">Every financier &mdash; institutional, climate fund, political risk insurer &mdash; is constrained by the same bottleneck: project-preparation throughput. Lumen8 licenses to these institutions as their internal pipeline-screening, due-diligence-acceleration, and MRV-verification surface. Outputs are pre-aligned to standard institutional submission formats (Verra-compatible). A six-month due-diligence cycle compresses to four weeks. A USD 1.5M PPF deploys 3–5&times; further.</p>
         <div class="buyer-outcome"><em>The standard becomes the format. The format becomes the procurement requirement.</em></div>
       </div>
     </div>
@@ -3386,16 +3371,16 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
       <p class="section-lead">Financiers require minimum tickets of USD 10–25 million. Distributed-energy sites are USD 0.4–1 million. Without aggregation, no underwriter can deploy. Without per-site preparation, no aggregation is possible. Lumen8 closes this loop &mdash; and the artifacts the engine generates pass due diligence on every leg of the capital stack.</p>
     </div>
     <div class="stack-bars reveal" id="stack-bars">
-      <div class="stack-row"><div class="stack-label">Grants &amp; viability gap</div><div class="stack-bar-wrap"><div class="stack-bar stack-bar-gr" data-w="20%" style="width:0">15–25%</div></div><div class="stack-pct">GCF &middot; BPDLH &middot; DAK Energi &middot; Dana Desa</div></div>
-      <div class="stack-row"><div class="stack-label">Concessional debt</div><div class="stack-bar-wrap"><div class="stack-bar stack-bar-cd" data-w="35%" style="width:0">30–40%</div></div><div class="stack-pct">FMO &middot; DFC &middot; ADB &middot; KfW DEG &middot; JICA</div></div>
-      <div class="stack-row"><div class="stack-label">Commercial debt</div><div class="stack-bar-wrap"><div class="stack-bar stack-bar-cm" data-w="25%" style="width:0">20–30%</div></div><div class="stack-pct">ING &middot; Rabobank &middot; MUFG (with MIGA cover)</div></div>
+      <div class="stack-row"><div class="stack-label">Grants &amp; viability gap</div><div class="stack-bar-wrap"><div class="stack-bar stack-bar-gr" data-w="20%" style="width:0">15–25%</div></div><div class="stack-pct">climate fund &middot; BPDLH &middot; DAK Energi &middot; Dana Desa</div></div>
+      <div class="stack-row"><div class="stack-label">Concessional debt</div><div class="stack-bar-wrap"><div class="stack-bar stack-bar-cd" data-w="35%" style="width:0">30–40%</div></div><div class="stack-pct">Multiple international concessional facilities</div></div>
+      <div class="stack-row"><div class="stack-label">Commercial debt</div><div class="stack-bar-wrap"><div class="stack-bar stack-bar-cm" data-w="25%" style="width:0">20–30%</div></div><div class="stack-pct">Indonesian + international commercial banks (with PRI underwriter cover)</div></div>
       <div class="stack-row"><div class="stack-label">Sponsor equity</div><div class="stack-bar-wrap"><div class="stack-bar stack-bar-eq" data-w="17.5%" style="width:0">15–20%</div></div><div class="stack-pct">Co-developer + EPC</div></div>
       <div class="stack-row"><div class="stack-label">Carbon pre-purchase</div><div class="stack-bar-wrap"><div class="stack-bar stack-bar-ca" data-w="7.5%" style="width:0">5–10%</div></div><div class="stack-pct">Verra &middot; Gold Standard &middot; Art. 6.2 / 6.4</div></div>
     </div>
     <div class="stack-cards reveal">
-      <div class="stack-card"><h4>Aggregation that survives DD</h4><p>A 50-village portfolio at USD 500K per site = USD 25M ticket. Lumen8 prepares all 50 sites in three days, generates a single SPV-level Bankable Project Report, and outputs IFC-grade documentation at portfolio level. The same DD pack covers concessional debt, commercial debt, and political risk insurance.</p></div>
-      <div class="stack-card"><h4>Multi-AE pathway</h4><p>Each Lumen8 site comes pre-formatted for the Accredited Entity that suits it. PT SMI for sovereign-flavored programs. FMO for Dutch-aligned commercial programs. KfW for German bilateral. ADB for sovereign loans. Replicable structures, not one-off engagements.</p></div>
-      <div class="stack-card"><h4>GCF PPF compatibility</h4><p>Lumen8's outputs satisfy GCF Project Preparation Facility cost categories: feasibility studies, ESIA, gender assessment, climate rationale, pre-FEED engineering, financial modeling, stakeholder consultation. A USD 1.5M PPF deploys 3–5&times; further when prep work is platform-generated.</p></div>
+      <div class="stack-card"><h4>Aggregation that survives DD</h4><p>A 50-village portfolio at USD 500K per site = USD 25M ticket. Lumen8 prepares all 50 sites in three days, generates a single SPV-level Bankable Project Report, and outputs institutional standard-grade documentation at portfolio level. The same DD pack covers concessional debt, commercial debt, and political risk insurance.</p></div>
+      <div class="stack-card"><h4>Multi-AE pathway</h4><p>Each Lumen8 site comes pre-formatted for the Accredited Entity that suits it. Sovereign-flavored programs and bilateral-aligned commercialal programs. bilateral for German bilateral. multilateral for sovereign loans. Replicable structures, not one-off engagements.</p></div>
+      <div class="stack-card"><h4>PPF compatibility</h4><p>Lumen8's outputs satisfy Project Preparation Facility cost categories: feasibility studies, ESIA, gender assessment, climate rationale, pre-FEED engineering, financial modeling, stakeholder consultation. A USD 1.5M PPF deploys 3–5&times; further when prep work is platform-generated.</p></div>
     </div>
   </div>
 </section>
@@ -3427,14 +3412,14 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
     <div class="reveal">
       <span class="eyebrow amber">Built for procurement, not retrofitted to it</span>
       <h2 class="section-title">Sovereign-grade compliance.<br><span class="grad-amber">Foundations, not features.</span></h2>
-      <p class="section-lead">Lumen8 is engineered for the procurement realities of the institutions that will use it. Indonesia's data residency requirements (UU 27/2022 PDP), EU GDPR for Dutch entity operations, and the auditability standards that DFIs demand &mdash; all foundational, not bolt-on.</p>
+      <p class="section-lead">Lumen8 is engineered for the procurement realities of the institutions that will use it. Indonesia's data residency requirements (UU 27/2022 PDP), GDPR for Dutch entity operations, and the auditability standards demanded by institutional capital &mdash; all foundational, not bolt-on.</p>
     </div>
     <div class="compliance-grid reveal">
       <div class="comp-col">
         <h3>Compliance Foundations</h3>
         <div class="comp-items">
           <div class="comp-item"><div class="comp-icon">&#10003;</div><div class="comp-text"><strong>Indonesia data residency.</strong> UU 27/2022 PDP-aligned. On-premises deployment available. Sensitive datasets stay in-country.</div></div>
-          <div class="comp-item"><div class="comp-icon">&#10003;</div><div class="comp-text"><strong>EU GDPR.</strong> Dutch entity, EU operational base. DPAs and SCCs available for cross-border processing.</div></div>
+          <div class="comp-item"><div class="comp-icon">&#10003;</div><div class="comp-text"><strong>GDPR.</strong> Dutch entity, EU operational base. DPAs and SCCs available for cross-border processing.</div></div>
           <div class="comp-item"><div class="comp-icon">&#10003;</div><div class="comp-text"><strong>Role-based access.</strong> Government-tier and institution-tier deployments with audit logs and SSO integration.</div></div>
           <div class="comp-item"><div class="comp-icon">&#10003;</div><div class="comp-text"><strong>SOC 2 roadmap.</strong> Type I targeted Q3 2026; Type II by Q1 2027.</div></div>
           <div class="comp-item"><div class="comp-icon">&#10003;</div><div class="comp-text"><strong>Knowledge graph.</strong> 15,941 nodes &middot; 47,621 edges &middot; 267 communities &middot; GitNexus + graphify dual indexing.</div></div>
@@ -3446,7 +3431,7 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
           <div class="comp-item"><div class="comp-icon">&#10003;</div><div class="comp-text"><strong>Tamper-evident audit log.</strong> HMAC-SHA256 hash-chained, append-only. Every output carries a verifiable evidence chain.</div></div>
           <div class="comp-item"><div class="comp-icon">&#10003;</div><div class="comp-text"><strong>Free, Prior, Informed Consent.</strong> Built-in FPIC workflow with stakeholder mapping and consultation tracking.</div></div>
           <div class="comp-item"><div class="comp-icon">&#10003;</div><div class="comp-text"><strong>Source attribution.</strong> Every metric maps back to its dataset, vintage, and confidence interval. No black-box outputs.</div></div>
-          <div class="comp-item"><div class="comp-icon">&#10003;</div><div class="comp-text"><strong>IFC PS 1–8 alignment.</strong> Performance Standards integrated into E&amp;S pre-screen output.</div></div>
+          <div class="comp-item"><div class="comp-icon">&#10003;</div><div class="comp-text"><strong>Institutional PS 1–8 alignment.</strong> Performance Standards integrated into E&amp;S pre-screen output.</div></div>
           <div class="comp-item"><div class="comp-icon">&#10003;</div><div class="comp-text"><strong>Digital MRV-grade.</strong> Article 6 Supervisory Body and ICVCM Core Carbon Principle compatibility.</div></div>
         </div>
       </div>
@@ -3488,13 +3473,13 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
     <table class="country-table reveal">
       <thead><tr><th>Country</th><th>Status</th><th>Unelectrified Sites</th><th>Capital Pool</th></tr></thead>
       <tbody>
-        <tr><td>Indonesia</td><td class="c-live">&#9679; Operational</td><td>8,493 villages</td><td>BPDLH, DAK Energi, GCF, ADB, JETP $21.7B</td></tr>
-        <tr><td>Philippines</td><td class="c-eng">&#9679; Engineering</td><td>~2,400 sitios</td><td>NEA, DOE, ADB, JICA, USAID</td></tr>
-        <tr><td>Papua New Guinea</td><td class="c-eng">&#9679; Engineering</td><td>~6,500 villages</td><td>ADB, World Bank, AusAid, NZAID</td></tr>
-        <tr><td>Vietnam</td><td class="c-eng">&#9679; Scoping</td><td>~1,200 hamlets</td><td>EVN, JICA, KfW, IFC</td></tr>
-        <tr><td>Nigeria</td><td class="c-scp">&#9679; Scoping</td><td>~22,000 communities</td><td>NEP, REA, AfDB, World Bank, GCF</td></tr>
-        <tr><td>Kenya</td><td class="c-scp">&#9679; Scoping</td><td>~3,800 sub-locations</td><td>REREC, KfW, AfD, IFC, USAID</td></tr>
-        <tr><td>South Africa</td><td class="c-scp">&#9679; Scoping</td><td>~1,500 villages</td><td>DBSA, IDC, GCF, KfW</td></tr>
+        <tr><td>Indonesia</td><td class="c-live">&#9679; Operational</td><td>8,493 villages</td><td>BPDLH, DAK Energi, JETP $21.7B</td></tr>
+        <tr><td>Philippines</td><td class="c-eng">&#9679; Engineering</td><td>~2,400 sitios</td><td>National rural-electrification frameworks</td></tr>
+        <tr><td>Papua New Guinea</td><td class="c-eng">&#9679; Engineering</td><td>~6,500 villages</td><td>National rural-electrification frameworks</td></tr>
+        <tr><td>Vietnam</td><td class="c-eng">&#9679; Scoping</td><td>~1,200 hamlets</td><td>National rural-electrification frameworks</td></tr>
+        <tr><td>Nigeria</td><td class="c-scp">&#9679; Scoping</td><td>~22,000 communities</td><td>National rural-electrification frameworks</td></tr>
+        <tr><td>Kenya</td><td class="c-scp">&#9679; Scoping</td><td>~3,800 sub-locations</td><td>National rural-electrification frameworks</td></tr>
+        <tr><td>South Africa</td><td class="c-scp">&#9679; Scoping</td><td>~1,500 villages</td><td>National rural-electrification frameworks</td></tr>
       </tbody>
     </table>
   </div>
@@ -3519,7 +3504,7 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
       <div class="whynow-card">
         <div class="whynow-n">02</div>
         <div class="whynow-title">Capital deployment window</div>
-        <div class="whynow-body">Concessional capital pools — GCF, GCF PPF, DFI bilateral programs — are under 2026–2027 deployment pressure with insufficient bankable artifacts to absorb. Lumen8 is the throughput unlock. Pipelines that exist on the platform absorb capital that would otherwise sit idle.</div>
+        <div class="whynow-body">Concessional capital pools are under 2026–2027 deployment pressure with insufficient bankable artifacts to absorb. Lumen8 is the throughputghput unlock. Pipelines that exist on the platform absorb capital that would otherwise sit idle.</div>
       </div>
       <div class="whynow-card">
         <div class="whynow-n">03</div>
@@ -3550,7 +3535,7 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
       <div class="narrative-card">
         <span class="narrative-n">N02 &middot; To financiers</span>
         <div class="narrative-title">A USD 100B aggregation unlock for distributed energy</div>
-        <div class="narrative-body">Concessional capital is structurally constrained by the per-site preparation arithmetic. Lumen8 collapses that arithmetic and prepares portfolio-grade artifacts that pass IFC, ADB, KfW, MIGA, GCF due diligence at the speed of platform compute. The bottleneck moves from preparation to underwriter throughput.</div>
+        <div class="narrative-body">Concessional capital is structurally constrained by the per-site preparation arithmetic. Lumen8 collapses that arithmetic and prepares portfolio-grade artifacts that pass institutionalFC, multilateral, bilateral, PRI underwriter, climate fund due diligence at the speed of platform compute. The bottleneck moves from preparation to underwriter throughput.</div>
         <div class="narrative-metric">USD 100B+ capital unlock &middot; 3–5&times; PPF efficiency</div>
       </div>
       <div class="narrative-card">
@@ -3591,7 +3576,7 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
         <div class="tranche-dot t-del"><span>T2</span></div>
         <div>
           <div class="tranche-header"><span class="tranche-num">Tranche 02</span><span class="tranche-title">Government Pilot &amp; First Closes</span><span class="pill pill-del">In Delivery</span></div>
-          <div class="tranche-unlock">Multi-ministry pilot deployment. First USD 25M aggregated SPV close. First DFI institutional license. First climate-fund grant submission generated end-to-end on platform. Stage-4 construction operations cockpit live. <strong>Unlocks: live customer revenue, sovereign reference, and DFI procurement footprint.</strong></div>
+          <div class="tranche-unlock">Multi-ministry pilot deployment. First USD 25M aggregated SPV close. First institutional license. First climate-fund grant submission generated end-to-end on platform. Stage-4 construction operations cockpit live. <strong>Unlocks: live customer revenue, sovereign reference, and institutional procurement footprint.</strong></div>
         </div>
       </div>
       <div class="tranche">
@@ -3632,19 +3617,19 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
     <div class="accordion reveal">
       <div class="acc-item">
         <button class="acc-trigger" onclick="toggleAcc(this)">How is this different from a GIS dashboard or an engineering CAD tool? <span class="acc-chevron">&#9662;</span></button>
-        <div class="acc-body">GIS visualizes existing data on a map. CAD tools design a single site to engineering specification. PVsyst simulates a known PV system. Lumen8 generates an entire feasibility study &mdash; economic, climate, political, system-design, regulatory, plus a complete per-HH electrical engineering package with 30 IEC/PUIL validation rules &mdash; across thousands of sites in parallel, ships it in ten different DFI-aligned formats, and carries an HMAC-signed audit chain back to source. GIS visualization and CAD design are surfaces of the engine, not the engine. Comparing Lumen8 to either is a category error.</div>
+        <div class="acc-body">GIS visualizes existing data on a map. CAD tools design a single site to engineering specification. PV-simulation tools simulate a known PV system. Lumen8 generates an entire feasibility studdy &mdash; economic, climate, political, system-design, regulatory, plus a complete per-HH electrical engineering package with 30 IEC/PUIL validation rules &mdash; across thousands of sites in parallel, ships it in ten different institutional-aligned formats, and carries an HMAC-signed audit chain back to source. GIS visualization and CAD design are surfaces of the engine, not the engine. Comparing Lumen8 to either is a category error.</div>
       </div>
       <div class="acc-item">
         <button class="acc-trigger" onclick="toggleAcc(this)">What stops a competitor from copying the dataset? <span class="acc-chevron">&#9662;</span></button>
-        <div class="acc-body">Three-layer composition. The dataset alone is the moat for two years &mdash; Indonesia at 8,493-village resolution joined to GOB v3 footprints, BNPB hazards, ACLED conflict events, BRWA adat, KPU Pilkada, RUPTL Lisdes, and 168 months of nightlight is operationally hard to assemble even with capital, given multi-ministry data-sharing requirements, sovereign data residency (UU 27/2022 PDP), and the integration work. The engine and the evidence layer extend the window to four years. Replicating across countries does not multiply linearly &mdash; each country has its own data-residency rules, its own grid-intelligence sources, its own political topology. The compounding moat is what defines the category.</div>
+        <div class="acc-body">Three-layer composition. The dataset alone is the moat for two years &mdash; Indonesia at 8,493-village resolution joined to global building footprints, BNPB hazards, conflict-events, adat-registry adat, KPU Pilkada, RUPTL Lisdes, and 168 months of nightlight is operationally hard to assemble even with capital, given multi-ministry data-sharing requirements, sovereign data residency (UU 27/2022 PDP), and the integration work. The engine and the evidence layer extend the window to four years. Replicating across countries does not multiply linearly &mdash; each country has its own data-residency rules, its own grid-intelligence sources, its own political topology. The compounding moat is what defines the category.</div>
       </div>
       <div class="acc-item">
-        <button class="acc-trigger" onclick="toggleAcc(this)">Can a platform-generated feasibility study survive DFI due diligence? <span class="acc-chevron">&#9662;</span></button>
+        <button class="acc-trigger" onclick="toggleAcc(this)">Can a platform-generated feasibility study survive institutional due diligence? <span class="acc-chevron">&#9662;</span></button>
         <div class="acc-body">Every output ships with an HMAC-signed Merkle-style evidence trail showing every contributing source, vintage, confidence interval, and disagreement flag between contradictory inputs. The reviewer audits the chain, not the conclusion. This is faster and more rigorous than auditing a human-authored consultancy report &mdash; where the analyst's reasoning is opaque, the underlying sources are typically not enumerated, and confidence intervals are absent. The engineering package itself enforces 30 named PUIL/IEC validation rules and a 6-state PE-approval workflow before any construction-pack ZIP is issued.</div>
       </div>
       <div class="acc-item">
-        <button class="acc-trigger" onclick="toggleAcc(this)">How accurate is the PV simulation vs pvlib reference? <span class="acc-chevron">&#9662;</span></button>
-        <div class="acc-body">Browser path: <b>±1.5–2%</b> vs pvlib reference. Server path with Finkelstein-Schafer real TMY: <b>±0.5–1%</b>. The 12-component loss stack (Hay-Davies POA, Sandia 4-rack thermal, Kasten-Young spectral AM, dynamic bifacial ROI/GCR, geometric row shading, 1-axis tracking + backtracking, 72-bin per-village horizon shading) replaces a legacy 4-loss isotropic model. Degradation calibrated to Purba 2020 Java field data (0.68%/yr primary, PID risk +0.15%/yr unmitigated). Source: ADR-043, Jordan et al. 2022 meta-analysis, IEC 61853-2.</div>
+        <button class="acc-trigger" onclick="toggleAcc(this)">How accurate is the PV simulation vs reference physics chain? <span class="acc-chevron">&#9662;</span></button>
+        <div class="acc-body">Browser path: <b>±1.5–2%</b> vs reference physics chain. Server path with Finkelstein-Schafer real TMY: <b>±0.5–1%</b>. The 12-component loss stack (Hay-Davies POA, Sandia 4-rack thermal, Kasten-Young spectral AM, dynamic bifacial ROI/GCR, geometric row shading, 1-axis tracking + backtracking, 72-bin per-village horizon shading) replaces a legacy 4-loss isotropic model. Degradation calibrated to Purba 2020 Java field data (0.68%/yr primary, PID risk +0.15%/yr unmitigated). Source: ADR-043, Jordan et al. 2022 meta-analysis, IEC 61853-2.</div>
       </div>
       <div class="acc-item">
         <button class="acc-trigger" onclick="toggleAcc(this)">Can the construction-pack ZIP survive a PE legal review? <span class="acc-chevron">&#9662;</span></button>
@@ -3680,7 +3665,7 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
       <div class="trust-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Operational today</div>
       <div class="trust-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>8,493 villages indexed</div>
       <div class="trust-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>30 IEC/PUIL rules</div>
-      <div class="trust-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>10 DFI report formats</div>
+      <div class="trust-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>10 institutional report formats</div>
       <div class="trust-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>HMAC audit chain</div>
       <div class="trust-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Sovereign-grade compliance</div>
     </div>
@@ -3798,7 +3783,7 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
     'From coordinate to bankable PDF: under two minutes, median.',
     '30 IEC/PUIL validation rules per engineering package, HMAC-signed.',
     '12 named funding instruments &middot; $330M+ visible TAM.',
-    '±1.5–2% PV simulation accuracy vs pvlib reference (better than PVsyst).',
+    '±1.5–2% PV simulation accuracy vs reference physics chain.',
     '50.9 GB curated Indonesian baselines &middot; offline-first.'
   ];
   const el=document.getElementById('cred-rotator');if(!el) return;let idx=0;
@@ -3823,10 +3808,10 @@ footer{border-top:1px solid var(--border);padding:60px 0 36px;background:var(--b
 
 /* ===== COORD MODAL ===== */
 const villagePresets={
-  beleme:{name:'Desa Beleme · Papua Pegunungan',coord:'-4.082, 138.624',time:'1m 42s',fields:[['Buildings (GOB)','47'],['PV array','124 kWp · 226 modules'],['BESS','320 kWh / 80 kW'],['Annual yield','168,400 kWh'],['LCOE','USD 0.18/kWh'],['IRR (P50)','18.4%'],['Annual PSH','4.35'],['Validation','30/30 rules pass'],['Funding fit','$790k (105% CAPEX)'],['Bankability','DFI Tier 1 · DSCR 1.4'],['Hazard grade','B+ · AAL 0.8%'],['Political grade','B (Low-Mod)']]},
-  topdan:{name:'Desa Topdan · NTT Timor',coord:'-9.620, 124.182',time:'1m 28s',fields:[['Buildings (GOB)','38'],['PV array','92 kWp · 167 modules'],['BESS','240 kWh / 60 kW'],['Annual yield','148,200 kWh'],['LCOE','USD 0.16/kWh'],['IRR (P50)','21.2%'],['Annual PSH','5.18'],['Validation','30/30 rules pass'],['Funding fit','$640k (98% CAPEX)'],['Bankability','DFI Tier 1 · DSCR 1.5'],['Hazard grade','A · AAL 0.4%'],['Political grade','A- (Low)']]},
-  toraja:{name:'Desa Toraja Batu · Sulawesi',coord:'-3.069, 119.884',time:'1m 51s',fields:[['Buildings (GOB)','62'],['PV array','148 kWp · 269 modules'],['BESS','380 kWh / 95 kW'],['Annual yield','198,800 kWh'],['LCOE','USD 0.19/kWh'],['IRR (P50)','17.1%'],['Annual PSH','4.62'],['Validation','30/30 rules pass'],['Funding fit','$920k (102% CAPEX)'],['Bankability','DFI Tier 1 · DSCR 1.3'],['Hazard grade','B · AAL 1.1%'],['Political grade','B (Mod)']]},
-  kelampai:{name:'Desa Kelampai · Kalimantan',coord:'0.498, 110.214',time:'1m 36s',fields:[['Buildings (GOB)','41'],['PV array','108 kWp · 196 modules'],['BESS','280 kWh / 70 kW'],['Annual yield','176,500 kWh'],['LCOE','USD 0.17/kWh'],['IRR (P50)','19.6%'],['Annual PSH','4.85'],['Validation','30/30 rules pass'],['Funding fit','$710k (101% CAPEX)'],['Bankability','DFI Tier 1 · DSCR 1.4'],['Hazard grade','B+ · AAL 0.7%'],['Political grade','B+ (Low)']]}
+  beleme:{name:'Desa Beleme · Papua Pegunungan',coord:'-4.082, 138.624',time:'1m 42s',fields:[['Buildings (GOB)','47'],['PV array','124 kWp · 226 modules'],['BESS','320 kWh / 80 kW'],['Annual yield','168,400 kWh'],['LCOE','USD 0.18/kWh'],['IRR (P50)','18.4%'],['Annual PSH','4.35'],['Validation','30/30 rules pass'],['Funding fit','$790k (105% CAPEX)'],['Bankability','institutional Tier 1 · DSCR 1.4'],['Hazard grade','B+ · AAL 0.8%'],['Political grade','B (Low-Mod)']]},
+  topdan:{name:'Desa Topdan · NTT Timor',coord:'-9.620, 124.182',time:'1m 28s',fields:[['Buildings (GOB)','38'],['PV array','92 kWp · 167 modules'],['BESS','240 kWh / 60 kW'],['Annual yield','148,200 kWh'],['LCOE','USD 0.16/kWh'],['IRR (P50)','21.2%'],['Annual PSH','5.18'],['Validation','30/30 rules pass'],['Funding fit','$640k (98% CAPEX)'],['Bankability','institutional Tier 1 · DSCR 1.5'],['Hazard grade','A · AAL 0.4%'],['Political grade','A- (Low)']]},
+  toraja:{name:'Desa Toraja Batu · Sulawesi',coord:'-3.069, 119.884',time:'1m 51s',fields:[['Buildings (GOB)','62'],['PV array','148 kWp · 269 modules'],['BESS','380 kWh / 95 kW'],['Annual yield','198,800 kWh'],['LCOE','USD 0.19/kWh'],['IRR (P50)','17.1%'],['Annual PSH','4.62'],['Validation','30/30 rules pass'],['Funding fit','$920k (102% CAPEX)'],['Bankability','institutional Tier 1 · DSCR 1.3'],['Hazard grade','B · AAL 1.1%'],['Political grade','B (Mod)']]},
+  kelampai:{name:'Desa Kelampai · Kalimantan',coord:'0.498, 110.214',time:'1m 36s',fields:[['Buildings (GOB)','41'],['PV array','108 kWp · 196 modules'],['BESS','280 kWh / 70 kW'],['Annual yield','176,500 kWh'],['LCOE','USD 0.17/kWh'],['IRR (P50)','19.6%'],['Annual PSH','4.85'],['Validation','30/30 rules pass'],['Funding fit','$710k (101% CAPEX)'],['Bankability','institutional Tier 1 · DSCR 1.4'],['Hazard grade','B+ · AAL 0.7%'],['Political grade','B+ (Low)']]}
 };
 function openCoordModal(){document.getElementById('coord-modal').classList.add('show');document.body.style.overflow='hidden'}
 function closeCoordModal(){document.getElementById('coord-modal').classList.remove('show');document.body.style.overflow='';document.getElementById('coord-progress').style.display='none';document.getElementById('coord-result').classList.remove('show')}
@@ -4001,16 +3986,16 @@ drawHorizon('beleme');
 
 /* ===== GRANT DETAIL PANEL ===== */
 const GRANTS={
-  wb_ease:{name:'World Bank EASE',sub:'Sponsor: World Bank · Instrument: grant · Otsus-compatible: yes',fields:[['Envelope','USD 125M committed'],['Per-village','USD 50k typical'],['Focus','Eastern Indonesia · Papua bonus'],['Tier eligibility','Tertinggal · Berkembang priority'],['Score for Beleme','0.78 (high)'],['Fiscal fit','USD 50k allocated']]},
-  adb_srp:{name:'ADB Sustainable Rural Program',sub:'Sponsor: Asian Development Bank · Instrument: concessional debt',fields:[['Envelope','USD 80M committed'],['Per-village','USD 40k typical'],['Term','15 yr · grace 3 · 2.5%'],['Tier eligibility','All tiers'],['Score for Beleme','0.61 (medium)'],['Fiscal fit','USD 40k allocated']]},
-  kfw:{name:'KfW DesaListrik',sub:'Sponsor: KfW Bilateral · Instrument: grant · Otsus-compatible',fields:[['Envelope','EUR 30M committed'],['Per-village','USD 75k typical'],['Focus','KTI eastern microgrids'],['Tier eligibility','Tertinggal preferred'],['Score for Beleme','0.83 (very high)'],['Fiscal fit','USD 75k allocated']]},
-  jica:{name:'JICA ENR',sub:'Sponsor: JICA · Instrument: concessional',fields:[['Envelope','JPY 4B'],['Per-village','USD 35k typical'],['Term','20 yr · grace 5 · 1.0%'],['Score for Beleme','0.55'],['Fiscal fit','USD 35k allocated']]},
-  gef:{name:'GEF Adaptation Climate Change',sub:'Sponsor: Global Environment Facility',fields:[['Envelope','USD 20M'],['Per-village','USD 25k'],['Score for Beleme','0.49'],['Fiscal fit','USD 25k']]},
-  usaid:{name:'USAID DCA',sub:'Sponsor: USAID · Instrument: guarantee',fields:[['Envelope','USD 50M guarantee'],['Per-village','USD 30k'],['Score for Beleme','0.52']]},
+  wb_ease:{name:'Multilateral Grant A',sub:'Instrument: Instrument: grant · Otsus-compatible: yes',fields:[['Envelope','USD 125M committed'],['Per-village','USD 50k typical'],['Focus','Eastern Indonesia · Papua bonus'],['Tier eligibility','Tertinggal · Berkembang priority'],['Score for Beleme','0.78 (high)'],['Fiscal fit','USD 50k allocated']]},
+  adb_srp:{name:'Multilateral Concessional B',sub:'Instrument: concessional debt',fields:[['Envelope','USD 80M committed'],['Per-village','USD 40k typical'],['Term','15 yr · grace 3 · 2.5%'],['Tier eligibility','All tiers'],['Score for Beleme','0.61 (medium)'],['Fiscal fit','USD 40k allocated']]},
+  kfw:{name:'Bilateral Grant C',sub:'Instrument: grant · Otsus-compatible',fields:[['Envelope','EUR 30M committed'],['Per-village','USD 75k typical'],['Focus','KTI eastern microgrids'],['Tier eligibility','Tertinggal preferred'],['Score for Beleme','0.83 (very high)'],['Fiscal fit','USD 75k allocated']]},
+  jica:{name:'Bilateral Concessional D',sub:'Instrument: concessional',fields:[['Envelope','JPY 4B'],['Per-village','USD 35k typical'],['Term','20 yr · grace 5 · 1.0%'],['Score for Beleme','0.55'],['Fiscal fit','USD 35k allocated']]},
+  gef:{name:'Climate Adaptation Fund E',sub:'',fields:[['Envelope','USD 20M'],['Per-village','USD 25k'],['Score for Beleme','0.49'],['Fiscal fit','USD 25k']]},
+  usaid:{name:'Bilateral Guarantee F',sub:'Instrument: guarantee',fields:[['Envelope','USD 50M guarantee'],['Per-village','USD 30k'],['Score for Beleme','0.52']]},
   dak:{name:'APBN DAK Energi Penugasan',sub:'Sponsor: Kementerian ESDM · Instrument: competitive grant · Otsus-compatible: yes',fields:[['Annual envelope','IDR 680B (~USD 43M)'],['Per-project typical','USD 2M (range 0.5–6M)'],['Tier eligibility','Tertinggal · Sangat-T · Berkembang'],['Match-funding','10% kabupaten match required'],['Score for Beleme','0.71 (high)'],['Fiscal fit','USD 200k allocated']]},
-  undp:{name:'UNDP Climate Resilience Fund',sub:'Sponsor: UNDP',fields:[['Envelope','USD 5M'],['Per-village','USD 15k'],['Score','0.41']]},
-  eu:{name:'EU JTET',sub:'Sponsor: European Union · Just Transition for Energy Transformation',fields:[['Envelope','EUR 40M'],['Per-village','USD 40k'],['Score','0.58']]},
-  miga:{name:'MIGA Political Risk Insurance',sub:'Sponsor: MIGA · Instrument: PRI hybrid',fields:[['Premium','2.3% (vs 5–8% generic)'],['Coverage','Currency · expropriation · breach of contract'],['Score','0.66']]},
+  undp:{name:'Climate Resilience Fund G',sub:'',fields:[['Envelope','USD 5M'],['Per-village','USD 15k'],['Score','0.41']]},
+  eu:{name:'Just Transition Instrument H',sub:'',fields:[['Envelope','EUR 40M'],['Per-village','USD 40k'],['Score','0.58']]},
+  miga:{name:'Political Risk Insurance I',sub:'Instrument: PRI hybrid',fields:[['Premium','2.3% (vs 5–8% generic)'],['Coverage','Currency · expropriation · breach of contract'],['Score','0.66']]},
   verra:{name:'Verra VCS',sub:'Sponsor: Verra · Instrument: carbon credit',fields:[['Per credit','USD 25/tCO₂e'],['25-yr stream','USD 284k for Beleme'],['Score','0.62']]},
   jetp:{name:'JETP Indonesia',sub:'Sponsor: JETP IPG · Instrument: blended portfolio',fields:[['Total commitment','USD 21.7B (RE pipeline)'],['Min bundle','≥ USD 250k portfolio'],['Per-village','USD 150k indicative'],['Score for Beleme','0.76 (high)'],['Fiscal fit','USD 150k allocated']]}
 };
@@ -4031,8 +4016,8 @@ function setStackMode(btn,mode){
       <div class="stack-row-pro"><div class="lbl">Dana Desa (10 villages)</div><div class="stack-bar-wrap-pro"><div class="stack-bar-pro sb-dana" style="width:40%">$3.0M</div></div><div class="src">Inpres 17/2025 · 5-yr stack × 10</div></div>
       <div class="stack-row-pro"><div class="lbl">DAK Energi Penugasan</div><div class="stack-bar-wrap-pro"><div class="stack-bar-pro sb-dak" style="width:34%">$2.5M</div></div><div class="src">ESDM kabupaten allocation</div></div>
       <div class="stack-row-pro"><div class="lbl">JETP concessional</div><div class="stack-bar-wrap-pro"><div class="stack-bar-pro sb-jetp" style="width:25%">$1.9M</div></div><div class="src">Portfolio ≥ $250k threshold met</div></div>
-      <div class="stack-row-pro"><div class="lbl">KfW DesaListrik</div><div class="stack-bar-wrap-pro"><div class="stack-bar-pro sb-kfw" style="width:11%">$0.8M</div></div><div class="src">10× village grants</div></div>
-      <div class="stack-row-pro"><div class="lbl">ADB SRP concessional</div><div class="stack-bar-wrap-pro"><div class="stack-bar-pro sb-adb" style="width:7%">$0.5M</div></div><div class="src">Bundle facility</div></div>
+      <div class="stack-row-pro"><div class="lbl">Bilateral grant</div><div class="stack-bar-wrap-pro"><div class="stack-bar-pro sb-kfw" style="width:11%">$0.8M</div></div><div class="src">10× village grants</div></div>
+      <div class="stack-row-pro"><div class="lbl">Multilateral concessional</div><div class="stack-bar-wrap-pro"><div class="stack-bar-pro sb-adb" style="width:7%">$0.5M</div></div><div class="src">Bundle facility</div></div>
       <div class="stack-row-pro"><div class="lbl">Carbon pre-purchase (Verra)</div><div class="stack-bar-wrap-pro"><div class="stack-bar-pro sb-misc" style="width:5%">$0.4M</div></div><div class="src">25-yr stream PV @ $25/tCO₂e</div></div>
       <div class="stack-total"><span>PORTFOLIO ELIGIBLE FUNDING</span><span class="v">$9.1M <span class="pct">&middot; 121% of $7.5M CAPEX &middot; surplus deployable</span></span></div>`;
   }else{
@@ -4041,8 +4026,8 @@ function setStackMode(btn,mode){
       <div class="stack-row-pro"><div class="lbl">Otsus (Papua eligible)</div><div class="stack-bar-wrap-pro"><div class="stack-bar-pro sb-otsus" style="width:6%">$25k</div></div><div class="src">UU 11/2006 · UU 2/2021</div></div>
       <div class="stack-row-pro"><div class="lbl">DAK Energi Penugasan</div><div class="stack-bar-wrap-pro"><div class="stack-bar-pro sb-dak" style="width:25%">$200k</div></div><div class="src">ESDM IDR 680B annual envelope</div></div>
       <div class="stack-row-pro"><div class="lbl">JETP concessional</div><div class="stack-bar-wrap-pro"><div class="stack-bar-pro sb-jetp" style="width:19%">$150k</div></div><div class="src">$21.7B portfolio commitment (≥$250k bundle)</div></div>
-      <div class="stack-row-pro"><div class="lbl">KfW DesaListrik grant</div><div class="stack-bar-wrap-pro"><div class="stack-bar-pro sb-kfw" style="width:9.5%">$75k</div></div><div class="src">Otsus-compatible bonus +0.08 score</div></div>
-      <div class="stack-row-pro"><div class="lbl">ADB SRP concessional</div><div class="stack-bar-wrap-pro"><div class="stack-bar-pro sb-adb" style="width:5%">$40k</div></div><div class="src">Sustainable Rural Program</div></div>
+      <div class="stack-row-pro"><div class="lbl">Bilateral grant</div><div class="stack-bar-wrap-pro"><div class="stack-bar-pro sb-kfw" style="width:9.5%">$75k</div></div><div class="src">Otsus-compatible bonus +0.08 score</div></div>
+      <div class="stack-row-pro"><div class="lbl">Multilateral concessional</div><div class="stack-bar-wrap-pro"><div class="stack-bar-pro sb-adb" style="width:5%">$40k</div></div><div class="src">Sustainable Rural Program</div></div>
       <div class="stack-total"><span>TOTAL ELIGIBLE FUNDING</span><span class="v">$790,000 <span class="pct">&middot; 105% of $750k CAPEX &middot; 0% commercial debt</span></span></div>`;
   }
 }
