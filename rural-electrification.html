@@ -30,9 +30,16 @@
     <a class="brand" href="/"><img src="/assets/wordmark.webp" alt="Lumen8"><span class="tag">Energy Intelligence</span></a>
     <nav class="links">
       <a href="/">Home</a>
-      <a href="/rural-electrification.html" class="active">Rural Electrification</a>
       <a href="/utility-scale.html">Utility Scale</a>
-      <a href="/modules.html">Modules</a>
+      <a href="/rural-electrification.html" class="active">Rural Electrification</a>
+      <span class="has-menu"><a href="/modules.html">Modules <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a><div class="menu">
+        <a href="/modules.html#maritime"><i class="cyan"></i>Ports &amp; Shore Power<small>03</small></a>
+        <a href="/modules.html#telecoms"><i class="rose"></i>Telco Towers<small>04</small></a>
+        <a href="/modules.html#agriculture"><i class="green"></i>Agriculture &amp; Agrivoltaics<small>05</small></a>
+        <a href="/modules.html#twin"><i class="violet"></i>Behavioural Twin<small>06</small></a>
+        <a href="/modules.html#carbon"><i class="green"></i>Carbon &amp; Embodied CO₂<small>07</small></a>
+        <a href="/modules.html#geothermal"><i class="blue"></i>Geothermal<small>08</small></a>
+      </div></span>
       <a class="platform-link" href="https://app.lumen8.ai" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Platform</a>
     </nav>
     <div class="nav-cta">
@@ -43,8 +50,8 @@
 </header>
 <div class="mobile">
   <a href="/">Home</a>
-  <a href="/rural-electrification.html">Rural Electrification</a>
   <a href="/utility-scale.html">Utility Scale</a>
+  <a href="/rural-electrification.html">Rural Electrification</a>
   <a href="/modules.html">Modules</a>
   <a href="https://app.lumen8.ai" rel="noopener">Platform</a>
   <a href="#contact">Request access</a>
@@ -84,7 +91,7 @@
 
 <!-- ============ PINNED PIPELINE ============ -->
 <section class="pipe" id="how">
-  <div class="pipe-stage wrap">
+  <div class="pipe-stage">
     <div class="pipe-steps">
       <div class="pipe-step">
         <div class="k">01 · SCREEN</div>
@@ -118,7 +125,7 @@
       </div>
       <div class="pipe-rail"><i></i><i></i><i></i><i></i><i></i><i></i></div>
     </div>
-    <div class="pipe-vis"><canvas data-holo="pipe-rural" data-step="0"></canvas></div>
+    <div class="pipe-vis"><canvas data-holo="pipe-rural" data-step="0"></canvas><div class="pipe-veil"></div></div>
   </div>
   <div class="pipe-spacer"></div>
 </section>
@@ -217,11 +224,11 @@
   <div class="wrap">
     <div class="foot-grid">
       <div class="foot-brand"><img src="/assets/lockup.webp" alt="Lumen8 · Energy Intelligence"><p>Energy intelligence for the infrastructure that has never been studied properly.</p></div>
-      <div><h5>Platform</h5><ul><li><a href="/rural-electrification.html">Rural Electrification</a></li><li><a href="/utility-scale.html">Utility Scale</a></li><li><a href="/modules.html">Modules</a></li></ul></div>
-      <div><h5>Modules</h5><ul><li><a href="/modules.html#maritime">Maritime</a></li><li><a href="/modules.html#telecoms">Telecoms</a></li><li><a href="/modules.html#agriculture">Agriculture</a></li><li><a href="/modules.html#twin">Behavioural Twin</a></li><li><a href="/modules.html#geothermal">Geothermal</a></li></ul></div>
+      <div><h5>Platform</h5><ul><li><a href="/utility-scale.html">Utility Scale</a></li><li><a href="/rural-electrification.html">Rural Electrification</a></li><li><a href="/modules.html">Modules</a></li><li><a href="https://app.lumen8.ai" rel="noopener">Sign in</a></li></ul></div>
+      <div><h5>Modules</h5><ul><li><a href="/modules.html#maritime">Ports &amp; Shore Power</a></li><li><a href="/modules.html#telecoms">Telco Towers</a></li><li><a href="/modules.html#agriculture">Agriculture</a></li><li><a href="/modules.html#twin">Behavioural Twin</a></li><li><a href="/modules.html#carbon">Carbon</a></li><li><a href="/modules.html#geothermal">Geothermal</a></li></ul></div>
       <div><h5>Contact</h5><ul><li><a href="mailto:hello@lumen8.ai">hello@lumen8.ai</a></li><li><a href="#contact">Request access</a></li></ul></div>
     </div>
-    <div class="foot-word" data-reveal="fade">LUMEN8</div>
+    <div class="foot-word" data-reveal="fade" role="img" aria-label="LUMEN8"></div>
     <div class="foot-bar"><span>© 2026 LUMEN8 · ENERGY INTELLIGENCE</span><span>FROM A COORDINATE TO A BANKABLE ASSET</span></div>
   </div>
 </footer>

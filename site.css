@@ -112,7 +112,9 @@ main{position:relative;z-index:1}
 .btn svg{width:16px;height:16px;position:relative;z-index:1;transition:transform .35s var(--ease)}
 .btn:hover svg{transform:translateX(4px)}
 .btn.primary{background:linear-gradient(135deg,var(--cyan),var(--blue));border-color:transparent;color:#03131a}
-.btn.primary::after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,var(--blue-2),var(--violet));opacity:0;transition:opacity .4s}
+/* Hover overlay stays in the cyan/blue family. It previously ended on
+   --violet (#a78bfa), which over a bright gradient button reads as pink. */
+.btn.primary::after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,var(--cyan-2),var(--blue));opacity:0;transition:opacity .4s}
 .btn.primary:hover::after{opacity:1}
 .btn.primary:hover{box-shadow:0 12px 40px rgba(59,130,246,.28)}
 .btn.ghost:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.28)}
@@ -201,8 +203,10 @@ main{position:relative;z-index:1}
 .card.violet::after{background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(167,139,250,.7),transparent 45%)}
 .card.green::before{background:radial-gradient(520px circle at var(--mx,50%) var(--my,50%),rgba(52,211,153,.13),transparent 45%)}
 .card.green::after{background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(52,211,153,.7),transparent 45%)}
-.card.rose::before{background:radial-gradient(520px circle at var(--mx,50%) var(--my,50%),rgba(251,113,133,.13),transparent 45%)}
-.card.rose::after{background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(251,113,133,.7),transparent 45%)}
+/* Was rgba(251,113,133,..) = --rose. That is the one unambiguously pink glow
+   on the site, and it fired on plain .card:hover. Now cyan like the default. */
+.card.rose::before{background:radial-gradient(520px circle at var(--mx,50%) var(--my,50%),rgba(34,211,238,.13),transparent 45%)}
+.card.rose::after{background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(34,211,238,.7),transparent 45%)}
 .card>*{position:relative;z-index:1}
 .card .num{font-family:var(--font-m);font-size:11px;letter-spacing:.2em;color:var(--muted)}
 .card h3{margin:16px 0 10px;font-size:clamp(20px,1.6vw,24px)}
@@ -510,3 +514,55 @@ footer li a:hover{color:var(--cyan)}
 .surf-note a:hover{color:var(--ink);border-color:var(--cyan)}
 .card.big .art{height:66%}
 .card.big .art::after{background:linear-gradient(180deg,rgba(4,6,12,0) 50%,rgba(4,6,12,.97) 100%)}
+
+/* ---------- v6: sunshine-to-money hero, module dropdown, full-bleed pipeline, wordmark footer ---------- */
+.hero h1 .grad{background:linear-gradient(92deg,#67e8f9 0%,#5eead4 35%,#34d399 70%,#a7f3d0 100%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gradshift 7s ease-in-out infinite alternate}
+@keyframes gradshift{from{background-position:0% 0}to{background-position:100% 0}}
+.hero canvas[data-hero3d]{inset:0;width:100%;height:100%}
+.hero .veil{background:linear-gradient(90deg,var(--bg) 0%,rgba(4,6,12,.92) 16%,rgba(4,6,12,.6) 34%,rgba(4,6,12,.1) 52%,transparent 66%),linear-gradient(180deg,rgba(4,6,12,.5),rgba(4,6,12,0) 22%,rgba(4,6,12,.04) 72%,var(--bg) 100%)}
+.hero .lead{max-width:540px}
+/* nav: module dropdown */
+.links .has-menu{position:relative;display:inline-flex}
+.links .has-menu>a{display:inline-flex;align-items:center;gap:5px}
+.links .chev{width:12px;height:12px;opacity:.6;transition:transform .3s var(--ease)}
+.links .has-menu:hover .chev,.links .has-menu.open .chev{transform:rotate(180deg)}
+.links .menu{position:absolute;top:calc(100% + 10px);left:0;min-width:292px;padding:8px;border-radius:16px;border:1px solid var(--line-2);background:rgba(6,9,18,.94);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);display:grid;gap:2px;opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .25s,transform .35s var(--ease);box-shadow:0 30px 70px rgba(0,0,0,.55)}
+.links .menu::before{content:"";position:absolute;left:0;right:0;top:-12px;height:12px}
+.links .has-menu:hover .menu,.links .has-menu:focus-within .menu,.links .has-menu.open .menu{opacity:1;transform:none;pointer-events:auto}
+.links .menu a{display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:10px;font-size:13.5px;color:var(--ink-2);white-space:nowrap}
+.links .menu a:hover{color:var(--ink);background:rgba(255,255,255,.06)}
+.links .menu a i{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);flex:none}
+.links .menu a i.rose{background:var(--rose);box-shadow:0 0 10px var(--rose)}
+.links .menu a i.green{background:var(--green);box-shadow:0 0 10px var(--green)}
+.links .menu a i.violet{background:var(--violet);box-shadow:0 0 10px var(--violet)}
+.links .menu a i.blue{background:var(--blue-2);box-shadow:0 0 10px var(--blue-2)}
+.links .menu a small{margin-left:auto;font-family:var(--font-m);font-size:9px;letter-spacing:.16em;color:var(--muted);padding-left:14px}
+/* pinned pipeline: full-bleed scene, text floats on the left, edges fade instead of clipping */
+.pipe-stage{display:block;position:sticky;top:0;height:100svh;width:100%;overflow:hidden}
+.pipe-vis{position:absolute;inset:0;width:100%;height:100%;max-height:none;aspect-ratio:auto;margin:0;z-index:0;cursor:grab}
+.pipe-vis canvas{border-radius:0;width:100%;height:100%}
+.pipe-veil{position:absolute;inset:0;pointer-events:none;z-index:1;background:linear-gradient(90deg,var(--bg) 0%,rgba(4,6,12,.9) 22%,rgba(4,6,12,.45) 40%,rgba(4,6,12,.05) 56%,transparent 68%),linear-gradient(180deg,var(--bg) 0%,rgba(4,6,12,.3) 14%,rgba(4,6,12,0) 30%,rgba(4,6,12,0) 74%,var(--bg) 100%)}
+.pipe-vis::after{left:auto;right:var(--gutter);bottom:30px;z-index:2}
+.pipe-steps{position:absolute;left:var(--gutter);top:50%;transform:translateY(-50%);width:min(560px,46%);height:440px;min-height:0;z-index:2;pointer-events:none;display:block}
+.pipe-step{inset:0 0 56px 0}
+.pipe-step h3{text-shadow:0 4px 40px rgba(4,6,12,.9)}
+.pipe-step p{text-shadow:0 2px 20px rgba(4,6,12,.9)}
+.pipe-rail{position:absolute;left:0;right:0;bottom:0}
+@media (max-width:900px){.pipe-stage{display:block}.pipe-steps{width:calc(100% - var(--gutter)*2);top:auto;bottom:36px;transform:none;height:340px}.pipe-veil{background:linear-gradient(180deg,var(--bg) 0%,rgba(4,6,12,.2) 18%,rgba(4,6,12,.25) 50%,rgba(4,6,12,.92) 74%,var(--bg) 100%)}.pipe-vis::after{display:none}}
+/* footer wordmark: the logo itself, fading into the dark */
+.foot-word{display:block;width:min(94%,1180px);aspect-ratio:1000/187;margin:24px auto 44px;background:url(/assets/wordmark.webp) center/contain no-repeat;-webkit-mask:linear-gradient(180deg,rgba(0,0,0,.17) 0%,rgba(0,0,0,.05) 62%,transparent 100%);mask:linear-gradient(180deg,rgba(0,0,0,.17) 0%,rgba(0,0,0,.05) 62%,transparent 100%);font-size:0;color:transparent;letter-spacing:0;line-height:0;user-select:none}
+/* stats: units sit small beside the figure */
+.stat b small,.kv b small{font-size:.46em;color:var(--muted);margin-left:5px;letter-spacing:0;-webkit-text-fill-color:var(--muted);font-family:var(--font-m);font-weight:500}
+.surf-note{gap:26px;flex-wrap:wrap}
+/* cards: the scene is the card */
+.card.big .art{height:70%}
+.card.big .art::after{background:linear-gradient(180deg,rgba(4,6,12,0) 46%,rgba(4,6,12,.55) 74%,rgba(4,6,12,.97) 100%)}
+.card.big:hover .art canvas{filter:saturate(1.08) brightness(1.06)}
+.card.big .art canvas{transition:filter .5s}
+/* module art: taller on wide screens so nothing is cut */
+.mod .art{aspect-ratio:1/1.02}
+.mod.amber .art{aspect-ratio:1/1.08}
+/* hover glow: cyan everywhere; rose stays a static identity for telecoms only */
+.card.rose::before{background:radial-gradient(520px circle at var(--mx,50%) var(--my,50%),rgba(34,211,238,.12),transparent 45%)}
+.card.rose::after{background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(34,211,238,.65),transparent 45%)}
+/* mailto fallback toast */

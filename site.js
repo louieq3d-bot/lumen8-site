@@ -83,6 +83,16 @@
     mobile.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeMobile));
   }
 
+  /* ---------- module dropdown on touch ---------- */
+  document.querySelectorAll('.links .has-menu').forEach((m) => {
+    const a = m.querySelector(':scope > a');
+    a.addEventListener('click', (e) => {
+      if (window.matchMedia('(hover:hover)').matches || m.classList.contains('open')) return;
+      e.preventDefault(); m.classList.add('open');
+    });
+    document.addEventListener('click', (e) => { if (!m.contains(e.target)) m.classList.remove('open'); });
+  });
+
   /* ---------- custom cursor ---------- */
   const cur = document.querySelector('.cursor');
   if (cur && !reduce && window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
@@ -166,15 +176,16 @@
     const target = parseFloat(el.dataset.count);
     const dec = (el.dataset.dec | 0);
     const suffix = el.dataset.suffix || '';
-    el.textContent = fmt(0, dec) + suffix;
+    const show = (v) => { el.textContent = fmt(v, dec); if (suffix) { const sm = document.createElement('small'); sm.textContent = suffix; el.appendChild(sm); } };
+    show(0);
     const obs = new IntersectionObserver((en) => {
       if (!en[0].isIntersecting) return;
       obs.disconnect();
-      if (reduce) { el.textContent = fmt(target, dec) + suffix; return; }
+      if (reduce) { show(target); return; }
       const t0 = performance.now(), dur = 1800;
       const step = (t) => {
         const p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 4);
-        el.textContent = fmt(target * e, dec) + suffix;
+        show(target * e);
         if (p < 1) requestAnimationFrame(step);
       };
       requestAnimationFrame(step);
@@ -366,5 +377,100 @@
     const win = document.createElement('div');
     win.style.cssText = 'flex:1;min-width:0;overflow:hidden;-webkit-mask:linear-gradient(90deg,transparent,#000 3%,#000 95%,transparent);mask:linear-gradient(90deg,transparent,#000 3%,#000 95%,transparent)';
     tick.parentNode.insertBefore(win, tick); win.appendChild(tick);
+  }
+})();
+
+/* ── mailto fallback ───────────────────────────────────────────────────────
+   The contact CTA is a real <a href="mailto:...">, which is correct markup —
+   but a visitor with no default mail handler (anyone living in webmail, which
+   is most people) clicks it and NOTHING happens. A silent no-op on the primary
+   conversion path.
+
+   We cannot detect whether the mail client opened, so we do not try. Instead
+   the click always produces something visible: we copy the address and say so
+   in a toast. The href is untouched and the event is never cancelled, so
+   people who DO have a mail client get their compose window exactly as before.
+
+   Feedback goes in a TOAST, not the button label. Both the CTA and the footer
+   links already read "hello@lumen8.ai", so rewriting the label to show the
+   address on failure is invisible — a working handler looks like a dead one.
+   (Learned the hard way while testing this.) */
+(() => {
+  const EMAIL = 'hello@lumen8.ai';
+  const links = document.querySelectorAll('a[href^="mailto:"]');
+  if (!links.length) return;
+
+  let toast, hideTimer;
+  function say(msg, good) {
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.setAttribute('role', 'status');
+      toast.setAttribute('aria-live', 'polite');
+      toast.style.cssText =
+        'position:fixed;left:50%;bottom:28px;transform:translate(-50%,14px);z-index:9999;' +
+        'padding:11px 18px;border-radius:999px;font:500 13.5px/1 Inter,system-ui,sans-serif;' +
+        'letter-spacing:.01em;pointer-events:none;opacity:0;' +
+        'transition:opacity .25s ease,transform .25s cubic-bezier(.16,1,.3,1);' +
+        'backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.style.background = good ? 'rgba(34,211,238,.14)' : 'rgba(255,255,255,.10)';
+    toast.style.color = good ? '#a5f3fc' : '#eaf0f8';
+    toast.style.boxShadow = 'inset 0 0 0 1px ' + (good ? 'rgba(34,211,238,.45)' : 'rgba(255,255,255,.18)');
+    // Force a reflow and set the visible state synchronously rather than
+    // deferring to requestAnimationFrame. rAF is throttled when the page is
+    // unfocused and stops entirely in a background tab — if the reveal lived
+    // in a rAF callback the toast could sit at opacity 0 forever, which is the
+    // dead-click bug wearing a hat. Reading offsetWidth flushes the initial
+    // style so the CSS transition still animates.
+    void toast.offsetWidth;
+    toast.style.opacity = '1';
+    toast.style.transform = 'translate(-50%,0)';
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translate(-50%,14px)';
+    }, 2600);
+  }
+
+  async function copy(text) {
+    // Async clipboard first, but NEVER awaited unbounded: writeText() does not
+    // reject when the document lacks focus, it returns a promise that never
+    // settles. An unbounded await would hang and show no feedback at all —
+    // the very dead-click this block exists to remove.
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        const won = await Promise.race([
+          navigator.clipboard.writeText(text).then(() => true, () => false),
+          new Promise((r) => setTimeout(() => r(null), 600)),
+        ]);
+        if (won === true) return true;
+        if (won === false) return legacyCopy(text);
+        // null => timed out (unfocused document); fall through to the sync path
+      }
+    } catch { /* fall through */ }
+    return legacyCopy(text);
+  }
+
+  function legacyCopy(text) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.cssText = 'position:fixed;top:-9999px;opacity:0';
+      document.body.appendChild(ta);
+      ta.select();
+      const ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      return ok;
+    } catch { return false; }
+  }
+
+  for (const a of links) {
+    a.addEventListener('click', async () => {
+      const ok = await copy(EMAIL);
+      say(ok ? EMAIL + ' copied to clipboard' : 'Email us at ' + EMAIL, ok);
+    });
   }
 })();
