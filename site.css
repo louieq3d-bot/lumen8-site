@@ -465,3 +465,18 @@ footer li a:hover{color:var(--cyan)}
 .cta::before{background:conic-gradient(from 0deg,transparent,rgba(34,211,238,.12),transparent 30%,rgba(59,130,246,.14),transparent 60%,rgba(167,139,250,.1),transparent)}
 .foot-bar,.foot-word{letter-spacing:-.06em}
 .foot-bar{letter-spacing:.12em}
+
+/* ---------- v4: crisper hero, interactive panels ---------- */
+.hero .veil{background:radial-gradient(70% 70% at 62% 48%,transparent 0%,rgba(4,6,12,.18) 74%,var(--bg) 100%),linear-gradient(180deg,rgba(4,6,12,.35),rgba(4,6,12,0) 26%,rgba(4,6,12,.08) 72%,var(--bg) 100%)}
+.mod .art::after{content:"DRAG TO ORBIT · HOVER TO INSPECT · CLICK TO FOCUS"}
+.pipe-vis::after{content:"DRAG · HOVER · CLICK";position:absolute;left:16px;bottom:14px;font-family:var(--font-m);font-size:9px;letter-spacing:.24em;color:var(--muted);pointer-events:none;opacity:.7}
+.pipe-vis{position:relative}
+
+/* ---------- v4: utility scroller backdrop, marquee start ---------- */
+.hs-bg{position:absolute;right:0;top:0;width:58%;height:100%;z-index:0;opacity:.85;pointer-events:none;
+  -webkit-mask:linear-gradient(90deg,transparent,#000 30%);mask:linear-gradient(90deg,transparent,#000 30%)}
+.hs-bg canvas{width:100%;height:100%;display:block}
+.hs-head,.hs-track{position:relative;z-index:1}
+.hs-card{min-height:min(440px,54vh);background:rgba(6,9,18,.62);backdrop-filter:blur(6px)}
+@media (max-width:900px){.hs-bg{width:100%;opacity:.45}}
+.ticker .line{padding-left:6px}

@@ -13,10 +13,10 @@
   try { renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true, powerPreference: 'high-performance' }); }
   catch (e) { return; }
   const field = document.querySelector('canvas[data-field]'); if (field) field.style.display = 'none';
-  renderer.setPixelRatio(Math.min(1.5, window.devicePixelRatio || 1));
+  renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
   renderer.setClearColor(0x000000, 0); renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.1;
   const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x04060c, 0.0042);
+  scene.fog = new THREE.FogExp2(0x04060c, 0.0021);
   const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 600);
   const rig = new THREE.Group(); rig.add(camera); scene.add(rig);
   camera.position.set(0, 46, 118); camera.lookAt(0, 4, 0);
@@ -37,7 +37,7 @@
   const pos = geo.attributes.position;
   for (let i = 0; i < pos.count; i++) pos.setY(i, terrainH(pos.getX(i), pos.getZ(i)));
   geo.computeVertexNormals();
-  const wire = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0x22d3ee, wireframe: true, transparent: true, opacity: .10, fog: true }));
+  const wire = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0x22d3ee, wireframe: true, transparent: true, opacity: .16, fog: true }));
   const fill = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0x04060c, transparent: true, opacity: .96, fog: true, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 }));
   scene.add(fill, wire);
   // vertex points, denser near the pin
@@ -45,7 +45,7 @@
   const cCyan = new THREE.Color(0x67e8f9), cAmber = new THREE.Color(0x93c5fd), cDim = new THREE.Color(0x1a5c6b);
   for (let i = 0; i < pos.count; i += 2) { const x = pos.getX(i), z = pos.getZ(i), d = Math.hypot(x, z); if (Math.random() < Math.max(.08, 1 - d / 110)) { vp.push(x, pos.getY(i) + .3, z); const c = Math.random() < .06 ? cAmber : (d < 70 ? cCyan : cDim); vc.push(c.r, c.g, c.b); } }
   const pg = new THREE.BufferGeometry(); pg.setAttribute('position', new THREE.Float32BufferAttribute(vp, 3)); pg.setAttribute('color', new THREE.Float32BufferAttribute(vc, 3));
-  const points = new THREE.Points(pg, new THREE.PointsMaterial({ size: 1.6, map: glowTex, vertexColors: true, transparent: true, opacity: .9, blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true }));
+  const points = new THREE.Points(pg, new THREE.PointsMaterial({ size: 1.1, map: glowTex, vertexColors: true, transparent: true, opacity: .75, blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true }));
   scene.add(points);
   // contour lines
   const contours = new THREE.Group();
@@ -72,14 +72,22 @@
   scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(fence), new THREE.LineDashedMaterial({ color: 0x93c5fd, dashSize: 2, gapSize: 2, transparent: true, opacity: .5 })).computeLineDistances());
 
   /* ---------- energy → value ---------- */
-  const curve = new THREE.CatmullRomCurve3([new THREE.Vector3(44, terrainH(44, -4) + 2, -4), new THREE.Vector3(56, 14, -18), new THREE.Vector3(66, 30, -34), new THREE.Vector3(72, 42, -52)]);
+  const curve = new THREE.CatmullRomCurve3([new THREE.Vector3(44, terrainH(44, -4) + 2, -4), new THREE.Vector3(56, 14, -18), new THREE.Vector3(66, 22, -34), new THREE.Vector3(72, 30, -52)]);
   const cpts = curve.getPoints(80);
-  scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(cpts), new THREE.LineBasicMaterial({ color: 0x22d3ee, transparent: true, opacity: .35 })));
+  const energyMat = (color, speed, repeat, alpha) => new THREE.ShaderMaterial({ uniforms: { t: { value: 0 }, c: { value: new THREE.Color(color) }, sp: { value: speed }, rp: { value: repeat }, al: { value: alpha } }, vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.); }', fragmentShader: 'uniform float t, sp, rp, al; uniform vec3 c; varying vec2 vUv; void main(){ float p = fract(vUv.x * rp - t * sp); float band = smoothstep(0., .1, p) * smoothstep(.55, .1, p); gl_FragColor = vec4(c * (.22 + 1.7 * band) + vec3(band * .45), (.18 + .82 * band) * al); }', transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide });
+  const EM = [];
+  const tube = (pts, color, radius, speed, repeat, alpha) => { const cv2 = new THREE.CatmullRomCurve3(pts); const m = energyMat(color, speed, repeat, alpha == null ? 1 : alpha); EM.push(m); return new THREE.Mesh(new THREE.TubeGeometry(cv2, 48, radius, 6, false), m); };
+  scene.add(tube(cpts.filter((p, i) => i % 8 === 0), 0x22d3ee, .55, .5, 3, .9));
+  // ground conduits: the coordinate feeds the array, the array feeds the village
+  [[18, -26], [18, 20], [62, -26], [62, 20]].forEach(([x, z]) => scene.add(tube([new THREE.Vector3(0, terrainH(0, 0) + .6, 0), new THREE.Vector3(x * .5, terrainH(x * .5, z * .5) + 1.2, z * .5), new THREE.Vector3(x, terrainH(x, z) + .6, z)], 0x3b82f6, .28, .45, 2, .75)));
+  const vil = []; for (let i = 0; i < 14; i++) { const a = i / 14 * 6.28 + .4, d = 28 + (i % 3) * 9, x = -Math.abs(Math.cos(a)) * d - 6, z = Math.sin(a) * d; vil.push(new THREE.Vector3(x, terrainH(x, z), z)); }
+  const hm = new THREE.MeshStandardMaterial({ color: 0x8e9bb3, roughness: .9, metalness: .05, emissive: 0x1e3a8a, emissiveIntensity: .15 });
+  vil.forEach((p, i) => { const h = new THREE.Mesh(new THREE.BoxGeometry(3.4, 1.6, 2.8), hm); h.position.set(p.x, p.y + .8, p.z); h.rotation.y = i * .7; scene.add(h); const rf = new THREE.Mesh(new THREE.ConeGeometry(2.4, .9, 4), new THREE.MeshStandardMaterial({ color: 0x1b2438, roughness: .85 })); rf.position.set(p.x, p.y + 2.05, p.z); rf.rotation.y = i * .7 + Math.PI / 4; scene.add(rf); scene.add(tube([new THREE.Vector3(0, terrainH(0, 0) + .6, 0), new THREE.Vector3(p.x * .5, terrainH(p.x * .5, p.z * .5) + 2.5, p.z * .5), new THREE.Vector3(p.x, p.y + 1.6, p.z)], 0x67e8f9, .1, .3 + (i % 4) * .08, 1, .8)); });
   const NP = 26, flow = new THREE.Group(); const flowS = [];
-  for (let i = 0; i < NP; i++) { const s = sprite(i % 5 ? 0x67e8f9 : 0x93c5fd, 2.6 + Math.random() * 1.4, .9); flow.add(s); flowS.push({ s, u: i / NP, v: .06 + Math.random() * .04 }); }
+  for (let i = 0; i < NP; i++) { const s = sprite(i % 5 ? 0x67e8f9 : 0x93c5fd, 1.4 + Math.random() * .8, .95); flow.add(s); flowS.push({ s, u: i / NP, v: .06 + Math.random() * .04 }); }
   scene.add(flow);
   // rising value: bars + a glowing curve
-  const chart = new THREE.Group(); chart.position.set(72, 42, -52); scene.add(chart);
+  const chart = new THREE.Group(); chart.position.set(72, 30, -52); scene.add(chart);
   const NB = 9, barsM = new THREE.InstancedMesh(new THREE.BoxGeometry(2.2, 1, 2.2), new THREE.MeshBasicMaterial({ color: 0x34d399, transparent: true, opacity: .7, blending: THREE.AdditiveBlending, depthWrite: false }), NB); chart.add(barsM);
   const barH = []; for (let i = 0; i < NB; i++) barH.push(3 + i * 2.6 + Math.random() * 1.5);
   chart.add(sprite(0x34d399, 30, .25));
@@ -104,7 +112,7 @@
     smx += (mx - smx) * .04; smy += (my - smy) * .04;
     const sy = Math.min(1, (window.scrollY || 0) / Math.max(1, window.innerHeight));
     rig.rotation.y = -.12 + smx * .22 + Math.sin(t * .08) * .05;
-    camera.position.set(0, 46 + smy * 8 + sy * 40, 118 - sy * 30); camera.lookAt(10, 4 + sy * 10, -10);
+    camera.position.set(-14, 44 + smy * 8 + sy * 40, 116 - sy * 30); camera.lookAt(-6, 4 + sy * 10, -10);
     rings.forEach((r, i) => { const ph = ((t * .32 + i * .25) % 1); const s = 3 + ph * 52; r.scale.set(s, s, 1); r.material.opacity = (1 - ph) * .7; });
     scan.rotation.z = t * .9; beamMat.opacity = .45 + Math.sin(t * 3) * .12;
     // array shimmer
@@ -117,6 +125,7 @@
     barsM.instanceMatrix.needsUpdate = true; valLine.geometry.setFromPoints(wave);
     // waveforms
     waves.forEach((w) => { const p = w.l.geometry.attributes.position; for (let i = 0; i < w.n; i++) { const x = -170 + i / (w.n - 1) * 340; const env = Math.exp(-Math.pow(x / 120, 2)); const y = w.y + (Math.sin(x * .06 + t * 1.4 + w.ph) * 6 + Math.sin(x * .17 - t * 2.2 + w.ph) * 2.2) * env; p.setXYZ(i, x, y, -40 + Math.sin(x * .02 + w.ph) * 30); } p.needsUpdate = true; });
+    EM.forEach((m) => { m.uniforms.t.value = t; });
     renderer.render(scene, camera);
   }
   tick();

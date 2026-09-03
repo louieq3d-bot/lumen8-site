@@ -13,7 +13,7 @@
     const cols = (cv.dataset.wave || 'blue,cyan').split(',').map((c) => PAL[c.trim()] || PAL.blue);
     const N = 22, strands = [];
     for (let k = 0; k < N; k++) strands.push({ o: (k / (N - 1) - .5), ph: k * .21, sp: .7 + (k % 5) * .06, c: cols[k % cols.length] });
-    const pulses = []; for (let i = 0; i < 7; i++) pulses.push({ k: (Math.random() * N) | 0, u: Math.random(), v: .05 + Math.random() * .05 });
+    const pulses = []; for (let i = 0; i < 11; i++) pulses.push({ k: (Math.random() * N) | 0, u: Math.random(), v: .05 + Math.random() * .05 });
     const st = { cv, ctx, cols, strands, pulses, t: Math.random() * 40, vis: false, W: 0, H: 0 };
     const size = () => { const d = Math.min(1.5, devicePixelRatio || 1); st.W = cv.clientWidth; st.H = cv.clientHeight; cv.width = st.W * d; cv.height = st.H * d; ctx.setTransform(d, 0, 0, d, 0, 0); };
     size(); new ResizeObserver(size).observe(cv);
@@ -30,10 +30,10 @@
     // soft body
     ctx.beginPath(); for (let i = 0; i <= 120; i++) { const [x, y] = point(st, strands[0], i / 120); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } for (let i = 120; i >= 0; i--) { const [x, y] = point(st, strands[strands.length - 1], i / 120); ctx.lineTo(x, y); } ctx.closePath(); ctx.fillStyle = grad; ctx.globalAlpha = .045; ctx.fill(); ctx.globalAlpha = 1;
     // strands
-    strands.forEach((s, k) => { ctx.beginPath(); for (let i = 0; i <= 140; i++) { const [x, y] = point(st, s, i / 140); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.strokeStyle = grad; ctx.globalAlpha = k % 3 === 0 ? .5 : .22; ctx.lineWidth = k % 3 === 0 ? 1.1 : .7; ctx.shadowBlur = k % 3 === 0 ? 8 : 0; ctx.shadowColor = 'rgba(' + s.c + ',.9)'; ctx.stroke(); });
+    strands.forEach((s, k) => { ctx.beginPath(); for (let i = 0; i <= 140; i++) { const [x, y] = point(st, s, i / 140); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); } ctx.strokeStyle = grad; ctx.globalAlpha = k % 3 === 0 ? .7 : .32; ctx.lineWidth = k % 3 === 0 ? 1.3 : .8; ctx.shadowBlur = k % 3 === 0 ? 8 : 0; ctx.shadowColor = 'rgba(' + s.c + ',.9)'; ctx.stroke(); });
     ctx.globalAlpha = 1; ctx.shadowBlur = 0;
     // synapse pulses
-    st.pulses.forEach((p) => { p.u += (reduce ? 0 : dt) * p.v * (1 + vel * 2); if (p.u > 1) { p.u = 0; p.k = (Math.random() * strands.length) | 0; } const s = strands[p.k], [x, y] = point(st, s, p.u); const a = Math.sin(p.u * Math.PI); const g = ctx.createRadialGradient(x, y, 0, x, y, 14); g.addColorStop(0, 'rgba(255,255,255,' + (.9 * a) + ')'); g.addColorStop(.25, 'rgba(' + s.c + ',' + (.6 * a) + ')'); g.addColorStop(1, 'rgba(' + s.c + ',0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, 14, 0, 6.283); ctx.fill(); });
+    st.pulses.forEach((p) => { p.u += (reduce ? 0 : dt) * p.v * (1 + vel * 2); if (p.u > 1) { p.u = 0; p.k = (Math.random() * strands.length) | 0; } const s = strands[p.k], [x, y] = point(st, s, p.u); const a = Math.sin(p.u * Math.PI); const g = ctx.createRadialGradient(x, y, 0, x, y, 14); g.addColorStop(0, 'rgba(255,255,255,' + a + ')'); g.addColorStop(.12, 'rgba(255,255,255,' + (.8 * a) + ')'); g.addColorStop(.3, 'rgba(' + s.c + ',' + (.6 * a) + ')'); g.addColorStop(1, 'rgba(' + s.c + ',0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, 14, 0, 6.283); ctx.fill(); });
     ctx.globalCompositeOperation = 'source-over';
   }
   let last = performance.now();
