@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Modules — Lumen8</title>
-<meta name="description" content="Shore power for ports, solar for diesel towers, agrivoltaics for farms, behavioural twins for impact and geothermal screening. The infrastructure around the grid, on the same engine.">
+<meta name="description" content="Shore power for ports, solar for diesel towers, agrivoltaics for agriculture, behavioural twins for impact and geothermal screening. The infrastructure around the grid, on the same engine.">
 <meta property="og:title" content="Modules — Lumen8">
 <meta property="og:description" content="Maritime, telecoms, agriculture, behavioural twin and geothermal. One engine, five more surfaces.">
 <meta property="og:type" content="website">
@@ -53,9 +53,9 @@
 <main>
 
 <section class="hero sub">
-  <canvas data-field></canvas>
-  <canvas data-hero3d></canvas>
+  <canvas data-holo="hero-port" class="hero-holo"></canvas>
   <div class="veil"></div>
+  <div class="hint">DRAG TO ORBIT · HOVER TO INSPECT · CLICK TO FOCUS</div>
   <div class="wrap">
     <div class="hero-grid">
       <div>
@@ -64,14 +64,14 @@
           <span class="w"><i>The</i></span> <span class="w"><i>infrastructure</i></span><br>
           <span class="w"><i class="grad-v">around</i></span> <span class="w"><i class="grad-v">the</i></span> <span class="w"><i class="grad-v">grid.</i></span>
         </h1>
-        <p class="lead" data-hero>Ports, towers, farms, people and heat. Each module runs on the same engine, shares the same data and produces the same class of evidence.</p>
+        <p class="lead" data-hero>Ports, towers, agriculture, people and heat. Each module runs on the same engine, shares the same data and produces the same class of evidence.</p>
         <div class="actions" data-hero>
           <a class="btn primary" href="#contact"><span>Request access</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           <a class="btn ghost" href="#maritime"><span>Start with maritime</span></a>
         </div>
       </div>
       <div class="hero-side" data-hero>
-        <div class="ticker"><span class="pulse"></span><div class="line" data-items='["<b>5,018</b> port facilities","<b>34,371</b> tower sites","<b>37 M</b> farm parcels","<b>4</b> impact frameworks","<b>P90 · P50 · P10</b> resource estimates","<b>1</b> shared engine"]'></div></div>
+        <div class="ticker"><span class="pulse"></span><div class="line" data-items='["<b>5,018</b> port facilities","<b>34,371</b> tower sites","<b>37 M</b> agricultural parcels","<b>4</b> impact frameworks","<b>P90 · P50 · P10</b> resource estimates","<b>1</b> shared engine"]'></div></div>
       </div>
     </div>
   </div>
@@ -93,7 +93,7 @@
   <div class="wrap">
     <div class="mod-grid">
       <div>
-        <span class="eyebrow" data-reveal>01 · Maritime</span>
+        <span class="eyebrow" data-reveal>03 · Maritime</span>
         <h2 class="h-l" data-reveal>Shore power,<br><span class="grad-c">berth by berth.</span></h2>
         <p class="lead" data-reveal>Every port and shipping lane in the country on one map. Work out how hard and expensive it is to reach an island site, then design a shore-power installation for a specific berth with a costed business case.</p>
         <ul class="feat" data-reveal>
@@ -121,7 +121,7 @@
   <div class="wrap">
     <div class="mod-grid flip">
       <div>
-        <span class="eyebrow rose" data-reveal>02 · Telecoms</span>
+        <span class="eyebrow rose" data-reveal>04 · Telecoms</span>
         <h2 class="h-l" data-reveal>Diesel towers,<br><span class="grad-r">ranked for solar.</span></h2>
         <p class="lead" data-reveal>Find the mobile-network towers running on diesel and rank which ones are worth converting. Each comes with a load profile, a carbon saving and a procurement-ready pack per cluster.</p>
         <ul class="feat" data-reveal>
@@ -149,7 +149,7 @@
   <div class="wrap">
     <div class="mod-grid">
       <div>
-        <span class="eyebrow green" data-reveal>03 · Agriculture</span>
+        <span class="eyebrow green" data-reveal>05 · Agriculture</span>
         <h2 class="h-l" data-reveal>Every field,<br><span class="grad-g">every crop.</span></h2>
         <p class="lead" data-reveal>See what is growing on every farm parcel in the country and where farming and solar can share the same land. Size the electricity demand from irrigation pumps, mills and cold storage before anyone drills a borehole.</p>
         <ul class="feat" data-reveal>
@@ -160,7 +160,7 @@
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12l4 4L19 6"/></svg>Mill catchments and deforestation-regulation screening</li>
         </ul>
         <div class="kv" data-reveal>
-          <div><b data-count="37.3" data-dec="1" data-suffix="M">0</b><span>Farm parcels</span></div>
+          <div><b data-count="37.3" data-dec="1" data-suffix="M">0</b><span>Agricultural parcels</span></div>
           <div><b data-count="15.1" data-dec="1" data-suffix="M">0</b><span>Hectares classified</span></div>
           <div><b data-count="3981">0</b><span>Villages scored for agrivoltaics</span></div>
         </div>
@@ -177,7 +177,7 @@
   <div class="wrap">
     <div class="mod-grid flip">
       <div>
-        <span class="eyebrow violet" data-reveal>04 · Behavioural Twin</span>
+        <span class="eyebrow violet" data-reveal>06 · Behavioural Twin</span>
         <h2 class="h-l" data-reveal>Measure impact.<br><span class="grad-v">Do not assert it.</span></h2>
         <p class="lead" data-reveal>Simulate how a village's households and businesses actually behave before and after electrification. Every result is signed and labelled as live, replayed or synthetic, so nobody can pass a demo off as evidence.</p>
         <ul class="feat" data-reveal>
@@ -205,7 +205,7 @@
   <div class="wrap">
     <div class="mod-grid">
       <div>
-        <span class="eyebrow amber" data-reveal>05 · Geothermal</span>
+        <span class="eyebrow amber" data-reveal>07 · Geothermal</span>
         <h2 class="h-l" data-reveal>Heat, screened<br><span class="grad-a">before drilling.</span></h2>
         <p class="lead" data-reveal>Find where underground heat is most likely to be commercially drillable, size the resource statistically and show whether one more exploration well is worth paying for.</p>
         <ul class="feat" data-reveal>
