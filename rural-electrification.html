@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rural Electrification — Lumen8</title>
+<meta name="description" content="Screen every unelectrified village in a country, rank the ones to build first, and take each from a map click to a construction pack with the paperwork a lender expects.">
+<meta property="og:title" content="Rural Electrification — Lumen8">
+<meta property="og:description" content="Every village. Ranked, sized, financed, engineered house by house.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lumen8.ai/rural-electrification.html">
+<meta name="theme-color" content="#04060c">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css">
+</head>
+<body>
+
+<div class="progress"></div>
+<div class="cursor"><div class="ring"></div><div class="dot"></div></div>
+<div class="orbs"><div class="orb c"></div><div class="orb a"></div><div class="orb v"></div></div>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="/"><img src="/assets/wordmark.webp" alt="Lumen8"><span class="tag">Energy Intelligence</span></a>
+    <nav class="links">
+      <a href="/">Home</a>
+      <a href="/rural-electrification.html" class="active">Rural Electrification</a>
+      <a href="/utility-scale.html">Utility Scale</a>
+      <a href="/modules.html">Modules</a>
+      <a class="platform-link" href="https://app.lumen8.ai" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Platform</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn primary sm" href="#contact"><span>Request access</span></a>
+      <button class="burger" aria-label="Menu"><i></i><i></i><i></i></button>
+    </div>
+  </div>
+</header>
+<div class="mobile">
+  <a href="/">Home</a>
+  <a href="/rural-electrification.html">Rural Electrification</a>
+  <a href="/utility-scale.html">Utility Scale</a>
+  <a href="/modules.html">Modules</a>
+  <a href="https://app.lumen8.ai" rel="noopener">Platform</a>
+  <a href="#contact">Request access</a>
+</div>
+
+<main>
+
+<section class="hero sub">
+  <canvas data-field></canvas>
+  <canvas data-hero3d></canvas>
+  <div class="veil"></div>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow" data-hero>Rural electrification</span>
+        <h1 class="h-xl">
+          <span class="w"><i>Every</i></span> <span class="w"><i>village.</i></span><br>
+          <span class="w"><i class="grad">Ranked,</i></span> <span class="w"><i class="grad">sized,</i></span> <span class="w"><i class="grad">financed,</i></span> <span class="w"><i class="grad">built.</i></span>
+        </h1>
+        <p class="lead" data-hero>Screen every unelectrified village in a country. Pick the ones to build first. Take each one from a map click to a construction pack, with the paperwork a lender expects.</p>
+        <div class="actions" data-hero>
+          <a class="btn primary" href="#contact"><span>Request access</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn ghost" href="#how"><span>How it works</span></a>
+        </div>
+      </div>
+      <div class="hero-side" data-hero>
+        <div class="ticker"><span class="pulse"></span><div class="line" data-items='["<b>8,493</b> villages indexed","<b>36</b> provinces covered","<b>12</b> funding instruments matched","<b>203,708 km</b> of grid predicted","<b>8,760</b> hours simulated per year","<b>25</b> years per model run"]'></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee"><div class="track">
+  <span>Priority ranking</span><span>Village digital twin</span><span>Solar + storage sizing</span><span>Tariff studio</span><span>Funding stack</span><span>Grant drafting</span><span>Hazard &amp; climate</span><span>Grid arrival</span><span>Social licence</span><span>Construction pack</span><span>Satellite verification</span>
+</div></div>
+<div class="wave-strip"><canvas data-wave="cyan,green"></canvas></div>
+
+<!-- ============ PINNED PIPELINE ============ -->
+<section class="pipe" id="how">
+  <div class="pipe-stage wrap">
+    <div class="pipe-steps">
+      <div class="pipe-step">
+        <div class="k">01 · SCREEN</div>
+        <h3>Rank the whole country.</h3>
+        <p>Six signals per village: households without power, solar resource, distance from the grid, accessibility, hazard exposure and demand. One ranked list, filterable by province, tier and terrain.</p>
+      </div>
+      <div class="pipe-step">
+        <div class="k">02 · TWIN</div>
+        <h3>Rebuild the village in 3D.</h3>
+        <p>Real building footprints and heights, road extraction and terrain become a digital twin. The low-voltage network is drawn house by house and checked against code.</p>
+      </div>
+      <div class="pipe-step">
+        <div class="k">03 · SIZE</div>
+        <h3>Size the system hour by hour.</h3>
+        <p>Solar and battery are dispatched across 8,760 hours for 25 years. Yield is reported at P50 through P99, with Monte Carlo runs behind every headline.</p>
+      </div>
+      <div class="pipe-step">
+        <div class="k">04 · FINANCE</div>
+        <h3>Match the money to the village.</h3>
+        <p>Ability to pay, willingness to pay and three tariff scenarios feed a funding stack that bundles the right instruments and pre-fills the applications.</p>
+      </div>
+      <div class="pipe-step">
+        <div class="k">05 · BUILD</div>
+        <h3>Hand the crew a pack.</h3>
+        <p>Bill of quantities with sourced components, pole schedules, drawings, logistics routes and an offline field briefing for the team on the ground.</p>
+      </div>
+      <div class="pipe-step">
+        <div class="k">06 · VERIFY</div>
+        <h3>Prove it from orbit.</h3>
+        <p>Built assets are re-observed by satellite. Impact and carbon are measured against what exists, and the result is signed so it cannot be quietly edited.</p>
+      </div>
+      <div class="pipe-rail"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+    <div class="pipe-vis"><canvas data-holo="pipe-rural" data-step="0"></canvas></div>
+  </div>
+  <div class="pipe-spacer"></div>
+</section>
+
+<!-- ============ CAPABILITIES ============ -->
+<section class="section">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow" data-reveal>Capabilities</span>
+      <h2 class="h-l" data-reveal>Everything a feasibility study<br><span class="grad">should have contained.</span></h2>
+    </div>
+    <div class="grid g3 stagger">
+      <div class="card tilt"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg></div><h3>Priority ranking</h3><p>Six weighted signals per village produce a national build order you can defend line by line.</p></div>
+      <div class="card tilt"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5M3 8v5M21 8v5"/></svg></div><h3>Village digital twin</h3><p>Buildings, roads and terrain rebuilt from satellite. The low-voltage network is designed house by house.</p></div>
+      <div class="card tilt"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg></div><h3>Solar + storage sizing</h3><p>Hourly dispatch across 25 years. Probabilistic yield, Monte Carlo risk and a tilt-and-azimuth sweep behind every number.</p></div>
+      <div class="card tilt amber"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 18h18M5 18V9l7-5 7 5v9M9 18v-5h6v5"/></svg></div><h3>Tariff &amp; affordability</h3><p>Ability and willingness to pay modelled per household. Three tariff scenarios, one clear recommendation.</p></div>
+      <div class="card tilt amber"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg></div><h3>Funding stack &amp; grants</h3><p>Twelve programme instruments matched to the site. Applications drafted from the run, not from scratch.</p></div>
+      <div class="card tilt amber"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg></div><h3>Grid intelligence</h3><p>Predicted medium-voltage grid and expansion timing fused into one arrival signal, with disagreements shown.</p></div>
+      <div class="card tilt violet"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2l3 7h7l-5.5 4.5L18.5 21 12 16.5 5.5 21l2-7.5L2 9h7z"/></svg></div><h3>Hazard &amp; climate</h3><p>Nine hazards composited with a five-model climate ensemble across four scenarios. Insurability, not just exposure.</p></div>
+      <div class="card tilt violet"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="16" r="3"/><path d="M10.5 10.5l3 3M2 22c0-4 3-6 6-6M22 2c0 4-3 6-6 6"/></svg></div><h3>Social licence</h3><p>Stakeholder maps, consent workflow and a step-by-step engagement playbook, so projects survive contact with people.</p></div>
+      <div class="card tilt green"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 7l9-4 9 4v10l-9 4-9-4zM12 12l9-5M12 12L3 7M12 12v9"/></svg></div><h3>Procurement &amp; build</h3><p>Sourced bills of material, logistics routes for every village, construction packs and offline briefings for field crews.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STATS ============ -->
+<section class="section tight">
+  <div class="wrap">
+    <div class="stats" data-reveal>
+      <div class="stat"><b data-count="8493">0</b><span>Villages indexed and screened</span><em>National coverage</em></div>
+      <div class="stat"><b data-count="36">0</b><span>Provinces with full profiles</span><em>Every region</em></div>
+      <div class="stat"><b data-count="12">0</b><span>Funding instruments matched</span><em>Grants to debt</em></div>
+      <div class="stat"><b data-count="203708">0</b><span>Kilometres of grid predicted</span><em>Arrival timing</em></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STORY ============ -->
+<section class="section">
+  <div class="wrap">
+    <div class="story">
+      <div class="sticky">
+        <span class="eyebrow amber" data-reveal>Why it matters</span>
+        <h2 class="h-l" data-reveal>Small sites,<br>big money.</h2>
+        <p class="lead" data-reveal>A single village is too small for institutional capital and too expensive to study one at a time. Lumen8 removes both problems at once.</p>
+      </div>
+      <div class="rows">
+        <div class="row" data-reveal><span class="n">01</span><div><h4>The study cost disappears</h4><p>What used to be a bespoke consultant engagement per site becomes a repeatable run. Portfolios of hundreds of villages are screened in an afternoon.</p></div></div>
+        <div class="row" data-reveal><span class="n">02</span><div><h4>Sites become portfolios</h4><p>Because every village is analysed the same way, they can be bundled into fundable tranches with consistent risk and return figures.</p></div></div>
+        <div class="row" data-reveal><span class="n">03</span><div><h4>Engineering comes with the finance</h4><p>Lenders see a design, not a sketch. Drawings, bills of material and code checks sit beside the financial model in the same dossier.</p></div></div>
+        <div class="row" data-reveal><span class="n">04</span><div><h4>Impact is measured afterwards</h4><p>Satellite re-observation and a behavioural twin turn impact from a promise into a measurement, with every result signed.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OUTPUTS ============ -->
+<section class="section tight">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow green" data-reveal>The dossier</span>
+      <h2 class="h-l" data-reveal>Eight documents.<br><span class="muted">One run.</span></h2>
+    </div>
+    <div class="outs stagger">
+      <div class="out"><i>01</i><div><b>Summary</b><span>Decision brief for leadership</span></div></div>
+      <div class="out"><i>02</i><div><b>Financials</b><span>Model, scenarios, sensitivities</span></div></div>
+      <div class="out"><i>03</i><div><b>Technical</b><span>System design and drawings</span></div></div>
+      <div class="out"><i>04</i><div><b>Solar</b><span>Resource and yield analysis</span></div></div>
+      <div class="out"><i>05</i><div><b>Economic</b><span>Tariffs, affordability, demand</span></div></div>
+      <div class="out"><i>06</i><div><b>Environmental</b><span>Hazard, climate, safeguards</span></div></div>
+      <div class="out"><i>07</i><div><b>Grid</b><span>Arrival timing and interaction</span></div></div>
+      <div class="out"><i>08</i><div><b>Political</b><span>Stakeholders and licence to operate</span></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="wave-strip"><canvas data-wave="cyan,green"></canvas></div>
+<!-- ============ CTA ============ -->
+<section class="section" id="contact">
+  <div class="wrap">
+    <div class="cta" data-reveal="scale">
+      <span class="eyebrow amber">Request access</span>
+      <h2>Bring us a region. Leave with a build order.</h2>
+      <p>Tell us where. We will screen it, pick a village, run the full engine and walk you through the dossier.</p>
+      <div class="actions">
+        <a class="btn primary" href="mailto:hello@lumen8.ai?subject=Lumen8%20rural%20electrification"><span>hello@lumen8.ai</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn ghost" href="/utility-scale.html"><span>Next: Utility scale</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand"><img src="/assets/lockup.webp" alt="Lumen8 · Energy Intelligence"><p>Energy intelligence for the infrastructure that has never been studied properly.</p></div>
+      <div><h5>Platform</h5><ul><li><a href="/rural-electrification.html">Rural Electrification</a></li><li><a href="/utility-scale.html">Utility Scale</a></li><li><a href="/modules.html">Modules</a></li></ul></div>
+      <div><h5>Modules</h5><ul><li><a href="/modules.html#maritime">Maritime</a></li><li><a href="/modules.html#telecoms">Telecoms</a></li><li><a href="/modules.html#agriculture">Agriculture</a></li><li><a href="/modules.html#twin">Behavioural Twin</a></li><li><a href="/modules.html#geothermal">Geothermal</a></li></ul></div>
+      <div><h5>Contact</h5><ul><li><a href="mailto:hello@lumen8.ai">hello@lumen8.ai</a></li><li><a href="#contact">Request access</a></li></ul></div>
+    </div>
+    <div class="foot-word" data-reveal="fade">LUMEN8</div>
+    <div class="foot-bar"><span>© 2026 LUMEN8 · ENERGY INTELLIGENCE</span><span>FROM A COORDINATE TO A BANKABLE ASSET</span></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.152.2/three.min.js"></script>
+<script src="/site.js"></script>
+<script src="/holo.js"></script>
+<script src="/waves.js"></script>
+<script src="/hero3d.js"></script>
+</body>
+</html>
