@@ -36,7 +36,7 @@
   const pos = geo.attributes.position; for (let i = 0; i < pos.count; i++) pos.setY(i, terrainH(pos.getX(i), pos.getZ(i))); geo.computeVertexNormals();
   const gmap = TX.ground.clone(); gmap.needsUpdate = true; gmap.repeat.set(W / 16, D / 16); const gb = TX.bump.clone(); gb.needsUpdate = true; gb.repeat.set(W / 10, D / 10);
   const fill = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ map: gmap, bumpMap: gb, bumpScale: .4, roughness: .95, metalness: .05, envMapIntensity: .25, polygonOffset: true, polygonOffsetFactor: 1 })); fill.receiveShadow = true; scene.add(fill);
-  scene.add(new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0x22d3ee, wireframe: true, transparent: true, opacity: .09, fog: true })));
+  scene.add(new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0x22d3ee, wireframe: true, transparent: true, opacity: .035, fog: true })));
   const vp = [], vc = []; const cCyan = new THREE.Color(0x67e8f9), cBlue = new THREE.Color(0x93c5fd), cDim = new THREE.Color(0x1a5c6b);
   for (let i = 0; i < pos.count; i += 2) { const x = pos.getX(i), z = pos.getZ(i), d = Math.hypot(x - 20, z); if (Math.random() < Math.max(.06, 1 - d / 120)) { vp.push(x, pos.getY(i) + .3, z); const c = Math.random() < .06 ? cBlue : (d < 80 ? cCyan : cDim); vc.push(c.r, c.g, c.b); } }
   const pg = new THREE.BufferGeometry(); pg.setAttribute('position', new THREE.Float32BufferAttribute(vp, 3)); pg.setAttribute('color', new THREE.Float32BufferAttribute(vc, 3));
@@ -47,8 +47,7 @@
   /* ---------- the coordinate ---------- */
   const pin = new THREE.Group(); pin.position.set(0, terrainH(0, 0), 0); scene.add(pin);
   const beam = K.beam(70, 0x60a5fa, .7); pin.add(beam);
-  const rings = []; for (let i = 0; i < 4; i++) { const r = K.ring(1, 0x3b82f6, .04); r.position.y = .4; pin.add(r); rings.push(r); }
-  const scan = new THREE.Mesh(new THREE.RingGeometry(0, 60, 96, 1, 0, .8), new THREE.MeshBasicMaterial({ color: 0x22d3ee, transparent: true, opacity: .08, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite: false })); scan.rotation.x = -Math.PI / 2; scan.position.y = .6; pin.add(scan);
+  const mk0 = K.marker(0x60a5fa, 5.5); mk0.position.y = .4; pin.add(mk0);
   const pinLabel = K.label('-8.6427, 120.0132', '#93c5fd', 13); pinLabel.position.set(2, 9, 0); pin.add(pinLabel);
 
   /* ---------- the sun ---------- */
@@ -101,7 +100,7 @@
 
   /* ---------- energy waveforms ---------- */
   const waves = [];
-  [[0x22d3ee, 16, .26, 0], [0x3b82f6, 24, .2, 2], [0xa78bfa, 32, .16, 4], [0x34d399, 40, .12, 1]].forEach(([c, y, op, ph]) => { const n = 220, g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(new Float32Array(n * 3), 3)); const l = new THREE.Line(g, new THREE.LineBasicMaterial({ color: c, transparent: true, opacity: op, blending: THREE.AdditiveBlending, fog: true })); scene.add(l); waves.push({ l, y, ph, n }); });
+  [[0x22d3ee, 16, .26, 0], [0x3b82f6, 24, .2, 2], [0xcbd5e1, 32, .14, 4], [0x34d399, 40, .12, 1]].forEach(([c, y, op, ph]) => { const n = 220, g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(new Float32Array(n * 3), 3)); const l = new THREE.Line(g, new THREE.LineBasicMaterial({ color: c, transparent: true, opacity: op, blending: THREE.AdditiveBlending, fog: true })); scene.add(l); waves.push({ l, y, ph, n }); });
 
   /* ---------- animate ---------- */
   let t = 0, mx = 0, my = 0, smx = 0, smy = 0, vis = true, W0 = 0, H0 = 0, cx = -26;
@@ -117,8 +116,7 @@
     const sy = Math.min(1, (window.scrollY || 0) / Math.max(1, window.innerHeight));
     rig.rotation.y = -.12 + smx * .2 + Math.sin(t * .08) * .04 + sy * .3;
     camera.position.set(cx - 8, 44 + smy * 8 + sy * 70, 120 - sy * 58); camera.lookAt(cx + 8 + sy * 30, 4 + sy * 6, -12 + sy * 20);
-    rings.forEach((r, i) => { const ph = ((t * .32 + i * .25) % 1); const s = 3 + ph * 52; r.scale.set(s, s, 1); r.material.opacity = (1 - ph) * .6; });
-    scan.rotation.z = t * .9; beam.userData.mat.opacity = .26 + Math.sin(t * 3) * .06;
+    mk0.userData.tick(t); beam.userData.mat.opacity = .26 + Math.sin(t * 3) * .06;
     arr.userData.setTilt(.5 - Math.sin(t * .12) * .45);
     sun.userData.tick(reduce ? 0 : .016, 22);
     flowS.forEach((f) => { f.u = (f.u + f.v * .016 * 3) % 1; curve.getPointAt(f.u, tmp); f.s.position.copy(tmp); f.s.material.opacity = .4 + .6 * Math.sin(f.u * Math.PI); });

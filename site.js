@@ -227,6 +227,8 @@
     const layers = pipe.querySelectorAll('.pipe-vis .layer');
     const rail = pipe.querySelectorAll('.pipe-rail i');
     const n = steps.length; if (!n) return;
+    // the rail is a real step index: labelled, clickable
+    rail.forEach((r, k) => { const kk = steps[k] && steps[k].querySelector('.k'); if (kk && !r.querySelector('b')) { const b = document.createElement('b'); b.textContent = kk.textContent.replace(/^\d+\s*[·.]\s*/, ''); r.appendChild(b); } r.setAttribute('role', 'tab'); r.setAttribute('title', kk ? kk.textContent : ''); r.addEventListener('click', () => { const total = pipe.offsetHeight - window.innerHeight; const y = pipe.getBoundingClientRect().top + window.scrollY + total * ((k + .5) / n); if (lenis) lenis.scrollTo(y, { duration: 1.1 }); else window.scrollTo({ top: y, behavior: 'smooth' }); }); });
     // each step gets one viewport of scroll
     const spacer = pipe.querySelector('.pipe-spacer');
     if (spacer) spacer.style.height = (n * 80) + 'svh';
@@ -352,19 +354,14 @@
         const x = p.x * W + ox * (1 + p.s * 0.2), y = p.y * H + oy * (1 + p.s * 0.2);
         const tw = 0.55 + 0.45 * Math.sin(t * p.sp * 3 + p.ph);
         if (p.hot) {
-          ctx.fillStyle = 'rgba(245,178,27,' + (0.5 + 0.5 * tw) + ')';
-          ctx.shadowColor = 'rgba(245,178,27,0.9)'; ctx.shadowBlur = 12;
+          ctx.fillStyle = 'rgba(224,242,254,' + (0.5 + 0.5 * tw) + ')';
+          ctx.shadowColor = 'rgba(103,232,249,0.9)'; ctx.shadowBlur = 12;
           ctx.beginPath(); ctx.arc(x, y, p.s * 1.4, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
         } else {
           ctx.fillStyle = 'rgba(103,232,249,' + (0.18 + 0.5 * tw) + ')';
           ctx.beginPath(); ctx.arc(x, y, p.s, 0, Math.PI * 2); ctx.fill();
         }
       });
-      // scanning sweep
-      const sx = ((t * 60) % (W + 400)) - 200;
-      const grd = ctx.createLinearGradient(sx - 160, 0, sx + 160, 0);
-      grd.addColorStop(0, 'rgba(34,211,238,0)'); grd.addColorStop(0.5, 'rgba(34,211,238,0.05)'); grd.addColorStop(1, 'rgba(34,211,238,0)');
-      ctx.fillStyle = grd; ctx.fillRect(sx - 160, 0, 320, H);
     };
     draw();
   }

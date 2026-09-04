@@ -20,9 +20,9 @@
   --amber-2:#93c5fd;
   --blue:#3b82f6;
   --blue-2:#60a5fa;
-  --violet:#a78bfa;
+  --violet:#cbd5e1; /* silver: the twin's identity. No purple anywhere on this site. */
   --green:#34d399;
-  --rose:#fb7185;
+  --rose:#2dd4bf; /* teal: the telecoms identity. No pink anywhere on this site. */
   --font-d:'Space Grotesk',system-ui,sans-serif;
   --font-b:'Inter',system-ui,sans-serif;
   --font-m:'JetBrains Mono',ui-monospace,monospace;
@@ -58,12 +58,12 @@ body::before{
 .orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.35;will-change:transform}
 .orb.c{width:60vw;height:60vw;left:-20vw;top:-20vw;background:radial-gradient(circle,rgba(34,211,238,.35),transparent 60%)}
 .orb.a{width:50vw;height:50vw;right:-18vw;top:30vh;background:radial-gradient(circle,rgba(59,130,246,.22),transparent 60%)}
-.orb.v{width:45vw;height:45vw;left:20vw;bottom:-25vw;background:radial-gradient(circle,rgba(167,139,250,.22),transparent 60%)}
+.orb.v{width:45vw;height:45vw;left:20vw;bottom:-25vw;background:radial-gradient(circle,rgba(45,212,191,.14),transparent 60%)}
 main{position:relative;z-index:1}
 
 /* ---------- progress + cursor ---------- */
 .progress{position:fixed;left:0;top:0;height:2px;width:100%;z-index:1500;transform-origin:0 50%;transform:scaleX(0);
-  background:linear-gradient(90deg,var(--cyan),var(--blue),var(--violet))}
+  background:linear-gradient(90deg,var(--cyan),var(--blue),var(--green))}
 .cursor{position:fixed;left:0;top:0;z-index:3000;pointer-events:none;mix-blend-mode:difference;display:none}
 .cursor .dot{position:absolute;width:6px;height:6px;border-radius:50%;background:#fff;transform:translate(-50%,-50%)}
 .cursor .ring{position:absolute;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.75);transform:translate(-50%,-50%);transition:width .25s var(--ease),height .25s var(--ease),opacity .25s}
@@ -86,12 +86,12 @@ main{position:relative;z-index:1}
 .h-s{font-size:clamp(20px,2vw,26px)}
 .lead{font-size:clamp(17px,1.4vw,21px);color:var(--ink-2);max-width:62ch;line-height:1.55}
 .muted{color:var(--muted)}
-.grad{background:linear-gradient(92deg,var(--cyan-2) 0%,var(--blue-2) 45%,#c4b5fd 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.grad{background:linear-gradient(92deg,var(--cyan-2) 0%,var(--blue-2) 45%,#6ee7b7 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .grad-c{background:linear-gradient(92deg,#a5f3fc,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
 .grad-a{background:linear-gradient(92deg,#bfdbfe,var(--blue-2) 50%,var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
-.grad-v{background:linear-gradient(92deg,#c4b5fd,var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.grad-v{background:linear-gradient(92deg,#f8fafc,#94a3b8);-webkit-background-clip:text;background-clip:text;color:transparent}
 .grad-g{background:linear-gradient(92deg,#6ee7b7,var(--green));-webkit-background-clip:text;background-clip:text;color:transparent}
-.grad-r{background:linear-gradient(92deg,#fda4af,var(--rose));-webkit-background-clip:text;background-clip:text;color:transparent}
+.grad-r{background:linear-gradient(92deg,#99f6e4,var(--rose));-webkit-background-clip:text;background-clip:text;color:transparent}
 .head{display:grid;gap:22px;max-width:920px;margin-bottom:clamp(40px,6vw,72px)}
 .head.center{text-align:center;margin-inline:auto;justify-items:center}
 .head .lead{margin-top:4px}
@@ -113,7 +113,7 @@ main{position:relative;z-index:1}
 .btn:hover svg{transform:translateX(4px)}
 .btn.primary{background:linear-gradient(135deg,var(--cyan),var(--blue));border-color:transparent;color:#03131a}
 /* Hover overlay stays in the cyan/blue family. It previously ended on
-   --violet (#a78bfa), which over a bright gradient button reads as pink. */
+   the old lavender --violet, which over a bright gradient button read as pink. */
 .btn.primary::after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,var(--cyan-2),var(--blue));opacity:0;transition:opacity .4s}
 .btn.primary:hover::after{opacity:1}
 .btn.primary:hover{box-shadow:0 12px 40px rgba(59,130,246,.28)}
@@ -199,11 +199,11 @@ main{position:relative;z-index:1}
 .card:hover{background:var(--panel-2);border-color:var(--line-2)}
 .card.amber::before{background:radial-gradient(520px circle at var(--mx,50%) var(--my,50%),rgba(59,130,246,.13),transparent 45%)}
 .card.amber::after{background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(59,130,246,.7),transparent 45%)}
-.card.violet::before{background:radial-gradient(520px circle at var(--mx,50%) var(--my,50%),rgba(167,139,250,.13),transparent 45%)}
-.card.violet::after{background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(167,139,250,.7),transparent 45%)}
+.card.violet::before{background:radial-gradient(520px circle at var(--mx,50%) var(--my,50%),rgba(203,213,225,.11),transparent 45%)}
+.card.violet::after{background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(203,213,225,.6),transparent 45%)}
 .card.green::before{background:radial-gradient(520px circle at var(--mx,50%) var(--my,50%),rgba(52,211,153,.13),transparent 45%)}
 .card.green::after{background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(52,211,153,.7),transparent 45%)}
-/* Was rgba(251,113,133,..) = --rose. That is the one unambiguously pink glow
+/* Was the old pink --rose. That is the one unambiguously pink glow
    on the site, and it fired on plain .card:hover. Now cyan like the default. */
 .card.rose::before{background:radial-gradient(520px circle at var(--mx,50%) var(--my,50%),rgba(34,211,238,.13),transparent 45%)}
 .card.rose::after{background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(34,211,238,.7),transparent 45%)}
@@ -364,7 +364,7 @@ main{position:relative;z-index:1}
 
 /* ---------- CTA ---------- */
 .cta{position:relative;overflow:hidden;border-radius:calc(var(--r) + 8px);border:1px solid var(--line-2);padding:clamp(48px,7vw,96px) clamp(24px,6vw,80px);
-  background:linear-gradient(135deg,rgba(34,211,238,.09),rgba(59,130,246,.07) 60%,rgba(167,139,250,.08));text-align:center}
+  background:linear-gradient(135deg,rgba(34,211,238,.09),rgba(59,130,246,.07) 60%,rgba(52,211,153,.08));text-align:center}
 .cta::before{content:"";position:absolute;inset:-40%;background:conic-gradient(from 0deg,transparent,rgba(34,211,238,.12),transparent 30%,rgba(59,130,246,.12),transparent 60%);animation:spin 18s linear infinite;pointer-events:none}
 .cta>*{position:relative}
 .cta h2{font-size:clamp(32px,5vw,68px);letter-spacing:-.035em;max-width:16ch;margin-inline:auto}
@@ -465,8 +465,8 @@ footer li a:hover{color:var(--cyan)}
 .chip.soon{border-color:rgba(96,165,250,.5);color:#bfdbfe}
 .row .n{color:var(--blue-2)}
 .out i{color:var(--blue-2)}
-.cta{background:linear-gradient(135deg,rgba(34,211,238,.08),rgba(59,130,246,.08) 55%,rgba(167,139,250,.09))}
-.cta::before{background:conic-gradient(from 0deg,transparent,rgba(34,211,238,.12),transparent 30%,rgba(59,130,246,.14),transparent 60%,rgba(167,139,250,.1),transparent)}
+.cta{background:linear-gradient(135deg,rgba(34,211,238,.08),rgba(59,130,246,.08) 55%,rgba(52,211,153,.09))}
+.cta::before{background:conic-gradient(from 0deg,transparent,rgba(34,211,238,.12),transparent 30%,rgba(59,130,246,.14),transparent 60%,rgba(52,211,153,.1),transparent)}
 .foot-bar,.foot-word{letter-spacing:-.06em}
 .foot-bar{letter-spacing:.12em}
 
@@ -507,8 +507,8 @@ footer li a:hover{color:var(--cyan)}
 .card.big .num{position:relative;z-index:1}
 .card.green::before{background:radial-gradient(520px circle at var(--mx,50%) var(--my,50%),rgba(52,211,153,.13),transparent 45%)}
 .card.green::after{background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(52,211,153,.7),transparent 45%)}
-.card.rose::before{background:radial-gradient(520px circle at var(--mx,50%) var(--my,50%),rgba(251,113,133,.12),transparent 45%)}
-.card.rose::after{background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(251,113,133,.65),transparent 45%)}
+.card.rose::before{background:radial-gradient(520px circle at var(--mx,50%) var(--my,50%),rgba(45,212,191,.12),transparent 45%)}
+.card.rose::after{background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(45,212,191,.65),transparent 45%)}
 .surf-note{margin-top:26px;display:flex;justify-content:flex-end;font-family:var(--font-m);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
 .surf-note a{color:var(--ink-2);border-bottom:1px solid var(--line-2);padding-bottom:2px}
 .surf-note a:hover{color:var(--ink);border-color:var(--cyan)}
@@ -562,7 +562,39 @@ footer li a:hover{color:var(--cyan)}
 /* module art: taller on wide screens so nothing is cut */
 .mod .art{aspect-ratio:1/1.02}
 .mod.amber .art{aspect-ratio:1/1.08}
-/* hover glow: cyan everywhere; rose stays a static identity for telecoms only */
-.card.rose::before{background:radial-gradient(520px circle at var(--mx,50%) var(--my,50%),rgba(34,211,238,.12),transparent 45%)}
-.card.rose::after{background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(34,211,238,.65),transparent 45%)}
+/* hover glow: teal for telecoms, silver for the twin, cyan/blue/green elsewhere. Nothing pink, nothing purple. */
+.card.rose::before{background:radial-gradient(520px circle at var(--mx,50%) var(--my,50%),rgba(45,212,191,.12),transparent 45%)}
+.card.rose::after{background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(45,212,191,.6),transparent 45%)}
 /* mailto fallback toast */
+
+/* ---------- v7: no purple, no pink; silver twin, teal telecoms; keyboard focus; a pipeline rail you can use ---------- */
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px}
+.btn:focus-visible{outline-offset:4px}
+.eyebrow.violet{color:#e2e8f0}
+.links .menu a i.violet{background:#e2e8f0;box-shadow:0 0 10px rgba(226,232,240,.8)}
+.links .menu a i.rose{background:var(--rose);box-shadow:0 0 10px var(--rose)}
+.card.violet .ico{color:#e2e8f0}.mod.violet .feat li svg{color:#e2e8f0}
+.aud .card.violet li::before{background:#e2e8f0;box-shadow:0 0 8px rgba(226,232,240,.8)}
+/* pipeline rail: a real step index. Click a segment to jump; labels stay visible so you always know where you are */
+.pipe-steps .pipe-rail{pointer-events:auto;margin-top:34px;gap:8px}
+.pipe-rail i{height:3px;cursor:pointer;overflow:visible;transition:background .3s}
+.pipe-rail i:hover{background:rgba(255,255,255,.35)}
+.pipe-rail i b{position:absolute;left:0;top:12px;font:500 9.5px/1 var(--font-m);letter-spacing:.16em;color:var(--muted);white-space:nowrap;transition:color .3s;text-transform:uppercase}
+.pipe-rail i.on b{color:var(--ink-2)}
+.pipe-rail i.on + i:not(.on) b{color:var(--ink-2)}
+.pipe-rail i:hover b{color:var(--ink)}
+.pipe-step{inset:0 0 72px 0}
+@media (max-width:900px){.pipe-rail i b{display:none}}
+/* cards: the scene lifts a little under the pointer */
+.card.big .art{transition:transform .7s var(--ease),opacity .5s}
+.card.big:hover .art{transform:translateY(-6px) scale(1.025)}
+.mod .art canvas{transition:filter .5s}
+.mod .art:hover canvas{filter:saturate(1.06) brightness(1.05)}
+/* sub-page heroes: a hair more room for the scene on wide screens */
+@media (min-width:1200px){.hero.sub .hero-grid{grid-template-columns:1.1fr .9fr}}
+/* nav: active page carries its dot, hovered page gets a soft underline */
+.links>a{position:relative}
+.links>a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:1px;background:linear-gradient(90deg,var(--cyan),transparent);transform:scaleX(0);transform-origin:0 50%;transition:transform .4s var(--ease)}
+.links>a:hover::after{transform:none}
+/* the ring-and-dot custom cursor read as a radar reticle; the native cursor is back for good */
+.cursor{display:none!important}
