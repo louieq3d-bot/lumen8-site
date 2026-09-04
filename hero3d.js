@@ -21,7 +21,7 @@
   renderer.shadowMap.enabled = !H.LOW; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   let post = null; try { post = H.makePost(renderer); renderer.toneMapping = THREE.NoToneMapping; } catch (e) { renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.1; }
   const scene = new THREE.Scene(); scene.fog = new THREE.FogExp2(0x04060c, 0.0017); scene.environment = H.envFor(renderer);
-  const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 900);
+  const camera = new THREE.PerspectiveCamera(42, 1, 1, 900);
   const rig = new THREE.Group(); rig.add(camera); scene.add(rig);
   H.lightRig(scene, 70, true);
   const V3 = (x, y, z) => new THREE.Vector3(x, y, z);
