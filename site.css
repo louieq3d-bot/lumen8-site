@@ -598,3 +598,15 @@ footer li a:hover{color:var(--cyan)}
 .links>a:hover::after{transform:none}
 /* the ring-and-dot custom cursor read as a radar reticle; the native cursor is back for good */
 .cursor{display:none!important}
+
+/* ---------- v9: the hero's treatment on every scene ---------- */
+/* module art: the same veil as the hero, so the site sits in the dark instead of in a box */
+.mod .art::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;border-radius:inherit;background:radial-gradient(85% 80% at 50% 46%,transparent 52%,rgba(4,6,12,.62) 100%),linear-gradient(180deg,rgba(4,6,12,.34),rgba(4,6,12,0) 24%,rgba(4,6,12,0) 68%,rgba(4,6,12,.6) 100%)}
+.mod .art canvas{position:relative;z-index:0}
+.mod .art::after{z-index:2}
+.card.big .art::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(90% 80% at 50% 40%,transparent 55%,rgba(4,6,12,.5) 100%),linear-gradient(180deg,rgba(4,6,12,.3),transparent 26%)}
+/* sub-page heroes: more of the frame for the site */
+.hero canvas.hero-holo{width:72%;-webkit-mask:linear-gradient(90deg,transparent 0,#000 32%,#000 100%);mask:linear-gradient(90deg,transparent 0,#000 32%,#000 100%)}
+.hs-bg{width:62%;opacity:.9}
+@media (max-width:1000px){.hero canvas.hero-holo{width:100%;opacity:.6;-webkit-mask:none;mask:none}}
+@media (max-width:900px){.hs-bg{width:100%;opacity:.45}}
