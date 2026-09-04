@@ -13,14 +13,11 @@
   if (!cv || typeof THREE === 'undefined' || !window.Holo) return;
   const H = window.Holo, K = H.kit, M = H.mats, TX = H.tex, P = H.P;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let renderer;
-  try { renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true, powerPreference: 'high-performance' }); }
-  catch (e) { return; }
+  /* the hero draws through the site's one shared renderer and blits into its own canvas */
+  const R = H.acquire(); if (!R) return; const renderer = R.renderer, post = R.post, blit = cv.getContext('2d');
   const field = document.querySelector('canvas[data-field]'); if (field) field.style.display = 'none';
-  renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1)); renderer.setClearColor(0x000000, 0);
-  renderer.shadowMap.enabled = !H.LOW; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  let post = null; try { post = H.makePost(renderer); renderer.toneMapping = THREE.NoToneMapping; } catch (e) { renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.1; }
-  const scene = new THREE.Scene(); scene.fog = new THREE.FogExp2(0x04060c, 0.0017); scene.environment = H.envFor(renderer);
+  const Q = H.Q;
+  const scene = new THREE.Scene(); scene.fog = new THREE.FogExp2(0x04060c, 0.0017); scene.environment = R.env;
   const camera = new THREE.PerspectiveCamera(42, 1, 1, 900);
   const rig = new THREE.Group(); rig.add(camera); scene.add(rig);
   H.lightRig(scene, 70, true);
@@ -35,7 +32,7 @@
   const geo = new THREE.PlaneGeometry(W, D, 150, 110); geo.rotateX(-Math.PI / 2);
   const pos = geo.attributes.position; for (let i = 0; i < pos.count; i++) pos.setY(i, terrainH(pos.getX(i), pos.getZ(i))); geo.computeVertexNormals();
   const gmap = TX.ground.clone(); gmap.needsUpdate = true; gmap.repeat.set(W / 16, D / 16); const gb = TX.bump.clone(); gb.needsUpdate = true; gb.repeat.set(W / 10, D / 10);
-  const fill = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ map: gmap, bumpMap: gb, bumpScale: .4, roughness: .95, metalness: .05, envMapIntensity: .25, polygonOffset: true, polygonOffsetFactor: 1 })); fill.receiveShadow = true; scene.add(fill);
+  const fill = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ map: gmap, emissiveMap: TX.white, bumpMap: gb, bumpScale: .4, roughness: .95, metalness: .05, envMapIntensity: .25, polygonOffset: true, polygonOffsetFactor: 1 })); fill.receiveShadow = true; scene.add(fill);
   scene.add(new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0x22d3ee, wireframe: true, transparent: true, opacity: .035, fog: true })));
   const vp = [], vc = []; const cCyan = new THREE.Color(0x67e8f9), cBlue = new THREE.Color(0x93c5fd), cDim = new THREE.Color(0x1a5c6b);
   for (let i = 0; i < pos.count; i += 2) { const x = pos.getX(i), z = pos.getZ(i), d = Math.hypot(x - 20, z); if (Math.random() < Math.max(.06, 1 - d / 120)) { vp.push(x, pos.getY(i) + .3, z); const c = Math.random() < .06 ? cBlue : (d < 80 ? cCyan : cDim); vc.push(c.r, c.g, c.b); } }
@@ -104,13 +101,13 @@
 
   /* ---------- animate ---------- */
   let t = 0, mx = 0, my = 0, smx = 0, smy = 0, vis = true, W0 = 0, H0 = 0, cx = -26;
-  const size = () => { const w = cv.clientWidth, h = cv.clientHeight; if (w === W0 && h === H0) return; W0 = w; H0 = h; renderer.setSize(w, h, false); camera.aspect = w / h; camera.fov = w < 800 ? 56 : 42; camera.updateProjectionMatrix(); cx = w / h > 1.15 ? -24 : -2; };
+  const size = () => { const w = cv.clientWidth, h = cv.clientHeight; if (w === W0 && h === H0) return; W0 = w; H0 = h; camera.aspect = w / h; camera.fov = w < 800 ? 56 : 42; camera.updateProjectionMatrix(); cx = w / h > 1.15 ? -24 : -2; };
   size(); window.addEventListener('resize', size);
   window.addEventListener('mousemove', (e) => { mx = e.clientX / window.innerWidth - .5; my = e.clientY / window.innerHeight - .5; }, { passive: true });
   new IntersectionObserver((en) => { vis = en[0].isIntersecting; }).observe(cv);
-  const tmp = new THREE.Vector3(), m = new THREE.Matrix4();
-  function tick() {
-    requestAnimationFrame(tick); if (!vis) return; size();
+  const tmp = new THREE.Vector3(), m = new THREE.Matrix4(); let fr = 0, lastT = 0;
+  function tick(now) {
+    requestAnimationFrame(tick); if (!vis) return; size(); const dt = Math.max(0, Math.min(.05, (now - lastT) / 1000)); lastT = now; Q.sample(dt); R.fit(W0, H0); renderer.shadowMap.needsUpdate = (fr++ & 1) === 0;
     t += reduce ? 0 : .016;
     smx += (mx - smx) * .04; smy += (my - smy) * .04;
     const sy = Math.min(1, (window.scrollY || 0) / Math.max(1, window.innerHeight));
@@ -126,6 +123,10 @@
     waves.forEach((w) => { const p = w.l.geometry.attributes.position; for (let i = 0; i < w.n; i++) { const x = -170 + i / (w.n - 1) * 340; const env = Math.exp(-Math.pow((x - 30) / 120, 2)); const y = w.y + (Math.sin(x * .06 + t * 1.4 + w.ph) * 6 + Math.sin(x * .17 - t * 2.2 + w.ph) * 2.2) * env; p.setXYZ(i, x, y, -50 + Math.sin(x * .02 + w.ph) * 30); } p.needsUpdate = true; });
     dust.userData.tick(t);
     if (post) post.render(scene, camera); else renderer.render(scene, camera);
+    const src = renderer.domElement; if (cv.width !== src.width || cv.height !== src.height) { cv.width = src.width; cv.height = src.height; } else blit.clearRect(0, 0, src.width, src.height); blit.drawImage(src, 0, 0);
   }
-  tick();
+  /* submit every shader now; the GPU links them in the background while the preloader is still up */
+  H.whenWarm(() => { renderer.compile(scene, camera); const gl = renderer.getContext(), ext = gl.getExtension('KHR_parallel_shader_compile'), born = performance.now();
+    const linked = () => !ext || performance.now() - born > 4000 || renderer.info.programs.every((p) => gl.getProgramParameter(p.program, ext.COMPLETION_STATUS_KHR));
+    const start = () => { if (linked()) requestAnimationFrame(tick); else setTimeout(start, 200); }; start(); });
 })();
