@@ -140,12 +140,25 @@
   });
 
   /* ---------- reveals ---------- */
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((en) => {
-      if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
-    });
+  /* An IntersectionObserver only fires when a threshold is CROSSED. A fast flick, an
+     anchor jump, or simply a long mobile page (one scroll step there can exceed the
+     844px viewport) carries an element from below the fold to above it between two
+     samples -- it is never sampled at 15% and stays invisible for the rest of the
+     session. The sweep picks up anything the observer stepped over. */
+  const pending = new Set();
+  let io = null;
+  const reveal = (el) => { el.classList.add('in'); if (io) io.unobserve(el); pending.delete(el); };
+  io = new IntersectionObserver((entries) => {
+    entries.forEach((en) => { if (en.isIntersecting) reveal(en.target); });
   }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
-  document.querySelectorAll('[data-reveal],.stagger').forEach((el) => io.observe(el));
+  document.querySelectorAll('[data-reveal],.stagger').forEach((el) => { pending.add(el); io.observe(el); });
+  let sweepT = 0;
+  const sweep = () => {
+    sweepT = 0;
+    const fold = window.innerHeight * .92;
+    [...pending].forEach((el) => { if (el.getBoundingClientRect().top < fold) reveal(el); });
+  };
+  addEventListener('scroll', () => { if (!sweepT && pending.size) sweepT = setTimeout(sweep, 160); }, { passive: true });
 
   /* ---------- statement line reveal ---------- */
   document.querySelectorAll('.statement h2').forEach((h) => {

@@ -449,7 +449,6 @@ footer li a:hover{color:var(--cyan)}
 .pipe-vis{cursor:grab}
 .pipe-vis canvas{border-radius:var(--r)}
 .card.big .art{height:62%}
-.card.big .art::after{background:linear-gradient(180deg,rgba(4,6,12,0) 40%,rgba(4,6,12,.97) 100%)}
 .wave-strip{height:clamp(150px,20vw,260px);-webkit-mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
 .eyebrow{font-size:10.5px;letter-spacing:.26em}
 .h-l{font-size:clamp(32px,4.6vw,66px)}
@@ -503,7 +502,6 @@ footer li a:hover{color:var(--cyan)}
 }
 .card.big{min-height:500px}
 .card.big .art{height:58%}
-.card.big .art::after{background:linear-gradient(180deg,rgba(4,6,12,0) 46%,rgba(4,6,12,.97) 100%)}
 .card.big .num{position:relative;z-index:1}
 .card.green::before{background:radial-gradient(520px circle at var(--mx,50%) var(--my,50%),rgba(52,211,153,.13),transparent 45%)}
 .card.green::after{background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(52,211,153,.7),transparent 45%)}
@@ -513,7 +511,6 @@ footer li a:hover{color:var(--cyan)}
 .surf-note a{color:var(--ink-2);border-bottom:1px solid var(--line-2);padding-bottom:2px}
 .surf-note a:hover{color:var(--ink);border-color:var(--cyan)}
 .card.big .art{height:66%}
-.card.big .art::after{background:linear-gradient(180deg,rgba(4,6,12,0) 50%,rgba(4,6,12,.97) 100%)}
 
 /* ---------- v6: sunshine-to-money hero, module dropdown, full-bleed pipeline, wordmark footer ---------- */
 .hero h1 .grad{background:linear-gradient(92deg,#67e8f9 0%,#5eead4 35%,#34d399 70%,#a7f3d0 100%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gradshift 7s ease-in-out infinite alternate}
@@ -556,7 +553,15 @@ footer li a:hover{color:var(--cyan)}
 .surf-note{gap:26px;flex-wrap:wrap}
 /* cards: the scene is the card */
 .card.big .art{height:70%}
-.card.big .art::after{background:linear-gradient(180deg,rgba(4,6,12,0) 46%,rgba(4,6,12,.55) 74%,rgba(4,6,12,.97) 100%)}
+/* The card eyebrow ("05 . AGRICULTURE") sits at 61-66% of the art and the title just
+   under it, so the scrim has to be near-opaque by 61% or the label disappears into a
+   bright scene. Five earlier rounds each appended their own ramp here; this is the one
+   that wins, measured rather than guessed. Above 46% it stays light so the scene reads. */
+.card.big .art::after{background:linear-gradient(180deg,
+  rgba(4,6,12,0) 26%,rgba(4,6,12,.3) 46%,rgba(4,6,12,.8) 58%,
+  rgba(4,6,12,.95) 68%,rgba(4,6,12,.99) 100%)}
+.card.big .num{color:#9db0c9;text-shadow:0 1px 14px rgba(4,6,12,.95),0 0 5px rgba(4,6,12,.85)}
+.card.big h3{text-shadow:0 2px 22px rgba(4,6,12,.8)}
 .card.big:hover .art canvas{filter:saturate(1.08) brightness(1.06)}
 .card.big .art canvas{transition:filter .5s}
 /* module art: taller on wide screens so nothing is cut */
