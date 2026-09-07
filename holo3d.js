@@ -418,7 +418,7 @@
     return { layers: L, radius: 46, pitch: .6, theta: -.5, lookX: -6, lookY: 4, shift: SHIFT, focusables: F, steps: [{ look: [0, 6, -14], zoom: .84 }, { look: [-4, 4, -8], zoom: .98 }, { look: [2, 5, -12], zoom: .98 }, { look: [24, 12, -60], zoom: .8 }, { look: [39, 6, 8], zoom: .72 }, { look: [-6, 7, -12], zoom: .86 }], tick(t, dt, step, k) { lb0.visible = step <= 1; lb2.visible = step === 2; const a = t * .45; sat.position.set(Math.cos(a) * 56, 26, Math.sin(a) * 56); sat.userData.aim(a); V.hs.forEach((h, i) => { h.userData.win.material.opacity = step >= 2 ? .3 + .35 * Math.sin(t * 1.5 + i) : 0; }); const bk = step > 0 ? .4 : 1; beams.forEach((b) => { b.userData.mat.opacity += ((.42 * bk) - b.userData.mat.opacity) * .05; }); fin.userData.tick(t, k); dust.userData.tick(t); } }; };
   /* Pinned pipelines run full-bleed behind a text column on the left. The lens shift puts the subject in the
      clear right-hand air on a wide screen, and centres it high on a phone where the text sits underneath. */
-  const SHIFT = { x: .64, y: .5, k: 1.22, mx: .5, my: .34, mk: 1.02 };
+  const SHIFT = { x: .64, y: .57, k: 1.22, mx: .5, my: .34, mk: 1.02 };
   /* hero framings: same worlds, wide low camera, slow drift */
   S['hero-plant'] = () => Object.assign(S.plant(), { pitch: .21, theta: -1.05, spin: .015, radius: 170, lookX: 40, lookY: 0, lookZ: 22, frame: .92, fov: 50 });
   S['hero-village'] = () => Object.assign(S.village(), { pitch: .44, theta: .55, spin: .04, radius: 34, lookY: 3, frame: 1.6 });

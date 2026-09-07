@@ -163,13 +163,15 @@ main{position:relative;z-index:1}
 .hero h1 .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em;margin-bottom:-.08em}
 .hero h1 .w i{display:inline-block;font-style:normal;transform:translateY(110%);will-change:transform}
 .hero .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}
-.hero-side{display:grid;gap:12px}
+.hero-side{display:grid;gap:12px;min-width:0}
 .ticker{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:rgba(6,9,18,.5);backdrop-filter:blur(10px);
-  font-family:var(--font-m);font-size:12px;color:var(--ink-2);display:flex;align-items:center;gap:12px;overflow:hidden}
+  font-family:var(--font-m);font-size:12px;color:var(--ink-2);display:flex;align-items:center;gap:12px;overflow:hidden;min-width:0;max-width:100%}
 .ticker b{color:var(--ink);font-weight:600}
 .ticker .pulse{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(52,211,153,.6);animation:pulse 2s infinite;flex:none}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(52,211,153,.55)}70%{box-shadow:0 0 0 10px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
-.ticker .line{white-space:nowrap;animation:tick 22s linear infinite}
+.ticker .line{white-space:nowrap;animation:tick 22s linear infinite;min-width:0;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 14px,#000 calc(100% - 20px),transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 14px,#000 calc(100% - 20px),transparent)}
 @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .scroll-hint{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;
   font-family:var(--font-m);font-size:10px;letter-spacing:.3em;color:var(--muted)}
@@ -237,6 +239,39 @@ main{position:relative;z-index:1}
 @media (max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}.stat{border-bottom:1px solid var(--line)}.stat:nth-child(even){border-right:0}}
 @media (max-width:480px){.stats{grid-template-columns:1fr}.stat{border-right:0}}
 
+/* ---------- proof band: coverage fields behind the national numbers ---------- */
+.proof{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--line)}
+.pcell{position:relative;isolation:isolate;min-height:248px;padding:26px 26px 24px;display:flex;flex-direction:column;justify-content:flex-end;
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.012));transition:background .55s var(--ease)}
+.pcell canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.62;transition:opacity .55s var(--ease);pointer-events:none}
+.pcell::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;z-index:2;background:var(--fc);opacity:.34;transition:opacity .45s var(--ease)}
+/* the number sits in its own pool of dark so the field never fights the type */
+.pcell::after{content:"";position:absolute;left:0;right:0;bottom:0;height:62%;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(4,6,12,0),rgba(4,6,12,.72) 46%,rgba(4,6,12,.9))}
+.pcell>b,.pcell>span,.pcell>em{position:relative;z-index:3}
+.pcell>b{display:block;font-family:var(--font-d);font-weight:600;font-size:clamp(34px,3.6vw,54px);letter-spacing:-.04em;line-height:1;
+  background:linear-gradient(180deg,#fff,#b6c0d2);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pcell>b small{font-size:.46em;margin-left:5px;letter-spacing:0;font-family:var(--font-m);font-weight:500;-webkit-text-fill-color:var(--muted)}
+.pcell>span{display:block;margin-top:10px;font-size:13px;color:var(--ink-2)}
+.pcell>em{display:block;font-style:normal;font-family:var(--font-m);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+.pcell:hover{background:linear-gradient(180deg,rgba(255,255,255,.085),rgba(255,255,255,.02))}
+.pcell:hover canvas{opacity:1}
+.pcell:hover::before{opacity:1}
+.pcell:hover>em{color:var(--fc)}
+
+/* the second rank of proof: the figures that describe the machine, not the map */
+.prail{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;margin-top:1px;background:var(--line);border:1px solid var(--line);border-top:0;border-radius:0 0 var(--r) var(--r);overflow:hidden}
+.proof{border-radius:var(--r) var(--r) 0 0}
+.prail>div{background:var(--bg-2);padding:20px 22px 22px}
+.prail b{display:block;font-family:var(--font-d);font-weight:600;font-size:clamp(19px,1.6vw,25px);letter-spacing:-.03em;line-height:1;color:var(--ink)}
+.prail b i{font-style:normal;font-family:var(--font-m);font-size:.5em;font-weight:500;color:var(--muted);margin-left:4px;letter-spacing:0}
+.prail span{display:block;margin-top:9px;font-size:11.5px;line-height:1.5;color:var(--muted)}
+.prail s{display:inline-block;text-decoration:none;font-family:var(--font-m);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--cyan);border:1px solid rgba(34,211,238,.3);border-radius:20px;padding:1px 7px;margin-top:5px}
+@media (max-width:1100px){.prail{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:900px){.proof{grid-template-columns:repeat(2,1fr)}.pcell{min-height:210px}}
+@media (max-width:560px){.proof{grid-template-columns:1fr}.prail{grid-template-columns:repeat(2,1fr)}}
+
 /* ---------- pinned pipeline ---------- */
 .pipe{position:relative}
 .pipe-stage{position:sticky;top:0;height:100svh;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:clamp(24px,5vw,80px);overflow:hidden}
@@ -263,7 +298,10 @@ main{position:relative;z-index:1}
 .hs{position:relative}
 .hs-pin{position:sticky;top:0;height:100svh;display:flex;flex-direction:column;justify-content:center;overflow:hidden;width:100%}
 .hs-track{display:flex;gap:20px;padding:0 var(--gutter);will-change:transform;align-items:stretch}
-.hs-card{flex:0 0 min(560px,82vw);min-height:min(520px,62vh)}
+.hs-card{flex:0 0 min(560px,82vw);min-height:min(360px,44vh);display:flex;flex-direction:column}
+.hs-card .chips{margin-top:auto;padding-top:22px}
+.hs-card::after{content:"";position:absolute;left:28px;right:28px;bottom:20px;height:1px;
+  background:linear-gradient(90deg,var(--blue-2),rgba(96,165,250,.06));opacity:.5}
 .hs-head{padding:0 var(--gutter);margin-bottom:34px;display:flex;align-items:flex-end;justify-content:space-between;gap:20px}
 .hs-head .h-l{max-width:16ch}
 .hs-head .hint{font-family:var(--font-m);font-size:11px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;display:flex;gap:10px;align-items:center}
@@ -480,7 +518,10 @@ footer li a:hover{color:var(--cyan)}
   -webkit-mask:linear-gradient(90deg,transparent,#000 30%);mask:linear-gradient(90deg,transparent,#000 30%)}
 .hs-bg canvas{width:100%;height:100%;display:block}
 .hs-head,.hs-track{position:relative;z-index:1}
-.hs-card{min-height:min(440px,54vh);background:rgba(6,9,18,.62);backdrop-filter:blur(6px)}
+.hs-card{min-height:min(340px,42vh);background:rgba(6,9,18,.62);backdrop-filter:blur(6px)}
+/* a phone gives the rail the whole viewport; the copy wraps longer, so the cards can
+   stay tall without reopening the empty bottoms they had on a wide screen */
+@media (max-width:760px){.hs-card{min-height:min(420px,52vh)}}
 @media (max-width:900px){.hs-bg{width:100%;opacity:.45}}
 .ticker .line{padding-left:6px}
 
