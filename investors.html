@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Investors · Lumen8</title>
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="description" content="Lumen8 investor data room. Access by invitation.">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css">
+<link rel="stylesheet" href="/investors.css">
+</head>
+<body class="inv-body">
+<div class="orbs"><div class="orb c"></div><div class="orb a"></div><div class="orb v"></div></div>
+
+<header class="inv-top">
+  <a class="brand" href="/"><img src="/assets/lockup.webp" alt="Lumen8 · Energy Intelligence"><span class="tag">Investor data room</span></a>
+  <div class="inv-top-r"><span class="conf">Confidential · seed round</span><button class="btn sm ghost" id="lock" hidden><span>Lock</span></button></div>
+</header>
+
+<main class="inv-gate" id="gate">
+  <form class="gatecard" id="gateform" autocomplete="off">
+    <span class="eyebrow">Investors</span>
+    <h1 class="h-m">The business plan, the market, the model and the money.</h1>
+    <p>This room is opened with the password we gave you. Everything behind it is decrypted in your browser; nothing here is readable without it.</p>
+    <label class="pw"><span>Password</span><input type="password" id="pw" name="password" autocomplete="current-password" required placeholder="••••••••••" spellcheck="false"></label>
+    <div class="gate-row"><button class="btn primary" type="submit" id="go"><span>Enter</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><span class="err" id="err" role="alert"></span></div>
+    <p class="small">No account, no username. If you have not been given the password, write to <a href="mailto:hello@lumen8.ai?subject=Lumen8%20investor%20access">hello@lumen8.ai</a>.</p>
+  </form>
+</main>
+
+<div class="inv" id="app" hidden>
+  <aside class="inv-side">
+    <div class="inv-side-h"><span class="eyebrow">Contents</span><button class="inv-side-toggle" id="sidetoggle" aria-label="Toggle contents"><i></i><i></i><i></i></button></div>
+    <nav class="inv-nav" id="nav"></nav>
+    <div class="inv-side-f"><span id="built"></span><a href="mailto:hello@lumen8.ai?subject=Lumen8%20seed%20round">hello@lumen8.ai</a></div>
+  </aside>
+  <main class="inv-main" id="main"></main>
+</div>
+<div class="tip" id="tip" hidden></div>
+
+<script src="/investors.js"></script>
+</body>
+</html>
