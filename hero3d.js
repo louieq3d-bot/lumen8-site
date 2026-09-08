@@ -63,29 +63,42 @@
   const invTop = V3(fx1 + 5, ay + 2.6, AC.z + 8);
   arr.userData.xs.forEach((x) => scene.add(K.line([[AC.x + x, ay + .2, AC.z + 15], [AC.x + x, ay + .2, AC.z + 17.5]], 0x67e8f9, .35)));
   scene.add(K.line([[fx0 + 4, ay + .22, AC.z + 17.5], [fx1 + 5, ay + .22, AC.z + 17.5], [fx1 + 5, ay + .22, AC.z + 9.5]], 0x67e8f9, .5));
-  const arrLabel = K.label('128 MWp × PR 0.82 · SINGLE-AXIS TRACKING', '#93c5fd', 22); arrLabel.position.set(fx0, ay + 9, fz0 - 2); scene.add(arrLabel);
+  const arrLabel = K.label('128 MWp × PR 0.82 · SINGLE-AXIS TRACKING · + 12.6 MW WIND', '#93c5fd', 24); arrLabel.position.set(fx0, ay + 9, fz0 - 2); scene.add(arrLabel);
   // pin → array: two ground conduits
   [[fx0 + 2, fz0 + 6], [fx0 + 2, fz1 - 6]].forEach(([x, z]) => scene.add(K.tube([V3(0, terrainH(0, 0) + .6, 0), V3(x * .5, terrainH(x * .5, z * .5) + 1.4, z * .5), V3(x, terrainH(x, z) + .8, z)], 0x3b82f6, .22, .45, 3, .75)));
 
-  /* ---------- energy → money: the flow and the numbers along it ---------- */
-  const chart = new THREE.Group(); chart.position.set(70, 12, -66); chart.rotation.y = -.5; scene.add(chart);
-  const NB = 9, barsM = new THREE.InstancedMesh(new THREE.BoxGeometry(2.2, 1, 2.2), M.solid(0x34d399, 0x34d399, .5, .85), NB); chart.add(barsM);
-  const barH = []; for (let i = 0; i < NB; i++) barH.push(3 + i * 2.6 + Math.random() * 1.5);
-  chart.add(M.sprite(0x34d399, 34, .22));
-  const wave = []; for (let i = 0; i < NB; i++) wave.push(V3(i * 3.4, barH[i] + 2, 0));
-  const valLine = new THREE.Line(new THREE.BufferGeometry().setFromPoints(wave), new THREE.LineBasicMaterial({ color: 0x6ee7b7, transparent: true, opacity: .9 })); chart.add(valLine);
-  const chartLabel = K.label('$13.1 M / yr REVENUE · IRR 14.2% · NPV $48 M', '#6ee7b7', 24); chartLabel.position.set(-3, 28.5, 0); chart.add(chartLabel);
-  const chartAxis = K.label('YEAR 1 → 25', '#6f7b91', 8); chartAxis.position.set(0, -1.2, 3); chart.add(chartAxis);
-  const flowPts = [invTop, V3(fx1 + 12, 8, AC.z - 4), V3(74, 12, -34), V3(72, 15, -52), V3(70, 16, -66)];
-  const curve = new THREE.CatmullRomCurve3(flowPts); scene.add(K.tube(curve.getPoints(30), 0x22d3ee, .45, .5, 4, .9));
-  [['= 214 GWh / yr', fx1 + 14, 12, AC.z - 6], ['× $0.061 / kWh', 76, 17, -36], ['× 25 yr → NPV', 74, 20, -52]].forEach(([tx, x, y, z]) => { const l = K.label(tx, '#a5f3fc', 15); l.position.set(x, y, z); scene.add(l); });
-  const NP = 24, flowS = []; for (let i = 0; i < NP; i++) { const s = M.sprite(i % 5 ? 0x67e8f9 : 0xffffff, 1.4 + Math.random() * .8, .95); scene.add(s); flowS.push({ s, u: i / NP, v: .05 + Math.random() * .04 }); }
+  /* ---------- wind on the ridge behind the array: the same engine, another resource ---------- */
+  const turbines = []; [[-34, -62, 26], [-10, -78, 28], [18, -94, 30]].forEach(([x, z, hh], i) => { const w = K.windTurbine(hh, 0x67e8f9); w.position.set(x, terrainH(x, z), z); w.rotation.y = .5; w.userData.ph = i * 2.1; scene.add(w); turbines.push(w); });
+  const windBase = turbines.map((w) => V3(w.position.x, w.position.y + .6, w.position.z));
+  scene.add(K.tube([windBase[2], windBase[1], windBase[0], V3(fx0 - 6, terrainH(fx0 - 6, fz0 - 8) + .8, fz0 - 8), V3(fx0 - 2, ay + 1.2, fz1 - 6)], 0x67e8f9, .2, .5, 4, .8));
+  const windLabel = K.label('WIND 3 × 4.2 MW · CAPACITY FACTOR 34%', '#a5f3fc', 20); windLabel.position.set(-22, terrainH(-10, -78) + 40, -78); scene.add(windLabel);
+
+  /* ---------- energy → money: the current, and the board that turns it into revenue ---------- */
+  const CX = 72, CZ = -62, cy = terrainH(CX, CZ);
+  const BW = 30, HB = 12.6, legH = 2.6, x0 = -BW * .46, x1 = BW * .3, gap = (x1 - x0) / 26, zero = HB * .3, top = HB * .68;
+  const board = K.screen(BW, HB, (x, tw, th) => { const px = (u) => (u + BW / 2) / BW * tw, py = (v) => (1 - v / HB) * th; x.fillStyle = '#070c16'; x.fillRect(0, 0, tw, th); const gr = x.createLinearGradient(0, 0, 0, th); gr.addColorStop(0, 'rgba(52,211,153,.12)'); gr.addColorStop(1, 'rgba(34,211,238,.04)'); x.fillStyle = gr; x.fillRect(0, 0, tw, th); x.textBaseline = 'alphabetic'; x.fillStyle = '#eaf0f8'; x.font = '600 40px "JetBrains Mono", monospace'; x.fillText('REVENUE · 25 YEARS', 60, 64); x.fillStyle = '#6ee7b7'; x.font = '500 22px "JetBrains Mono", monospace'; x.fillText('128 MWp + WIND 12.6 MW · P50 · USD', 640, 64);
+    [['REVENUE', '$13.1 M / yr', '#6ee7b7'], ['IRR', '14.2%', '#6ee7b7'], ['NPV', '$48 M', '#bfdbfe'], ['DSCR', '1.41', '#bfdbfe'], ['TARIFF', '$0.061 / kWh', '#bfdbfe']].forEach(([k, v, c], i) => { const X = 60 + i * 300; x.fillStyle = '#6f7b91'; x.font = '500 20px "JetBrains Mono", monospace'; x.fillText(k, X, 118); x.fillStyle = c; x.font = '600 34px "JetBrains Mono", monospace'; x.fillText(v, X, 160); });
+    x.strokeStyle = 'rgba(103,232,249,.09)'; x.lineWidth = 2; for (let i = 1; i <= 4; i++) { const y = py(zero + (top - zero) * i / 4); x.beginPath(); x.moveTo(px(x0), y); x.lineTo(px(x1), y); x.stroke(); } x.strokeStyle = 'rgba(103,232,249,.7)'; x.lineWidth = 3; x.beginPath(); x.moveTo(px(x0), py(zero)); x.lineTo(px(x1), py(zero)); x.stroke();
+    x.fillStyle = '#8b96a8'; x.font = '500 22px "JetBrains Mono", monospace'; x.textAlign = 'center'; for (let yv = 0; yv <= 25; yv += 5) { const X = px(x0 + gap * (yv + .5)); x.fillRect(X - 1, py(zero) - 6, 2, 12); x.fillText('Y' + yv, X, py(zero) + 38); } x.textAlign = 'left';
+    x.fillStyle = '#34d399'; x.font = '500 18px "JetBrains Mono", monospace'; x.fillText('▮ REVENUE / YEAR', px(x0), py(top) - 12); x.fillStyle = '#67e8f9'; x.fillText('— CUMULATIVE · DEBT REPAID Y12', px(x0) + 330, py(top) - 12); x.strokeStyle = 'rgba(103,232,249,.35)'; x.lineWidth = 4; x.strokeRect(6, 6, tw - 12, th - 12); }, legH);
+  board.position.set(CX, cy + .1, CZ); board.rotation.y = -.55; scene.add(board); const bpad = K.pad(36, 10, TX.concrete); bpad.position.set(CX, cy, CZ); bpad.rotation.y = -.55; scene.add(bpad);
+  const NB = 25, barH = []; for (let i = 0; i < NB; i++) barH.push((top - zero) * (.42 + i * .016 + Math.sin(i * 1.3) * .04));
+  const barsM = new THREE.InstancedMesh(new THREE.BoxGeometry(gap * .58, 1, .8), M.solid(0x34d399, 0x34d399, .5, .95), NB); board.add(barsM);
+  const cum = []; let acc = 0; for (let i = 0; i <= NB; i++) { cum.push(V3(x0 + gap * (i + .5), legH + zero + (top - zero) * .92 * acc / 30, .95)); if (i < NB) acc += barH[i] / (top - zero); }
+  const cumLine = new THREE.Line(new THREE.BufferGeometry().setFromPoints(cum), new THREE.LineBasicMaterial({ color: 0x67e8f9, transparent: true, opacity: .95 })); board.add(cumLine);
+  const boardIn = new THREE.Vector3(); board.updateMatrixWorld(); board.localToWorld(boardIn.set(-BW / 2 - 1, legH + 3, .5));
+  const flowPts = [invTop, V3(fx1 + 12, 8, AC.z - 4), V3(64, 10, -36), V3(boardIn.x - 6, boardIn.y + 2, boardIn.z + 6), boardIn];
+  const curve = new THREE.CatmullRomCurve3(flowPts); scene.add(K.tube(curve.getPoints(40), 0x22d3ee, .55, .7, 5, .95));
+  [['= 214 GWh / yr', fx1 + 14, 12, AC.z - 6], ['× $0.061 / kWh', 66, 15, -38], ['= $13.1 M / yr', boardIn.x - 8, boardIn.y + 7, boardIn.z + 4]].forEach(([tx, x, y, z]) => { const l = K.label(tx, '#a5f3fc', 15); l.position.set(x, y, z); scene.add(l); });
+  const NP = 40, flowS = []; for (let i = 0; i < NP; i++) { const s = M.sprite(i % 5 ? 0x67e8f9 : 0xffffff, 1.6 + Math.random() * 1, .95); scene.add(s); flowS.push({ s, u: i / NP, v: .07 + Math.random() * .05 }); }
+  /* feeders: the rows' current into the inverter */
+  const feeders = []; [-14, 0, 14].forEach((dx) => { const tube = K.tube([V3(AC.x + dx, ay + .6, AC.z + 15), V3(AC.x + dx * .6 + 8, ay + 1.2, AC.z + 18), invTop], 0x67e8f9, .14, .9, 3, .8); scene.add(tube); feeders.push(tube); });
 
   /* ---------- the village in the foreground, fed by a pole line down the road ---------- */
   const rd = []; for (let i = 0; i <= 24; i++) { const t = i / 24, x = 2 + 46 * t + Math.sin(t * 5) * 3, z = 3 + 44 * t; rd.push(V3(x, terrainH(x, z) + .15, z)); }
   scene.add(K.road(rd, 2.8));
   const polePts = []; for (let i = 2; i < rd.length; i += 4) { const p = rd[i], n = rd[Math.min(rd.length - 1, i + 1)], dx = n.x - p.x, dz = n.z - p.z, l = Math.hypot(dx, dz) || 1; const x = p.x + (-dz / l) * 2.6, z = p.z + (dx / l) * 2.6; polePts.push(V3(x, terrainH(x, z), z)); }
-  const line = K.poleLine(polePts, 0x67e8f9, { h: 6.4, sag: .6, speed: .6, radius: .07, wire: .7 }); scene.add(line);
+  const line = K.poleLine(polePts, 0x67e8f9, { h: 6.4, sag: .6, speed: 1.1, radius: .08, wire: .8 }); scene.add(line);
   const tops = line.userData.tops;
   scene.add(K.tube([V3(0, terrainH(0, 0) + .6, 0), V3(tops[0][1].x * .5, terrainH(0, 0) + 4, tops[0][1].z * .5), tops[0][1]], 0x3b82f6, .14, .45, 2, .8));
   const houses = [], seed = (s) => () => { s = (s * 9301 + 49297) % 233280; return s / 233280; }, r = seed(31);
@@ -116,9 +129,9 @@
     mk0.userData.tick(t); beam.userData.mat.opacity = .26 + Math.sin(t * 3) * .06;
     arr.userData.setTilt(.5 - Math.sin(t * .12) * .45);
     sun.userData.tick(reduce ? 0 : .016, 22);
-    flowS.forEach((f) => { f.u = (f.u + f.v * .016 * 3) % 1; curve.getPointAt(f.u, tmp); f.s.position.copy(tmp); f.s.material.opacity = .4 + .6 * Math.sin(f.u * Math.PI); });
-    for (let i = 0; i < NB; i++) { const h = barH[i] * (.86 + .14 * Math.sin(t * 1.3 + i * .6)); m.makeScale(1, h, 1); m.setPosition(i * 3.4, h / 2, 0); barsM.setMatrixAt(i, m); wave[i].y = h + 2; }
-    barsM.instanceMatrix.needsUpdate = true; valLine.geometry.setFromPoints(wave);
+    flowS.forEach((f) => { f.u = (f.u + f.v * .016 * 4) % 1; curve.getPointAt(f.u, tmp); f.s.position.copy(tmp); f.s.material.opacity = .4 + .6 * Math.sin(f.u * Math.PI); });
+    for (let i = 0; i < NB; i++) { const h = barH[i] * (.95 + .05 * Math.sin(t * 1.3 + i * .6)); m.makeScale(1, h, 1); m.setPosition(x0 + gap * (i + 1.5), legH + zero + h / 2, .7); barsM.setMatrixAt(i, m); }
+    barsM.instanceMatrix.needsUpdate = true; turbines.forEach((w) => w.userData.tick(t + w.userData.ph, 1.5)); windLabel.material.opacity = .8;
     houses.forEach((h, i) => { h.userData.win.material.opacity = .3 + .3 * Math.max(0, Math.sin(t * 1.1 + i)); });
     waves.forEach((w) => { const p = w.l.geometry.attributes.position; for (let i = 0; i < w.n; i++) { const x = -170 + i / (w.n - 1) * 340; const env = Math.exp(-Math.pow((x - 30) / 120, 2)); const y = w.y + (Math.sin(x * .06 + t * 1.4 + w.ph) * 6 + Math.sin(x * .17 - t * 2.2 + w.ph) * 2.2) * env; p.setXYZ(i, x, y, -50 + Math.sin(x * .02 + w.ph) * 30); } p.needsUpdate = true; });
     dust.userData.tick(t);

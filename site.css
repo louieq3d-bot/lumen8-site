@@ -707,3 +707,29 @@ body::before{mix-blend-mode:normal;opacity:.03}
 .links a.investors-link{color:#a7f3d0;background:rgba(52,211,153,.07);box-shadow:inset 0 0 0 1px rgba(52,211,153,.3);margin-left:6px}
 .links a.investors-link:hover{color:#d1fae5;background:rgba(52,211,153,.14);box-shadow:inset 0 0 0 1px rgba(52,211,153,.55),0 4px 18px rgba(52,211,153,.13)}
 .mobile a:nth-child(6){transition-delay:.25s}.mobile a:nth-child(7){transition-delay:.3s}
+
+/* ---------- v14: full-bleed module features, the outputs wall ---------- */
+.mod.full{position:relative;min-height:96svh;display:flex;align-items:center;overflow:hidden;padding:130px 0 110px}
+.mod.full .mod-bg{position:absolute;inset:0;z-index:0}
+.mod.full canvas.mod-holo{position:absolute;right:0;top:0;width:78%;height:100%;display:block;cursor:grab;-webkit-mask:linear-gradient(90deg,transparent 0,#000 28%,#000 100%);mask:linear-gradient(90deg,transparent 0,#000 28%,#000 100%)}
+.mod.full .mod-veil{position:absolute;inset:0;pointer-events:none;z-index:1;background:linear-gradient(90deg,var(--bg) 0%,rgba(4,6,12,.92) 20%,rgba(4,6,12,.55) 40%,rgba(4,6,12,.08) 58%,transparent 70%),linear-gradient(180deg,var(--bg) 0%,rgba(4,6,12,.25) 16%,rgba(4,6,12,0) 36%,rgba(4,6,12,0) 70%,var(--bg) 100%)}
+.mod.full .wrap{position:relative;z-index:2;pointer-events:none}
+.mod.full .mod-copy{max-width:600px;pointer-events:auto}
+.mod.full .mod-copy .status{display:inline-block;margin-bottom:18px}
+.mod.full .mod-copy .h-l{text-shadow:0 4px 40px rgba(4,6,12,.9)}
+.mod.full .mod-copy .lead,.mod.full .feat li{text-shadow:0 2px 20px rgba(4,6,12,.9)}
+.mod.full .kv div{background:rgba(6,9,18,.7)}
+.mod.full .hint{position:absolute;right:var(--gutter);bottom:26px;z-index:2;font-family:var(--font-m);font-size:9px;letter-spacing:.24em;color:var(--muted);opacity:.8;pointer-events:none}
+@media (max-width:1000px){.mod.full canvas.mod-holo{width:100%;opacity:.55;-webkit-mask:none;mask:none}.mod.full .mod-veil{background:linear-gradient(180deg,rgba(4,6,12,.78),rgba(4,6,12,.6) 55%,var(--bg) 100%)}.mod.full .hint{display:none}.mod.full{min-height:0;padding:100px 0 80px}}
+/* outputs: the pack first, formats coloured, the wall breathes */
+.outs{grid-template-columns:repeat(5,1fr)}
+@media (max-width:1100px){.outs{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:640px){.outs{grid-template-columns:1fr 1fr}}
+.out{position:relative;overflow:hidden}
+.out::before{content:"";position:absolute;inset:0;background:radial-gradient(120px circle at 20% 30%,rgba(34,211,238,.12),transparent 60%);opacity:0;transition:opacity .4s}
+.out:hover::before{opacity:1}
+.out[data-fmt=pack] i{color:#a7f3d0;border-color:rgba(52,211,153,.5);box-shadow:0 0 14px rgba(52,211,153,.25)}
+.out[data-fmt=pack]{border-color:rgba(52,211,153,.35)}
+.out[data-fmt=cad] i{color:#67e8f9;border-color:rgba(34,211,238,.5)}
+.out[data-fmt=3d] i{color:#e2e8f0;border-color:rgba(226,232,240,.4)}
+.out[data-fmt=pdf] i{color:var(--blue-2)}
