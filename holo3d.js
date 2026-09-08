@@ -221,7 +221,103 @@
     const lb = K.label('480 MWp · 20 BLOCKS · SINGLE-AXIS TRACKING · GCR 0.42', '#93c5fd', 34); lb.position.set(X0, 16, Z0 - 8); root.add(lb); const lb2 = K.label('150 kV', '#67e8f9', 11); lb2.position.set(SX + 2, 16, -10); root.add(lb2);
     return { layers: L, radius: 170, shadowR: 130, fog: .0016, pitch: .62, theta: -.55, lookX: 12, lookY: 0, focusables: F, tick(t, dt) { const a = t * .18; const sx = Math.cos(a) * 240, sy = 60 + Math.sin(a) * 60; sunS.position.set(sx * .8, Math.max(8, sy), -170); const tilt = Math.max(-.95, Math.min(.95, Math.cos(a) * 1.1)); blocks.forEach((b) => b.userData.setTilt(tilt)); dust.userData.tick(t); sub.userData.sparks.userData.tick(dt); } }; };
   S.port = () => { const r = rnd(13), root = new THREE.Group(), L = [root], F = []; const water = K.water(220); root.add(water); const qm = textured(TX.concrete, 0xb9c3d3, { emissive: 0x1e3a8a, emissiveIntensity: .04 }); qm.map = TX.concrete.clone(); qm.map.needsUpdate = true; qm.map.repeat.set(24, 6); const quay = K.box(150, 3.6, 34, qm, 0xc7d2e0, .35); quay.position.set(0, -.4, -23); root.add(quay); const QY = 3.2; for (let i = 0; i < 14; i++) { const f = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1.6, .5), matte(0x111827)); f.position.set(-70 + i * 10.8, 1.6, -5.8); root.add(f); const bol = new THREE.Mesh(new THREE.CylinderGeometry(.22, .3, .5, 8), matte(0x475569)); bol.position.set(-65 + i * 10.8, QY + .25, -7.4); root.add(bol); } [-9.5, -19.5].forEach((z) => root.add(K.line([[-74, QY + .05, z], [74, QY + .05, z]], 0xd6e0ec, .45))); root.add(K.line([[-74, QY + .06, -6.2], [74, QY + .06, -6.2]], P.cyan2, .5)); const cranes = [-34, -10, 14].map((x, i) => { const c = named(K.crane(P.cyan), 'SHIP-TO-SHORE CRANE ' + (i + 1) + ' · 1,200 kW PEAK'); c.position.set(x, QY, -14.5); root.add(c); F.push(c); return c; }); const ship = named(K.ship(r), 'CONTAINER VESSEL · 1,840 kW AT BERTH · COLD IRONING'); ship.position.set(-4, .2, 9.6); root.add(ship); F.push(ship); [[-62, -7.6, 8], [-38, -7.6, -6], [10, -7.6, 26], [32, -7.6, 26]].forEach(([bx, bz, sx]) => root.add(K.line([[bx, QY, bz], [sx, 3.6, 5.4]], 0xd6e0ec, .3))); const rtgs = []; [-52, -18, 16].forEach((x, i) => { const st = K.containers(8, 2, 4, r, 2.45); st.position.set(x, QY, -33.5); root.add(st); const rtg = named(K.rtg(11, P.cyan), 'RTG CRANE · ELECTRIFIED · -71% DIESEL'); rtg.position.set(x + 10, QY, -31); root.add(rtg); F.push(rtg); rtgs.push(rtg); }); [-60, -26, 8].forEach((x) => root.add(K.line([[x, QY + .05, -40], [x + 22, QY + .05, -40], [x + 22, QY + .05, -26], [x, QY + .05, -26], [x, QY + .05, -40]], 0x9fb3c8, .3, true))); root.add(K.road([[-74, QY + .04, -23.5], [74, QY + .04, -23.5]], 3.2)); const wh = named(K.building(26, 6, 15, P.cyan, 8, 2), 'WAREHOUSE · ROOF PV 410 kWp'); wh.position.set(54, QY, -32); root.add(wh); F.push(wh); const roofPv = K.pv(4, 8, 2.6, 2.2, P.blue); roofPv.position.set(54, QY + 5.4, -32); roofPv.scale.setScalar(.9); root.add(roofPv); const sp = named(K.substation(P.cyan, 12), 'SHORE POWER · 6.6 kV · 1,840 kW'); sp.position.set(-64, QY, -26); root.add(sp); F.push(sp); const beam = K.beam(16, P.cyan, .7); beam.position.set(-64, QY + 3, -26); root.add(beam); root.add(K.ptube([[-64, QY + .6, -20], [-64, QY + .6, -8.5], [-12, QY + .6, -8.5]], P.blue2, .16, .6, .9)); const reel = new THREE.Mesh(new THREE.TorusGeometry(1.1, .3, 8, 20), solid(0xd6e0ec, P.cyan, .3)); reel.position.set(-12, QY + 1.4, -8); root.add(reel); root.add(K.tube([V3(-12, QY + 1.4, -7.4), V3(-12, QY + .6, -1), V3(-12, 4.2, 4.6), V3(-12, 4.6, 5.4)], P.cyan, .14, .6, 2)); root.add(K.tube([V3(54, QY + 5.6, -32), V3(30, QY + 3, -22), V3(0, QY + 2, -23.5), V3(-40, QY + 2, -23.5), V3(-64, QY + 2, -23)], P.blue2, .09, .5, 4, .7)); const tug = named(K.tug(), 'HARBOUR TUG · 2 × 1,200 kW'); root.add(tug); F.push(tug); const buoys = [[-80, 44], [78, 50], [-30, 62], [40, 70]].map(([x, z], i) => { const b = K.buoy(i % 2 ? P.rose : P.green); b.position.set(x, .2, z); root.add(b); return b; }); const bw = K.box(180, 2.6, 5, textured(TX.gravel, 0x94a3b8), 0x94a3b8, .3); bw.position.set(0, -.2, 84); bw.rotation.y = .04; root.add(bw); const lh = new THREE.Mesh(new THREE.CylinderGeometry(.6, .9, 6, 8), matte(0xe2e8f0)); lh.position.set(88, 3, 80); root.add(lh); const lhl = sprite(0xffffff, 4, .9); lhl.position.set(88, 6.6, 80); root.add(lhl); const tracks = []; [[[-104, .3, 96], [-70, .3, 60], [-40, .3, 30]], [[104, .3, 100], [70, .3, 66], [44, .3, 36]]].forEach((pts) => { const f = K.flow(pts, P.cyan2, 2, .12); root.add(f); tracks.push(f); }); const dust = K.dust(80, 120); dust.position.y = 3; root.add(dust); [['QUAY 480 m · 3 STS · 6 RTG · 2,400 TEU', -44, 30, -36], ['SHORE POWER · 6.6 kV · 1,840 kW', -74, 16, -30], ['AT BERTH 14 h · -3.1 t CO2 PER CALL', 12, 27, 26]].forEach(([tx, x, y, z]) => { const lb = K.label(tx, '#67e8f9', 26); lb.position.set(x, y, z); root.add(lb); }); return { layers: L, radius: 68, pitch: .5, theta: -.4, lookY: 2, lookZ: -9, focusables: F, tick(t, dt) { water.userData.tick(t); cranes.forEach((c, i) => c.userData.tick(t, i * 2)); rtgs.forEach((g, i) => { g.userData.tick(t, i); g.position.x = [-52, -18, 16][i] + 10 + Math.sin(t * .12 + i) * 7; }); ship.position.y = .2 + Math.sin(t * .8) * .1; ship.rotation.z = Math.sin(t * .6) * .005; ship.userData.lights.opacity = .3 + .3 * Math.max(0, Math.sin(t * 1.4)); ship.userData.nav.material.opacity = .4 + .6 * Math.max(0, Math.sin(t * 3)); const ta = t * .16; tug.position.set(46 + Math.cos(ta) * 18, .1 + Math.sin(t) * .08, 40 + Math.sin(ta) * 14); tug.rotation.y = -ta + Math.PI / 2; tug.userData.wake.userData.tick(dt); buoys.forEach((b, i) => { b.userData.light.opacity = .3 + .7 * Math.max(0, Math.sin(t * 2 + i * 1.3)); b.position.y = .2 + Math.sin(t * 1.2 + i) * .12; }); lhl.material.opacity = .4 + .6 * Math.max(0, Math.sin(t * 1.5)); tracks.forEach((f) => f.userData.tick(dt)); dust.userData.tick(t); sp.userData.sparks.userData.tick(dt); } }; };
-  S.tower = () => { const root = new THREE.Group(), L = [root], F = []; const T = K.terrain(120, 60, 1.4, .06, 0xffffff, true, TX.grass); root.add(T, K.grid(120, 48, P.rose, .04)); const gy = T.userData.h(0, 4); const pad = K.pad(30, 22, TX.gravel); pad.position.set(-1.5, gy, 4.5); root.add(pad); const tw = named(K.tower(24, P.rose), 'TOWER SITE · 3 TENANTS · 24 m LATTICE · OFF-GRID'); tw.position.set(4, gy + .1, -2); root.add(tw); F.push(tw);  const pv = named(K.pv(4, 5, 2.2, 1.7, P.blue), 'PV CANOPY · 18 kWp'); pv.position.set(-9, gy + .2, 8); root.add(pv); F.push(pv); const shelter = named(K.building(3.4, 2.4, 2.8, P.cyan, 2, 1), 'EQUIPMENT SHELTER · RECTIFIER 48 V'); shelter.position.set(-1, gy + .2, 10); root.add(shelter); F.push(shelter); const bess = named(K.bess(P.cyan), 'BATTERY · 60 kWh LFP'); bess.position.set(5, gy + .2, 11); bess.scale.setScalar(.8); root.add(bess); F.push(bess); const gen = named(K.box(2.6, 1.7, 1.6, solid(0x1c2333, P.rose, .25), P.rose, .6), 'DIESEL GENSET · BACKUP ONLY · -82% RUNTIME'); gen.position.set(10, gy + .2, 6); root.add(gen); F.push(gen); const tank = named(K.tank(.8, 3.2, P.rose), 'FUEL TANK · 1,200 L'); tank.position.set(11.5, gy + .2, 1.5); root.add(tank); F.push(tank); root.add(K.fence([[-17, gy, -7], [14, gy, -7], [14, gy, 16], [-17, gy, 16], [-17, gy, -7]], P.rose)); const rd = []; for (let i = 0; i <= 14; i++) { const z = 16 + i * 2.6, x = 4 + Math.sin(i * .5) * 3; rd.push(V3(x, T.userData.h(x, z) + .1, z)); } root.add(K.road(rd, 2.2)); root.add(K.tube([V3(-6, gy + 1.6, 8), V3(-3, gy + 1.4, 9), V3(-1, gy + 1.3, 10)], P.blue2, .1, .7, 2)); root.add(K.tube([V3(0.7, gy + 1.3, 10), V3(3.2, gy + 1.3, 10.6), V3(5, gy + 1.4, 11)], P.cyan, .09, .6, 2)); root.add(K.ptube([[-1, gy + .5, 8.6], [-1, gy + .5, 1], [3.5, gy + .5, 1], [3.5, gy + .5, -2]], P.cyan, .1, .6, .9)); root.add(K.tube([V3(4, gy + .6, -2), V3(4, gy + 12, -2), V3(4, gy + 22, -2)], P.cyan2, .07, .9, 4, .8)); root.add(K.tube([V3(8.7, gy + 1, 6), V3(6.5, gy + 1.1, 7.5), V3(1, gy + 1.2, 10)], P.rose, .06, .3, 2, .6)); const smoke = K.particles([10, gy + 1.9, 6], 0x6b7280, 10, { up: 1.6, spread: .5, life: 2.4, size: .8 }); root.add(smoke); for (let i = 0; i < 11; i++) { const a = i * .6 + .3, d = 26 + (i % 3) * 7; const tr = K.tree(1.2 + (i % 4) * .3, (i * .37) % 1); tr.position.set(Math.cos(a) * d, T.userData.h(Math.cos(a) * d, Math.sin(a) * d), Math.sin(a) * d); root.add(tr); } const dust = K.dust(40, 90); root.add(dust); const lb = K.label('SITE FIT 81 · DIESEL -82% · 34,371 SITES SCORED', '#99f6e4', 12); lb.position.set(-2, 13.5, -14); root.add(lb); const lb2 = K.label('24 h LOAD 2.1 kW · SOLAR SHARE 91%', '#99f6e4', 10); lb2.position.set(-2, 11.5, -14); root.add(lb2); return { layers: L, radius: 30, focusables: F, tick(t, dt) {  smoke.userData.tick(dt * (.3 + .7 * Math.max(0, Math.sin(t * .3)))); tw.userData.lamp.opacity = .3 + .7 * Math.max(0, Math.sin(t * 2.4)); dust.userData.tick(t); } }; };
+  /* telecoms: a ridge-top compound that reads as one node of a live microwave network */
+  S.tower = () => {
+    const r = rnd(23), root = new THREE.Group(), L = [root], F = [];
+    /* long-wavelength ground: gentle where the compound sits, real relief on the horizon */
+    const T = K.terrain(300, 120, 6, .006, 0xffffff, true, TX.grass);
+    root.add(T, K.grid(300, 96, P.cyan, .026));
+    const H = (x, z) => T.userData.h(x, z);
+    /* cut-and-fill bench: the top clears the high corner, the skirt buries under the low one */
+    let hi = -1e9, lo = 1e9;
+    for (let x = -26; x <= 26; x += 2) for (let z = -20; z <= 24; z += 2) if (H(x, z) > hi) hi = H(x, z);
+    for (let x = -40; x <= 40; x += 3) for (let z = -34; z <= 40; z += 3) if (H(x, z) < lo) lo = H(x, z);
+    const PY = hi + 1.1, TH = 28, TX0 = 3, TZ0 = -4, AY = PY + TH - 2.4, BD = PY - lo + 12;
+    const bench = K.box(40, BD, 32, textured(TX.gravel, 0x8794a8, { bumpScale: .18 }), P.steel, .16);
+    bench.position.set(0, PY - BD - .04, 2); root.add(bench);
+    const pad = K.pad(36, 28, TX.gravel); pad.position.set(0, PY - .08, 2); root.add(pad);
+    const tw = named(K.tower(TH, P.rose), 'TOWER SITE · 3 TENANTS · 28 m LATTICE · OFF-GRID');
+    tw.position.set(TX0, PY, TZ0); root.add(tw); F.push(tw);
+    /* sector footprints and traffic rings, held at antenna height so they never clip the hills */
+    const sectors = [0, 1, 2].map((i) => {
+      const g = new THREE.RingGeometry(3.4, 11, 24, 1, i * 2.094 + .5, 1.18); g.rotateX(-Math.PI / 2);
+      const m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ color: i === 1 ? P.cyan : P.blue2, transparent: true, opacity: .028, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide }));
+      m.position.set(TX0, AY, TZ0); root.add(m); return m;
+    });
+    const rings = [0, 1, 2].map((i) => {
+      const m = new THREE.Mesh(new THREE.TorusGeometry(1, .035, 6, 48), new THREE.MeshBasicMaterial({ color: P.cyan2, transparent: true, opacity: .4, blending: THREE.AdditiveBlending, depthWrite: false }));
+      m.rotation.x = Math.PI / 2; m.position.set(TX0, AY, TZ0); root.add(m); return { m, p: i / 3 };
+    });
+    /* peer sites on the far ridges, linked by microwave hops */
+    const peers = [[-62, -44, .58], [58, -52, .54], [-74, 16, .5], [16, -104, .62]].map(([x, z, s]) => {
+      const y = H(x, z), g = named(K.tower(20, P.rose), 'PEER SITE · MICROWAVE BACKHAUL');
+      g.position.set(x, y, z); g.scale.setScalar(s); root.add(g);
+      const p = K.pad(9, 7, TX.gravel); p.position.set(x, y + .04, z + 1.5); root.add(p);
+      return { g, tip: V3(x, y + 20 * s * .86, z) };
+    });
+    const links = peers.map((pr) => {
+      const f = K.flow([V3(TX0, AY - 1.4, TZ0), V3((TX0 + pr.tip.x) / 2, AY + 2.5, (TZ0 + pr.tip.z) / 2), pr.tip], P.cyan2, 2, .11);
+      root.add(f); return f;
+    });
+    /* generation, storage and the diesel it displaces */
+    const pvA = named(K.pv(4, 6, 2.4, 1.9, P.blue), 'PV CANOPY · 18 kWp · 24 MODULES');
+    pvA.position.set(-11, PY, 7); root.add(pvA); F.push(pvA);
+    const pvB = named(K.pv(3, 6, 2.4, 1.9, P.blue), 'PV CANOPY · EXPANSION BAY');
+    pvB.position.set(-11, PY, -6); root.add(pvB); F.push(pvB);
+    const shelter = named(K.building(5, 3, 3.8, P.cyan, 3, 1), 'EQUIPMENT SHELTER · RECTIFIER 48 V DC');
+    shelter.position.set(-1.5, PY, 11); root.add(shelter); F.push(shelter);
+    const rect = named(K.box(1.5, 2.1, 1.1, solid(0x2a3650, P.cyan, .22), P.cyan2, .6), 'HYBRID CONTROLLER · MPPT + RECTIFIER');
+    rect.position.set(3.4, PY, 11.2); root.add(rect); F.push(rect);
+    const bess = named(K.bess(P.cyan), 'BATTERY · 60 kWh LFP · 18 h AUTONOMY');
+    bess.position.set(9, PY, 10.4); bess.scale.setScalar(.85); root.add(bess); F.push(bess);
+    const gen = named(K.box(3, 1.9, 1.8, matte(0x39414f, 0x0a0d14, .02), 0x8d99ab, .38), 'DIESEL GENSET · BACKUP ONLY · -82% RUNTIME');
+    gen.position.set(13.5, PY, 6); root.add(gen); F.push(gen);
+    const tank = named(K.tank(.9, 3.4, 0x8d99ab), 'FUEL TANK · 1,200 L');
+    tank.position.set(14.5, PY, 1); root.add(tank); F.push(tank);
+    root.add(K.fence([[-18.5, PY, -12.5], [18.5, PY, -12.5], [18.5, PY, 15.5], [-18.5, PY, 15.5], [-18.5, PY, -12.5]], P.rose));
+    /* access track switchbacking off the bench and down the slope */
+    const rd = [];
+    for (let i = 0; i <= 24; i++) {
+      const t = i / 24, x = 5 + Math.sin(t * 3.2) * 15 + t * 9, z = 19 + t * 84;
+      rd.push(V3(x, H(x, z) + .12, z));
+    }
+    root.add(K.road(rd, 2.4));
+    /* energy: panels to controller, controller to battery, controller up the mast */
+    root.add(K.tube([V3(-7.5, PY + 1.5, 7), V3(-2, PY + 1.4, 9), V3(3, PY + 1.5, 10.9)], P.blue2, .1, .7, 2));
+    root.add(K.tube([V3(-7.5, PY + 1.4, -6), V3(-2, PY + 1.4, 2), V3(3, PY + 1.5, 10.5)], P.blue2, .085, .55, 3, .8));
+    root.add(K.tube([V3(4.2, PY + 1.4, 11.2), V3(6.6, PY + 1.3, 10.9), V3(8.9, PY + 1.4, 10.6)], P.cyan, .09, .6, 2));
+    root.add(K.ptube([[3.4, PY + .5, 10.4], [3.4, PY + .5, 1], [TX0, PY + .5, TZ0]], P.cyan, .1, .6, .9));
+    root.add(K.tube([V3(TX0, PY + .6, TZ0), V3(TX0, PY + 15, TZ0), V3(TX0, AY - .6, TZ0)], P.cyan2, .075, .9, 5, .85));
+    root.add(K.tube([V3(12.5, PY + 1.1, 6), V3(9, PY + 1.2, 8.4), V3(4.4, PY + 1.3, 11)], 0x8d99ab, .06, .22, 2, .35));
+    const smoke = K.particles([13.5, PY + 2.1, 6], 0x6b7280, 10, { up: 1.6, spread: .5, life: 2.4, size: .8 });
+    root.add(smoke);
+    const mk = K.marker(P.cyan2, 3.4); mk.position.set(TX0, PY + .1, TZ0); root.add(mk);
+    /* forest on the slopes, kept off the compound */
+    for (let i = 0; i < 54; i++) {
+      const a = r() * 6.283, d = 30 + r() * 104, x = Math.cos(a) * d, z = Math.sin(a) * d;
+      if (Math.abs(x) < 27 && z > -21 && z < 25) continue;
+      const tr = K.tree(1.3 + r() * 1.5, r()); tr.position.set(x, H(x, z), z); root.add(tr);
+    }
+    const dust = K.dust(60, 110); dust.position.y = 4; root.add(dust);
+    [['SITE FIT 81 · DIESEL -82%', 12, 15.5, '#99f6e4'], ['SOLAR SHARE 91% · 18 h AUTONOMY', 11, 13.2, '#93c5fd'], ['MICROWAVE BACKHAUL · 3 TENANTS', 10, 11.1, '#93c5fd']].forEach(([tx, w, y, c]) => {
+      const lb = K.label(tx, c, w); lb.position.set(-8, PY + y, -2); root.add(lb);
+    });
+    return {
+      layers: L, radius: 44, pitch: .42, theta: -.55, lookY: 7, focusables: F,
+      tick(t, dt) {
+        smoke.userData.tick(dt * (.3 + .7 * Math.max(0, Math.sin(t * .3))));
+        tw.userData.lamp.opacity = .3 + .7 * Math.max(0, Math.sin(t * 2.4));
+        peers.forEach((pr, i) => { pr.g.userData.lamp.opacity = .25 + .6 * Math.max(0, Math.sin(t * 1.7 + i * 1.9)); });
+        sectors.forEach((s, i) => { s.material.opacity = .035 + .05 * Math.max(0, Math.sin(t * 1.1 + i * 2.1)); });
+        rings.forEach((rg) => {
+          rg.p += dt * .16; if (rg.p > 1) rg.p -= 1;
+          const k = 2 + rg.p * 15; rg.m.scale.setScalar(k); rg.m.material.opacity = .34 * (1 - rg.p) * (1 - rg.p);
+        });
+        links.forEach((f) => f.userData.tick(dt));
+        mk.userData.tick(t); dust.userData.tick(t);
+      }
+    };
+  };
   /* Agriculture: parcels are raised beds, not painted rectangles. Every block has real
      thickness, so it catches the sun on one side and shadows its neighbour; paddies are
      bunded and flooded, row crops are ridged corduroy with tufts standing off them, and
