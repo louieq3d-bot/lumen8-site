@@ -656,3 +656,49 @@ footer li a:hover{color:var(--cyan)}
 .hs-bg{width:62%;opacity:.9}
 @media (max-width:1000px){.hero canvas.hero-holo{width:100%;opacity:.6;-webkit-mask:none;mask:none}}
 @media (max-width:900px){.hs-bg{width:100%;opacity:.45}}
+
+/* ---------- v12: lighter on every frame ---------- */
+/* a 90 px blur on three 60 vw orbs re-rendered every scroll frame; the gradients carry the softness now */
+.orb{filter:none}
+.orb.c{background:radial-gradient(circle,rgba(34,211,238,.26) 0%,rgba(34,211,238,.10) 30%,rgba(34,211,238,.03) 52%,transparent 68%)}
+.orb.a{background:radial-gradient(circle,rgba(59,130,246,.18) 0%,rgba(59,130,246,.07) 30%,rgba(59,130,246,.02) 52%,transparent 68%)}
+.orb.v{background:radial-gradient(circle,rgba(45,212,191,.12) 0%,rgba(45,212,191,.05) 30%,rgba(45,212,191,.015) 52%,transparent 68%)}
+body::before{mix-blend-mode:normal;opacity:.03}
+/* backdrop blurs over a live canvas re-blur every frame; solid panels instead */
+.ticker{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(6,9,18,.72)}
+.hs-card{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(6,9,18,.8)}
+/* the headline gradient shift repainted the whole hero title every frame */
+.hero h1 .grad{animation:none;background-position:35% 0}
+@media (max-width:900px){.nav.scrolled{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(4,6,12,.9)}}
+/* hero intro and statement lines without a tween library */
+.js .hero [data-hero]{opacity:0;transform:translateY(24px);transition:opacity 1.1s var(--ease),transform 1.1s var(--ease)}
+.js .hero.in [data-hero]{opacity:1;transform:none}
+.hero h1 .w i{transition:transform 1.2s var(--ease)}
+.hero.in h1 .w i{transform:none}
+.statement h2 .l i{transition:transform 1.1s var(--ease)}
+.statement h2 .l:nth-child(2) i{transition-delay:.12s}.statement h2 .l:nth-child(3) i{transition-delay:.24s}.statement h2 .l:nth-child(4) i{transition-delay:.36s}
+.statement h2.in .l i{transform:none}
+@media (prefers-reduced-motion:reduce){.js .hero [data-hero]{opacity:1;transform:none}}
+
+/* ---------- v12: a first engagement, and the questions people ask ---------- */
+.tl{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+@media (max-width:1000px){.tl{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.tl{grid-template-columns:1fr}}
+.tl .card{min-height:260px;display:flex;flex-direction:column}
+.tl .card .num{display:flex;align-items:center;gap:12px;color:var(--blue-2)}
+.tl .card .num::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(96,165,250,.5),transparent)}
+.tl .card h3{font-size:clamp(20px,1.5vw,23px)}
+.tl .card p{font-size:14.5px}
+.tl .card .who{margin-top:auto;padding-top:20px;font-family:var(--font-m);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.faq-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(30px,6vw,90px);align-items:start}
+@media (max-width:900px){.faq-grid{grid-template-columns:1fr}}
+.faq{display:grid;border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:1fr 28px;align-items:center;gap:18px;padding:22px 0;font-family:var(--font-d);font-weight:600;font-size:clamp(17px,1.4vw,21px);letter-spacing:-.01em;transition:color .25s}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--cyan-2)}
+.faq summary i{width:28px;height:28px;border-radius:50%;border:1px solid var(--line-2);position:relative;transition:transform .4s var(--ease),border-color .3s}
+.faq summary i::before,.faq summary i::after{content:"";position:absolute;left:50%;top:50%;width:10px;height:1.5px;background:var(--ink-2);transform:translate(-50%,-50%)}
+.faq summary i::after{transform:translate(-50%,-50%) rotate(90deg)}
+.faq details[open] summary i{transform:rotate(45deg);border-color:var(--cyan)}
+.faq details p{color:var(--ink-2);font-size:15.5px;max-width:64ch;padding:0 0 24px}

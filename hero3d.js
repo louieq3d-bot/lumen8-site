@@ -107,7 +107,7 @@
   new IntersectionObserver((en) => { vis = en[0].isIntersecting; }).observe(cv);
   const tmp = new THREE.Vector3(), m = new THREE.Matrix4(); let fr = 0, lastT = 0;
   function tick(now) {
-    requestAnimationFrame(tick); if (!vis) return; size(); const dt = Math.max(0, Math.min(.05, (now - lastT) / 1000)); lastT = now; Q.sample(dt); R.fit(W0, H0); renderer.shadowMap.needsUpdate = (fr++ & 1) === 0;
+    requestAnimationFrame(tick); if (!vis) return; size(); const dt = Math.max(0, Math.min(.05, (now - lastT) / 1000)); lastT = now; Q.sample(dt); R.fit(W0, H0); renderer.shadowMap.needsUpdate = (fr++ % 3) === 0;
     t += reduce ? 0 : .016;
     smx += (mx - smx) * .04; smy += (my - smy) * .04;
     const sy = Math.min(1, (window.scrollY || 0) / Math.max(1, window.innerHeight));
@@ -123,7 +123,7 @@
     waves.forEach((w) => { const p = w.l.geometry.attributes.position; for (let i = 0; i < w.n; i++) { const x = -170 + i / (w.n - 1) * 340; const env = Math.exp(-Math.pow((x - 30) / 120, 2)); const y = w.y + (Math.sin(x * .06 + t * 1.4 + w.ph) * 6 + Math.sin(x * .17 - t * 2.2 + w.ph) * 2.2) * env; p.setXYZ(i, x, y, -50 + Math.sin(x * .02 + w.ph) * 30); } p.needsUpdate = true; });
     dust.userData.tick(t);
     if (post) post.render(scene, camera); else renderer.render(scene, camera);
-    const src = renderer.domElement; if (cv.width !== src.width || cv.height !== src.height) { cv.width = src.width; cv.height = src.height; } else blit.clearRect(0, 0, src.width, src.height); blit.drawImage(src, 0, 0);
+    const src = renderer.domElement, pr = renderer.getPixelRatio(), pw = Math.floor(W0 * pr), ph = Math.floor(H0 * pr); if (cv.width !== pw || cv.height !== ph) { cv.width = pw; cv.height = ph; } else blit.clearRect(0, 0, pw, ph); blit.drawImage(src, 0, src.height - ph, pw, ph, 0, 0, pw, ph);
   }
   /* submit every shader now; the GPU links them in the background while the preloader is still up */
   H.whenWarm(() => { renderer.compile(scene, camera); const gl = renderer.getContext(), ext = gl.getExtension('KHR_parallel_shader_compile'), born = performance.now();

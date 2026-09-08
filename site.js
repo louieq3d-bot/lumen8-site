@@ -4,8 +4,9 @@
 (function () {
   'use strict';
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const hasGsap = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
-  if (hasGsap) gsap.registerPlugin(ScrollTrigger);
+  document.documentElement.classList.add('js');
+  /* No tween library. The five effects GSAP + ScrollTrigger used to drive (hero intro, statement lines, orb drift,
+     hero recede, parallax) are CSS transitions and one scroll handler now: 113 KB less script, one ticker fewer. */
 
   /* ---------- preloader ---------- */
   const loader = document.querySelector('.loader');
@@ -27,15 +28,9 @@
   /* ---------- smooth scroll ---------- */
   let lenis = null;
   if (!reduce && typeof Lenis !== 'undefined') {
-    lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
-    if (hasGsap) {
-      lenis.on('scroll', ScrollTrigger.update);
-      gsap.ticker.add((t) => lenis.raf(t * 1000));
-      gsap.ticker.lagSmoothing(0);
-    } else {
-      const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
-      requestAnimationFrame(raf);
-    }
+    lenis = new Lenis({ lerp: 0.085, smoothWheel: true });
+    const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
+    requestAnimationFrame(raf);
   }
   // anchor links play nice with Lenis
   document.querySelectorAll('a[href^="#"]').forEach((a) => {
@@ -166,8 +161,7 @@
     if (!lines.length) return;
     const obs = new IntersectionObserver((en) => {
       if (!en[0].isIntersecting) return;
-      if (hasGsap && !reduce) gsap.to(lines, { y: 0, duration: 1.1, ease: 'expo.out', stagger: 0.12 });
-      else lines.forEach((l) => (l.style.transform = 'none'));
+      h.classList.add('in');
       obs.disconnect();
     }, { threshold: 0.4 });
     obs.observe(h);
@@ -175,12 +169,10 @@
 
   /* ---------- hero intro ---------- */
   function heroIntro() {
-    const words = document.querySelectorAll('.hero h1 .w i');
-    if (!words.length) return;
-    if (hasGsap && !reduce) {
-      gsap.to(words, { y: 0, duration: 1.2, ease: 'expo.out', stagger: 0.06, delay: 0.1 });
-      gsap.from('.hero [data-hero]', { y: 24, opacity: 0, duration: 1.1, ease: 'expo.out', stagger: 0.1, delay: 0.5 });
-    } else words.forEach((w) => (w.style.transform = 'none'));
+    const hero = document.querySelector('.hero'); if (!hero) return;
+    hero.querySelectorAll('h1 .w i').forEach((w, i) => { w.style.transitionDelay = (.1 + i * .06) + 's'; });
+    hero.querySelectorAll('[data-hero]').forEach((el, i) => { el.style.transitionDelay = (.5 + i * .1) + 's'; });
+    hero.classList.add('in');
   }
 
   /* ---------- count-up ---------- */
@@ -220,18 +212,19 @@
     tick();
   });
 
-  /* ---------- parallax orbs ---------- */
-  if (hasGsap && !reduce) {
-    gsap.utils.toArray('.orb').forEach((o, i) => {
-      gsap.to(o, { yPercent: (i + 1) * -18, ease: 'none', scrollTrigger: { trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: 1.2 } });
-    });
-    gsap.utils.toArray('[data-parallax]').forEach((el) => {
-      const amt = parseFloat(el.dataset.parallax || '0.2');
-      gsap.to(el, { yPercent: amt * -100, ease: 'none', scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true } });
-    });
-    // hero fade-out on scroll
-    const hero = document.querySelector('.hero .wrap');
-    if (hero) gsap.to(hero, { opacity: 0, y: -60, ease: 'none', scrollTrigger: { trigger: '.hero', start: '40% top', end: 'bottom top', scrub: true } });
+  /* ---------- scroll-driven: the orbs drift, the hero copy recedes ---------- */
+  if (!reduce) {
+    const orbs = [...document.querySelectorAll('.orb')];
+    const heroWrap = document.querySelector('.hero .wrap'), heroEl = document.querySelector('.hero');
+    let queued = false;
+    const drive = () => {
+      queued = false;
+      const y = window.scrollY || 0, h = document.documentElement.scrollHeight - window.innerHeight, p = h > 0 ? y / h : 0;
+      orbs.forEach((o, i) => { o.style.transform = 'translate3d(0,' + (-(i + 1) * 18 * p).toFixed(2) + '%,0)'; });
+      if (heroWrap && heroEl) { const H = heroEl.offsetHeight, q = Math.min(1, Math.max(0, (y - H * .4) / (H * .6))); heroWrap.style.opacity = (1 - q).toFixed(3); heroWrap.style.transform = 'translateY(' + (-60 * q).toFixed(1) + 'px)'; }
+    };
+    window.addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(drive); } }, { passive: true });
+    drive();
   }
 
   /* ---------- pinned pipeline ---------- */
