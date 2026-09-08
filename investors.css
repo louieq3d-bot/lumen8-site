@@ -439,3 +439,37 @@
 .pv-row b{font-family:var(--font-d);font-size:16px;color:var(--ink);text-align:right}
 .pv-row b small{font-family:var(--font-m);font-size:10px;color:var(--muted);letter-spacing:.06em;margin-left:4px}
 .pv-note{font-family:var(--font-m);font-size:10.5px;line-height:1.6;color:var(--muted)}
+
+/* ---------- round 4: valuation context, entry economics, the case ---------- */
+.chart .band{cursor:pointer;transition:fill-opacity .3s}
+.chart .band:hover{fill-opacity:1}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+@media (max-width:900px){.facts{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.facts{grid-template-columns:1fr}}
+.fact{border:1px solid var(--line);border-radius:14px;padding:18px;background:var(--panel);display:grid;gap:8px;align-content:start}
+.fact b{font-family:var(--font-d);font-size:clamp(22px,2vw,28px);letter-spacing:-.03em;background:linear-gradient(180deg,#fff,#b6c0d2);-webkit-background-clip:text;background-clip:text;color:transparent}
+.fact p{font-size:13.5px;margin:0}
+.fact small{font-family:var(--font-m);font-size:10px;letter-spacing:.06em;color:var(--muted)}
+.entry{display:grid;gap:16px;border:1px solid rgba(52,211,153,.35);border-radius:18px;padding:22px;background:rgba(52,211,153,.04)}
+.entry-ctl{display:grid;grid-template-columns:1fr 1.2fr;gap:20px;align-items:center}
+@media (max-width:800px){.entry-ctl{grid-template-columns:1fr}}
+.entry-ctl label{display:grid;gap:8px}
+.entry-ctl label span{display:flex;justify-content:space-between;font-size:13.5px;color:var(--ink-2)}
+.entry-ctl label b{font-family:var(--font-m);font-weight:500;color:#a7f3d0}
+.entry-ctl input[type=range]{width:100%;accent-color:#34d399}
+.entry-note{font-family:var(--font-m);font-size:10.5px;line-height:1.6;color:var(--muted)}
+.entry-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:800px){.entry-grid{grid-template-columns:1fr}}
+.ecell{border:1px solid var(--line);border-radius:14px;padding:16px;background:rgba(4,6,12,.4);display:grid;gap:8px}
+.ecell i{font-style:normal;font-family:var(--font-m);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--green)}
+.erow{display:grid;grid-template-columns:52px 1fr auto;gap:10px;align-items:baseline;font-size:12.5px;color:var(--muted)}
+.erow b{font-family:var(--font-d);font-size:18px;color:var(--ink)}
+.erow em{font-style:normal;font-family:var(--font-m);font-size:11.5px;color:#a7f3d0}
+.ebar{height:8px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden}
+.ebar i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--green),#6ee7b7);transition:width .5s var(--ease)}
+.case{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+@media (max-width:800px){.case{grid-template-columns:1fr}}
+.crow{display:grid;grid-template-columns:36px 1fr;gap:14px;border:1px solid var(--line);border-radius:14px;padding:18px;background:var(--panel)}
+.crow i{font-style:normal;font-family:var(--font-m);font-size:11px;letter-spacing:.2em;color:var(--cyan);padding-top:4px}
+.crow b{display:block;font-family:var(--font-d);font-size:17px;margin-bottom:6px}
+.crow p{font-size:13.5px;margin:0}

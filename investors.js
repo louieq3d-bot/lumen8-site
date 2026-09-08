@@ -224,6 +224,22 @@
     };
     $$('input', el).forEach((i) => i.addEventListener('input', () => { if (i.dataset.k === 'g') S.g = +i.value / 100; else S.m = +i.value; draw(); })); draw();
   };
+  /* valuation context: multiple bands on one axis, sourced */
+  W.comps = (el, C) => {
+    el.innerHTML = ''; const Wd = 900, H = 60 + C.bands.length * 52, L = 300, R = 40, mx = 32; const svg = svgEl('svg', { viewBox: '0 0 ' + Wd + ' ' + H }, el); const x = (v) => L + (Wd - L - R) * v / mx;
+    [0, 5, 10, 15, 20, 25, 30].forEach((v) => { svgEl('line', { x1: x(v), x2: x(v), y1: 20, y2: H - 30, class: 'axis' }, svg); const t = svgEl('text', { x: x(v), y: H - 12, 'text-anchor': 'middle', class: 'sm' }, svg); t.textContent = v + '×'; });
+    const cols = { silver: COL.silver, blue: COL.blue2, cyan: COL.cyan, green: COL.green };
+    C.bands.forEach((b, i) => { const y = 34 + i * 52; const t = svgEl('text', { x: L - 14, y: y + 5, 'text-anchor': 'end', class: 'lbl', 'font-size': 12.5 }, svg); t.textContent = b.k; const r = svgEl('rect', { x: x(b.lo), y: y - 11, width: x(b.hi) - x(b.lo), height: 22, rx: 11, fill: cols[b.c], 'fill-opacity': b.c === 'green' ? .9 : .55, class: 'band' }, svg); const v = svgEl('text', { x: x(b.hi) + 10, y: y + 5, class: 'lbl', 'font-size': 12, fill: cols[b.c] }, svg); v.textContent = b.lo + '–' + b.hi + '× revenue'; tipOn(r, '<b>' + esc(b.k) + ' · ' + b.lo + '–' + b.hi + '×</b>' + esc(b.src)); });
+    const lg = svgEl('text', { x: L, y: 12, class: 'sm' }, svg); lg.textContent = 'ENTERPRISE VALUE / REVENUE · PUBLIC ON NEXT-TWELVE-MONTHS REVENUE, PRIVATE ON ARR · 2025–2026 PRINTS';
+  };
+  W.facts = (el, C) => { el.innerHTML = C.facts.map((f) => '<div class="fact"><b>' + esc(f.b) + '</b><p>' + esc(f.t) + '</p><small>' + esc(f.s) + '</small></div>').join(''); };
+  W.case = (el, C) => { el.innerHTML = C.case.map((r, i) => '<div class="crow"><i>0' + (i + 1) + '</i><div><b>' + esc(r[0]) + '</b><p>' + esc(r[1]) + '</p></div></div>').join(''); };
+  W.entry = (el, PL) => {
+    el.innerHTML = '<div class="entry-ctl"><label><span>Post-money at entry<b data-v></b></span><input type="range" min="10" max="60" step="1" value="21"></label><div class="entry-note">Carta\'s Q3 2025 median seed pre-money was USD 16 m; USD 5 m on top of that is the default. The plan\'s enterprise value is year-end recurring revenue times the multiple.</div></div><div class="entry-grid"></div>';
+    const rng = $('input', el); const a3 = PL.years[2].arr, a4 = PL.years[3].arr;
+    const draw = () => { const pm = +rng.value; $('[data-v]', el).textContent = 'USD ' + pm + ' m · ' + (100 * 5 / pm).toFixed(1) + '% for USD 5 m'; $('.entry-grid', el).innerHTML = PL.multiples.map(([nm, m]) => { const e3 = a3 * m, e4 = a4 * m; return '<div class="ecell"><i>' + esc(nm) + ' · ' + m + '× ARR</i><div class="erow"><span>Year 3</span><b>USD ' + e3.toFixed(0) + ' m</b><em>' + (e3 / pm).toFixed(1) + '× entry</em></div><div class="erow"><span>Year 4</span><b>USD ' + e4.toFixed(0) + ' m</b><em>' + (e4 / pm).toFixed(1) + '× entry</em></div><div class="ebar"><i style="width:' + Math.min(100, 100 * (e4 / pm) / 60).toFixed(1) + '%"></i></div></div>'; }).join(''); };
+    rng.addEventListener('input', draw); draw();
+  };
   W.bridge = (el, I) => { const mx = Math.max(...I.bridge.map((b) => b[1])); el.innerHTML = '<div class="bridge">' + I.bridge.map((b, i) => '<div class="brow"><span>' + esc(b[0]) + '</span><div><i style="width:' + (100 * Math.sqrt(b[1] / mx)).toFixed(1) + '%;background:' + [COL.silver, COL.cyan, COL.blue2, COL.green][i] + '"></i></div><b>USD ' + b[1] + ' m<small>' + (i ? (b[1] / I.bridge[0][1]).toFixed(1) + '× the round' : 'platform equity') + '</small></b></div>').join('') + '</div><div class="srcline">Widths on a square-root scale. Capital mobilisation ratio = capex reaching financial close ÷ Lumen8 capital invested, reported gross and attributed every quarter. Attribution needs a close, a Lumen8 analysis in the decision pack and written confirmation, then a 50% discount.</div>'; };
   W.traj = (el, I) => {
     el.innerHTML = ''; const Wd = 640, H = 300, L = 54, R = 20, T = 20, B = 40; const svg = svgEl('svg', { viewBox: '0 0 ' + Wd + ' ' + H }, el); const x = (y) => L + (y - 2015) / 20 * (Wd - L - R), yv = (v) => T + (H - T - B) * (1 - v / 200);
