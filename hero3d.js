@@ -131,7 +131,7 @@
     sun.userData.tick(reduce ? 0 : .016, 22);
     flowS.forEach((f) => { f.u = (f.u + f.v * .016 * 4) % 1; curve.getPointAt(f.u, tmp); f.s.position.copy(tmp); f.s.material.opacity = .4 + .6 * Math.sin(f.u * Math.PI); });
     for (let i = 0; i < NB; i++) { const h = barH[i] * (.95 + .05 * Math.sin(t * 1.3 + i * .6)); m.makeScale(1, h, 1); m.setPosition(x0 + gap * (i + 1.5), legH + zero + h / 2, .7); barsM.setMatrixAt(i, m); }
-    barsM.instanceMatrix.needsUpdate = true; turbines.forEach((w) => w.userData.tick(t + w.userData.ph, 1.5)); windLabel.material.opacity = .8;
+    barsM.instanceMatrix.needsUpdate = true; turbines.forEach((w) => w.userData.tick(t + w.userData.ph, .85)); windLabel.material.opacity = .8;
     houses.forEach((h, i) => { h.userData.win.material.opacity = .3 + .3 * Math.max(0, Math.sin(t * 1.1 + i)); });
     waves.forEach((w) => { const p = w.l.geometry.attributes.position; for (let i = 0; i < w.n; i++) { const x = -170 + i / (w.n - 1) * 340; const env = Math.exp(-Math.pow((x - 30) / 120, 2)); const y = w.y + (Math.sin(x * .06 + t * 1.4 + w.ph) * 6 + Math.sin(x * .17 - t * 2.2 + w.ph) * 2.2) * env; p.setXYZ(i, x, y, -50 + Math.sin(x * .02 + w.ph) * 30); } p.needsUpdate = true; });
     dust.userData.tick(t);
