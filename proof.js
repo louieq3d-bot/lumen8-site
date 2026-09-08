@@ -44,6 +44,30 @@
       return p;
     },
     /* classified parcels — a mosaic that fills crop by crop */
+    /* a plant layout: tracker rows in blocks, filling block by block */
+    tables(w, h) {
+      const p = [], cols = 18, rows = 4, gx = w / (cols + 1), gy = h / (rows + 1);
+      for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) p.push({ x: gx * (i + 1), y: gy * (j + 1), w: gx * .42, h: gy * .62, d: (i / cols) * .7 + (j / rows) * .3, road: j === 1 });
+      return p;
+    },
+    /* a stack of pages */
+    sheets(w, h) {
+      const p = [], cols = 7, rows = 2, cw = w / (cols + 1), ch = h / (rows + 1);
+      for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) p.push({ x: cw * (i + .55), y: ch * (j + .5), w: cw * .82, h: ch * .78, d: (i + j * cols) / (cols * rows), lines: 3 + Math.round(hash(i, j) * 3) });
+      return p;
+    },
+    /* a bill of materials: parts scattered, each linked to its assembly */
+    parts(w, h) {
+      const p = [], hubs = [[.22, .5], [.5, .42], [.78, .55]];
+      for (let i = 0; i < 120; i++) { const hb = hubs[i % 3], a = hash(i, 2) * 6.283, r = Math.pow(hash(i, 4), .7) * .19; p.push({ x: (hb[0] + Math.cos(a) * r * 1.3) * w, y: (hb[1] + Math.sin(a) * r) * h, hx: hb[0] * w, hy: hb[1] * h, d: hash(i, 6), r: .9 + hash(i, 8) * 1.3 }); }
+      return p;
+    },
+    /* a predicted grid: a trunk with branches spreading across the land */
+    grid(w, h) {
+      const p = [];
+      for (let i = 0; i < 46; i++) { const u = hash(i, 1), v = hash(i, 3); const x0 = u * w, y0 = .5 * h + (v - .5) * h * .3; const a = (hash(i, 5) - .5) * 2.2 + (v > .5 ? 1.57 : -1.57), len = h * (.12 + hash(i, 7) * .3); p.push({ x0, y0, x1: x0 + Math.cos(a) * len, y1: y0 + Math.sin(a) * len, d: u * .8 + hash(i, 9) * .2 }); }
+      return p;
+    },
     fields(w, h) {
       const p = [], cols = 14, rows = 6, gx = w / cols, gy = h / rows;
       for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
@@ -103,6 +127,23 @@
           c.beginPath(); c.arc(m.x, m.y - H * .5, 3.5 + pulse * 5.5, 0, 6.283); c.stroke();
         }
       });
+    },
+    tables(c, w, h, g, k, t, col) {
+      c.fillStyle = col; c.strokeStyle = col; c.lineWidth = 1;
+      c.globalAlpha = .12; c.beginPath(); c.moveTo(0, h * .5); c.lineTo(w, h * .5); c.stroke();
+      g.forEach((m, i) => { if (m.d > k) return; const a = Math.min(1, (k - m.d) * 6); c.globalAlpha = a * (.32 + .3 * (.5 + .5 * Math.sin(t * 1.2 + i * .15))); c.fillRect(m.x - m.w / 2, m.y - m.h / 2, m.w, m.h); });
+    },
+    sheets(c, w, h, g, k, t, col) {
+      g.forEach((m, i) => { if (m.d > k) return; const a = Math.min(1, (k - m.d) * 5); c.globalAlpha = a * .5; c.strokeStyle = col; c.lineWidth = 1; c.strokeRect(m.x + .5, m.y + .5, m.w, m.h); c.globalAlpha = a * (.25 + .15 * (.5 + .5 * Math.sin(t + i))); c.fillStyle = col; for (let l = 0; l < m.lines; l++) c.fillRect(m.x + 5, m.y + 6 + l * 7, m.w * (.4 + hash(i, l) * .45), 2); });
+    },
+    parts(c, w, h, g, k, t, col) {
+      c.strokeStyle = col; c.fillStyle = col;
+      g.forEach((m, i) => { if (m.d > k) return; const a = Math.min(1, (k - m.d) * 5); c.globalAlpha = a * .12; c.lineWidth = 1; c.beginPath(); c.moveTo(m.hx, m.hy); c.lineTo(m.x, m.y); c.stroke(); c.globalAlpha = a * (.4 + .4 * (.5 + .5 * Math.sin(t * 1.3 + i * .4))); c.beginPath(); c.arc(m.x, m.y, m.r, 0, 6.283); c.fill(); });
+      c.globalAlpha = .8; [[.22, .5], [.5, .42], [.78, .55]].forEach((hb) => { c.beginPath(); c.arc(hb[0] * w, hb[1] * h, 3.5, 0, 6.283); c.fill(); });
+    },
+    grid(c, w, h, g, k, t, col) {
+      c.strokeStyle = col; c.lineWidth = 1.6; c.globalAlpha = .55; c.beginPath(); c.moveTo(0, h * .5); c.bezierCurveTo(w * .3, h * .42, w * .6, h * .6, w, h * .5); c.stroke();
+      g.forEach((m, i) => { if (m.d > k) return; const a = Math.min(1, (k - m.d) * 4); c.globalAlpha = a * (.28 + .2 * (.5 + .5 * Math.sin(t + i * .3))); c.lineWidth = 1; c.beginPath(); c.moveTo(m.x0, m.y0); c.lineTo(m.x0 + (m.x1 - m.x0) * a, m.y0 + (m.y1 - m.y0) * a); c.stroke(); if (a >= 1) { c.beginPath(); c.arc(m.x1, m.y1, 1.6, 0, 6.283); c.fill(); } });
     },
     fields(c, w, h, g, k, t, col) {
       g.forEach((m, i) => {

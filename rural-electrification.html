@@ -155,11 +155,29 @@
 <!-- ============ STATS ============ -->
 <section class="section tight">
   <div class="wrap">
-    <div class="stats" data-reveal>
-      <div class="stat"><b data-count="8493">0</b><span>Villages indexed and screened</span><em>National coverage</em></div>
-      <div class="stat"><b data-count="36">0</b><span>Provinces with full profiles</span><em>Every region</em></div>
-      <div class="stat"><b data-count="12">0</b><span>Funding instruments matched</span><em>Grants to debt</em></div>
-      <div class="stat"><b data-count="203708">0</b><span>Kilometres of grid predicted</span><em>Arrival timing</em></div>
+    <div class="proof" data-reveal>
+      <article class="pcell" style="--fc:#22d3ee"><canvas data-field="villages" aria-hidden="true"></canvas><b data-count="8493">0</b><span>Villages indexed and screened</span><em>National coverage</em></article>
+      <article class="pcell" style="--fc:#34d399"><canvas data-field="fields" aria-hidden="true"></canvas><b data-count="36">0</b><span>Provinces with full profiles</span><em>Every region</em></article>
+      <article class="pcell" style="--fc:#93c5fd"><canvas data-field="sheets" aria-hidden="true"></canvas><b data-count="12">0</b><span>Funding instruments matched</span><em>Grants to debt</em></article>
+      <article class="pcell" style="--fc:#60a5fa"><canvas data-field="grid" aria-hidden="true"></canvas><b data-count="203708">0</b><span>Kilometres of grid predicted</span><em>Arrival timing</em></article>
+    </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ENGAGEMENT ============ -->
+<section class="section tight" id="engagement">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow green" data-reveal>A first programme</span>
+      <h2 class="h-l" data-reveal>From a region<br><span class="muted">to a build order.</span></h2>
+      <p class="lead" data-reveal>A national programme is a list with reasons. These are the four steps that produce it, and each one leaves a document behind.</p>
+    </div>
+    <div class="tl stagger">
+      <div class="card green"><span class="num">01 · SCREEN</span><h3>Rank the region.</h3><p>Six weighted signals per village, your weights, one ranked list you can defend line by line. Villages the grid will reach soon are flagged so the money goes where it will not.</p><span class="who">You get · a ranked list with its reasons</span></div>
+      <div class="card green"><span class="num">02 · TWIN</span><h3>Rebuild the shortlist in 3D.</h3><p>Buildings, roads and terrain from satellite; the low-voltage network designed house by house; solar and storage sized hour by hour across 25 years.</p><span class="who">You get · a design per village</span></div>
+      <div class="card green"><span class="num">03 · FUND</span><h3>Match the money to the village.</h3><p>Ability and willingness to pay per household, three tariff scenarios, and a funding stack of twelve instruments with the applications drafted from the run.</p><span class="who">You get · dossier and grant drafts</span></div>
+      <div class="card green"><span class="num">04 · BUILD</span><h3>Hand the crew a pack.</h3><p>Bill of quantities, pole schedule, drawings, logistics route and an offline briefing that works with no signal. Then the satellite comes back every year to prove it.</p><span class="who">You keep · every file, every run</span></div>
     </div>
   </div>
 </section>
@@ -251,6 +269,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.152.2/three.min.js"></script>
 <script src="/site.js"></script>
 <script src="/holo3d.js"></script>
+<script src="/proof.js"></script>
 <script src="/waves.js"></script>
 <script src="/hero3d.js"></script>
 </body>
