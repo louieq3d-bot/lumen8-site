@@ -67,32 +67,29 @@
 
   /* ---------- widgets ---------- */
   const W = {};
+  /* every chart carries a title, a one-line reading and its source line in the same place */
+  const frame = (el, title, sub, src) => { const hd = document.createElement('div'); hd.className = 'chart-h'; hd.innerHTML = '<b>' + esc(title) + '</b><span>' + esc(sub) + '</span>' + (src ? '<small>' + esc(src) + '</small>' : ''); el.insertBefore(hd, el.firstChild); };
   const tabs = (el, name, cb) => { const t = $('[data-tabs=' + name + ']'); if (!t) return; $$('button', t).forEach((b) => b.addEventListener('click', () => { $$('button', t).forEach((x) => x.classList.toggle('on', x === b)); cb(b.dataset.set); })); };
 
-  /* funnel: stages as trapezoids, width by log of value so a 3,300 -> 1.6 chain still reads */
+  /* funnel: a real funnel, top to bottom, each stage a bar whose width is the log of its value, joined by the flow */
   W.funnel = (el, F) => {
     const draw = (set) => {
-      const f = F[set], n = f.stages.length, Wd = 1000, sh = 74, gap = 10, H = n * (sh + gap) + 30; el.innerHTML = '';
+      const f = F[set], n = f.stages.length, Wd = 1000, L = 330, R = 150, rh = 66, top = 18, H = top + n * rh + 8; el.innerHTML = '';
       const svg = svgEl('svg', { viewBox: '0 0 ' + Wd + ' ' + H }, el);
       const vmax = Math.log10(Math.max(...f.stages.map((s) => s.value)) + 1), vmin = Math.log10(Math.min(...f.stages.map((s) => s.value)) + 1);
-      const wOf = (v) => 180 + 560 * ((Math.log10(v + 1) - vmin) / Math.max(1e-6, vmax - vmin));
-      f.stages.forEach((s, i) => {
-        const y = 14 + i * (sh + gap), w0 = wOf(s.value), w1 = i + 1 < n ? wOf(f.stages[i + 1].value) : w0 * .8, cx = 300;
-        const g = svgEl('g', { class: 'funnel-stage' }, svg);
-        const grad = 'url(#fg' + i + ')'; const defs = svgEl('defs', {}, g); const lg = svgEl('linearGradient', { id: 'fg' + i, x1: 0, x2: 1 }, defs); svgEl('stop', { offset: 0, 'stop-color': i === n - 1 ? COL.green : COL.cyan, 'stop-opacity': .85 - i * .08 }, lg); svgEl('stop', { offset: 1, 'stop-color': i === n - 1 ? COL.mint : COL.blue, 'stop-opacity': .55 - i * .05 }, lg);
-        svgEl('path', { d: `M${cx - w0 / 2},${y} L${cx + w0 / 2},${y} L${cx + w1 / 2},${y + sh} L${cx - w1 / 2},${y + sh} Z`, fill: grad, stroke: 'rgba(103,232,249,.35)' }, g);
-        const tx = svgEl('text', { x: cx, y: y + sh / 2 + 6, 'text-anchor': 'middle', class: 'lbl', 'font-size': 20, 'font-weight': 600, fill: '#fff' }, g); tx.textContent = s.text;
-        const l1 = svgEl('text', { x: 640, y: y + 30, class: 'lbl', 'font-size': 14 }, g); l1.textContent = s.label;
-        const l2 = svgEl('text', { x: 640, y: y + 52, class: 'sm' }, g); l2.textContent = s.source;
-        svgEl('line', { x1: cx + w0 / 2 + 8, y1: y + sh / 2, x2: 626, y2: y + sh / 2, class: 'axis' }, g);
-        if (i < n - 1) { const ar = svgEl('text', { x: cx, y: y + sh + 9, 'text-anchor': 'middle', class: 'sm' }, g); ar.textContent = '▼'; }
-        tipOn(g, '<b>' + esc(s.label) + ' · ' + esc(s.text) + '</b>' + esc(s.note) + '<small>' + esc(s.source) + '</small>');
-      });
-      const t = svgEl('text', { x: 20, y: H - 4, class: 'sm' }, svg); t.textContent = f.title + ' · widths on a log scale · hover for derivation';
+      const wOf = (v) => 90 + (Wd - L - R - 90) * ((Math.log10(v + 1) - vmin) / Math.max(1e-6, vmax - vmin));
+      const defs = svgEl('defs', {}, svg); f.stages.forEach((s, i) => { const lg = svgEl('linearGradient', { id: 'fg' + i, x1: 0, x2: 1 }, defs); const last = i === n - 1; svgEl('stop', { offset: 0, 'stop-color': last ? COL.green : COL.cyan, 'stop-opacity': .95 }, lg); svgEl('stop', { offset: 1, 'stop-color': last ? COL.mint : COL.blue, 'stop-opacity': .8 }, lg); });
+      f.stages.forEach((s, i) => { const y = top + i * rh, w0 = wOf(s.value), w1 = i + 1 < n ? wOf(f.stages[i + 1].value) : w0; const g = svgEl('g', { class: 'funnel-stage' }, svg);
+        if (i + 1 < n) svgEl('path', { d: `M${L},${y + 30} L${L + w0},${y + 30} L${L + w1},${y + rh + 6} L${L},${y + rh + 6} Z`, fill: 'url(#fg' + i + ')', 'fill-opacity': .13 }, g);
+        svgEl('rect', { x: L, y: y + 6, width: w0, height: 26, rx: 5, fill: 'url(#fg' + i + ')' }, g);
+        const v = svgEl('text', { x: L + w0 + 12, y: y + 24, class: 'val' }, g); v.textContent = s.text;
+        const l1 = svgEl('text', { x: L - 16, y: y + 19, 'text-anchor': 'end', class: 'lbl' }, g); l1.textContent = s.label;
+        const l2 = svgEl('text', { x: L - 16, y: y + 36, 'text-anchor': 'end', class: 'sm' }, g); l2.textContent = s.source;
+        tipOn(g, '<b>' + esc(s.label) + ' · ' + esc(s.text) + '</b>' + esc(s.note) + '<small>' + esc(s.source) + '</small>'); });
+      frame(el, f.title, 'USD bn a year · bar widths on a log scale · hover a stage for its derivation', 'IEA · Global Infrastructure Hub · joint MDB report · RMI · Lumen8 derivations marked as such');
     };
     draw('sea'); tabs(el, 'funnel', draw);
   };
-
   /* ladder: nested rings, click for the panel */
   W.ladder = (el, L) => {
     el.innerHTML = ''; const svg = svgEl('svg', { viewBox: '0 0 420 420' }, el); const info = document.createElement('div'); info.className = 'ladder-info'; el.appendChild(info);
@@ -106,7 +103,7 @@
   W.speed = (el, S) => {
     const secs = (t) => { const m = /([\d.]+)\s*(ms|s|weeks|×)/.exec(t); if (!m) return null; const v = parseFloat(m[1]); return m[2] === 'ms' ? v / 1000 : m[2] === 's' ? v : m[2] === 'weeks' ? v * 7 * 86400 : null; };
     const vals = S.map((s) => secs(s.t)).filter((v) => v != null); const lo = Math.log10(Math.min(...vals) + 1e-3), hi = Math.log10(Math.max(...vals) + 1e-3);
-    el.innerHTML = S.map((s) => { const v = secs(s.t); const w = v == null ? 40 : 3 + 97 * (Math.log10(v + 1e-3) - lo) / (hi - lo); const bench = /Consultancy/.test(s.op); return '<div class="speed-row' + (bench ? ' bench' : '') + '"><div>' + esc(s.op) + '<small>' + esc(s.src) + '</small></div><div><div class="bar" style="width:' + w.toFixed(1) + '%"></div></div><b>' + esc(s.t) + '</b></div>'; }).join('') + '<div class="srcline">Bars are on a log scale. At true scale the 20.2-second run would not render against six weeks; the ratio is about 180,000 to one.</div>';
+    frame(el, 'Speed is the product', 'Every clock measured; the consultancy row is the benchmark it replaces'); el.innerHTML += S.map((s) => { const v = secs(s.t); const w = v == null ? 40 : 3 + 97 * (Math.log10(v + 1e-3) - lo) / (hi - lo); const bench = /Consultancy/.test(s.op); return '<div class="speed-row' + (bench ? ' bench' : '') + '"><div>' + esc(s.op) + '<small>' + esc(s.src) + '</small></div><div><div class="bar" style="width:' + w.toFixed(1) + '%"></div></div><b>' + esc(s.t) + '</b></div>'; }).join('') + '<div class="srcline">Bars are on a log scale. At true scale the 20.2-second run would not render against six weeks; the ratio is about 180,000 to one.</div>';
   };
 
   W.matrix = (el, M) => {
@@ -160,7 +157,7 @@
 
   /* use of funds: donut */
   W.donut = (el, U) => {
-    el.innerHTML = ''; const svg = svgEl('svg', { viewBox: '0 0 420 420' }, el); const tot = U.total; let a0 = -Math.PI / 2; const R = 170, r0 = 108;
+    el.innerHTML = ''; frame(el, 'Use of funds by category', 'USD 5.31 m over 30 months, no revenue assumed', 'scripts/build-scaleup-plan.py · scaleup-model.json'); const svg = svgEl('svg', { viewBox: '0 0 420 420' }, el); const tot = U.total; let a0 = -Math.PI / 2; const R = 170, r0 = 108;
     const centre = svgEl('g', {}, svg); const c1 = svgEl('text', { x: 210, y: 202, 'text-anchor': 'middle', class: 'lbl', 'font-size': 26, 'font-weight': 600, fill: '#fff' }, centre); c1.textContent = 'USD 5.31 m'; const c2 = svgEl('text', { x: 210, y: 228, 'text-anchor': 'middle', class: 'sm' }, centre); c2.textContent = '30 MONTHS · NO REVENUE ASSUMED';
     U.lines.forEach((l, i) => { const v = l[4], a1 = a0 + v / tot * Math.PI * 2; const big = a1 - a0 > Math.PI ? 1 : 0; const p = (a, rr) => [210 + Math.cos(a) * rr, 210 + Math.sin(a) * rr]; const [x0, y0] = p(a0, R), [x1, y1] = p(a1, R), [x2, y2] = p(a1, r0), [x3, y3] = p(a0, r0);
       const path = svgEl('path', { d: `M${x0},${y0} A${R},${R} 0 ${big} 1 ${x1},${y1} L${x2},${y2} A${r0},${r0} 0 ${big} 0 ${x3},${y3} Z`, fill: PAL[i % PAL.length], 'fill-opacity': .85, stroke: '#04060c', 'stroke-width': 2, style: 'cursor:pointer;transition:fill-opacity .3s' }, svg);
@@ -172,7 +169,7 @@
 
   /* cash profile: monthly outflow columns + cumulative line + headcount */
   W.cash = (el, U) => {
-    el.innerHTML = ''; const Wd = 1000, H = 340, L = 60, Rr = 60, T = 24, B = 44, n = U.monthly.length; const svg = svgEl('svg', { viewBox: '0 0 ' + Wd + ' ' + H }, el);
+    el.innerHTML = ''; frame(el, 'Cash profile', 'Monthly outflow, cumulative spend and headcount across the thirty months'); const Wd = 1000, H = 340, L = 60, Rr = 60, T = 24, B = 44, n = U.monthly.length; const svg = svgEl('svg', { viewBox: '0 0 ' + Wd + ' ' + H }, el);
     const x = (i) => L + (i + .5) * (Wd - L - Rr) / n, mMax = 280, cMax = 5.5, hMax = 45; const yM = (v) => T + (H - T - B) * (1 - v / mMax), yC = (v) => T + (H - T - B) * (1 - v / cMax);
     [0, 100, 200].forEach((v) => { svgEl('line', { x1: L, x2: Wd - Rr, y1: yM(v), y2: yM(v), class: 'axis' }, svg); const t = svgEl('text', { x: L - 8, y: yM(v) + 4, 'text-anchor': 'end', class: 'sm' }, svg); t.textContent = v + 'k'; });
     [1, 2, 3, 4, 5].forEach((v) => { const t = svgEl('text', { x: Wd - Rr + 8, y: yC(v) + 4, class: 'sm' }, svg); t.textContent = v + 'm'; });
@@ -186,7 +183,7 @@
   W.headfn = (el, U) => { const mx = Math.max(...U.fn.rows.map((r) => r[3])); el.innerHTML = '<table class="fn-table"><thead><tr><th>Function</th>' + U.fn.cols.map((c) => '<th>' + c + '</th>').join('') + '</tr></thead><tbody>' + U.fn.rows.map((r) => '<tr><td>' + esc(r[0]) + '</td><td>' + r[1] + '</td><td>' + r[2] + '</td><td><span class="bar" style="width:' + (60 * r[3] / mx).toFixed(0) + 'px"></span>' + r[3] + '</td></tr>').join('') + '<tr class="tot"><td>Total headcount</td><td>22</td><td>35</td><td>42</td></tr></tbody></table><div class="srcline">Build side against sell side: 69% technical at month 12, 56% at month 30. One office in Jakarta; the supply-chain roles are field-based in China with no premises.</div>'; };
   W.datalines = (el, U) => { const tot = U.data.reduce((a, d) => a + d[1], 0), mx = Math.max(...U.data.map((d) => d[1])); el.innerHTML = '<div class="srcline" style="margin:0 0 10px">DATA, TOOLING & INFRASTRUCTURE · USD ' + tot + 'k ACROSS 30 MONTHS, BOUGHT IN PHASES</div>' + U.data.map((d, i) => '<div class="speed-row"><div>' + esc(d[2]) + '<small>' + esc(d[0]) + '</small></div><div><div class="bar" style="width:' + (100 * d[1] / mx).toFixed(1) + '%;background:' + PAL[i] + '"></div></div><b>USD ' + d[1] + 'k</b></div>').join('') + '<div class="srcline">58% of this leaves an asset behind if the invoices stop: perpetual time series, archive scenes, cadastral extracts and well data. 31% rents access. 11% is licensing counsel that keeps the estate legal to resell. Free sources carry every wide-area task throughout.</div>'; };
   W.gantt = (el, U) => {
-    el.innerHTML = '<div class="gantt"><table><thead><tr><th>Role</th><th><div class="cells">' + Array.from({ length: 30 }, (_, i) => '<i class="' + ((i % 6) === 0 ? 'q' : '') + '" style="font-style:normal">' + ((i % 6) === 0 ? 'M' + (i + 1) : '') + '</i>').join('') + '</div></th></tr></thead><tbody>' + U.roles.map((r) => { const c = DEPT[r[1]] || COL.cyan, first = Math.min(...r[2]); return '<tr style="--dc:' + c + '"><td class="r"><span class="dept">' + r[1] + '</span>' + esc(r[0]) + '</td><td class="m"><div class="cells">' + Array.from({ length: 30 }, (_, i) => '<i class="' + ((i % 6) === 0 ? 'q ' : '') + (r[2].includes(i + 1) ? 'on ' : '') + (i + 1 >= first ? 'run' : '') + '"></i>').join('') + '</div></td></tr>'; }).join('') + '</tbody></table></div><div class="head-legend">' + Object.keys(DEPT).map((k) => '<span><i style="background:' + DEPT[k] + '"></i>' + k + '</span>').join('') + '<span>· EACH DOT IS ONE FUNDED SEAT WITH A START MONTH IN THE MODEL</span></div>';
+    frame(el, 'Hiring schedule', 'Every funded seat by month and location; a dot is one person starting'); el.innerHTML += '<div class="gantt"><table><thead><tr><th>Role</th><th><div class="cells">' + Array.from({ length: 30 }, (_, i) => '<i class="' + ((i % 6) === 0 ? 'q' : '') + '" style="font-style:normal">' + ((i % 6) === 0 ? 'M' + (i + 1) : '') + '</i>').join('') + '</div></th></tr></thead><tbody>' + U.roles.map((r) => { const c = DEPT[r[1]] || COL.cyan, first = Math.min(...r[2]); return '<tr style="--dc:' + c + '"><td class="r"><span class="dept">' + r[1] + '</span>' + esc(r[0]) + '</td><td class="m"><div class="cells">' + Array.from({ length: 30 }, (_, i) => '<i class="' + ((i % 6) === 0 ? 'q ' : '') + (r[2].includes(i + 1) ? 'on ' : '') + (i + 1 >= first ? 'run' : '') + '"></i>').join('') + '</div></td></tr>'; }).join('') + '</tbody></table></div><div class="head-legend">' + Object.keys(DEPT).map((k) => '<span><i style="background:' + DEPT[k] + '"></i>' + k + '</span>').join('') + '<span>· EACH DOT IS ONE FUNDED SEAT WITH A START MONTH IN THE MODEL</span></div>';
   };
   W.team = (el, T) => { el.innerHTML = T.map((m, i) => '<div class="member f' + i + '"><div class="mhead"><div class="ini">' + esc(m.name[0]) + '</div><div><h3>' + esc(m.name) + '</h3><span class="role">' + esc(m.role) + '</span></div><span class="line">' + esc(m.line) + '</span></div><p>' + esc(m.bio) + '</p><div class="cols2 mlists"><div><i>Owns at Lumen8</i><ul>' + m.owns.map((o) => '<li>' + esc(o) + '</li>').join('') + '</ul></div><div><i>Built before it</i><ul>' + m.built.map((o) => '<li>' + esc(o) + '</li>').join('') + '</ul></div></div><div class="marks">' + m.marks.map((k) => '<span>' + esc(k) + '</span>').join('') + '</div></div>').join(''); };
   /* the index lighting up: 8,493 village points in the shape of the archipelago; the slider prepares them in priority order */
@@ -212,7 +209,7 @@
     const adj = (y, i) => { const f = i === 0 ? 1 : Math.pow(S.g, i); return { prep: y.prep * (i ? S.g : 1), lic: y.lic * f, mon: y.mon * f, arr: y.arr * f, sites: Math.round(y.sites * (i ? S.g : 1)), customers: Math.round(y.customers * f), assets: Math.round(y.assets * f) }; };
     const draw = () => {
       const A = yrs.map(adj); const Wd = 900, H = 340, L = 60, R = 70, T = 30, B = 44, n = yrs.length; const mx = Math.max(6, ...A.map((a) => a.prep + a.lic + a.mon)) * 1.15, amx = Math.max(6, ...A.map((a) => a.arr)) * 1.1;
-      const ch = $('.plan-chart', el); ch.innerHTML = ''; const svg = svgEl('svg', { viewBox: '0 0 ' + Wd + ' ' + H }, ch); const x = (i) => L + (i + .5) * (Wd - L - R) / n, yv = (v) => T + (H - T - B) * (1 - v / mx), ya = (v) => T + (H - T - B) * (1 - v / amx), bw = (Wd - L - R) / n * .5;
+      const ch = $('.plan-chart', el); ch.innerHTML = ''; frame(ch, 'Revenue by line and recurring revenue at year end', 'USD m · columns recognised in the year · line at year end'); const svg = svgEl('svg', { viewBox: '0 0 ' + Wd + ' ' + H }, ch); const x = (i) => L + (i + .5) * (Wd - L - R) / n, yv = (v) => T + (H - T - B) * (1 - v / mx), ya = (v) => T + (H - T - B) * (1 - v / amx), bw = (Wd - L - R) / n * .5;
       [0, .25, .5, .75, 1].forEach((f) => { svgEl('line', { x1: L, x2: Wd - R, y1: yv(mx * f), y2: yv(mx * f), class: 'axis' }, svg); const t = svgEl('text', { x: L - 8, y: yv(mx * f) + 4, 'text-anchor': 'end', class: 'sm' }, svg); t.textContent = (mx * f).toFixed(0); const t2 = svgEl('text', { x: Wd - R + 8, y: ya(amx * f) + 4, class: 'sm' }, svg); t2.textContent = (amx * f).toFixed(0); });
       A.forEach((a, i) => { let y0 = yv(0); [['prep', COL.cyan, 'Preparation, one-off'], ['lic', COL.blue, 'Platform licences'], ['mon', COL.green, 'Monitoring & MRV']].forEach(([k, col, nm]) => { const hh = yv(0) - yv(a[k]); const r = svgEl('rect', { x: x(i) - bw / 2, y: y0 - hh, width: bw, height: Math.max(0, hh), fill: col, 'fill-opacity': .75, rx: 2 }, svg); tipOn(r, '<b>' + yrs[i].y + ' · ' + nm + '</b>USD ' + a[k].toFixed(2) + ' m recognised<small>total year revenue USD ' + (a.prep + a.lic + a.mon).toFixed(2) + ' m</small>'); y0 -= hh; }); const t = svgEl('text', { x: x(i), y: H - B + 20, 'text-anchor': 'middle', class: 'lbl' }, svg); t.textContent = yrs[i].y; const tv = svgEl('text', { x: x(i), y: y0 - 8, 'text-anchor': 'middle', class: 'lbl', 'font-size': 12, fill: '#fff' }, svg); tv.textContent = 'USD ' + (a.prep + a.lic + a.mon).toFixed(1) + ' m'; });
       svgEl('path', { d: A.map((a, i) => (i ? 'L' : 'M') + x(i) + ',' + ya(a.arr)).join(' '), fill: 'none', stroke: COL.cyan2, 'stroke-width': 3 }, svg); A.forEach((a, i) => { const cpt = svgEl('circle', { cx: x(i), cy: ya(a.arr), r: 5, fill: COL.cyan2 }, svg); tipOn(cpt, '<b>' + yrs[i].y + ' · ARR at year end</b>USD ' + a.arr.toFixed(1) + ' m recurring<small>' + a.customers + ' customers · ' + a.assets + ' assets under monitoring</small>'); const t = svgEl('text', { x: x(i) + bw / 2 + 8, y: ya(a.arr) + 4, class: 'lbl', 'font-size': 11, fill: '#67e8f9' }, svg); t.textContent = 'ARR ' + a.arr.toFixed(1); });
@@ -226,11 +223,11 @@
   };
   /* valuation context: multiple bands on one axis, sourced */
   W.comps = (el, C) => {
-    el.innerHTML = ''; const Wd = 900, H = 60 + C.bands.length * 52, L = 300, R = 40, mx = 32; const svg = svgEl('svg', { viewBox: '0 0 ' + Wd + ' ' + H }, el); const x = (v) => L + (Wd - L - R) * v / mx;
+    el.innerHTML = ''; frame(el, 'Enterprise value to revenue', 'Public on next-twelve-months revenue, private on ARR · 2025–2026 prints', 'SaaS Capital · SEG · Clouded Judgement · Value Add VC · market pricing of AI-native growth rounds'); const Wd = 900, H = 60 + C.bands.length * 52, L = 300, R = 150, mx = 32; const svg = svgEl('svg', { viewBox: '0 0 ' + Wd + ' ' + H }, el); const x = (v) => L + (Wd - L - R) * v / mx;
     [0, 5, 10, 15, 20, 25, 30].forEach((v) => { svgEl('line', { x1: x(v), x2: x(v), y1: 20, y2: H - 30, class: 'axis' }, svg); const t = svgEl('text', { x: x(v), y: H - 12, 'text-anchor': 'middle', class: 'sm' }, svg); t.textContent = v + '×'; });
     const cols = { silver: COL.silver, blue: COL.blue2, cyan: COL.cyan, green: COL.green };
     C.bands.forEach((b, i) => { const y = 34 + i * 52; const t = svgEl('text', { x: L - 14, y: y + 5, 'text-anchor': 'end', class: 'lbl', 'font-size': 12.5 }, svg); t.textContent = b.k; const r = svgEl('rect', { x: x(b.lo), y: y - 11, width: x(b.hi) - x(b.lo), height: 22, rx: 11, fill: cols[b.c], 'fill-opacity': b.c === 'green' ? .9 : .55, class: 'band' }, svg); const v = svgEl('text', { x: x(b.hi) + 10, y: y + 5, class: 'lbl', 'font-size': 12, fill: cols[b.c] }, svg); v.textContent = b.lo + '–' + b.hi + '× revenue'; tipOn(r, '<b>' + esc(b.k) + ' · ' + b.lo + '–' + b.hi + '×</b>' + esc(b.src)); });
-    const lg = svgEl('text', { x: L, y: 12, class: 'sm' }, svg); lg.textContent = 'ENTERPRISE VALUE / REVENUE · PUBLIC ON NEXT-TWELVE-MONTHS REVENUE, PRIVATE ON ARR · 2025–2026 PRINTS';
+    
   };
   W.facts = (el, C) => { el.innerHTML = C.facts.map((f) => '<div class="fact"><b>' + esc(f.b) + '</b><p>' + esc(f.t) + '</p><small>' + esc(f.s) + '</small></div>').join(''); };
   W.case = (el, C) => { el.innerHTML = C.case.map((r, i) => '<div class="crow"><i>0' + (i + 1) + '</i><div><b>' + esc(r[0]) + '</b><p>' + esc(r[1]) + '</p></div></div>').join(''); };
@@ -242,7 +239,7 @@
   };
   W.bridge = (el, I) => { const mx = Math.max(...I.bridge.map((b) => b[1])); el.innerHTML = '<div class="bridge">' + I.bridge.map((b, i) => '<div class="brow"><span>' + esc(b[0]) + '</span><div><i style="width:' + (100 * Math.sqrt(b[1] / mx)).toFixed(1) + '%;background:' + [COL.silver, COL.cyan, COL.blue2, COL.green][i] + '"></i></div><b>USD ' + b[1] + ' m<small>' + (i ? (b[1] / I.bridge[0][1]).toFixed(1) + '× the round' : 'platform equity') + '</small></b></div>').join('') + '</div><div class="srcline">Widths on a square-root scale. Capital mobilisation ratio = capex reaching financial close ÷ Lumen8 capital invested, reported gross and attributed every quarter. Attribution needs a close, a Lumen8 analysis in the decision pack and written confirmation, then a 50% discount.</div>'; };
   W.traj = (el, I) => {
-    el.innerHTML = ''; const Wd = 640, H = 300, L = 54, R = 20, T = 20, B = 40; const svg = svgEl('svg', { viewBox: '0 0 ' + Wd + ' ' + H }, el); const x = (y) => L + (y - 2015) / 20 * (Wd - L - R), yv = (v) => T + (H - T - B) * (1 - v / 200);
+    el.innerHTML = ''; frame(el, 'Southeast Asia clean-energy investment', 'USD bn a year, 2015 to the 2035 need, with the 5–10% preparation layer shaded', 'IEA · Global Infrastructure Hub'); const svg = svgEl('svg', { viewBox: '0 0 ' + Wd + ' ' + H }, el); const x = (y) => L + (y - 2015) / 20 * (Wd - L - R), yv = (v) => T + (H - T - B) * (1 - v / 200);
     [0, 50, 100, 150, 200].forEach((v) => { svgEl('line', { x1: L, x2: Wd - R, y1: yv(v), y2: yv(v), class: 'axis' }, svg); const t = svgEl('text', { x: L - 8, y: yv(v) + 4, 'text-anchor': 'end', class: 'sm' }, svg); t.textContent = v; });
     [2015, 2020, 2025, 2030, 2035].forEach((y) => { const t = svgEl('text', { x: x(y), y: H - 14, 'text-anchor': 'middle', class: 'sm' }, svg); t.textContent = y; });
     const band = I.sea.map((p) => x(p[0]) + ',' + yv(p[1] * .10)).join(' ') + ' ' + I.sea.slice().reverse().map((p) => x(p[0]) + ',' + yv(p[1] * .05)).join(' '); svgEl('polygon', { points: band, fill: COL.green, 'fill-opacity': .22 }, svg);

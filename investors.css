@@ -473,3 +473,30 @@
 .crow i{font-style:normal;font-family:var(--font-m);font-size:11px;letter-spacing:.2em;color:var(--cyan);padding-top:4px}
 .crow b{display:block;font-family:var(--font-d);font-size:17px;margin-bottom:6px}
 .crow p{font-size:13.5px;margin:0}
+
+/* ---------- round 5: chart frames, quieter type, the funnel ---------- */
+.chart-h{display:grid;grid-template-columns:1fr auto;gap:4px 18px;align-items:baseline;padding:2px 2px 14px;border-bottom:1px solid var(--line);margin-bottom:14px}
+.chart-h b{font-family:var(--font-d);font-weight:600;font-size:16px;letter-spacing:-.01em;color:var(--ink)}
+.chart-h span{grid-column:1;font-size:12.5px;color:var(--ink-2)}
+.chart-h small{grid-column:2;grid-row:1/3;font-family:var(--font-m);font-size:10px;letter-spacing:.06em;color:var(--muted);text-align:right;max-width:320px;line-height:1.5}
+@media (max-width:640px){.chart-h{grid-template-columns:1fr}.chart-h small{grid-column:1;grid-row:auto;text-align:left}}
+.chart text{font-family:var(--font-b)}
+.chart .lbl{font-size:13px;fill:var(--ink)}
+.chart .sm{font-family:var(--font-m);font-size:10px;letter-spacing:.06em;fill:var(--muted)}
+.chart .val{font-family:var(--font-d);font-weight:600;font-size:16px;fill:#fff;letter-spacing:-.01em}
+.chart.tall{min-height:0}
+.funnel-stage rect{transition:opacity .3s}
+.funnel-stage:hover rect{filter:brightness(1.2)}
+.speed-row{font-size:13px}
+.speed-row small{font-family:var(--font-m);font-size:10px}
+.speed-row b{font-family:var(--font-d);font-weight:600;font-size:14px}
+.matrix{font-size:13px}
+.uof-table td,.fn-table td{font-family:var(--font-b)}
+.uof-table td:not(:first-child),.fn-table td:not(:first-child){font-family:var(--font-m);font-size:12px}
+.kpi b{font-size:clamp(24px,2.2vw,34px)}
+.tabs button{font-family:var(--font-b);font-size:12.5px;letter-spacing:0;text-transform:none;font-weight:500}
+.mnote,.entry-note,.pv-note,.srcline{font-family:var(--font-b);font-size:12.5px;letter-spacing:0;line-height:1.55}
+.srcline{color:var(--muted)}
+.sim .stack div,.brow,.mbars div{font-family:var(--font-b)}
+.sim .stack b,.brow b,.mbars b{font-family:var(--font-d);font-weight:600}
+.pinned{font-family:var(--font-b);font-size:12.5px;letter-spacing:0}
