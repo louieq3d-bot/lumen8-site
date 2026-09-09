@@ -500,3 +500,39 @@
 .sim .stack div,.brow,.mbars div{font-family:var(--font-b)}
 .sim .stack b,.brow b,.mbars b{font-family:var(--font-d);font-weight:600}
 .pinned{font-family:var(--font-b);font-size:12.5px;letter-spacing:0}
+
+/* ---------- round 6: the reach ladder, the greyed data room, the funds section ---------- */
+.ladder.reach{grid-template-columns:1.3fr 1fr;align-items:start}
+@media (max-width:1000px){.ladder.reach{grid-template-columns:1fr}}
+.reach-list{display:grid;gap:8px}
+.reach-h{padding:2px 2px 12px;border-bottom:1px solid var(--line);margin-bottom:4px}
+.reach-h b{display:block;font-family:var(--font-d);font-weight:600;font-size:16px;color:var(--ink)}
+.reach-h span{display:block;font-size:12.5px;color:var(--ink-2);margin-top:3px}
+.reach-row{display:grid;grid-template-columns:26px minmax(150px,200px) 1fr minmax(150px,170px);gap:14px;align-items:center;text-align:left;width:100%;border:1px solid var(--line);border-radius:14px;padding:13px 16px;background:var(--panel);cursor:pointer;color:inherit;font:inherit;transition:border-color .3s,background .3s,transform .3s var(--ease)}
+.reach-row:hover{border-color:var(--line-2);transform:translateX(2px)}
+.reach-row.on{border-color:var(--c);background:rgba(34,211,238,.05);box-shadow:inset 3px 0 0 var(--c)}
+.reach-row i{font-style:normal;font-family:var(--font-m);font-size:11px;letter-spacing:.2em;color:var(--c)}
+.reach-row .rt b{display:block;font-family:var(--font-d);font-weight:600;font-size:15px;color:var(--ink)}
+.reach-row .rt span{display:block;font-size:11.5px;color:var(--muted);line-height:1.35;margin-top:2px}
+.reach-row .rb{height:12px;border-radius:6px;background:rgba(255,255,255,.05);overflow:hidden}
+.reach-row .rb em{display:block;height:100%;border-radius:6px;background:var(--c);opacity:.35;transition:width .8s var(--ease),opacity .3s}
+.reach-row.on .rb em{opacity:.95;box-shadow:0 0 14px var(--c)}
+.reach-row .rv{text-align:right}
+.reach-row .rv b{display:block;font-family:var(--font-d);font-weight:600;font-size:14px;color:var(--ink);white-space:nowrap}
+.reach-row .rv span{display:inline-block;font-family:var(--font-m);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--c);border:1px solid var(--c);border-radius:999px;padding:3px 8px;margin-top:5px;opacity:.85;white-space:normal;line-height:1.3;text-align:right}
+.reach-row.on .rv span{opacity:1}
+@media (max-width:760px){.reach-row{grid-template-columns:22px 1fr;gap:8px 12px}.reach-row .rb{grid-column:2}.reach-row .rv{grid-column:2;text-align:left}}
+.ladder-info .sub{color:var(--c,var(--cyan))}
+.ladder-info .figs b{font-size:16px}
+.doc.soon{opacity:.55;filter:saturate(.4)}
+.doc.soon i{border-style:dashed}
+.soonchip{font-family:var(--font-m);font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1px dashed var(--line-2);border-radius:999px;padding:7px 12px;color:var(--muted);white-space:nowrap}
+.kpis.five .kpi b{font-size:clamp(20px,1.7vw,27px);white-space:nowrap}
+@media (max-width:1100px){.kpis.five{grid-template-columns:repeat(3,1fr)}}
+.gates{width:100%}
+.gates th:first-child,.gates td:first-child{color:var(--ink)}
+.py-h span{color:var(--c,var(--cyan))}
+.plan-years .py:nth-child(1){--c:#22d3ee}.plan-years .py:nth-child(2){--c:#60a5fa}.plan-years .py:nth-child(3){--c:#34d399}.plan-years .py:nth-child(4){--c:#a7f3d0}
+.py{border-top:2px solid var(--c,var(--line))}
+
+@media (max-width:640px){.pv-grid b{font-size:clamp(20px,5.6vw,26px)}}
