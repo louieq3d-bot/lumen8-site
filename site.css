@@ -752,3 +752,15 @@ body::before{mix-blend-mode:normal;opacity:.03}
 .mod.full .feat li{text-shadow:0 2px 20px rgba(4,6,12,.9)}
 .mod.full .kv div{background:rgba(6,9,18,.62)}
 @media (max-width:1000px){.mod.full{min-height:0;padding:110px 0 80px}.mod.full canvas.mod-holo{width:100%;opacity:.6;-webkit-mask:none;mask:none}.mod.full .mod-veil{background:linear-gradient(180deg,rgba(4,6,12,.72),rgba(4,6,12,.55) 55%,var(--bg) 100%)}}
+
+/* v18 — the horizontal fade of every wide hero canvas is drawn inside the 3D composite pass; no compositor mask */
+@media (min-width:1001px){.hero canvas.hero-holo,.mod.full canvas.mod-holo{-webkit-mask:none;mask:none}}
+
+/* v19 — the hero ticker states one whole fact at a time.
+   The narrow-screen stack at the top of this file was being overridden by the later unconditional .hero-grid rule,
+   which left a phone with a 96px-wide ticker showing a fragment of one number. The stack is restored here, after it. */
+@media (max-width:1000px){.hero-grid{grid-template-columns:1fr}.hero-side{width:100%}}
+.ticker .line{animation:none;-webkit-mask:none;mask:none;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;
+  transition:opacity .4s var(--ease),transform .4s var(--ease)}
+.ticker .line.swap{opacity:0;transform:translateY(-7px)}
+@media (max-width:520px){.ticker .line{white-space:normal;text-overflow:clip}}

@@ -1,6 +1,6 @@
 /* LUMEN8 site runtime — smooth scroll, reveals, pinned scenes, hero field.
-   Depends on GSAP + ScrollTrigger + Lenis loaded before this file. Every
-   feature degrades gracefully when a dependency or motion is unavailable. */
+   No scroll or tween library: native scrolling, CSS transitions and a few
+   scroll handlers. Every feature degrades gracefully without motion. */
 (function () {
   'use strict';
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -26,13 +26,11 @@
   } else heroIntro();
 
   /* ---------- smooth scroll ---------- */
-  let lenis = null;
-  if (!reduce && typeof Lenis !== 'undefined') {
-    lenis = new Lenis({ lerp: 0.085, smoothWheel: true });
-    const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
-    requestAnimationFrame(raf);
-  }
-  // anchor links play nice with Lenis
+  /* Native scrolling. A JS smooth-scroll library moves the page from the main thread, one step per animation
+     frame, so every slow frame (a heavy 3D draw, a texture upload) became a visible hitch in the scroll itself.
+     The compositor scrolls natively at the panel's refresh rate whatever the page is doing; the scroll-linked
+     effects read the position and follow. */
+  // anchor links
   document.querySelectorAll('a[href^="#"]').forEach((a) => {
     a.addEventListener('click', (e) => {
       const id = a.getAttribute('href');
@@ -41,8 +39,7 @@
       if (!el) return;
       e.preventDefault();
       closeMobile();
-      if (lenis) lenis.scrollTo(el, { offset: -70, duration: 1.4 });
-      else el.scrollIntoView({ behavior: 'smooth' });
+      window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 70, behavior: 'smooth' });
     });
   });
 
@@ -234,7 +231,7 @@
     const rail = pipe.querySelectorAll('.pipe-rail i');
     const n = steps.length; if (!n) return;
     // the rail is a real step index: labelled, clickable
-    rail.forEach((r, k) => { const kk = steps[k] && steps[k].querySelector('.k'); if (kk && !r.querySelector('b')) { const b = document.createElement('b'); b.textContent = kk.textContent.replace(/^\d+\s*[·.]\s*/, ''); r.appendChild(b); } r.setAttribute('role', 'tab'); r.setAttribute('title', kk ? kk.textContent : ''); r.addEventListener('click', () => { const total = pipe.offsetHeight - window.innerHeight; const y = pipe.getBoundingClientRect().top + window.scrollY + total * ((k + .5) / n); if (lenis) lenis.scrollTo(y, { duration: 1.1 }); else window.scrollTo({ top: y, behavior: 'smooth' }); }); });
+    rail.forEach((r, k) => { const kk = steps[k] && steps[k].querySelector('.k'); if (kk && !r.querySelector('b')) { const b = document.createElement('b'); b.textContent = kk.textContent.replace(/^\d+\s*[·.]\s*/, ''); r.appendChild(b); } r.setAttribute('role', 'tab'); r.setAttribute('title', kk ? kk.textContent : ''); r.addEventListener('click', () => { const total = pipe.offsetHeight - window.innerHeight; const y = pipe.getBoundingClientRect().top + window.scrollY + total * ((k + .5) / n); window.scrollTo({ top: y, behavior: 'smooth' }); }); });
     // each step gets one viewport of scroll
     const spacer = pipe.querySelector('.pipe-spacer');
     if (spacer) spacer.style.height = (n * 80) + 'svh';
@@ -372,14 +369,20 @@
     draw();
   }
 
-  /* ---------- live ticker ---------- */
+  /* ---------- live ticker ----------
+     It used to scroll continuously. A marquee never rests on a whole fact: at any instant it shows the tail of one
+     claim and the head of the next, so a two-second glance at the hero read "llages indexed ... 34,". Each claim now
+     holds still long enough to be read, then gives way to the next. */
   const tick = document.querySelector('.ticker .line');
   if (tick) {
     const items = JSON.parse(tick.dataset.items || '[]');
-    if (items.length) tick.innerHTML = (items.concat(items)).map((s) => '<span style="margin-right:44px">' + s + '</span>').join('');
-    const win = document.createElement('div');
-    win.style.cssText = 'flex:1;min-width:0;overflow:hidden;-webkit-mask:linear-gradient(90deg,transparent,#000 3%,#000 95%,transparent);mask:linear-gradient(90deg,transparent,#000 3%,#000 95%,transparent)';
-    tick.parentNode.insertBefore(win, tick); win.appendChild(tick);
+    if (items.length) {
+      let k = 0; tick.innerHTML = items[0]; tick.setAttribute('aria-live', 'polite');
+      if (!reduce && items.length > 1) setInterval(() => {
+        tick.classList.add('swap');
+        setTimeout(() => { k = (k + 1) % items.length; tick.innerHTML = items[k]; tick.classList.remove('swap'); }, 420);
+      }, 3800);
+    }
   }
 })();
 

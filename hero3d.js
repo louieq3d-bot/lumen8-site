@@ -14,10 +14,10 @@
   const H = window.Holo, K = H.kit, M = H.mats, TX = H.tex, P = H.P;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   /* the hero draws through the site's one shared renderer and blits into its own canvas */
-  const R = H.acquire(); if (!R) return; const renderer = R.renderer, post = R.post, blit = cv.getContext('2d');
+  const R = H.acquire(); if (!R) return; const renderer = R.renderer, post = R.post, blit = cv.getContext(R.off ? 'bitmaprenderer' : '2d');
   const field = document.querySelector('canvas[data-field]'); if (field) field.style.display = 'none';
   const Q = H.Q;
-  const scene = new THREE.Scene(); scene.fog = new THREE.FogExp2(0x04060c, 0.0017); scene.environment = R.env;
+  const scene = new THREE.Scene(); scene.fog = new THREE.FogExp2(0x04060c, 0.0017);
   const camera = new THREE.PerspectiveCamera(42, 1, 1, 900);
   const rig = new THREE.Group(); rig.add(camera); scene.add(rig);
   H.lightRig(scene, 70, true);
@@ -32,7 +32,7 @@
   const geo = new THREE.PlaneGeometry(W, D, 150, 110); geo.rotateX(-Math.PI / 2);
   const pos = geo.attributes.position; for (let i = 0; i < pos.count; i++) pos.setY(i, terrainH(pos.getX(i), pos.getZ(i))); geo.computeVertexNormals();
   const gmap = TX.ground.clone(); gmap.needsUpdate = true; gmap.repeat.set(W / 16, D / 16); const gb = TX.bump.clone(); gb.needsUpdate = true; gb.repeat.set(W / 10, D / 10);
-  const fill = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ map: gmap, emissiveMap: TX.white, bumpMap: gb, bumpScale: .4, roughness: .95, metalness: .05, envMapIntensity: .25, polygonOffset: true, polygonOffsetFactor: 1 })); fill.receiveShadow = true; scene.add(fill);
+  const fill = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ map: gmap, emissiveMap: TX.white, roughness: .95, metalness: .05, envMapIntensity: .25, polygonOffset: true, polygonOffsetFactor: 1 })); fill.receiveShadow = true; scene.add(fill);
   scene.add(new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0x22d3ee, wireframe: true, transparent: true, opacity: .035, fog: true })));
   const vp = [], vc = []; const cCyan = new THREE.Color(0x67e8f9), cBlue = new THREE.Color(0x93c5fd), cDim = new THREE.Color(0x1a5c6b);
   for (let i = 0; i < pos.count; i += 2) { const x = pos.getX(i), z = pos.getZ(i), d = Math.hypot(x - 20, z); if (Math.random() < Math.max(.06, 1 - d / 120)) { vp.push(x, pos.getY(i) + .3, z); const c = Math.random() < .06 ? cBlue : (d < 80 ? cCyan : cDim); vc.push(c.r, c.g, c.b); } }
@@ -118,28 +118,29 @@
   size(); window.addEventListener('resize', size);
   window.addEventListener('mousemove', (e) => { mx = e.clientX / window.innerWidth - .5; my = e.clientY / window.innerHeight - .5; }, { passive: true });
   new IntersectionObserver((en) => { vis = en[0].isIntersecting; }).observe(cv);
-  const tmp = new THREE.Vector3(), m = new THREE.Matrix4(); let fr = 0, lastT = 0;
-  function tick(now) {
-    requestAnimationFrame(tick); if (!vis) return; size(); const dt = Math.max(0, Math.min(.05, (now - lastT) / 1000)); lastT = now; Q.sample(dt); R.fit(W0, H0); renderer.shadowMap.needsUpdate = (fr++ % 3) === 0;
-    t += reduce ? 0 : .016;
+  const tmp = new THREE.Vector3(), m = new THREE.Matrix4(); let fr = 0;
+  /* drawn by the shared loop (60 fps cadence, one GPU timer window, one governor for the page) */
+  function draw(dt) {
+    size(); R.fit(W0, H0); renderer.shadowMap.needsUpdate = (fr++ % 6) === 0;
+    t += reduce ? 0 : dt;
     smx += (mx - smx) * .04; smy += (my - smy) * .04;
     const sy = Math.min(1, (window.scrollY || 0) / Math.max(1, window.innerHeight));
     rig.rotation.y = -.12 + smx * .2 + Math.sin(t * .08) * .04 + sy * .3;
     camera.position.set(cx - 8, 44 + smy * 8 + sy * 70, 120 - sy * 58); camera.lookAt(cx + 8 + sy * 30, 4 + sy * 6, -12 + sy * 20);
     mk0.userData.tick(t); beam.userData.mat.opacity = .26 + Math.sin(t * 3) * .06;
     arr.userData.setTilt(.5 - Math.sin(t * .12) * .45);
-    sun.userData.tick(reduce ? 0 : .016, 22);
-    flowS.forEach((f) => { f.u = (f.u + f.v * .016 * 4) % 1; curve.getPointAt(f.u, tmp); f.s.position.copy(tmp); f.s.material.opacity = .4 + .6 * Math.sin(f.u * Math.PI); });
+    sun.userData.tick(reduce ? 0 : dt, 22);
+    flowS.forEach((f) => { f.u = (f.u + f.v * dt * 4) % 1; curve.getPointAt(f.u, tmp); f.s.position.copy(tmp); f.s.material.opacity = .4 + .6 * Math.sin(f.u * Math.PI); });
     for (let i = 0; i < NB; i++) { const h = barH[i] * (.95 + .05 * Math.sin(t * 1.3 + i * .6)); m.makeScale(1, h, 1); m.setPosition(x0 + gap * (i + 1.5), legH + zero + h / 2, .7); barsM.setMatrixAt(i, m); }
     barsM.instanceMatrix.needsUpdate = true; turbines.forEach((w) => w.userData.tick(t + w.userData.ph, .85)); windLabel.material.opacity = .8;
     houses.forEach((h, i) => { h.userData.win.material.opacity = .3 + .3 * Math.max(0, Math.sin(t * 1.1 + i)); });
     waves.forEach((w) => { const p = w.l.geometry.attributes.position; for (let i = 0; i < w.n; i++) { const x = -170 + i / (w.n - 1) * 340; const env = Math.exp(-Math.pow((x - 30) / 120, 2)); const y = w.y + (Math.sin(x * .06 + t * 1.4 + w.ph) * 6 + Math.sin(x * .17 - t * 2.2 + w.ph) * 2.2) * env; p.setXYZ(i, x, y, -50 + Math.sin(x * .02 + w.ph) * 30); } p.needsUpdate = true; });
     dust.userData.tick(t);
-    if (post) post.render(scene, camera); else renderer.render(scene, camera);
-    const src = renderer.domElement, pr = renderer.getPixelRatio(), pw = Math.floor(W0 * pr), ph = Math.floor(H0 * pr); if (cv.width !== pw || cv.height !== ph) { cv.width = pw; cv.height = ph; } else blit.clearRect(0, 0, pw, ph); blit.drawImage(src, 0, src.height - ph, pw, ph, 0, 0, pw, ph);
+    if (post) { post.fade(-1, -1); post.render(scene, camera); } else renderer.render(scene, camera);
+    R.show(cv, blit);
   }
   /* submit every shader now; the GPU links them in the background while the preloader is still up */
   H.whenWarm(() => { renderer.compile(scene, camera); const gl = renderer.getContext(), ext = gl.getExtension('KHR_parallel_shader_compile'), born = performance.now();
     const linked = () => !ext || performance.now() - born > 4000 || renderer.info.programs.every((p) => gl.getProgramParameter(p.program, ext.COMPLETION_STATUS_KHR));
-    const start = () => { if (linked()) requestAnimationFrame(tick); else setTimeout(start, 200); }; start(); });
+    const start = () => { if (linked()) H.drive({ vis: () => vis, draw }); else setTimeout(start, 200); }; start(); });
 })();
