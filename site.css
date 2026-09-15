@@ -690,6 +690,37 @@ body::before{mix-blend-mode:normal;opacity:.03}
 .tl .card h3{font-size:clamp(20px,1.5vw,23px)}
 .tl .card p{font-size:14.5px}
 .tl .card .who{margin-top:auto;padding-top:20px;font-family:var(--font-m);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+
+/* --- the engagement thread: one conductor drawn across the four stages as the
+   reader scrolls. The section is about a sequence in time, so it is staged in
+   time: the line draws, each node ignites as the current reaches it, and the
+   card under that node comes up out of its resting state. --- */
+.tl-thread{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:center;height:34px;margin-bottom:10px}
+/* the track runs node-centre to node-centre: half a column in from each end,
+   and the columns carry the same 18px gap the cards do */
+.tl-track{position:absolute;left:calc(12.5% - 6.75px);right:calc(12.5% - 6.75px);top:50%;height:1px;transform:translateY(-.5px);background:var(--line-2)}
+.tl-fill{position:absolute;inset:0;transform-origin:0 50%;transform:scaleX(var(--p,0));
+  background:linear-gradient(90deg,var(--cyan),var(--blue-2) 60%,var(--green));
+  box-shadow:0 0 12px rgba(59,130,246,.55)}
+.tl-pulse{position:absolute;top:50%;left:calc(var(--p,0) * 100%);width:7px;height:7px;margin:-3.5px 0 0 -3.5px;border-radius:50%;
+  background:var(--cyan-2);box-shadow:0 0 10px var(--cyan),0 0 26px rgba(34,211,238,.6);
+  opacity:var(--pulse,0);transition:opacity .35s}
+.tl-node{position:relative;justify-self:center;width:11px;height:11px;border-radius:50%;
+  border:1px solid var(--line-2);background:var(--bg);transition:border-color .45s,background .45s,box-shadow .45s}
+.tl-node::after{content:"";position:absolute;inset:2px;border-radius:50%;background:transparent;transition:background .45s}
+.tl-node.on{border-color:var(--cyan);box-shadow:0 0 0 4px rgba(34,211,238,.10),0 0 16px rgba(34,211,238,.5)}
+.tl-node.on::after{background:var(--cyan-2)}
+/* The cards rest back, then come forward as the current reaches them. This
+   block drives its own reveal, so it carries no .stagger -- and the resting
+   state is scoped to .js so the cards stay readable if the script never runs. */
+.js .tl .card{opacity:.46;transform:translateY(10px);transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1),border-color .6s}
+.js .tl .card.lit{opacity:1;transform:none;border-color:var(--line-2)}
+.tl .card.lit .num{color:var(--cyan-2)}
+@media (max-width:1000px){.tl-thread{display:none}}
+@media (prefers-reduced-motion:reduce){
+  .tl-fill{transform:scaleX(1)}.tl-pulse{display:none}
+  .js .tl .card{opacity:1;transform:none;transition:none}
+}
 .faq-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(30px,6vw,90px);align-items:start}
 @media (max-width:900px){.faq-grid{grid-template-columns:1fr}}
 .faq{display:grid;border-top:1px solid var(--line)}

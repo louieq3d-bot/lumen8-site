@@ -255,6 +255,47 @@
     update();
   });
 
+  /* ---------- engagement thread ----------
+     The four stages are a sequence in time, so they are staged in time. One
+     conductor is drawn across them as the block crosses the viewport: the line
+     fills, a current rides its leading edge, each node ignites as the current
+     reaches it, and the card beneath comes up out of its resting state. The
+     block drives its own reveal, so it carries no .stagger. */
+  document.querySelectorAll('.tl').forEach((tl) => {
+    const cards = [...tl.querySelectorAll('.card')];
+    const thread = tl.parentNode.querySelector('.tl-thread');
+    const nodes = thread ? [...thread.querySelectorAll('.tl-node')] : [];
+    const n = cards.length; if (!n) return;
+    if (reduce) { cards.forEach((c) => c.classList.add('lit')); nodes.forEach((d) => d.classList.add('on')); return; }
+    const last = Math.max(1, n - 1);
+    let queued = false;
+    const draw = () => {
+      queued = false;
+      const vh = window.innerHeight;
+      // Below 1000px the thread is hidden and the cards stack, so one shared
+      // scrub would light a column taller than the screen all at once. There,
+      // each card is lit by its own arrival instead.
+      if (!thread || thread.offsetParent === null) {
+        cards.forEach((c) => c.classList.toggle('lit', c.getBoundingClientRect().top < vh * 0.88));
+        return;
+      }
+      // the scrub runs while the block's top travels from 86% to 32% of the viewport
+      const r = tl.getBoundingClientRect(), from = vh * 0.86, to = vh * 0.32;
+      const p = Math.min(1, Math.max(0, (from - r.top) / (from - to)));
+      thread.style.setProperty('--p', p.toFixed(4));
+      // the current only shows while it is actually travelling
+      thread.style.setProperty('--pulse', (p > 0.02 && p < 0.99) ? '1' : '0');
+      for (let k = 0; k < n; k++) {
+        const on = p * 1.04 >= k / last;
+        cards[k].classList.toggle('lit', on);
+        if (nodes[k]) nodes[k].classList.toggle('on', on);
+      }
+    };
+    window.addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(draw); } }, { passive: true });
+    window.addEventListener('resize', draw);
+    draw();
+  });
+
   /* ---------- horizontal scroller ---------- */
   document.querySelectorAll('.hs').forEach((hs) => {
     const track = hs.querySelector('.hs-track');
