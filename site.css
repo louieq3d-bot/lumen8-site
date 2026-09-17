@@ -792,6 +792,8 @@ body::before{mix-blend-mode:normal;opacity:.03}
    which left a phone with a 96px-wide ticker showing a fragment of one number. The stack is restored here, after it. */
 @media (max-width:1000px){.hero-grid{grid-template-columns:1fr}.hero-side{width:100%}}
 .ticker .line{animation:none;-webkit-mask:none;mask:none;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;
-  transition:opacity .4s var(--ease),transform .4s var(--ease)}
-.ticker .line.swap{opacity:0;transform:translateY(-7px)}
+  transition:opacity .22s var(--ease),transform .22s var(--ease)}
+/* the fact never blinks out: a long fade left the pill empty for a fifth of a second at a time, which is what a
+   first glance -- or a screenshot -- lands on often enough to matter. It hands over quickly and never reaches zero. */
+.ticker .line.swap{opacity:.05;transform:translateY(-6px)}
 @media (max-width:520px){.ticker .line{white-space:normal;text-overflow:clip}}

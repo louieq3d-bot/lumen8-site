@@ -103,6 +103,7 @@
   scene.add(K.tube([V3(0, terrainH(0, 0) + .6, 0), V3(tops[0][1].x * .5, terrainH(0, 0) + 4, tops[0][1].z * .5), tops[0][1]], 0x3b82f6, .14, .45, 2, .8));
   const houses = [], seed = (s) => () => { s = (s * 9301 + 49297) % 233280; return s / 233280; }, r = seed(31);
   for (let i = 3; i < rd.length - 1; i += 3) { const p = rd[i], n = rd[i + 1], dx = n.x - p.x, dz = n.z - p.z, l = Math.hypot(dx, dz) || 1; [-1, 1].forEach((sd) => { if (sd < 0 && i < 9) return; if (r() < .18) return; const off = sd * (6.5 + r() * 2.5), x = p.x + (-dz / l) * off, z = p.z + (dx / l) * off; const h = K.house(3.4 + r() * 1.4, 2.8 + r(), 1.6 + r() * .4, 0); h.position.set(x, terrainH(x, z), z); h.rotation.y = Math.atan2(dx, dz) + (sd > 0 ? Math.PI / 2 : -Math.PI / 2); scene.add(h); houses.push(h); }); }
+  const glow = K.lightUp(houses, rd[0].x, rd[0].z);
   houses.forEach((h) => { const t = K.nearestTop(tops, h.position.x, h.position.z); scene.add(K.drop(t, V3(h.position.x, h.position.y + 2.2, h.position.z))); });
   for (let i = 0; i < 26; i++) { const a = r() * 6.28, d = 14 + r() * 40, x = 26 + Math.cos(a) * d, z = 26 + Math.sin(a) * d * .8; if (houses.some((h) => Math.hypot(h.position.x - x, h.position.z - z) < 5) || rd.some((p) => Math.hypot(p.x - x, p.z - z) < 4) || Math.hypot(x, z) < 8) continue; const tr = K.tree(1 + r(), r()); tr.position.set(x, terrainH(x, z), z); scene.add(tr); }
   const vilLabel = K.label('481 HH · 100% CONNECTED', '#67e8f9', 14); vilLabel.position.set(30, 10, 34); scene.add(vilLabel);
@@ -133,7 +134,7 @@
     flowS.forEach((f) => { f.u = (f.u + f.v * dt * 4) % 1; curve.getPointAt(f.u, tmp); f.s.position.copy(tmp); f.s.material.opacity = .4 + .6 * Math.sin(f.u * Math.PI); });
     for (let i = 0; i < NB; i++) { const h = barH[i] * (.95 + .05 * Math.sin(t * 1.3 + i * .6)); m.makeScale(1, h, 1); m.setPosition(x0 + gap * (i + 1.5), legH + zero + h / 2, .7); barsM.setMatrixAt(i, m); }
     barsM.instanceMatrix.needsUpdate = true; turbines.forEach((w) => w.userData.tick(t + w.userData.ph, .85)); windLabel.material.opacity = .8;
-    houses.forEach((h, i) => { h.userData.win.material.opacity = .3 + .3 * Math.max(0, Math.sin(t * 1.1 + i)); });
+    glow(t, t > 2.2); /* the village comes on a moment after the hero lands, home by home down the line */
     waves.forEach((w) => { const p = w.l.geometry.attributes.position; for (let i = 0; i < w.n; i++) { const x = -170 + i / (w.n - 1) * 340; const env = Math.exp(-Math.pow((x - 30) / 120, 2)); const y = w.y + (Math.sin(x * .06 + t * 1.4 + w.ph) * 6 + Math.sin(x * .17 - t * 2.2 + w.ph) * 2.2) * env; p.setXYZ(i, x, y, -50 + Math.sin(x * .02 + w.ph) * 30); } p.needsUpdate = true; });
     dust.userData.tick(t);
     if (post) { post.fade(-1, -1); post.render(scene, camera); } else renderer.render(scene, camera);

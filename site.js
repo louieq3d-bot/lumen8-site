@@ -421,7 +421,7 @@
       let k = 0; tick.innerHTML = items[0]; tick.setAttribute('aria-live', 'polite');
       if (!reduce && items.length > 1) setInterval(() => {
         tick.classList.add('swap');
-        setTimeout(() => { k = (k + 1) % items.length; tick.innerHTML = items[k]; tick.classList.remove('swap'); }, 420);
+        setTimeout(() => { k = (k + 1) % items.length; tick.innerHTML = items[k]; tick.classList.remove('swap'); }, 220);
       }, 3800);
     }
   }

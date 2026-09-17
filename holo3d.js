@@ -35,8 +35,8 @@
   TX.grass = mkTex(384, 384, (x, w, h) => { mottle(x, w, h, [6, 16, 20], [14, 32, 34], 32, true); }, 1);
   TX.bump = mkTex(256, 256, (x, w, h) => { mottle(x, w, h, [80, 80, 80], [190, 190, 190], 14, true); }, 1, true);
   TX.pv = mkTex(256, 512, (x, w, h) => { x.fillStyle = '#0a1f5c'; x.fillRect(0, 0, w, h); x.strokeStyle = 'rgba(59,111,216,.55)'; x.lineWidth = 3; for (let i = 0; i <= 6; i++) { x.beginPath(); x.moveTo(i * w / 6, 0); x.lineTo(i * w / 6, h); x.stroke(); } for (let j = 0; j <= 10; j++) { x.beginPath(); x.moveTo(0, j * h / 10); x.lineTo(w, j * h / 10); x.stroke(); } x.strokeStyle = 'rgba(191,219,254,.38)'; x.lineWidth = 3; [w * .33, w * .67].forEach((bx) => { x.beginPath(); x.moveTo(bx, 0); x.lineTo(bx, h); x.stroke(); }); x.strokeStyle = 'rgba(147,197,253,.32)'; x.lineWidth = 5; x.strokeRect(3, 3, w - 6, h - 6); }, 1); /* soft 2 px lines on a power-of-two canvas: mipmaps average them out instead of shimmering at grazing angles */
-  TX.roof = mkTex(64, 64, (x, w, h) => { for (let i = 0; i < w; i += 8) { x.fillStyle = '#1b2438'; x.fillRect(i, 0, 8, h); x.fillStyle = '#2a3552'; x.fillRect(i + 5, 0, 3, h); x.fillStyle = '#121a2c'; x.fillRect(i + 2, 0, 1, h); } }, 1);
-  TX.wall = mkTex(128, 128, (x, w, h) => { mottle(x, w, h, [128, 142, 170], [158, 170, 196], 18, false); x.fillStyle = 'rgba(30,58,138,.18)'; x.fillRect(0, h - 10, w, 10); }, 1);
+  TX.roof = mkTex(128, 64, (x, w, h) => { mottle(x, w, h, [74, 86, 106], [104, 116, 136], 10, false); for (let i = 0; i < w; i += 8) { x.fillStyle = 'rgba(214,226,242,.30)'; x.fillRect(i + 1, 0, 2, h); x.fillStyle = 'rgba(8,12,22,.42)'; x.fillRect(i + 5, 0, 2, h); } x.fillStyle = 'rgba(8,12,22,.25)'; x.fillRect(0, h / 2 - 1, w, 2); }, 1); /* corrugated galvanised sheet: a light crest and a shadowed trough every rib, and a lap joint */
+  TX.wall = mkTex(256, 256, (x, w, h) => { mottle(x, w, h, [150, 160, 178], [188, 196, 210], 22, false); x.fillStyle = 'rgba(40,52,74,.08)'; for (let j = 0; j < h; j += 32) x.fillRect(0, j, w, 1); const g = x.createLinearGradient(0, h - 44, 0, h); g.addColorStop(0, 'rgba(24,32,50,0)'); g.addColorStop(1, 'rgba(24,32,50,.45)'); x.fillStyle = g; x.fillRect(0, h - 44, w, 44); }, 1); /* rendered blockwork: cool plaster, faint course lines, rain splash darkening the foot of the wall */
   TX.asphalt = mkTex(128, 128, (x, w, h) => { mottle(x, w, h, [22, 30, 44], [34, 42, 58], 9, true); }, 1);
   TX.concrete = mkTex(128, 128, (x, w, h) => { mottle(x, w, h, [40, 50, 68], [58, 68, 88], 16, true); x.strokeStyle = 'rgba(0,0,0,.35)'; x.lineWidth = 2; x.strokeRect(0, 0, w, h); }, 1);
   TX.rib = mkTex(64, 64, (x, w, h) => { for (let i = 0; i < w; i += 6) { x.fillStyle = '#9a9a9a'; x.fillRect(i, 0, 6, h); x.fillStyle = '#d0d0d0'; x.fillRect(i + 2, 0, 2, h); x.fillStyle = '#606060'; x.fillRect(i + 5, 0, 1, h); } }, 1, true);
@@ -97,6 +97,11 @@
 
   /* ---------- kit ---------- */
   const K = {};
+  /* Small parts that share a material are baked into one geometry: a house with framed windows, gutters, barge
+     boards and a porch is five draw calls, fewer than the plain box-and-prism house it replaced. */
+  const place = (geo, x, y, z, rx, ry, rz) => geo.applyMatrix4(new THREE.Matrix4().compose(V3(x, y, z), new THREE.Quaternion().setFromEuler(new THREE.Euler(rx || 0, ry || 0, rz || 0)), V3(1, 1, 1)));
+  const mergeGeo = (parts) => { const P3 = [], N3 = [], U2 = []; parts.forEach((g0) => { const g = g0.index ? g0.toNonIndexed() : g0, p = g.attributes.position.array, n = g.attributes.normal.array, u = g.attributes.uv && g.attributes.uv.array; for (let k = 0; k < p.length; k++) { P3.push(p[k]); N3.push(n[k]); } for (let k = 0; k < p.length / 3 * 2; k++) U2.push(u ? u[k] : 0); }); const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.Float32BufferAttribute(P3, 3)); geo.setAttribute('normal', new THREE.Float32BufferAttribute(N3, 3)); geo.setAttribute('uv', new THREE.Float32BufferAttribute(U2, 2)); geo.computeBoundingSphere(); return geo; };
+  let HM = null; const houseMats = () => HM || (HM = { trim: matte(0xdfe6f0), dark: matte(0x121a2a), base: matte(0x3a4456) });
   K.box = (w, h, d, mat, edge, eo) => { const g = new THREE.Group(); const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.y = h / 2; g.add(m); if (edge) { const e = new THREE.LineSegments(new THREE.EdgesGeometry(m.geometry), edgeMat(edge, eo)); e.position.y = h / 2; g.add(e); } return g; };
   K.grid = (size, div, color, opacity) => { const g = new THREE.GridHelper(size, div, color, color); g.material.transparent = true; g.material.opacity = (opacity == null ? .12 : opacity) * .3; g.material.depthWrite = false; return g; };
   K.terrain = (size, seg, amp, freq, color, wire, tex) => { const g = new THREE.Group(); const geo = new THREE.PlaneGeometry(size, size, seg, seg); geo.rotateX(-Math.PI / 2); const p = geo.attributes.position; for (let i = 0; i < p.count; i++) { const x = p.getX(i), z = p.getZ(i); p.setY(i, fbm(x, z, amp, freq) - amp * .1); } geo.computeVertexNormals(); const map = (tex || TX.ground).clone(); map.needsUpdate = true; map.repeat.set(size / 14, size / 14); g.add(new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ map, emissiveMap: TX.white, color: color || 0xffffff, metalness: .05, roughness: .95, envMapIntensity: .25, polygonOffset: true, polygonOffsetFactor: 1 }))); if (wire !== false) g.add(new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: P.cyan, wireframe: true, transparent: true, opacity: .02, depthWrite: false }))); g.userData.h = (x, z) => fbm(x, z, amp, freq) - amp * .1; return g; };
@@ -104,7 +109,47 @@
   K.pv = (rows, cols, px, pz, color) => { const g = new THREE.Group(); const n = rows * cols; const mod = new THREE.InstancedMesh(new THREE.BoxGeometry(px * .86, .06, pz * .62), glass(color || P.blue), n); const frame = new THREE.InstancedMesh(new THREE.BoxGeometry(px * .9, .08, pz * .66), solid(0xc7d2e0, 0x000000, 0), n); const post = new THREE.InstancedMesh(new THREE.CylinderGeometry(.06, .06, 1.2, 6), solid(P.steel, 0x000000, 0), n); const m = new THREE.Matrix4(), s = V3(1, 1, 1), pos = []; let k = 0; for (let i = 0; i < rows; i++) for (let j = 0; j < cols; j++) { const x = (j - (cols - 1) / 2) * px, z = (i - (rows - 1) / 2) * pz; pos.push([x, z]); m.compose(V3(x, .6, z), new THREE.Quaternion(), s); post.setMatrixAt(k, m); k++; } const setTilt = (a) => { const q = new THREE.Quaternion().setFromEuler(new THREE.Euler(a, 0, 0)); pos.forEach(([x, z], i) => { m.compose(V3(x, 1.32, z), q, s); mod.setMatrixAt(i, m); m.compose(V3(x, 1.24, z), q, s); frame.setMatrixAt(i, m); }); mod.instanceMatrix.needsUpdate = true; frame.instanceMatrix.needsUpdate = true; }; setTilt(-.35); mod.userData.noReceive = frame.userData.noReceive = true; g.add(mod, frame, post); g.userData.mod = mod; g.userData.setTilt = setTilt; return g; };
   /* single-axis tracker rows: long N-S rows on posts with a torque tube, tilting about the row axis */
   K.tracker = (rows, len, pitch, color, hp) => { const g = new THREE.Group(); const H = hp || 1.7, w = 2.1; const gm = glass(color || P.blue); gm.map = TX.pv.clone(); gm.map.needsUpdate = true; gm.map.repeat.set(1, len / 2.2); gm.emissiveMap = gm.map; const mod = new THREE.InstancedMesh(new THREE.BoxGeometry(w, .05, len), gm, rows); const frame = new THREE.InstancedMesh(new THREE.BoxGeometry(w + .06, .07, len + .06), solid(0xc7d2e0, 0x000000, 0), rows); /* sits wholly under the glass: a frame face inside the module z-fought as stripes */ const np = Math.max(2, Math.round(len / 4.5)); const post = new THREE.InstancedMesh(new THREE.CylinderGeometry(.07, .08, H - .1, 6), solid(P.steel, 0x000000, 0), rows * np); const tube = new THREE.InstancedMesh(new THREE.CylinderGeometry(.07, .07, len, 6), solid(0xbfcbdb, 0x000000, 0), rows); const m = new THREE.Matrix4(), s = V3(1, 1, 1), q = new THREE.Quaternion(), q0 = new THREE.Quaternion(), qz = new THREE.Quaternion().setFromEuler(new THREE.Euler(Math.PI / 2, 0, 0)), xs = []; for (let i = 0; i < rows; i++) { const x = (i - (rows - 1) / 2) * pitch; xs.push(x); for (let k = 0; k < np; k++) { const z = (k - (np - 1) / 2) * (len / np); m.compose(V3(x, (H - .1) / 2, z), q0, s); post.setMatrixAt(i * np + k, m); } m.compose(V3(x, H - .1, 0), qz, s); tube.setMatrixAt(i, m); } const setTilt = (a) => { q.setFromEuler(new THREE.Euler(0, 0, a)); xs.forEach((x, i) => { m.compose(V3(x, H, 0), q, s); mod.setMatrixAt(i, m); m.compose(V3(x, H - .07, 0), q, s); frame.setMatrixAt(i, m); }); mod.instanceMatrix.needsUpdate = true; frame.instanceMatrix.needsUpdate = true; }; setTilt(-.4); mod.userData.noReceive = frame.userData.noReceive = true; g.add(mod, frame, post, tube); g.userData.setTilt = setTilt; g.userData.xs = xs; g.userData.len = len; return g; };
-  K.house = (w, d, h, r) => { const g = new THREE.Group(); g.userData.dims = [w, d, h]; const body = K.box(w, h, d, textured(TX.wall, 0xffffff, { emissive: 0x1e3a8a, emissiveIntensity: .06 }), 0xeaf0f8, .16); g.add(body); const sh = new THREE.Shape(); sh.moveTo(-w / 2 - .35, 0); sh.lineTo(w / 2 + .35, 0); sh.lineTo(0, h * .55); sh.lineTo(-w / 2 - .35, 0); const rm = textured(TX.roof, 0xffffff, { metalness: .35, roughness: .6, emissive: 0x1e3a8a, emissiveIntensity: .05 }); rm.map = TX.roof.clone(); rm.map.needsUpdate = true; rm.map.repeat.set(w / 2, d / 2); const roof = new THREE.Mesh(new THREE.ExtrudeGeometry(sh, { depth: d + .6, bevelEnabled: false }), rm); roof.position.set(0, h, -d / 2 - .3); g.add(roof); const re = new THREE.LineSegments(new THREE.EdgesGeometry(roof.geometry), edgeMat(0xbfdbfe, .18)); re.position.copy(roof.position); g.add(re); const wm = new THREE.MeshBasicMaterial({ color: 0xbfdbfe, transparent: true, opacity: 0 }); [[-w * .25, d / 2 + .03, 0], [w * .25, d / 2 + .03, 0], [w / 2 + .03, 0, Math.PI / 2], [-w / 2 - .03, 0, -Math.PI / 2]].forEach(([x, z, ry]) => { const win = new THREE.Mesh(new THREE.PlaneGeometry(w * .18, h * .3), wm); win.position.set(x, h * .55, z); win.rotation.y = ry; g.add(win); }); const door = new THREE.Mesh(new THREE.PlaneGeometry(w * .16, h * .55), matte(0x101828)); door.position.set(0, h * .28, d / 2 + .02); g.add(door); const step = new THREE.Mesh(new THREE.BoxGeometry(w * .3, .12, .5), matte(0x64748b)); step.position.set(0, .06, d / 2 + .3); g.add(step); g.userData.win = { material: wm }; g.rotation.y = r * Math.PI; return g; };
+  /* A house that reads as a home at any distance: rendered block walls on a plinth, a corrugated roof with an
+     overhang, ridge cap, gutters and painted barge boards, framed and silled windows with a lit pane behind a
+     mullion cross, a door under a small canopy with its own lamp, and on roughly half the houses a rooftop panel.
+     userData.win.material.opacity still drives the light, so every scene that already animated it keeps working. */
+  K.house = (w, d, h, r) => {
+    const g = new THREE.Group(); g.userData.dims = [w, d, h]; const HMs = houseMats(), q = hash(w * 17.3, d * 29.1 + h);
+    g.add(K.box(w, h, d, textured(TX.wall, 0xffffff, { emissive: 0x1e3a8a, emissiveIntensity: .035 }), 0xeaf0f8, .08));
+    const ov = .35, rh = h * .55, span = w / 2 + ov, a = Math.atan2(rh, span), sl = Math.hypot(rh, span);
+    const trim = [], dark = [], base = [], glassG = [], roofG = [];
+    const sh = new THREE.Shape(); sh.moveTo(-span, 0); sh.lineTo(span, 0); sh.lineTo(0, rh); sh.lineTo(-span, 0);
+    roofG.push(place(new THREE.ExtrudeGeometry(sh, { depth: d + .6, bevelEnabled: false }), 0, h, -d / 2 - .3));
+    trim.push(place(new THREE.BoxGeometry(.24, .24, d + .72), 0, h + rh - .02, 0, 0, 0, Math.PI / 4));
+    [-1, 1].forEach((s) => { trim.push(place(new THREE.BoxGeometry(.13, .11, d + .64), s * (span - .02), h - .04, 0)); [-1, 1].forEach((zf) => trim.push(place(new THREE.BoxGeometry(sl + .06, .12, .07), s * span / 2, h + rh / 2 + .03, zf * (d / 2 + .33), 0, 0, -s * a))); });
+    base.push(place(new THREE.BoxGeometry(w + .16, .24, d + .16), 0, .12, 0), place(new THREE.BoxGeometry(w * .34, .13, .5), 0, .065, d / 2 + .33));
+    const cy = h * .56, win = (cx, cz, ry, ww, wh) => { const put = (geo, lx, ly, lz, list) => { place(geo, lx, ly, lz); place(geo, cx, cy, cz, 0, ry, 0); list.push(geo); };
+      put(new THREE.PlaneGeometry(ww, wh), 0, 0, .012, dark); put(new THREE.PlaneGeometry(ww * .92, wh * .92), 0, 0, .022, glassG);
+      put(new THREE.BoxGeometry(ww + .14, .07, .07), 0, wh / 2 + .035, .03, trim); put(new THREE.BoxGeometry(ww + .14, .07, .07), 0, -wh / 2 - .035, .03, trim);
+      put(new THREE.BoxGeometry(.07, wh, .07), -ww / 2 - .035, 0, .03, trim); put(new THREE.BoxGeometry(.07, wh, .07), ww / 2 + .035, 0, .03, trim);
+      put(new THREE.BoxGeometry(.035, wh, .04), 0, 0, .03, trim); put(new THREE.BoxGeometry(ww, .035, .04), 0, wh * .08, .03, trim); put(new THREE.BoxGeometry(ww + .26, .05, .16), 0, -wh / 2 - .08, .08, trim); };
+    const fw = Math.min(.8, w * .2), wh = h * .34;
+    win(-w * .29, d / 2, 0, fw, wh); win(w * .29, d / 2, 0, fw, wh); win(-w * .24, -d / 2, Math.PI, fw, wh); win(w * .24, -d / 2, Math.PI, fw, wh);
+    win(w / 2, 0, Math.PI / 2, Math.min(.8, d * .24), wh); win(-w / 2, 0, -Math.PI / 2, Math.min(.8, d * .24), wh);
+    const dw = Math.min(.62, w * .17), dh = h * .62;
+    dark.push(place(new THREE.BoxGeometry(dw, dh, .05), 0, dh / 2, d / 2 + .025));
+    trim.push(place(new THREE.BoxGeometry(dw + .16, .08, .08), 0, dh + .04, d / 2 + .04), place(new THREE.BoxGeometry(.08, dh, .08), -dw / 2 - .04, dh / 2, d / 2 + .04), place(new THREE.BoxGeometry(.08, dh, .08), dw / 2 + .04, dh / 2, d / 2 + .04));
+    roofG.push(place(new THREE.BoxGeometry(dw + .7, .06, .62), 0, dh + .3, d / 2 + .3, .24));
+    const rm = textured(TX.roof, 0xffffff, { metalness: .45, roughness: .5, emissive: 0x1e3a8a, emissiveIntensity: .04 }); rm.map = TX.roof.clone(); rm.map.needsUpdate = true; rm.map.repeat.set(w / 1.6, d / 3);
+    const roof = new THREE.Mesh(mergeGeo(roofG), rm); g.add(roof);
+    g.add(new THREE.Mesh(mergeGeo(trim), HMs.trim), new THREE.Mesh(mergeGeo(dark), HMs.dark), new THREE.Mesh(mergeGeo(base), HMs.base));
+    const re = new THREE.LineSegments(new THREE.EdgesGeometry(roofG[0]), edgeMat(0xbfdbfe, .12)); g.add(re);
+    const wm = new THREE.MeshBasicMaterial({ color: 0xf0f9ff, transparent: true, opacity: .8, blending: THREE.AdditiveBlending, depthWrite: false });
+    const pane = new THREE.Mesh(mergeGeo(glassG), wm); pane.userData.noShadow = true; g.add(pane);
+    const lamp = sprite(0xbae6fd, .5, .3); lamp.position.set(0, dh + .06, d / 2 + .1); g.add(lamp);
+    if (q > .42) { const pv = new THREE.Mesh(new THREE.BoxGeometry(sl * .56, .05, Math.min(d * .64, 2.6)), glass(P.blue)); pv.position.set(Math.sin(a) * .08 + span * .52, h + rh * .48 + Math.cos(a) * .08, 0); pv.rotation.z = -a; pv.userData.noReceive = true; g.add(pv); }
+    g.userData.win = { material: { get opacity() { return wm.opacity; }, set opacity(v) { wm.opacity = v; lamp.material.opacity = Math.min(.6, v * .5); } } };
+    g.rotation.y = r * Math.PI; return g;
+  };
+  /* A village switches on the way a network does: the moment the grid is energised, light travels out from the
+     powerhouse and each home comes on as it arrives, flares briefly, then settles into a steady, breathing glow.
+     Before that, and whenever the grid is off, the windows stay dark. */
+  K.lightUp = (hs, ox, oz) => { const st = hs.map((h) => ({ d: Math.hypot(h.position.x - ox, h.position.z - oz), v: 0 })); let t0 = null; return (t, on) => { if (!on) { t0 = null; } else if (t0 == null) t0 = t; for (let i = 0; i < hs.length; i++) { const s = st[i], age = on ? t - t0 - s.d * .03 : -1, want = age > 0 ? 1 : 0; s.v += (want - s.v) * (want ? .08 : .12); const flare = age > 0 && age < 1.2 ? Math.sin(age / 1.2 * Math.PI) * .45 : 0; hs[i].userData.win.material.opacity = Math.min(1, s.v * (.84 + .1 * Math.sin(t * .55 + i * 1.7)) + flare * s.v); } }; };
   K.building = (w, h, d, color, cols, floors) => { const g = new THREE.Group(); g.add(K.box(w, h, d, textured(TX.concrete, 0xbfc9da, { emissive: color || P.cyan, emissiveIntensity: .05 }), 0xeaf0f8, .2)); const wm = new THREE.MeshBasicMaterial({ color: 0xbfdbfe, transparent: true, opacity: .28 }); const nc = cols || Math.max(2, Math.round(w / 2.2)), nf = floors || Math.max(1, Math.round(h / 2.2)); for (let f = 0; f < nf; f++) for (let c = 0; c < nc; c++) { const win = new THREE.Mesh(new THREE.PlaneGeometry(w / nc * .45, h / nf * .38), wm); win.position.set((c - (nc - 1) / 2) * (w / nc), (f + .55) * (h / nf), d / 2 + .03); g.add(win); } const lip = new THREE.Mesh(new THREE.BoxGeometry(w + .3, .18, d + .3), matte(0x475569)); lip.position.y = h + .05; g.add(lip); g.userData.win = { material: wm }; return g; };
   K.tree = (s, r) => { const g = new THREE.Group(); const trunk = new THREE.Mesh(new THREE.CylinderGeometry(.08 * s, .14 * s, .9 * s, 5), matte(0x3b3a48)); trunk.position.y = .45 * s; g.add(trunk); const leaf = new THREE.MeshStandardMaterial({ color: r > .5 ? 0x0f5f4c : 0x146b52, emissive: 0x0e7f6a, emissiveIntensity: .1, roughness: .9, flatShading: true }); const c = r > .5 ? new THREE.Mesh(new THREE.ConeGeometry(.7 * s, 1.9 * s, 7), leaf) : new THREE.Mesh(new THREE.IcosahedronGeometry(.85 * s, 1), leaf); c.position.y = r > .5 ? 1.7 * s : 1.5 * s; g.add(c); g.rotation.y = r * 6.28; return g; };
   K.ring = (radius, color, w) => { const m = new THREE.Mesh(new THREE.RingGeometry(radius * (1 - (w || .03)), radius, 96), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: .8, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite: false })); m.rotation.x = -Math.PI / 2; return m; };
@@ -279,7 +324,7 @@
 
   /* ---------- scenes ---------- */
   const S = {};
-  S.village = () => { const r = rnd(7), root = new THREE.Group(), L = [root], F = []; const T = K.terrain(230, 110, 1.3, .05, 0xffffff, true, TX.grass); root.add(T, K.grid(230, 92, P.cyan, .05)); const V = buildVillage(T, r, root, F); const bx = V.V.beam.x, bz = V.V.beam.z, by = T.userData.h(bx, bz); const beam = K.beam(16, P.blue2, .8); beam.position.set(bx, by, bz); root.add(beam); const mk0 = K.marker(P.blue2, 4.5); mk0.position.set(bx, by + .12, bz); root.add(mk0); const dust = K.dust(60, 120); root.add(dust); const lb = K.label('481 HOUSEHOLDS · TIER A · 39 kWp / 163 kWh', '#93c5fd', 18); lb.position.set(-30, 12, -30); root.add(lb); return { layers: L, radius: 34, pitch: .66, theta: -.35, focusables: F, tick(t) { mk0.userData.tick(t); V.hs.forEach((h, i) => { h.userData.win.material.opacity = .35 + .35 * Math.sin(t * 1.5 + i); }); dust.userData.tick(t); } }; };
+  S.village = () => { const r = rnd(7), root = new THREE.Group(), L = [root], F = []; const T = K.terrain(230, 110, 1.3, .05, 0xffffff, true, TX.grass); root.add(T, K.grid(230, 92, P.cyan, .05)); const V = buildVillage(T, r, root, F); const bx = V.V.beam.x, bz = V.V.beam.z, by = T.userData.h(bx, bz); const beam = K.beam(16, P.blue2, .8); beam.position.set(bx, by, bz); root.add(beam); const mk0 = K.marker(P.blue2, 4.5); mk0.position.set(bx, by + .12, bz); root.add(mk0); const dust = K.dust(60, 120); root.add(dust); const lb = K.label('481 HOUSEHOLDS · TIER A · 39 kWp / 163 kWh', '#93c5fd', 18); lb.position.set(-30, 12, -30); root.add(lb); const glow = K.lightUp(V.hs, V.V.power.x, V.V.power.z); return { layers: L, radius: 34, pitch: .66, theta: -.35, focusables: F, tick(t) { mk0.userData.tick(t); glow(t, true); dust.userData.tick(t); } }; };
   /* utility plant: twenty tracker blocks on a graded site, an inverter station per block on two collector roads,
      two energised trunks into a 150 kV substation and a pylon line out. Row-end cables are one LineSegments. */
   S.plant = () => { const root = new THREE.Group(), L = [root], F = []; const T = K.terrain(760, 60, .8, .016); root.add(T, K.grid(760, 120, P.cyan, .03));
@@ -649,16 +694,16 @@
     const dust = K.dust(60, 110, 0xa7f3d0); root.add(dust);
     return { layers: L, radius: 44, shadowR: 62, fog: .0026, pitch: .46, spin: .03, theta: -.2, lookX: 8, lookY: 3.5, lookZ: -8, focusables: F, tick(t, dt) { const a = t * .3; sat.position.set(Math.cos(a) * 60, 34, Math.sin(a) * 60); sat.userData.aim(a); const sx = Math.cos(a) * 60 * .45, sz = Math.sin(a) * 60 * .45; swath.position.set(sx, gy(sx, sz) + .3, sz); swEdge.position.copy(swath.position); nadir.position.set(sx, gy(sx, sz) + .3, sz); nadir.userData.mat.opacity = .08 + .05 * Math.sin(t * 2); houses.forEach((hs, i) => { hs.userData.win.material.opacity = .3 + .3 * Math.max(0, Math.sin(t * 1.1 + i)); }); cross.material.opacity = .5 + .45 * Math.sin(t * 3); dust.userData.tick(t); } }; };
   S['pipe-home'] = () => { const L = [], F = [], mk = () => { const g = new THREE.Group(); L.push(g); return g; }; const T = K.terrain(220, 100, 1.6, .045, 0xffffff, true, TX.grass); const L0 = mk(); L0.add(T, K.grid(220, 72, P.cyan, .05)); const V0 = villageLayout(T, rnd(7)); const bx = -12, bz = V0.roadZ(-12), by = T.userData.h(bx, bz); const beam = K.beam(26, P.blue2, .9); beam.position.set(bx, by, bz); L0.add(beam); const mk0 = K.marker(P.blue2, 5); mk0.position.set(bx, by + .15, bz); L0.add(mk0); const lb0 = K.label('-8.6427, 120.0132 · SITE LOCKED', '#93c5fd', 16); lb0.position.set(bx + 1.5, by + 13, bz); L0.add(lb0); const dust = K.dust(60, 120); L0.add(dust);
-    const L1 = mk(), L2 = mk(); const V = buildVillage(T, rnd(7), { civil: L1, grid: L2 }, F);  const sat = K.sat(0xffffff); L1.add(sat); const lb1 = K.label('481 FOOTPRINTS · 2.4 km ROAD · SLOPE 3° · GHI 5.4', '#67e8f9', 18); lb1.position.set(-6, 5.5, -24); L1.add(lb1);
+    const L1 = mk(), L2 = mk(); const V = buildVillage(T, rnd(7), { civil: L1, grid: L2 }, F); const glow = K.lightUp(V.hs, V.V.power.x, V.V.power.z), st2 = () => L2.userData.built;  const sat = K.sat(0xffffff); L1.add(sat); const lb1 = K.label('481 FOOTPRINTS · 2.4 km ROAD · SLOPE 3° · GHI 5.4', '#67e8f9', 18); lb1.position.set(-6, 5.5, -24); L1.add(lb1);
     const lb2 = K.label('LV NETWORK · 13 POLES · 39 kWp / 163 kWh · CODE-CHECKED', '#93c5fd', 18); lb2.position.set(22, 10.5, -34); L2.add(lb2);
     const L3 = mk(); const fin = K.finance(P.green, 36); const fy = T.userData.h(24, -62) + .1; fin.position.set(24, fy, -62); fin.rotation.y = -.5; L3.add(fin);
     const L4 = mk(); const docs = K.docs(); const dy = T.userData.h(-40, 30) + .1; docs.position.set(-40, dy, 30); docs.rotation.y = -.5; L4.add(docs); const lb4 = K.label('14-TAB ENGINEERING PACK · DRAWING SET · MODEL · DOSSIER · FIELD PACK · SIGNED', '#6ee7b7', 15); lb4.position.set(-40, dy + 7.5, 27); L4.add(lb4);
-    return { layers: L, radius: 46, pitch: .58, theta: -.5, spin: .035, lookX: -6, lookY: 4, shift: SHIFT, focusables: F, steps: [{ look: [bx, by + 7, bz], zoom: .62 }, { look: [-4, 4, -10], zoom: .96 }, { look: [4, 5, -16], zoom: .98 }, { look: [24, fy + 9.5, -62], zoom: .88, pitch: .3, face: -.5, span: .3 }, { look: [-40, dy + 2.8, 30], zoom: .42, pitch: .95, face: -.5, span: .5 }], tick(t, dt, step, k) { mk0.userData.tick(t); lb0.visible = step <= 1; lb1.visible = step >= 1 && step <= 2; lb2.visible = step === 2; const bk = step > 0 ? .35 : 1; beam.userData.mat.opacity += ((.42 * bk) - beam.userData.mat.opacity) * .05; beam.userData.halo.opacity += ((.08 * bk) - beam.userData.halo.opacity) * .05; const a = t * .4; sat.position.set(Math.cos(a) * 64, 30, Math.sin(a) * 64); sat.userData.aim(a); V.hs.forEach((h, i) => { h.userData.win.material.opacity = step >= 2 ? .35 + .35 * Math.sin(t * 1.5 + i) : 0; }); fin.userData.tick(t, k); docs.userData.tick(t); dust.userData.tick(t); } }; };
-  S['pipe-rural'] = () => { const r = rnd(9), L = [], F = [], mk = () => { const g = new THREE.Group(); L.push(g); return g; }; const T = K.terrain(220, 100, 1.6, .04, 0xffffff, true, TX.grass); const L0 = mk(); L0.add(T, K.grid(220, 72, P.cyan, .05)); const cp = []; for (let i = 0; i < 90; i++) { const x = -46 + r() * 92, z = -36 + r() * 72; cp.push(V3(x, T.userData.h(x, z) + .6, z)); } L0.add(new THREE.Points(new THREE.BufferGeometry().setFromPoints(cp), new THREE.PointsMaterial({ color: P.cyan2, size: 1.4, map: glowTex, transparent: true, opacity: .9, blending: THREE.AdditiveBlending, depthWrite: false }))); const dust = K.dust(60, 120); L0.add(dust); const L1 = mk(), L2 = mk(); const V = buildVillage(T, rnd(7), { civil: L1, grid: L2 }, F); const beams = [[0, -15, 24, P.blue2, 1], [-40, -30, 12, P.cyan, .6], [44, 18, 12, P.cyan, .6]].map(([x, z, h, c, k]) => { const b = K.beam(h, c, k); b.position.set(x, T.userData.h(x, z), z); L0.add(b); return b; }); const lb0 = K.label('TIER A · 481 HH · RANK 14 / 8,493', '#93c5fd', 16); lb0.position.set(1.5, 12, -15); L0.add(lb0); const disp = []; for (let i = 0; i <= 40; i++) disp.push(V3(14 + i * 1.2, 9 + Math.max(0, Math.sin(i / 40 * Math.PI)) * 7, -40)); L2.add(K.tube(disp, P.blue2, .14, .4, 4, .9)); const lb2 = K.label('24 h DISPATCH · PV 39 kWp · BESS 163 kWh', '#93c5fd', 16); lb2.position.set(4, 14, -26); L2.add(lb2);
+    return { layers: L, radius: 46, pitch: .58, theta: -.5, spin: .035, lookX: -6, lookY: 4, shift: SHIFT, focusables: F, steps: [{ look: [bx, by + 7, bz], zoom: .62 }, { look: [-4, 4, -10], zoom: .96 }, { look: [4, 5, -16], zoom: .98 }, { look: [24, fy + 9.5, -62], zoom: .88, pitch: .3, face: -.5, span: .3 }, { look: [-40, dy + 2.8, 30], zoom: .42, pitch: .95, face: -.5, span: .5 }], tick(t, dt, step, k) { mk0.userData.tick(t); lb0.visible = step <= 1; lb1.visible = step >= 1 && step <= 2; lb2.visible = step === 2; const bk = step > 0 ? .35 : 1; beam.userData.mat.opacity += ((.42 * bk) - beam.userData.mat.opacity) * .05; beam.userData.halo.opacity += ((.08 * bk) - beam.userData.halo.opacity) * .05; const a = t * .4; sat.position.set(Math.cos(a) * 64, 30, Math.sin(a) * 64); sat.userData.aim(a); glow(t, step >= 2 && st2()); fin.userData.tick(t, k); docs.userData.tick(t); dust.userData.tick(t); } }; };
+  S['pipe-rural'] = () => { const r = rnd(9), L = [], F = [], mk = () => { const g = new THREE.Group(); L.push(g); return g; }; const T = K.terrain(220, 100, 1.6, .04, 0xffffff, true, TX.grass); const L0 = mk(); L0.add(T, K.grid(220, 72, P.cyan, .05)); const cp = []; for (let i = 0; i < 90; i++) { const x = -46 + r() * 92, z = -36 + r() * 72; cp.push(V3(x, T.userData.h(x, z) + .6, z)); } L0.add(new THREE.Points(new THREE.BufferGeometry().setFromPoints(cp), new THREE.PointsMaterial({ color: P.cyan2, size: 1.4, map: glowTex, transparent: true, opacity: .9, blending: THREE.AdditiveBlending, depthWrite: false }))); const dust = K.dust(60, 120); L0.add(dust); const L1 = mk(), L2 = mk(); const V = buildVillage(T, rnd(7), { civil: L1, grid: L2 }, F); const glow = K.lightUp(V.hs, V.V.power.x, V.V.power.z), st2 = () => L2.userData.built; const beams = [[0, -15, 24, P.blue2, 1], [-40, -30, 12, P.cyan, .6], [44, 18, 12, P.cyan, .6]].map(([x, z, h, c, k]) => { const b = K.beam(h, c, k); b.position.set(x, T.userData.h(x, z), z); L0.add(b); return b; }); const lb0 = K.label('TIER A · 481 HH · RANK 14 / 8,493', '#93c5fd', 16); lb0.position.set(1.5, 12, -15); L0.add(lb0); const disp = []; for (let i = 0; i <= 40; i++) disp.push(V3(14 + i * 1.2, 9 + Math.max(0, Math.sin(i / 40 * Math.PI)) * 7, -40)); L2.add(K.tube(disp, P.blue2, .14, .4, 4, .9)); const lb2 = K.label('24 h DISPATCH · PV 39 kWp · BESS 163 kWh', '#93c5fd', 16); lb2.position.set(4, 14, -26); L2.add(lb2);
     const L3 = mk(); const fin = K.finance(P.green, 36); const fy = T.userData.h(24, -62) + .1; fin.position.set(24, fy, -62); fin.rotation.y = -.5; L3.add(fin);
     const L4 = mk(); const docs = K.docs(); const dy = T.userData.h(40, 8) + .1; docs.position.set(40, dy, 8); docs.rotation.y = -.5; L4.add(docs); const lb4 = K.label('BOQ · POLE SCHEDULE · FIELD PACK', '#6ee7b7', 12); lb4.position.set(40, dy + 7.5, 5); L4.add(lb4);
     const L5 = mk(); const orbit = K.ring(56, P.green, .006); orbit.position.y = 26; orbit.material.opacity = .35; L5.add(orbit); const sat = K.sat(P.cyan2); L5.add(sat); const lb5 = K.label('SATELLITE PASS · VERIFIED · SIGNED', '#6ee7b7', 18); lb5.position.set(-19, 20, -22); L5.add(lb5);
-    return { layers: L, radius: 46, pitch: .6, theta: -.5, spin: .035, lookX: -6, lookY: 4, shift: SHIFT, focusables: F, steps: [{ look: [0, 6, -14], zoom: .84 }, { look: [-4, 4, -8], zoom: .98 }, { look: [2, 5, -12], zoom: .98 }, { look: [24, fy + 9.5, -62], zoom: .88, pitch: .3, face: -.5, span: .3 }, { look: [40, dy + 2.8, 8], zoom: .42, pitch: .95, face: -.5, span: .5 }, { look: [-6, 7, -12], zoom: .86 }], tick(t, dt, step, k) { lb0.visible = step <= 1; lb2.visible = step === 2; const a = t * .45; sat.position.set(Math.cos(a) * 56, 26, Math.sin(a) * 56); sat.userData.aim(a); V.hs.forEach((h, i) => { h.userData.win.material.opacity = step >= 2 ? .3 + .35 * Math.sin(t * 1.5 + i) : 0; }); const bk = step > 0 ? .4 : 1; beams.forEach((b) => { b.userData.mat.opacity += ((.42 * bk) - b.userData.mat.opacity) * .05; }); fin.userData.tick(t, k); docs.userData.tick(t); dust.userData.tick(t); } }; };
+    return { layers: L, radius: 46, pitch: .6, theta: -.5, spin: .035, lookX: -6, lookY: 4, shift: SHIFT, focusables: F, steps: [{ look: [0, 6, -14], zoom: .84 }, { look: [-4, 4, -8], zoom: .98 }, { look: [2, 5, -12], zoom: .98 }, { look: [24, fy + 9.5, -62], zoom: .88, pitch: .3, face: -.5, span: .3 }, { look: [40, dy + 2.8, 8], zoom: .42, pitch: .95, face: -.5, span: .5 }, { look: [-6, 7, -12], zoom: .86 }], tick(t, dt, step, k) { lb0.visible = step <= 1; lb2.visible = step === 2; const a = t * .45; sat.position.set(Math.cos(a) * 56, 26, Math.sin(a) * 56); sat.userData.aim(a); glow(t, step >= 2 && st2()); const bk = step > 0 ? .4 : 1; beams.forEach((b) => { b.userData.mat.opacity += ((.42 * bk) - b.userData.mat.opacity) * .05; }); fin.userData.tick(t, k); docs.userData.tick(t); dust.userData.tick(t); } }; };
   /* Pinned pipelines run full-bleed behind a text column on the left. The lens shift puts the subject in the
      clear right-hand air on a wide screen, and centres it high on a phone where the text sits underneath. */
   const SHIFT = { x: .64, y: .57, k: 1.22, mx: .5, my: .34, mk: 1.02 };
@@ -718,7 +763,7 @@
     lightRig(scene, def.shadowR || def.radius, !!def.frame || cv.clientWidth > 900, def.bright);
     const cam = new THREE.PerspectiveCamera(def.fov || 36, 1, 1, 1600); /* heroes take a wider lens: more depth, more scale */
     const th0 = def.theta == null ? -.6 : def.theta, look0 = V3(def.lookX || 0, def.lookY == null ? def.radius * .12 : def.lookY, def.lookZ || 0);
-    const st = { cv, R, blit, renderer, post, scene, cam, def, t: Math.random() * 50, theta: th0, phi: def.pitch || .78, tTheta: th0, vTheta: 0, drag: false, moved: 0, lx: 0, vis: false, step: cv.dataset.step != null ? +cv.dataset.step : def.layers.length - 1, shown: def.layers.map(() => 1), spin: def.spin || .1, mx: 0, my: 0, W: 0, H: 0, hover: null, focus: null, look: look0.clone(), lookT: look0.clone(), look0, labels, zoom: 1, zoomT: 1, phiT: def.pitch || .78, label: null, px: 9, py: 0, fr: 0, ready: false, born: performance.now(), card: !name.startsWith('pipe') && !name.startsWith('hero'), hero: name.startsWith('hero'), track: cv.closest('.hs'), su: 0, faded: false, op1: getComputedStyle(cv).opacity, sdirty: 3 };
+    const st = { cv, R, blit, renderer, post, scene, cam, def, t: Math.random() * 50, theta: th0, phi: def.pitch || .78, tTheta: th0, vTheta: 0, drag: false, moved: 0, lx: 0, vis: false, step: cv.dataset.step != null ? +cv.dataset.step : def.layers.length - 1, shown: def.layers.map(() => 1), spin: def.spin || .1, mx: 0, my: 0, W: 0, H: 0, hover: null, focus: null, look: look0.clone(), lookT: look0.clone(), look0, labels, zoom: 1, zoomT: 1, fit: 1, fitT: 1, phiT: def.pitch || .78, label: null, px: 9, py: 0, fr: 0, ready: false, born: performance.now(), card: !name.startsWith('pipe') && !name.startsWith('hero'), hero: name.startsWith('hero'), track: cv.closest('.hs'), su: 0, faded: false, op1: getComputedStyle(cv).opacity, sdirty: 3 };
     /* every scene fades in on its first drawn frame, like the hero behind the preloader */
     cv.style.opacity = '0'; cv.style.transition = 'opacity 1.2s ease, filter .5s'; void getComputedStyle(cv).opacity;
     def.layers.forEach((g, i) => { g.visible = i <= st.step; });
@@ -750,22 +795,94 @@
      earth into place, instead of the whole layer scaling up at once. Order is by x on the first call, so the wave sweeps. */
   const build = (g, p) => { const ch = g.children, n = ch.length; if (!g.userData.ord) { let x0 = 1e9, x1 = -1e9; ch.forEach((c) => { if (c.position.x || c.position.z) { x0 = Math.min(x0, c.position.x); x1 = Math.max(x1, c.position.x); } }); g.userData.ord = ch.map((c, k) => (c.position.x || c.position.z) && x1 > x0 ? (c.position.x - x0) / (x1 - x0) : k / Math.max(1, n)); ch.forEach((c) => { c.userData.y0 = c.position.y; c.userData.vis0 = c.visible; }); }
     const ord = g.userData.ord; for (let k = 0; k < n; k++) { const c = ch[k], q = Math.min(1, Math.max(0, p * 1.7 - ord[k] * .7)), s = sm(q); c.position.y = c.userData.y0 - (1 - s) * (c.isSprite ? 2 : 5); c.visible = q > 0 && c.userData.vis0; } g.userData.built = p >= 1; };
+  /* Every readout stays inside its own panel. A caption is a screen-aligned sprite anchored at a point in the
+     scene, so one anchored near an edge used to run off the frame and read as a chopped word. Each frame the
+     anchor is projected and the sprite re-anchors along its own width -- left, right or anywhere between -- so
+     the whole line sits inside the panel while staying as close to what it labels as it can. A line wider than
+     the panel steps down in size until it fits rather than losing its tail. */
+  const lbv = new THREE.Vector3();
+  function clampLabel(o, st, tv, asp, lmin) {
+    if (!o || !o.visible) return;
+    if (!o.userData.s0) o.userData.s0 = o.scale.clone();
+    o.scale.copy(o.userData.s0);
+    o.getWorldPosition(lbv); const d = st.cam.position.distanceTo(lbv);
+    lbv.project(st.cam); if (lbv.z > 1 || !isFinite(lbv.x) || !isFinite(lbv.y)) return;
+    const m = .03, L = lmin + m, Rr = 1 - m;
+    /* a panel that pulled back to frame its subject would otherwise render its readouts too small to read, so a
+       line under about fifteen pixels tall grows until it is legible -- and only then is trimmed to fit. */
+    const hpx = o.scale.y / Math.max(.001, d * tv) * .5 * st.H;
+    if (hpx < 15) o.scale.multiplyScalar(Math.min(1.55, 15 / Math.max(.001, hpx)));
+    let w = o.scale.x / Math.max(.001, d * tv * asp);
+    if (w > Rr - L) { const k = Math.max(.6, (Rr - L) / w); o.scale.multiplyScalar(k); w *= k; }
+    const cx0 = 1 - (Rr - lbv.x) / w, cx1 = (lbv.x - L) / w;
+    o.center.x = Math.min(Math.max(0, cx0), Math.max(cx0, Math.min(cx1, 1.6)));
+    const h = o.scale.y / Math.max(.001, d * tv);
+    const cy0 = 1 - (Rr - lbv.y) / h, cy1 = (lbv.y + 1 - m) / h;
+    o.center.y = cy0 > cy1 ? .5 : Math.min(cy1, Math.max(cy0, .5));
+  }
+  function fitLabels(st) {
+    if (!st.labels.length && !st.label) return;
+    st.cam.updateMatrixWorld();
+    const tv = Math.tan(st.cam.fov * Math.PI / 360), asp = st.cam.aspect;
+    /* a pipeline composes its subject to one side because the other side carries the copy, so its readouts are
+       held inside the half the scene actually owns rather than being pushed in under the paragraph. */
+    const sh = st.def.shift, narrow = st.W / Math.max(1, st.H) < .9;
+    const lmin = sh && !narrow ? Math.min(.55, Math.max(-1, 2 * (sh.x - .18) - 1)) : -1;
+    for (let i = 0; i < st.labels.length; i++) clampLabel(st.labels[i], st, tv, asp, lmin);
+    clampLabel(st.label, st, tv, asp, lmin);
+  }
+  /* How far does the subject actually reach past the panel? Every named object in the scene -- the cranes, the
+     ship, the substation, the tower -- is projected corner by corner into panel space; ground, water and grid
+     are left out because those are meant to run off the edges. The worst overshoot becomes the pull-back for
+     the next frame, and since a subject's on-screen size falls off as 1/distance, multiplying the distance by
+     that overshoot lands on a fit in a single step. It only ever pulls back: a scene already composed inside
+     its panel is left exactly as it was authored. */
+  const afb = new THREE.Box3(), afv = new THREE.Vector3(), afe = [];
+  function autoFrame(st) {
+    const F = st.def.focusables; if (!F || !F.length) return;
+    st.cam.updateMatrixWorld(); afe.length = 0;
+    for (let i = 0; i < F.length; i++) {
+      const o = F[i]; if (!o.visible) continue; let p = o.parent, on = true;
+      while (p) { if (p.visible === false) { on = false; break; } p = p.parent; }
+      if (!on) continue;
+      afb.setFromObject(o); if (afb.isEmpty()) continue;
+      let e = 0;
+      for (let k = 0; k < 8; k++) {
+        afv.set(k & 1 ? afb.max.x : afb.min.x, k & 2 ? afb.max.y : afb.min.y, k & 4 ? afb.max.z : afb.min.z);
+        afv.project(st.cam); if (afv.z > 1) continue;
+        e = Math.max(e, Math.abs(afv.x), Math.abs(afv.y));
+      }
+      if (e) afe.push(e);
+    }
+    if (!afe.length) return;
+    /* the reach of the fifth-furthest object in ten, not the furthest: a harbour tug on its rounds or a satellite
+       on its orbit is allowed to leave the frame, while cranes and a ship all pressing on the edge are not. LIM
+       lets the composition bleed a little past the panel, which is what makes a scene fill it rather than sit in it. */
+    afe.sort((a, b) => a - b); const ov = afe[Math.min(afe.length - 1, Math.floor(afe.length * .8))], LIM = 1.14;
+    if (!ov || !isFinite(ov)) return;
+    st.fitT = Math.min(1.6, Math.max(1, st.fit * ov / LIM));
+  }
   function frame(st, dt) {
     st.t += dt; const fs = st.def.steps && st.def.steps[st.step]; if (!st.drag) { if (fs && fs.face != null) { const want = fs.face + Math.sin(st.t * .12) * (fs.span || .35); st.tTheta += (want - st.tTheta) * (1 - Math.pow(.95, dt * 60)) * .6 + st.vTheta; } else st.tTheta += (reduce ? 0 : st.spin * dt) + st.vTheta; st.vTheta *= .92; } const e1 = 1 - Math.pow(.88, dt * 60), e2 = 1 - Math.pow(.95, dt * 60); st.theta += (st.tTheta - st.theta) * e1;
     st.zoom += (st.zoomT - st.zoom) * e2; st.phi += (st.phiT - st.phi) * e2; st.look.lerp(st.lookT, e2);
+    st.fit += (st.fitT - st.fit) * e2;
     /* scroll rig, as on the home hero: a hero tracks the first viewport of scroll and lifts to an overview; a card tracks
        its own passage through the viewport (a pinned section tracks its pin), entering low and close, leaving high and wide */
     let su = 0; if (st.hero) { const sec = st.cv.closest('section') || st.cv; su = Math.min(1, Math.max(0, -sec.getBoundingClientRect().top / Math.max(1, window.innerHeight))); } else if (st.card) { const r = (st.track || st.cv).getBoundingClientRect(), vh = window.innerHeight; const p = st.track ? -r.top / Math.max(1, r.height - vh) : (vh - r.top) / (vh + r.height); su = Math.min(.5, Math.max(-.5, p - .5)); }
     st.su += (su - st.su) * e2; const soft = st.def.soft ? .3 : 1; const lift = st.su * (st.hero ? .7 : .5) * soft, turn = st.su * (st.hero ? .55 : 1) * soft, wide = 1 + st.su * (st.hero ? .6 : .3) * soft;
     const narrow = st.W / Math.max(1, st.H) < .9, sh = st.def.shift;
     const sx = sh ? (narrow ? sh.mx : sh.x) : .5, sy = sh ? (narrow ? sh.my : sh.y) : .5, back = sh ? (narrow ? sh.mk : sh.k) : 1;
-    const R = st.def.radius * (st.def.frame || (narrow ? 2.5 : 1.9)) * back * st.zoom * wide, phi = Math.min(1.35, Math.max(.12, st.phi + lift + st.my * .2)), th = st.theta + st.mx * .15 + turn;
+    /* st.fit is measured, not guessed: autoFrame() below reads how far the subject actually reaches past the
+       panel and this pulls back by exactly that much, so a wide berth and a compact tower compound each
+       fill their own panel instead of sharing one hand-tuned distance. */
+    const R = st.def.radius * (st.def.frame || (narrow ? 2.5 : 1.9)) * st.fit * back * st.zoom * wide, phi = Math.min(1.35, Math.max(.12, st.phi + lift + st.my * .2)), th = st.theta + st.mx * .15 + turn;
     st.cam.position.set(st.look.x + Math.sin(th) * Math.cos(phi) * R, st.look.y + Math.sin(phi) * R, st.look.z + Math.cos(th) * Math.cos(phi) * R); st.cam.lookAt(st.look); lens(st.cam, sx, sy);
     st.def.layers.forEach((g, i) => { if (i > st.step) { g.visible = false; return; } g.visible = true; if (st.shown[i] < 1) { st.shown[i] = Math.min(1, st.shown[i] + dt * .9); build(g, st.shown[i]); } else if (!g.userData.built) build(g, 1); });
     if (st.def.tick) st.def.tick(st.t, reduce ? 0 : dt, st.step, st.shown[3] == null ? 1 : st.shown[3]);
     if (narrow) for (let i = 0; i < st.labels.length; i++) st.labels[i].visible = false;
     /* a pipeline's earlier captions leave the frame two steps on, so the board and the table are read on their own */
     else if (st.def.steps) for (let i = 0; i < st.labels.length; i++) { const li = st.labels[i].userData.layer; if (li > 0 && li < st.step - 1) st.labels[i].visible = false; }
+    fitLabels(st);
     pick(st);
     /* shadows depend on the light and the casters, never on the camera: a static scene renders its shadow map on
        arrival and whenever a layer is still building; only scenes whose ticks move casters (def.dyn) refresh it */
@@ -774,6 +891,7 @@
     if (st.post) { const wide = st.hero && !narrow; st.post.fade(wide ? 0 : -1, wide ? .34 : -1); st.post.render(st.scene, st.cam); } else st.renderer.render(st.scene, st.cam);
     if (st.blit) st.R.show(st.cv, st.blit);
     if (!st.faded) { st.faded = true; st.cv.style.opacity = st.op1; }
+    if (st.card && (st.fr & 7) === 0) autoFrame(st);
   }
   /* One loop draws everything, at most ~60 times a second: a 120 or 240 Hz panel scrolls natively at its own rate
      while the 3D redraws at 60, which leaves the GPU three times the budget per frame. The GPU timer brackets the
