@@ -335,6 +335,14 @@ main{position:relative;z-index:1}
 .statement h2 .l{display:block;overflow:hidden}
 .statement h2 .l i{display:block;font-style:normal;transform:translateY(105%)}
 .statement h2 .dim{color:var(--muted)}
+/* Each span is one sentence of the statement, set tight because on a wide screen each is a single line of
+   type. On a phone every one of them wraps, and 1.08 leading pushed a descender into the cap below it --
+   four sentences read as one crowded block. Narrow screens get their own leading and a gap between the
+   sentences, so the statement still lands as four deliberate lines. */
+@media (max-width:640px){
+  .statement h2{line-height:1.2;max-width:19ch}
+  .statement h2 .l+.l{margin-top:.14em}
+}
 
 /* ---------- reveal ---------- */
 [data-reveal]{opacity:0;transform:translateY(28px);will-change:transform,opacity}
