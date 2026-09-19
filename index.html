@@ -306,18 +306,31 @@
       <h2 class="h-l" data-reveal>An engineering pack,<br>and documents people can sign.</h2>
       <p class="lead" data-reveal>Not a PDF and a spreadsheet. The full pack an engineer, a lender and a field crew each need, from one run, in the formats their tools already open.</p>
     </div>
-    <div class="outs stagger">
-      <div class="out" data-fmt="pack"><i>XLS</i><div><b>Engineering pack</b><span>Fourteen tabs, site to storage to cost</span></div></div>
-      <div class="out" data-fmt="cad"><i>DXF</i><div><b>Drawing set</b><span>Layouts, single-line, schedules</span></div></div>
-      <div class="out" data-fmt="cad"><i>XML</i><div><b>Civil surfaces</b><span>LandXML for earthworks and roads</span></div></div>
-      <div class="out" data-fmt="3d"><i>3D</i><div><b>Site model</b><span>As-built, on real terrain</span></div></div>
-      <div class="out" data-fmt="pdf"><i>PDF</i><div><b>Executive briefing</b><span>Eight pages, decision-ready</span></div></div>
-      <div class="out"><i>PDF</i><div><b>Bankable dossier</b><span>Financials, technical, risk</span></div></div>
-      <div class="out"><i>XLS</i><div><b>Financial model</b><span>Scenarios and sensitivities</span></div></div>
-      <div class="out"><i>DOC</i><div><b>Grant application draft</b><span>Pre-filled from the run</span></div></div>
-      <div class="out"><i>PDF</i><div><b>Climate disclosure</b><span>Hazard and transition risk</span></div></div>
-      <div class="out"><i>PDF</i><div><b>Carbon verification</b><span>Satellite-checked, annual</span></div></div>
-      <div class="out"><i>KIT</i><div><b>Field briefing</b><span>Offline pack for site teams</span></div></div>
+    <div class="pack-grid">
+      <div class="docset stagger">
+        <div class="docgrp"><span class="gl">For the engineer</span>
+          <div class="docrow" data-fmt="pack" data-focus="ENGINEERING PACK"><i>XLS</i><div><b>Engineering pack</b><span>Fourteen tabs, site to storage to cost</span></div></div>
+          <div class="docrow" data-fmt="cad" data-focus="DRAWING SET"><i>DXF</i><div><b>Drawing set</b><span>Layouts, single-line, schedules</span></div></div>
+          <div class="docrow" data-fmt="cad" data-focus="DRAWING SET"><i>XML</i><div><b>Civil surfaces</b><span>LandXML for earthworks and roads</span></div></div>
+          <div class="docrow" data-fmt="3d"><i>3D</i><div><b>Site model</b><span>As-built, on real terrain</span></div></div>
+        </div>
+        <div class="docgrp"><span class="gl">For the lender</span>
+          <div class="docrow" data-fmt="pdf" data-focus="BANKABLE DOSSIER"><i>PDF</i><div><b>Bankable dossier</b><span>Financials, technical, risk</span></div></div>
+          <div class="docrow" data-fmt="pack" data-focus="FINANCIAL MODEL"><i>XLS</i><div><b>Financial model</b><span>Scenarios and sensitivities</span></div></div>
+          <div class="docrow" data-fmt="pdf"><i>PDF</i><div><b>Executive briefing</b><span>Eight pages, decision-ready</span></div></div>
+        </div>
+        <div class="docgrp"><span class="gl">For the approval</span>
+          <div class="docrow"><i>DOC</i><div><b>Grant application draft</b><span>Pre-filled from the run</span></div></div>
+          <div class="docrow" data-fmt="pdf"><i>PDF</i><div><b>Climate disclosure</b><span>Hazard and transition risk</span></div></div>
+          <div class="docrow" data-fmt="pdf"><i>PDF</i><div><b>Carbon verification</b><span>Satellite-checked, annual</span></div></div>
+        </div>
+        <div class="docgrp"><span class="gl">For the crew on site</span>
+          <div class="docrow" data-fmt="cad" data-focus="FIELD PACK"><i>KIT</i><div><b>Field briefing</b><span>Offline pack for site teams</span></div></div>
+        </div>
+      </div>
+      <div class="pack-art" data-reveal="scale">
+        <span class="lbl">The pack</span><canvas data-holo="pack"></canvas>
+      </div>
     </div>
   </div>
 </section>

@@ -805,3 +805,41 @@ body::before{mix-blend-mode:normal;opacity:.03}
    first glance -- or a screenshot -- lands on often enough to matter. It hands over quickly and never reaches zero. */
 .ticker .line.swap{opacity:.05;transform:translateY(-6px)}
 @media (max-width:520px){.ticker .line{white-space:normal;text-overflow:clip}}
+
+/* v20 — what comes out, as a pack you can turn over.
+   Eleven identical cards said "eleven files" and nothing else. The same eleven, grouped by who opens them and set
+   beside the pack itself in 3D, say "one run, four audiences" — and hovering a line turns the pack to that document. */
+.pack-grid{display:grid;grid-template-columns:1fr .92fr;gap:clamp(28px,5vw,70px);align-items:start}
+/* the pack stays with the reader while they work down the list, rather than floating in the middle of it */
+@media (min-width:1001px){.pack-art{position:sticky;top:clamp(104px,20vh,168px)}}
+@media (max-width:1000px){.pack-grid{grid-template-columns:1fr;gap:34px}}
+.docset{display:flex;flex-direction:column;gap:22px}
+.docgrp{display:flex;flex-direction:column;gap:2px}
+.docgrp .gl{font-family:var(--font-m);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);
+  padding:0 0 9px 2px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.docrow{display:flex;gap:14px;align-items:center;padding:9px 12px;border-radius:12px;border:1px solid transparent;
+  position:relative;transition:border-color .3s,background .3s,transform .4s var(--ease)}
+.docrow i{flex:none;width:34px;height:34px;border-radius:9px;border:1px solid var(--line-2);display:grid;place-items:center;
+  font-family:var(--font-m);font-size:10px;letter-spacing:.06em;color:var(--blue-2);font-style:normal;transition:color .3s,border-color .3s,box-shadow .3s}
+.docrow b{display:block;font-family:var(--font-d);font-weight:600;font-size:15px}
+.docrow span{font-size:12px;color:var(--muted)}
+.docrow[data-fmt=pack] i{color:#a7f3d0;border-color:rgba(52,211,153,.5)}
+.docrow[data-fmt=cad] i{color:#67e8f9;border-color:rgba(34,211,238,.5)}
+.docrow[data-fmt="3d"] i{color:#e2e8f0;border-color:rgba(226,232,240,.4)}
+.docrow:hover{background:var(--panel);border-color:var(--line)}
+/* only the lines that have an object in the scene offer to turn it */
+.docrow[data-focus]{cursor:pointer}
+.docrow[data-focus]::after{content:"";position:absolute;right:12px;width:5px;height:5px;border-radius:50%;
+  background:var(--blue-2);opacity:0;transform:scale(.4);transition:opacity .3s,transform .4s var(--ease)}
+.docrow[data-focus]:hover::after{opacity:.9;transform:scale(1)}
+.docrow[data-focus]:hover i{box-shadow:0 0 16px rgba(34,211,238,.28)}
+.pack-art{aspect-ratio:1/.76;border-radius:var(--r);border:1px solid var(--line-2);position:relative;overflow:hidden;cursor:grab;
+  background:radial-gradient(72% 62% at 50% 54%,rgba(34,211,238,.09),transparent 70%),linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01))}
+.pack-art canvas{width:100%;height:100%;display:block;position:relative;z-index:0}
+.pack-art::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;border-radius:inherit;
+  background:radial-gradient(85% 80% at 50% 46%,transparent 54%,rgba(4,6,12,.55) 100%)}
+.pack-art .lbl{position:absolute;left:16px;top:14px;z-index:2;font-family:var(--font-m);font-size:10px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--muted)}
+.pack-art::after{content:"DRAG TO ORBIT · HOVER TO INSPECT · CLICK TO FOCUS";position:absolute;left:16px;bottom:14px;z-index:2;
+  font-family:var(--font-m);font-size:9px;letter-spacing:.24em;color:var(--muted);pointer-events:none;opacity:.8}
+@media (max-width:520px){.pack-art::after{content:"DRAG TO ORBIT"}}

@@ -521,3 +521,19 @@
     });
   }
 })();
+
+/* The document list drives the pack scene. Hovering a line that has an object in the scene turns the pack to it
+   and holds it there; leaving the list lets the scene go home. Touch gets nothing extra — the canvas is already
+   draggable, and a tap-to-focus here would fight the scroll. */
+(() => {
+  const set = document.querySelector('.docset');
+  const cv = document.querySelector('.pack-art canvas[data-holo]');
+  if (!set || !cv || !window.matchMedia('(hover:hover)').matches) return;
+  const aim = (needle) => { if (window.Holo && window.Holo.focus) window.Holo.focus(cv, needle); };
+  set.addEventListener('pointerover', (e) => {
+    if (e.pointerType !== 'mouse') return;
+    const row = e.target.closest('.docrow[data-focus]');
+    if (row) aim(row.dataset.focus);
+  });
+  set.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') aim(null); });
+})();
