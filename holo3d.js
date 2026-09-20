@@ -871,7 +871,7 @@
     lightRig(scene, def.shadowR || def.radius, !!def.frame || cv.clientWidth > 900, def.bright);
     const cam = new THREE.PerspectiveCamera(def.fov || 36, 1, 1, 1600); /* heroes take a wider lens: more depth, more scale */
     const th0 = def.theta == null ? -.6 : def.theta, look0 = V3(def.lookX || 0, def.lookY == null ? def.radius * .12 : def.lookY, def.lookZ || 0);
-    const st = { cv, R, blit, renderer, post, scene, cam, def, t: Math.random() * 50, theta: th0, phi: def.pitch || .78, tTheta: th0, vTheta: 0, drag: false, moved: 0, lx: 0, vis: false, step: cv.dataset.step != null ? +cv.dataset.step : def.layers.length - 1, shown: def.layers.map(() => 1), spin: def.spin || .1, mx: 0, my: 0, W: 0, H: 0, hover: null, focus: null, look: look0.clone(), lookT: look0.clone(), look0, labels, zoom: 1, zoomT: 1, fit: 1, fitT: 1, phiT: def.pitch || .78, label: null, px: 9, py: 0, fr: 0, ready: false, born: performance.now(), card: !name.startsWith('pipe') && !name.startsWith('hero'), hero: name.startsWith('hero'), track: cv.closest('.hs'), su: 0, faded: false, op1: getComputedStyle(cv).opacity, sdirty: 3 };
+    const st = { cv, R, blit, renderer, post, scene, cam, def, t: Math.random() * 50, theta: th0, phi: def.pitch || .78, tTheta: th0, vTheta: 0, drag: false, moved: 0, lx: 0, vis: false, step: cv.dataset.step != null ? +cv.dataset.step : def.layers.length - 1, shown: def.layers.map(() => 1), spin: def.spin || .1, mx: 0, my: 0, W: 0, H: 0, hover: null, focus: null, look: look0.clone(), lookT: look0.clone(), look0, labels, zoom: 1, zoomT: 1, fit: 1, fitT: 1, vc: 0, vcT: 0, phiT: def.pitch || .78, label: null, px: 9, py: 0, fr: 0, ready: false, born: performance.now(), card: !name.startsWith('pipe') && !name.startsWith('hero'), hero: name.startsWith('hero'), track: cv.closest('.hs'), su: 0, faded: false, op1: getComputedStyle(cv).opacity, sdirty: 3 };
     /* every scene fades in on its first drawn frame, like the hero behind the preloader */
     cv.style.opacity = '0'; cv.style.transition = 'opacity 1.2s ease, filter .5s'; void getComputedStyle(cv).opacity;
     def.layers.forEach((g, i) => { g.visible = i <= st.step; });
@@ -939,16 +939,26 @@
     for (let i = 0; i < st.labels.length; i++) clampLabel(st.labels[i], st, tv, asp, lmin);
     clampLabel(st.label, st, tv, asp, lmin);
   }
-  /* How far does the subject actually reach past the panel? Every named object in the scene -- the cranes, the
+  /* How far does the subject actually reach across the panel? Every named object in the scene -- the cranes, the
      ship, the substation, the tower -- is projected corner by corner into panel space; ground, water and grid
-     are left out because those are meant to run off the edges. The worst overshoot becomes the pull-back for
-     the next frame, and since a subject's on-screen size falls off as 1/distance, multiplying the distance by
-     that overshoot lands on a fit in a single step. It only ever pulls back: a scene already composed inside
-     its panel is left exactly as it was authored. */
+     are left out because those are meant to run off the edges. The reach becomes the camera distance for the
+     next frame, and since a subject's on-screen size falls off as 1/distance, multiplying the distance by that
+     reach lands on a fit in a single step.
+
+     It corrects in both directions. Pulling back was never the whole job: a wide subject in a tall panel was
+     authored at one hand-tuned distance and then simply left there, so a parcel grid or a geothermal field sat
+     in the middle of its card with a third of the frame dead above it. Measuring the reach and closing on it
+     from either side lets each scene fill the panel it was actually given. The floor stops a scene that has
+     built only its first layer -- one shed, one well -- from flying the camera into it.
+
+     The same projection gives the subject's vertical centre, which is drifted back to the middle of the panel
+     through the off-axis lens. A landscape subject in a portrait card cannot fill both axes, but the space it
+     cannot fill belongs split evenly above and below it rather than piled at the top. */
   const afb = new THREE.Box3(), afv = new THREE.Vector3(), afe = [];
   function autoFrame(st) {
     const F = st.def.focusables; if (!F || !F.length) return;
     st.cam.updateMatrixWorld(); afe.length = 0;
+    let y0 = 1e9, y1 = -1e9;
     for (let i = 0; i < F.length; i++) {
       const o = F[i]; if (!o.visible) continue; let p = o.parent, on = true;
       while (p) { if (p.visible === false) { on = false; break; } p = p.parent; }
@@ -959,21 +969,33 @@
         afv.set(k & 1 ? afb.max.x : afb.min.x, k & 2 ? afb.max.y : afb.min.y, k & 4 ? afb.max.z : afb.min.z);
         afv.project(st.cam); if (afv.z > 1) continue;
         e = Math.max(e, Math.abs(afv.x), Math.abs(afv.y));
+        if (afv.y < y0) y0 = afv.y; if (afv.y > y1) y1 = afv.y;
       }
       if (e) afe.push(e);
     }
     if (!afe.length) return;
-    /* the reach of the fifth-furthest object in ten, not the furthest: a harbour tug on its rounds or a satellite
-       on its orbit is allowed to leave the frame, while cranes and a ship all pressing on the edge are not. LIM
-       lets the composition bleed a little past the panel, which is what makes a scene fill it rather than sit in it. */
-    afe.sort((a, b) => a - b); const ov = afe[Math.min(afe.length - 1, Math.floor(afe.length * .8))], LIM = 1.14;
-    if (!ov || !isFinite(ov)) return;
-    st.fitT = Math.min(1.6, Math.max(1, st.fit * ov / LIM));
+    afe.sort((a, b) => a - b);
+    const ov = afe[Math.min(afe.length - 1, Math.floor(afe.length * .8))], top = afe[afe.length - 1], LIM = 1.14;
+    if (!ov || !isFinite(ov) || !isFinite(top)) return;
+    /* The two directions do not get to share a tolerance. Pulling back reads the fifth-furthest object in ten,
+       not the furthest, so a harbour tug on its rounds or a satellite on its orbit is allowed to leave the
+       frame while cranes and a ship all pressing on the edge are not. Closing in has to read the furthest:
+       pushing to the eightieth percentile would clip the other fifth by construction, which is exactly what
+       it did to a mast -- one tall object among a compound of low ones, cut off at both ends of its panel.
+       So it only closes in when even the furthest object still has room, and LIM lets the composition bleed
+       a little past the panel either way, which is what makes a scene fill it rather than sit in it. */
+    const want = ov > LIM ? st.fit * ov / LIM : top < LIM ? st.fit * top / LIM : st.fit;
+    st.fitT = Math.min(1.6, Math.max(.62, want));
+    /* The skew subtracts: clip y is m11*y - (-m12*z), so NDC y comes out as the centred term MINUS m12, and
+       m12 is 2*sy-1. A subject sitting low in the panel therefore needs sy raised by half its offset, not
+       lowered by it. Clamped, because a sixth of a panel of skew is already a strong composition and a subject
+       still rising out of the ground mid-build must not drag the frame along with it. */
+    if (y1 > y0) { const yc = (y0 + y1) / 2; st.vcT = Math.max(-.16, Math.min(.16, isFinite(yc) ? yc / 2 : 0)); }
   }
   function frame(st, dt) {
     st.t += dt; const fs = st.def.steps && st.def.steps[st.step]; if (!st.drag) { if (fs && fs.face != null) { const want = fs.face + Math.sin(st.t * .12) * (fs.span || .35); st.tTheta += (want - st.tTheta) * (1 - Math.pow(.95, dt * 60)) * .6 + st.vTheta; } else st.tTheta += (reduce ? 0 : st.spin * dt) + st.vTheta; st.vTheta *= .92; } const e1 = 1 - Math.pow(.88, dt * 60), e2 = 1 - Math.pow(.95, dt * 60); st.theta += (st.tTheta - st.theta) * e1;
     st.zoom += (st.zoomT - st.zoom) * e2; st.phi += (st.phiT - st.phi) * e2; st.look.lerp(st.lookT, e2);
-    st.fit += (st.fitT - st.fit) * e2;
+    st.fit += (st.fitT - st.fit) * e2; st.vc += (st.vcT - st.vc) * e2;
     /* scroll rig, as on the home hero: a hero tracks the first viewport of scroll and lifts to an overview; a card tracks
        its own passage through the viewport (a pinned section tracks its pin), entering low and close, leaving high and wide */
     let su = 0; if (st.hero) { const sec = st.cv.closest('section') || st.cv; su = Math.min(1, Math.max(0, -sec.getBoundingClientRect().top / Math.max(1, window.innerHeight))); } else if (st.card) { const r = (st.track || st.cv).getBoundingClientRect(), vh = window.innerHeight; const p = st.track ? -r.top / Math.max(1, r.height - vh) : (vh - r.top) / (vh + r.height); su = Math.min(.5, Math.max(-.5, p - .5)); }
@@ -984,7 +1006,7 @@
        panel and this pulls back by exactly that much, so a wide berth and a compact tower compound each
        fill their own panel instead of sharing one hand-tuned distance. */
     const R = st.def.radius * (st.def.frame || (narrow ? 2.5 : 1.9)) * st.fit * back * st.zoom * wide, phi = Math.min(1.35, Math.max(.12, st.phi + lift + st.my * .2)), th = st.theta + st.mx * .15 + turn;
-    st.cam.position.set(st.look.x + Math.sin(th) * Math.cos(phi) * R, st.look.y + Math.sin(phi) * R, st.look.z + Math.cos(th) * Math.cos(phi) * R); st.cam.lookAt(st.look); lens(st.cam, sx, sy);
+    st.cam.position.set(st.look.x + Math.sin(th) * Math.cos(phi) * R, st.look.y + Math.sin(phi) * R, st.look.z + Math.cos(th) * Math.cos(phi) * R); st.cam.lookAt(st.look); lens(st.cam, sx, sy + st.vc);
     st.def.layers.forEach((g, i) => { if (i > st.step) { g.visible = false; return; } g.visible = true; if (st.shown[i] < 1) { st.shown[i] = Math.min(1, st.shown[i] + dt * .9); build(g, st.shown[i]); } else if (!g.userData.built) build(g, 1); });
     if (st.def.tick) st.def.tick(st.t, reduce ? 0 : dt, st.step, st.shown[3] == null ? 1 : st.shown[3]);
     if (narrow) for (let i = 0; i < st.labels.length; i++) st.labels[i].visible = false;

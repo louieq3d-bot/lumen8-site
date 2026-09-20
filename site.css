@@ -843,3 +843,24 @@ body::before{mix-blend-mode:normal;opacity:.03}
 .pack-art::after{content:"DRAG TO ORBIT · HOVER TO INSPECT · CLICK TO FOCUS";position:absolute;left:16px;bottom:14px;z-index:2;
   font-family:var(--font-m);font-size:9px;letter-spacing:.24em;color:var(--muted);pointer-events:none;opacity:.8}
 @media (max-width:520px){.pack-art::after{content:"DRAG TO ORBIT"}}
+
+/* v21 — on a phone the full-bleed scene stops being a backdrop the copy has to fight.
+   At 390px the desktop composition collapses: the horizontal veil that keeps the text column clear on a wide
+   screen has no column to keep clear, so it fell back to a flat 55-72% wash and the lead, the feature list and
+   half the heading were read straight off a lattice of nodes, houses and trees. Dropping the canvas opacity
+   further would only have traded an unreadable scene for a dull one.
+   So the scene becomes what it already is on every other section of the site: its own framed band, at the top,
+   at full strength -- and the copy below it sits on the page, on nothing. Both get to be legible. The veil now
+   only has to land the band's two edges into the background, and the text shadows that were propping the copy
+   up over the scene come off, which is what makes it read as typeset rather than composited. */
+@media (max-width:1000px){
+  /* the band clears the fixed nav rather than running under it: a scene that fills its own frame was still
+     losing its top edge -- a graph's outer lobes, a ledger board's header -- to 66px of translucent bar */
+  .mod.full{display:block;min-height:0;padding:64px 0 86px;align-items:stretch}
+  .mod.full .mod-bg{position:relative;inset:auto;height:42svh;min-height:272px;max-height:400px;overflow:hidden}
+  .mod.full canvas.mod-holo{position:absolute;inset:0;width:100%;height:100%;opacity:1;-webkit-mask:none;mask:none}
+  .mod.full .mod-veil{background:linear-gradient(180deg,var(--bg) 0%,rgba(4,6,12,.34) 16%,rgba(4,6,12,0) 44%,rgba(4,6,12,.34) 82%,var(--bg) 100%)}
+  .mod.full .wrap{margin-top:-30px}
+  .mod.full .mod-copy .h-l,.mod.full .mod-copy .lead,.mod.full .feat li{text-shadow:none}
+  .mod.full .kv div{background:rgba(6,9,18,.5)}
+}
