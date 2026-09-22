@@ -281,34 +281,68 @@
   /* sun + photons streaming onto an array: sunshine as an input, not decoration */
   K.sun = (pos, target, n, color) => { const g = new THREE.Group(); pos = vec(pos); target = vec(target); const core = sprite(0xffffff, 10, 1); core.position.copy(pos); g.add(core); const halo = sprite(color || 0xdbeafe, 34, .45); halo.position.copy(pos); g.add(halo); const ph = []; for (let i = 0; i < n; i++) { const s = sprite(i % 4 ? 0xe0f2fe : 0x67e8f9, 1.1, .9); g.add(s); ph.push({ s, u: Math.random(), v: .12 + Math.random() * .1, o: V3((Math.random() - .5) * 1, 0, (Math.random() - .5) * 1), tx: V3((Math.random() - .5) * 2, 0, (Math.random() - .5) * 2) }); } g.userData.tick = (dt, spread) => { ph.forEach((p) => { p.u += dt * p.v; if (p.u > 1) { p.u = 0; p.tx.set((Math.random() - .5) * 2, 0, (Math.random() - .5) * 2); } const to = V3(target.x + p.tx.x * spread, target.y, target.z + p.tx.z * spread); p.s.position.lerpVectors(pos, to, p.u); p.s.material.opacity = Math.sin(p.u * Math.PI) * .9; }); halo.material.opacity = .4 + .08 * Math.sin(performance.now() * .001); }; return g; };
   /* the money: cash-flow bars, cumulative NPV line, funding stack, KPI readouts */
-  /* The financial model as a thing in the world: a display board on a concrete pad. The board's face is a canvas
-     texture (title, KPI strip, axes, year ticks, legend); the cash-flow bars, the cumulative line and the funding
-     stack stand in front of it in 3D and build up as the step arrives; a conduit carries the engineering numbers in. */
+  /* The financial model as a thing in the world: a display board on a concrete pad, and the four numbers a lender
+     actually asks for standing above it as holograms. They used to be a KPI strip painted on the board, ten pixels
+     tall at the distance the step is framed from, so "make the numbers bankable" arrived with no legible number.
+     Now the board carries the chart and the covenant check at a type size that survives the distance, the KPIs rise
+     out of it as camera-facing cards once the cash flows are in, the cumulative position is an energy line that
+     draws itself year by year, and payback is marked where it crosses zero. */
+  const kpiCard = (key, val, sub, col) => { const c = document.createElement('canvas'); c.width = 640; c.height = 300; const x = c.getContext('2d');
+    const rr = (X, Y, w, h, r) => { x.beginPath(); x.moveTo(X + r, Y); x.arcTo(X + w, Y, X + w, Y + h, r); x.arcTo(X + w, Y + h, X, Y + h, r); x.arcTo(X, Y + h, X, Y, r); x.arcTo(X, Y, X + w, Y, r); x.closePath(); };
+    const bg = x.createLinearGradient(0, 0, 0, 300); bg.addColorStop(0, 'rgba(10,22,40,.86)'); bg.addColorStop(1, 'rgba(5,10,20,.8)'); rr(8, 8, 624, 284, 26); x.fillStyle = bg; x.fill();
+    const bd = x.createLinearGradient(0, 0, 640, 0); bd.addColorStop(0, 'rgba(34,211,238,.9)'); bd.addColorStop(1, col); x.lineWidth = 3; x.strokeStyle = bd; x.stroke();
+    x.fillStyle = col; x.globalAlpha = .9; x.fillRect(40, 8, 120, 4); x.globalAlpha = 1;
+    x.textBaseline = 'alphabetic'; x.fillStyle = '#7dd3fc'; x.font = '500 34px "JetBrains Mono", monospace'; x.letterSpacing = '6px'; x.fillText(key, 40, 74);
+    x.letterSpacing = '0px'; x.shadowColor = col; x.shadowBlur = 24; x.fillStyle = col; x.font = '600 112px "JetBrains Mono", monospace'; x.fillText(val, 36, 196); x.shadowBlur = 0;
+    x.fillStyle = '#8b96a8'; x.font = '500 28px "JetBrains Mono", monospace'; x.letterSpacing = '3px'; x.fillText(sub, 40, 254);
+    const t = new THREE.CanvasTexture(c); srgb(t); t.minFilter = THREE.LinearMipmapLinearFilter; t.anisotropy = 8;
+    const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: t, transparent: true, depthWrite: false, fog: false, opacity: 0 })); return s; };
   K.finance = (color, w) => {
     const g = new THREE.Group(); const W = w || 30, HB = W * .42, yrs = 25, x0 = -W * .46, x1 = W * .22, gap = (x1 - x0) / 26, zero = HB * .30, top = HB * .68, legH = 2.6;
     g.add(K.pad(W + 6, 14, TX.concrete));
     const board = K.screen(W, HB, (x, tw, th) => { const px = (u) => (u + W / 2) / W * tw, py = (v) => (1 - v / HB) * th;
-      x.fillStyle = '#070c16'; x.fillRect(0, 0, tw, th); const gr = x.createLinearGradient(0, 0, 0, th); gr.addColorStop(0, 'rgba(34,211,238,.10)'); gr.addColorStop(.5, 'rgba(34,211,238,0)'); gr.addColorStop(1, 'rgba(59,130,246,.08)'); x.fillStyle = gr; x.fillRect(0, 0, tw, th);
-      x.strokeStyle = 'rgba(103,232,249,.09)'; x.lineWidth = 2; for (let i = 1; i <= 5; i++) { const y = py(zero + (top - zero) * i / 5); x.beginPath(); x.moveTo(px(x0), y); x.lineTo(px(x1), y); x.stroke(); }
-      x.strokeStyle = 'rgba(103,232,249,.75)'; x.lineWidth = 3; x.beginPath(); x.moveTo(px(x0), py(zero)); x.lineTo(px(x1), py(zero)); x.stroke();
-      x.textBaseline = 'alphabetic'; x.textAlign = 'center'; x.fillStyle = '#8b96a8'; mono(x, 26); for (let y = 0; y <= yrs; y += 5) { const X = px(x0 + gap * (y + .5)); x.fillRect(X - 1, py(zero) - 8, 2, 16); x.fillText('Y' + y, X, py(zero) + 44); }
-      x.textAlign = 'left'; x.fillStyle = '#eaf0f8'; mono(x, 44, 600); x.fillText('FINANCIAL MODEL', px(x0), 70); x.fillStyle = '#67e8f9'; mono(x, 28); x.fillText('25 YEARS · P50 YIELD · USD · RUN 7f3a', px(x0) + 520, 70);
-      [['IRR', '14.2%', '#6ee7b7'], ['NPV', '$186 k', '#6ee7b7'], ['DSCR', '1.38', '#bfdbfe'], ['LCOE', '$0.24/kWh', '#bfdbfe'], ['TARIFF', '$0.31/kWh', '#bfdbfe'], ['CAPEX', '$412 k', '#bfdbfe']].forEach(([k, v, c], i) => { const X = px(x0) + i * 300; x.fillStyle = '#6f7b91'; mono(x, 22); x.fillText(k, X, 130); x.fillStyle = c; mono(x, 40, 600); x.fillText(v, X, 178); });
-      const ly = py(top) - 16; x.fillStyle = '#34d399'; mono(x, 22); x.fillText('▮ NET CASH FLOW / YEAR', px(x0), ly); x.fillStyle = '#67e8f9'; x.fillText('— CUMULATIVE · PAYBACK YEAR 7', px(x0) + 420, ly); x.fillStyle = '#93c5fd'; x.fillText('▮ CAPEX', px(x0) + 1000, ly);
-      x.fillStyle = '#6f7b91'; x.fillText('FUNDING STACK', px(x1 + 1.2), ly);
-      [[.55, 'GRANT 55%', '#67e8f9'], [.30, 'DEBT 30%', '#93c5fd'], [.15, 'EQUITY 15%', '#e2e8f0']].forEach(([f, nm, c], i) => { const base = [0, .55, .85][i]; x.fillStyle = c; mono(x, 26); x.fillText(nm, px(x1 + 5.4), py(zero + (base + f / 2) * (top - zero)) + 9); });
+      x.fillStyle = '#060b15'; x.fillRect(0, 0, tw, th); const gr = x.createLinearGradient(0, 0, 0, th); gr.addColorStop(0, 'rgba(34,211,238,.08)'); gr.addColorStop(.5, 'rgba(34,211,238,0)'); gr.addColorStop(1, 'rgba(52,211,153,.07)'); x.fillStyle = gr; x.fillRect(0, 0, tw, th);
+      x.strokeStyle = 'rgba(103,232,249,.10)'; x.lineWidth = 2; for (let i = 1; i <= 5; i++) { const y = py(zero + (top - zero) * i / 5); x.beginPath(); x.moveTo(px(x0), y); x.lineTo(px(x1), y); x.stroke(); }
+      x.strokeStyle = 'rgba(103,232,249,.8)'; x.lineWidth = 4; x.beginPath(); x.moveTo(px(x0), py(zero)); x.lineTo(px(x1), py(zero)); x.stroke();
+      x.textBaseline = 'alphabetic'; x.textAlign = 'center'; x.fillStyle = '#9aa6ba'; mono(x, 36); for (let y = 0; y <= yrs; y += 5) { const X = px(x0 + gap * (y + .5)); x.fillRect(X - 1.5, py(zero) - 10, 3, 20); x.fillText('Y' + y, X, py(zero) + 54); }
+      x.textAlign = 'left'; x.fillStyle = '#eaf0f8'; mono(x, 66, 600); x.fillText('FINANCIAL MODEL', px(x0), 104); x.fillStyle = '#67e8f9'; mono(x, 34); x.fillText('25 YEARS · P50 YIELD · USD', px(x0) + 690, 102);
+      x.fillStyle = '#6ee7b7'; mono(x, 32); x.fillText('✓ DSCR ≥ 1.30 COVENANT HELD · P90 STRESS PASSED · 3 SCENARIOS', px(x0), 172);
+      const ly = py(top) - 22; mono(x, 30); x.fillStyle = '#34d399'; x.fillText('▮ NET CASH FLOW', px(x0), ly); x.fillStyle = '#67e8f9'; x.fillText('━ CUMULATIVE', px(x0) + 380, ly); x.fillStyle = '#93c5fd'; x.fillText('▮ CAPEX', px(x0) + 700, ly);
+      x.fillStyle = '#8b96a8'; x.fillText('FUNDING', px(x1 + 1.2), ly);
+      [[.55, 'GRANT 55%', '#67e8f9'], [.30, 'DEBT 30%', '#93c5fd'], [.15, 'EQUITY 15%', '#e2e8f0']].forEach(([f, nm, c], i) => { const base = [0, .55, .85][i]; x.fillStyle = c; mono(x, 32); x.fillText(nm, px(x1 + 5.2), py(zero + (base + f / 2) * (top - zero)) + 11); });
       x.strokeStyle = 'rgba(103,232,249,.35)'; x.lineWidth = 4; x.strokeRect(6, 6, tw - 12, th - 12);
     }, legH, 2048); g.add(board);
+    /* the shared screen's cover glass mirrors the sky at 2.4x, which on this board washed the right half of the chart to teal */
+    board.traverse((o) => { if (o.material && o.material.metalness === 1 && o.material.opacity < .1) { o.material.opacity = .03; o.material.envMapIntensity = .8; } });
     const bh = []; for (let i = 0; i < yrs; i++) bh.push((top - zero) * (.3 + i * .018 + Math.sin(i * 1.7) * .05));
-    const bm = new THREE.InstancedMesh(new THREE.BoxGeometry(gap * .58, 1, .8), solid(P.green, P.green, .5, .95), yrs); g.add(bm);
-    const cg = new THREE.BoxGeometry(gap * .58, zero * .82, .8); cg.translate(0, -zero * .41, 0); const capex = new THREE.Mesh(cg, solid(P.blue, P.blue, .45, .95)); capex.position.set(x0 + gap * .5, legH + zero, .7); g.add(capex);
+    const bm = new THREE.InstancedMesh(new THREE.BoxGeometry(gap * .6, 1, .8), solid(0xffffff, 0x10b981, .55, .95), yrs); g.add(bm);
+    const ca = new THREE.Color(0x22d3ee), cb = new THREE.Color(0x34d399), cc = new THREE.Color(); for (let i = 0; i < yrs; i++) bm.setColorAt(i, cc.copy(ca).lerp(cb, Math.min(1, i / 9)));
+    const cg = new THREE.BoxGeometry(gap * .6, zero * .82, .8); cg.translate(0, -zero * .41, 0); const capex = new THREE.Mesh(cg, solid(P.blue, P.blue, .45, .95)); capex.position.set(x0 + gap * .5, legH + zero, .7); g.add(capex);
     let s7 = 0, tot = 0; for (let i = 0; i < yrs; i++) { if (i < 7) s7 += bh[i]; tot += bh[i]; } const umax = -1 + tot / s7; const pts = []; let acc = 0;
-    for (let j = 0; j <= yrs; j++) { const u = -1 + acc / s7; pts.push(V3(x0 + gap * (j + .5), legH + zero + (u < 0 ? u * zero * .8 : u / umax * (top - zero) * .95), .95)); if (j < yrs) acc += bh[j]; }
-    const npv = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), edgeMat(P.cyan2, .95)); g.add(npv); const be = sprite(0xffffff, 2.2, .95); be.position.copy(pts[7]); g.add(be);
+    for (let j = 0; j <= yrs; j++) { const u = -1 + acc / s7; pts.push(V3(x0 + gap * (j + .5), legH + zero + (u < 0 ? u * zero * .8 : u / umax * (top - zero) * .95), 1.05)); if (j < yrs) acc += bh[j]; }
+    const TS = 120; const npv = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts, false, 'catmullrom', .2), TS, .16, 6, false), energyMat(P.cyan2, .45, 6, 1)); g.add(npv); const per = npv.geometry.index.count / TS;
+    const be = sprite(0xffffff, 2.6, .95); be.position.copy(pts[7]); g.add(be);
+    const pbLine = K.line([[pts[7].x, legH + .4, 1.05], [pts[7].x, legH + HB - .8, 1.05]], P.cyan2, .5, true); g.add(pbLine);
+    const pbRing = K.ring(1, P.cyan2, .08); pbRing.rotation.x = 0; pbRing.position.copy(pts[7]); g.add(pbRing);
     const stack = [[.55, P.cyan], [.30, P.blue2], [.15, 0xe2e8f0]].map(([f, c], i) => { const base = [0, .55, .85][i], hh = f * (top - zero); const sg = new THREE.BoxGeometry(2.4, hh, .8); sg.translate(0, hh / 2, 0); const s = new THREE.Mesh(sg, solid(c, c, .35, .95)); s.position.set(x1 + 3.2, legH + zero + base * (top - zero), .7); g.add(s); return s; });
+    const rise = K.particles(pts[yrs], P.green, 14, { up: 2.6, spread: .9, life: 2.2, size: .8 }); g.add(rise);
     g.add(K.ptube([[x0 - 1.5, .2, .4], [x0 - 6, .3, 9], [x0 - 12, .2, 26]], P.cyan2, .16, .5, .9));
-    const m = new THREE.Matrix4();
-    g.userData.tick = (t, k) => { k = k == null ? 1 : k; for (let i = 0; i < yrs; i++) { const h = Math.max(.02, bh[i] * sm(Math.min(1, Math.max(0, k * 2.2 - i * .05))) * (.97 + .03 * Math.sin(t * 1.2 + i * .4))); m.makeScale(1, h, 1); m.setPosition(x0 + gap * (i + 1.5), legH + zero + h / 2, .7); bm.setMatrixAt(i, m); } bm.instanceMatrix.needsUpdate = true; capex.scale.y = Math.max(.01, Math.min(1, k * 3)); const n = Math.floor(Math.max(0, k * 1.7 - .3) * (yrs + 1)); npv.geometry.setDrawRange(0, Math.min(yrs + 1, Math.max(2, n))); npv.material.opacity = k > .25 ? .95 : 0; be.visible = n >= 8; be.material.opacity = .45 + .5 * Math.sin(t * 3); stack.forEach((s, i) => { s.scale.y = Math.max(.01, Math.min(1, k * 2.5 - .8 - i * .25)); }); };
+    /* the four numbers, rising out of the board's top bar on threads of light, staggered in depth so an orbit parallaxes them */
+    const cw = W * .235, cy = legH + HB + cw * .3 + 1.8;
+    const kpis = [['IRR', '14.2%', 'EQUITY · 25 YR', '#6ee7b7'], ['NPV', '$186k', 'AT 8% REAL', '#6ee7b7'], ['DSCR', '1.38×', 'MIN · P90', '#93c5fd'], ['PAYBACK', 'Y7', 'SIMPLE · P50', '#67e8f9']].map(([k, v, s, c], i) => {
+      const sp = kpiCard(k, v, s, c); const X = (i - 1.5) * cw * 1.12, Z = 1.2 + (i % 2) * 1.6; sp.scale.set(cw, cw * 300 / 640, 1); sp.position.set(X, cy, Z); g.add(sp);
+      const th = K.line([[X, legH + HB + .5, .3], [X, cy - cw * .22, Z]], P.cyan2, 0); g.add(th); return { sp, th, X, Z }; });
+    const m = new THREE.Matrix4(); let lt = null;
+    g.userData.tick = (t, k) => { k = k == null ? 1 : k; const dt = lt == null ? 0 : Math.min(.05, Math.max(0, t - lt)); lt = t;
+      for (let i = 0; i < yrs; i++) { const h = Math.max(.02, bh[i] * sm(Math.min(1, Math.max(0, k * 2.2 - i * .05))) * (.97 + .03 * Math.sin(t * 1.2 + i * .4))); m.makeScale(1, h, 1); m.setPosition(x0 + gap * (i + 1.5), legH + zero + h / 2, .7); bm.setMatrixAt(i, m); } bm.instanceMatrix.needsUpdate = true;
+      capex.scale.y = Math.max(.01, Math.min(1, k * 3));
+      const f = Math.min(1, Math.max(0, k * 1.7 - .3)); npv.geometry.setDrawRange(0, Math.max(0, Math.round(f * TS)) * per); npv.visible = f > 0;
+      const paid = f * yrs >= 7.2; be.visible = paid; be.material.opacity = .45 + .5 * Math.sin(t * 3); pbLine.visible = paid;
+      pbRing.visible = paid; const rp = (t * .6) % 1; pbRing.scale.setScalar(1 + rp * 4); pbRing.material.opacity = .7 * (1 - rp);
+      stack.forEach((s, i) => { s.scale.y = Math.max(.01, Math.min(1, k * 2.5 - .8 - i * .25)); });
+      rise.visible = f >= 1; if (rise.visible) rise.userData.tick(dt);
+      kpis.forEach((c, i) => { const a = sm(Math.min(1, Math.max(0, (k - .5 - i * .08) / .2))); c.sp.material.opacity = a * (.94 + .06 * Math.sin(t * 1.3 + i)); c.sp.position.y = cy - (1 - a) * 2.4 + Math.sin(t * .8 + i * 1.4) * .18; c.sp.visible = a > .01; c.th.material.opacity = a * (.22 + .12 * Math.sin(t * 2 + i)); c.th.visible = a > .01; });
+    };
     return g; };
   /* survey marker: four bracket corners, a crosshair and a soft glow. No rings, no sweeps. */
   K.marker = (color, r) => { const g = new THREE.Group(); const R = r || 4, c = R * .34; const pts = []; [[1, 1], [-1, 1], [1, -1], [-1, -1]].forEach(([sx, sz]) => { pts.push(V3(sx * R, 0, sz * R), V3(sx * (R - c), 0, sz * R), V3(sx * R, 0, sz * R), V3(sx * R, 0, sz * (R - c))); }); pts.push(V3(-R * .3, 0, 0), V3(R * .3, 0, 0), V3(0, 0, -R * .3), V3(0, 0, R * .3)); const ln = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts), edgeMat(color, .75)); g.add(ln); const disc = new THREE.Mesh(new THREE.PlaneGeometry(R * 2, R * 2), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: .05, blending: THREE.AdditiveBlending, depthWrite: false })); disc.rotation.x = -Math.PI / 2; disc.position.y = -.02; g.add(disc); const gl = sprite(color, R * 1.5, .3); gl.position.y = .3; g.add(gl); const dot = sprite(0xffffff, R * .35, .95); dot.position.y = .35; g.add(dot); g.userData.tick = (t) => { const p = .5 + .5 * Math.sin(t * 2.4); ln.material.opacity = .5 + .35 * p; gl.material.opacity = .2 + .18 * p; }; return g; };
@@ -802,7 +836,7 @@
     const L3 = mk(); const fin = K.finance(P.green, 36); const fy = T.userData.h(24, -62) + .1; fin.position.set(24, fy, -62); fin.rotation.y = -.5; L3.add(fin);
     const L4 = mk(); const docs = K.docs(); const dy = T.userData.h(-40, 30) + .1; docs.position.set(-40, dy, 30); docs.rotation.y = -.5; L4.add(docs); const lb4 = K.label('14-TAB ENGINEERING PACK · DRAWING SET · MODEL · DOSSIER · FIELD PACK · SIGNED', '#6ee7b7', 15); lb4.position.set(-40, dy + 7.5, 27); L4.add(lb4);
     let a0 = 1;
-    return { layers: L, radius: 46, pitch: .58, theta: -.5, spin: .035, lookX: -6, lookY: 4, shift: SHIFT, focusables: F, steps: [{ look: [bx, by + 7, bz], zoom: .62 }, { look: [-4, 4, -10], zoom: .96 }, { look: [4, 5, -16], zoom: .98 }, { look: [24, fy + 9.5, -62], zoom: .88, pitch: .3, face: -.5, span: .3 }, { look: [-40, dy + 2.8, 30], zoom: .42, pitch: .95, face: -.5, span: .5 }], tick(t, dt, step, k) { mk0.userData.tick(t); lb0.visible = step <= 1; lb1.visible = step >= 1 && step <= 2; lb2.visible = step === 2;
+    return { layers: L, radius: 46, pitch: .58, theta: -.5, spin: .035, lookX: -6, lookY: 4, shift: SHIFT, focusables: F, steps: [{ look: [bx, by + 7, bz], zoom: .62 }, { look: [-4, 4, -10], zoom: .96 }, { look: [4, 5, -16], zoom: .98 }, { look: [21.4, fy + 12.5, -63.4], zoom: .8, mzoom: 1.1, pitch: .22, face: -.5, span: .24 }, { look: [-40, dy + 2.8, 30], zoom: .42, pitch: .95, face: -.5, span: .5 }], tick(t, dt, step, k) { mk0.userData.tick(t); lb0.visible = step === 0; lb1.visible = step >= 1 && step <= 2; lb2.visible = step === 2;
       a0 += ((step === 0 ? 1 : 0) - a0) * .06; acq.visible = a0 > .015;
       if (acq.visible) { grat.forEach((ln, i) => { ln.material.opacity = a0 * (.13 + .17 * (.5 + .5 * Math.sin(t * .9 + i * 1.6))); });
         rings.forEach((m) => { const p = (t * .19 + m.userData.ph) % 1, s = 5 + p * 48; m.scale.set(s, s, 1); m.material.opacity = a0 * (1 - p) * (1 - p) * .55; });
@@ -811,7 +845,7 @@
     const L3 = mk(); const fin = K.finance(P.green, 36); const fy = T.userData.h(24, -62) + .1; fin.position.set(24, fy, -62); fin.rotation.y = -.5; L3.add(fin);
     const L4 = mk(); const docs = K.docs(); const dy = T.userData.h(40, 8) + .1; docs.position.set(40, dy, 8); docs.rotation.y = -.5; L4.add(docs); const lb4 = K.label('BOQ · POLE SCHEDULE · FIELD PACK', '#6ee7b7', 12); lb4.position.set(40, dy + 7.5, 5); L4.add(lb4);
     const L5 = mk(); const orbit = K.ring(56, P.green, .006); orbit.position.y = 26; orbit.material.opacity = .35; L5.add(orbit); const sat = K.sat(P.cyan2); L5.add(sat); const lb5 = K.label('SATELLITE PASS · VERIFIED · SIGNED', '#6ee7b7', 18); lb5.position.set(-19, 20, -22); L5.add(lb5);
-    return { layers: L, radius: 46, pitch: .6, theta: -.5, spin: .035, lookX: -6, lookY: 4, shift: SHIFT, focusables: F, steps: [{ look: [0, 6, -14], zoom: .84 }, { look: [-4, 4, -8], zoom: .98 }, { look: [2, 5, -12], zoom: .98 }, { look: [24, fy + 9.5, -62], zoom: .88, pitch: .3, face: -.5, span: .3 }, { look: [40, dy + 2.8, 8], zoom: .42, pitch: .95, face: -.5, span: .5 }, { look: [-6, 7, -12], zoom: .86 }], tick(t, dt, step, k) { lb0.visible = step <= 1; lb2.visible = step === 2; const a = t * .45; sat.position.set(Math.cos(a) * 56, 26, Math.sin(a) * 56); sat.userData.aim(a); glow(t, step >= 2 && st2()); const bk = step > 0 ? .4 : 1; beams.forEach((b) => { b.userData.mat.opacity += ((.42 * bk) - b.userData.mat.opacity) * .05; }); fin.userData.tick(t, k); docs.userData.tick(t); dust.userData.tick(t); } }; };
+    return { layers: L, radius: 46, pitch: .6, theta: -.5, spin: .035, lookX: -6, lookY: 4, shift: SHIFT, focusables: F, steps: [{ look: [0, 6, -14], zoom: .84 }, { look: [-4, 4, -8], zoom: .98 }, { look: [2, 5, -12], zoom: .98 }, { look: [21.4, fy + 12.5, -63.4], zoom: .8, mzoom: 1.1, pitch: .22, face: -.5, span: .24 }, { look: [40, dy + 2.8, 8], zoom: .42, pitch: .95, face: -.5, span: .5 }, { look: [-6, 7, -12], zoom: .86 }], tick(t, dt, step, k) { lb0.visible = step <= 1; lb2.visible = step === 2; const a = t * .45; sat.position.set(Math.cos(a) * 56, 26, Math.sin(a) * 56); sat.userData.aim(a); glow(t, step >= 2 && st2()); const bk = step > 0 ? .4 : 1; beams.forEach((b) => { b.userData.mat.opacity += ((.42 * bk) - b.userData.mat.opacity) * .05; }); fin.userData.tick(t, k); docs.userData.tick(t); dust.userData.tick(t); } }; };
   /* Pinned pipelines run full-bleed behind a text column on the left. The lens shift puts the subject in the
      clear right-hand air on a wide screen, and centres it high on a phone where the text sits underneath. */
   const SHIFT = { x: .64, y: .57, k: 1.22, mx: .5, my: .34, mk: 1.02 };
@@ -886,7 +920,7 @@
     cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up); cv.addEventListener('pointerleave', () => { st.mx = st.my = 0; st.px = 9; });
   }
   /* the resting camera for the current step (pipelines move the camera per step) */
-  function home(st) { const s = st.def.steps && st.def.steps[st.step]; st.phiT = (s && s.pitch) || st.def.pitch || .78; if (s) { st.lookT.set(s.look[0], s.look[1], s.look[2]); st.zoomT = s.zoom || 1; } else { st.lookT.copy(st.look0); st.zoomT = 1; } }
+  function home(st) { const s = st.def.steps && st.def.steps[st.step]; st.phiT = (s && s.pitch) || st.def.pitch || .78; if (s) { st.lookT.set(s.look[0], s.look[1], s.look[2]); st.zoomT = (s.mzoom && st.W / Math.max(1, st.H) < .9 && s.mzoom) || s.zoom || 1; } else { st.lookT.copy(st.look0); st.zoomT = 1; } }
   function pick(st) {
     if (!st.def.focusables || st.px > 2 || st.drag) { if (st.hover) { setGlow(st.hover, false); st.hover = null; } return; }
     ndc.set(st.px, st.py); ray.setFromCamera(ndc, st.cam); const hits = ray.intersectObjects(st.def.focusables, true);
