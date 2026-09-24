@@ -65,28 +65,43 @@
     const t = pm.fromScene(sc, .03).texture; pm.dispose(); return t;
   }
 
-  /* ---------- bloom post-pass (render to MSAA target, threshold, blur, composite with ACES + sRGB) ---------- */
+  /* ---------- post: multisampled scene target, bloom, composite ----------
+     The scene renders into a 4x multisampled target at the display's own resolution: real geometric antialiasing on
+     every edge, cable and blade. The target stores sRGB-encoded 8-bit colour (SRGB8_ALPHA8), so the dark navy
+     gradients keep their precision -- linear light in a plain 8-bit target posterised every shadow into bands.
+     (A half-float target was tried: on ANGLE/D3D11 a multisampled RGBA16F resolve next to a shadow pass stalls the
+     CPU ~23 ms a frame, so it is not used.) The composite only tone-maps, adds bloom, dithers and encodes: no FXAA
+     smearing the lettering on a board, no sharpen crunching an upscale, because nothing is upscaled any more. FXAA
+     survives only as the fallback for a context that cannot multisample. */
   function makePost(renderer) {
     const vs = 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0., 1.); }';
     const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2)); const cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1); const sc = new THREE.Scene(); sc.add(quad);
+    const gl = renderer.getContext(), gl2 = renderer.capabilities.isWebGL2;
+    const CFG = window.HOLO_CFG || {}; /* debug override: { ms: max samples, srgb: bool } */
+    const enc = gl2 && CFG.srgb !== false;
+    /* the sample counts this format can actually multisample at */
+    let MS = 0; if (gl2) { try { const ok = gl.getInternalformatParameter(gl.RENDERBUFFER, enc ? gl.SRGB8_ALPHA8 : gl.RGBA8, gl.SAMPLES); MS = ok && ok.length ? Math.min(4, Math.max.apply(null, ok)) : 0; } catch (e) { MS = 0; } }
+    if (CFG.ms != null) MS = Math.min(MS, CFG.ms);
     const lin = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, depthBuffer: false };
-    const rt = new THREE.WebGLRenderTarget(4, 4, { depthBuffer: true }); const b0 = new THREE.WebGLRenderTarget(4, 4, lin), b1 = new THREE.WebGLRenderTarget(4, 4, lin);
+    const rt = new THREE.WebGLRenderTarget(4, 4, { depthBuffer: true, samples: MS }); const b0 = new THREE.WebGLRenderTarget(4, 4, lin), b1 = new THREE.WebGLRenderTarget(4, 4, lin);
+    if (enc) srgb(rt.texture);
+    if (MS) renderer.properties.get(rt).__ignoreDepthValues = true; /* resolve colour only: depth is never read back, so the blit skips it */
     const bright = new THREE.ShaderMaterial({ uniforms: { src: { value: null }, th: { value: .82 }, rg: { value: new THREE.Vector2(1, 1) } }, vertexShader: vs, fragmentShader: 'uniform sampler2D src; uniform float th; uniform vec2 rg; varying vec2 vUv; void main(){ vec4 c = texture2D(src, vUv * rg); float l = dot(c.rgb, vec3(.3,.59,.11)); gl_FragColor = vec4(c.rgb * smoothstep(th, th + .6, l), 1.); }', depthTest: false, depthWrite: false });
     const blur = new THREE.ShaderMaterial({ uniforms: { src: { value: null }, dir: { value: new THREE.Vector2(1, 0) }, rg: { value: new THREE.Vector2(1, 1) } }, vertexShader: vs, fragmentShader: 'uniform sampler2D src; uniform vec2 dir, rg; varying vec2 vUv; void main(){ float w[5]; w[0]=.227; w[1]=.195; w[2]=.122; w[3]=.054; w[4]=.016; vec2 uv = vUv * rg, hi = rg - abs(dir) * .5; vec3 s = texture2D(src, uv).rgb * w[0]; for (int i = 1; i < 5; i++) { vec2 o = dir * float(i) * 1.6; s += texture2D(src, clamp(uv + o, vec2(0.), hi)).rgb * w[i]; s += texture2D(src, clamp(uv - o, vec2(0.), hi)).rgb * w[i]; } gl_FragColor = vec4(s, 1.); }', depthTest: false, depthWrite: false });
-    /* composite: ACES + sRGB, bloom add, and when the scene was rendered below device resolution a contrast-adaptive
-       sharpen (4 taps, CAS-style) on the way up so the upsample reads crisp, not soft. fd is the horizontal fade the
-       CSS mask used to do: alpha ramps from fd.x to fd.y across the canvas; (-1,-1) means none. */
-    const comp = new THREE.ShaderMaterial({ uniforms: { src: { value: null }, glow: { value: null }, k: { value: .8 }, ex: { value: 1.0 }, sh: { value: 0 }, rg: { value: new THREE.Vector2(1, 1) }, px: { value: new THREE.Vector2(0, 0) }, fd: { value: new THREE.Vector2(-1, -1) } }, vertexShader: vs, fragmentShader: '#define RMIN (1./128.) \n#define RMUL (1./8.) \n#define SPAN 8. \nuniform sampler2D src, glow; uniform float k, ex, sh; uniform vec2 rg, px, fd; varying vec2 vUv; vec3 aces(vec3 x){ return clamp((x * (2.51 * x + .03)) / (x * (2.43 * x + .59) + .14), 0., 1.); } vec3 tap(vec2 uv, vec2 hi){ return texture2D(src, clamp(uv, vec2(0.), hi)).rgb; } vec3 fxaa(vec2 uv, vec2 hi, vec3 m){ const vec3 L = vec3(.299, .587, .114); vec3 nw = tap(uv + vec2(-px.x, -px.y), hi), ne = tap(uv + vec2(px.x, -px.y), hi), sw = tap(uv + vec2(-px.x, px.y), hi), se = tap(uv + px, hi); float lnw = dot(nw, L), lne = dot(ne, L), lsw = dot(sw, L), lse = dot(se, L), lm = dot(m, L); float lmin = min(lm, min(min(lnw, lne), min(lsw, lse))), lmax = max(lm, max(max(lnw, lne), max(lsw, lse))); vec2 dir = vec2(-((lnw + lne) - (lsw + lse)), ((lnw + lsw) - (lne + lse))); float red = max((lnw + lne + lsw + lse) * (.25 * RMUL), RMIN); float rcp = 1. / (min(abs(dir.x), abs(dir.y)) + red); dir = min(vec2(SPAN), max(vec2(-SPAN), dir * rcp)) * px; vec3 ra = .5 * (tap(uv + dir * (1. / 3. - .5), hi) + tap(uv + dir * (2. / 3. - .5), hi)); vec3 rb = ra * .5 + .25 * (tap(uv - dir * .5, hi) + tap(uv + dir * .5, hi)); float lb = dot(rb, L); return (lb < lmin || lb > lmax) ? ra : rb; } void main(){ vec2 uv = vUv * rg; vec2 hi = rg - px; vec4 c = texture2D(src, uv); vec3 e = fxaa(uv, hi, c.rgb); if (sh > 0.) { vec3 a = tap(uv + vec2(-px.x, 0.), hi), b = tap(uv + vec2(px.x, 0.), hi), cc = tap(uv + vec2(0., -px.y), hi), d = tap(uv + vec2(0., px.y), hi); vec3 mn = min(min(min(a, b), min(cc, d)), e), mx = max(max(max(a, b), max(cc, d)), e); vec3 amp3 = sqrt(clamp(min(mn, 1. - mx) / max(mx, 1e-4), 0., 1.)); float w = -min(min(amp3.r, amp3.g), amp3.b) * sh; e = max(vec3(0.), ((a + b + cc + d) * w + e) / (4. * w + 1.)); } vec3 g = texture2D(glow, uv).rgb * k; vec3 col = pow(aces((e + g) * ex), vec3(1. / 2.2)); float a2 = clamp(max(c.a, dot(g, vec3(.6))), 0., 1.); if (fd.x >= 0.) a2 *= smoothstep(fd.x, fd.y, vUv.x); gl_FragColor = vec4(col, a2); }', transparent: true, depthTest: false, depthWrite: false });
-    let W = 0, H = 0, pw = 0, ph = 0, sx = 1, sy = 1, rs = 1; const RG = new THREE.Vector2(1, 1);
-    /* the targets only ever grow; each scene renders into an rs-scaled sub-region of them and the composite draws the
-       scene's full pw x ph into the drawing buffer, which is sized to the scene */
-    const vp = (t, k) => { t.viewport.set(0, 0, Math.floor(t.width * sx * k), Math.floor(t.height * sy * k)); t.scissor.copy(t.viewport); t.scissorTest = true; };
-    return {
-      region(w, h, k) { pw = w; ph = h; rs = k == null ? 1 : k; },
+    /* composite: ACES + sRGB, bloom add, a 1/255 dither so the dark gradients stay smooth on an 8-bit panel. fd is
+       the horizontal fade the CSS mask used to do: alpha ramps from fd.x to fd.y across the canvas; (-1,-1) means none. */
+    const comp = new THREE.ShaderMaterial({ defines: { FXAA: MS ? 0 : 1 }, uniforms: { src: { value: null }, glow: { value: null }, k: { value: .8 }, ex: { value: 1.0 }, rg: { value: new THREE.Vector2(1, 1) }, px: { value: new THREE.Vector2(0, 0) }, fd: { value: new THREE.Vector2(-1, -1) } }, vertexShader: vs, fragmentShader: '#define RMIN (1./128.) \n#define RMUL (1./8.) \n#define SPAN 8. \nuniform sampler2D src, glow; uniform float k, ex; uniform vec2 rg, px, fd; varying vec2 vUv; vec3 aces(vec3 x){ return clamp((x * (2.51 * x + .03)) / (x * (2.43 * x + .59) + .14), 0., 1.); } \n#if FXAA \nvec3 tap(vec2 uv, vec2 hi){ return texture2D(src, clamp(uv, vec2(0.), hi)).rgb; } vec3 fxaa(vec2 uv, vec2 hi, vec3 m){ const vec3 L = vec3(.299, .587, .114); vec3 nw = tap(uv + vec2(-px.x, -px.y), hi), ne = tap(uv + vec2(px.x, -px.y), hi), sw = tap(uv + vec2(-px.x, px.y), hi), se = tap(uv + px, hi); float lnw = dot(nw, L), lne = dot(ne, L), lsw = dot(sw, L), lse = dot(se, L), lm = dot(m, L); float lmin = min(lm, min(min(lnw, lne), min(lsw, lse))), lmax = max(lm, max(max(lnw, lne), max(lsw, lse))); vec2 dir = vec2(-((lnw + lne) - (lsw + lse)), ((lnw + lsw) - (lne + lse))); float red = max((lnw + lne + lsw + lse) * (.25 * RMUL), RMIN); float rcp = 1. / (min(abs(dir.x), abs(dir.y)) + red); dir = min(vec2(SPAN), max(vec2(-SPAN), dir * rcp)) * px; vec3 ra = .5 * (tap(uv + dir * (1. / 3. - .5), hi) + tap(uv + dir * (2. / 3. - .5), hi)); vec3 rb = ra * .5 + .25 * (tap(uv - dir * .5, hi) + tap(uv + dir * .5, hi)); float lb = dot(rb, L); return (lb < lmin || lb > lmax) ? ra : rb; } \n#endif \nfloat dith(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453) - .5; } void main(){ vec2 uv = vUv * rg; vec4 c = texture2D(src, uv); \n#if FXAA \nvec3 e = fxaa(uv, rg - px, c.rgb); \n#else \nvec3 e = c.rgb; \n#endif \nvec3 g = texture2D(glow, uv).rgb * k; vec3 col = pow(aces((e + g) * ex), vec3(1. / 2.2)) + dith(gl_FragCoord.xy) / 255.; float a2 = clamp(max(c.a, dot(g, vec3(.6))), 0., 1.); if (fd.x >= 0.) a2 *= smoothstep(fd.x, fd.y, vUv.x); gl_FragColor = vec4(max(col, vec3(0.)), a2); }', transparent: true, depthTest: false, depthWrite: false });
+    let W = 0, H = 0, pw = 0, ph = 0, sx = 1, sy = 1; const RG = new THREE.Vector2(1, 1);
+    /* the targets only ever grow; each scene renders into its own pw x ph sub-region of them (scissored, so the
+       multisample resolve blits only that region) and the composite draws it 1:1 into the drawing buffer */
+    const vp = (t) => { t.viewport.set(0, 0, Math.floor(t.width * sx), Math.floor(t.height * sy)); t.scissor.copy(t.viewport); t.scissorTest = true; };
+    return { samples: MS, srgb: enc,
+      region(w, h) { pw = w; ph = h; },
       fade(x0, x1) { comp.uniforms.fd.value.set(x0, x1); },
       size() { if (pw <= W && ph <= H) { sx = pw / W; sy = ph / H; return; } W = Math.max(W, pw); H = Math.max(H, ph); sx = pw / W; sy = ph / H; rt.setSize(W, H); b0.setSize(Math.max(2, W >> 2), Math.max(2, H >> 2)); b1.setSize(Math.max(2, W >> 2), Math.max(2, H >> 2)); },
       render(scene, camera) {
-        this.size(); const bw = b0.width, bh = b0.height; RG.set(sx * rs, sy * rs); vp(rt, rs); vp(b0, rs); vp(b1, rs); bright.uniforms.rg.value.copy(RG); blur.uniforms.rg.value.copy(RG); comp.uniforms.rg.value.copy(RG); comp.uniforms.sh.value = rs < .995 ? .17 : 0; comp.uniforms.px.value.set(1 / W, 1 / H);
+        if (MS && rt.samples !== Math.min(MS, Q.ms)) { rt.dispose(); rt.samples = Math.min(MS, Q.ms); renderer.properties.get(rt).__ignoreDepthValues = true; }
+        this.size(); const bw = b0.width, bh = b0.height; RG.set(sx, sy); vp(rt); vp(b0); vp(b1); bright.uniforms.rg.value.copy(RG); blur.uniforms.rg.value.copy(RG); comp.uniforms.rg.value.copy(RG); comp.uniforms.px.value.set(1 / W, 1 / H);
         renderer.setRenderTarget(rt); renderer.clear(); renderer.render(scene, camera);
         quad.material = bright; bright.uniforms.src.value = rt.texture; renderer.setRenderTarget(b0); renderer.render(sc, cam);
         quad.material = blur; for (let i = 0; i < 2; i++) { blur.uniforms.src.value = b0.texture; blur.uniforms.dir.value.set(1 / bw, 0); renderer.setRenderTarget(b1); renderer.render(sc, cam); blur.uniforms.src.value = b1.texture; blur.uniforms.dir.value.set(0, 1 / bh); renderer.setRenderTarget(b0); renderer.render(sc, cam); }
@@ -170,14 +185,43 @@
      column. A long enough line could not shrink far enough to stay out of that column, so it anchored to the
      right edge and ran its tail under the paragraph. Past a readable line length the caption now breaks at a
      separator into two balanced rows: half the width, the same wording, and it fits the air it is allowed. */
-  const LBF = '500 60px "JetBrains Mono", monospace';
-  K.label = (text, color, w) => { const c = document.createElement('canvas'); const x = c.getContext('2d'); const meas = (s) => { x.font = LBF; x.letterSpacing = '6px'; return x.measureText(s).width + s.length * 6; };
+  /* The glyphs fill the row now (74 px caps in a 128 px row, up from 60 px of mostly padding), sit on a tight dark
+     keyline instead of a wide blur, and are set in the weight the page actually loads, so a caption that is 20 px
+     tall on screen is 20 px of letter rather than 9 px of letter in a haze. */
+  const LBF = '600 74px "JetBrains Mono", monospace', LBS = 4;
+  K.label = (text, color, w) => { const c = document.createElement('canvas'); const x = c.getContext('2d'); const meas = (s) => { x.font = LBF; x.letterSpacing = LBS + 'px'; return x.measureText(s).width + s.length * LBS; };
     let rows = [text]; const seg = text.split(' · ');
-    if (meas(text) > 1700 && seg.length > 1) { let best = null; for (let i = 1; i < seg.length; i++) { const a = seg.slice(0, i).join(' · '), b = seg.slice(i).join(' · '); const d = Math.abs(meas(a) - meas(b)); if (!best || d < best.d) best = { d, rows: [a, b] }; } rows = best.rows; }
-    c.height = 128 * rows.length; c.width = Math.max(1024, Math.ceil(Math.max.apply(null, rows.map(meas)) + 48)); x.font = LBF; x.fillStyle = color || '#67e8f9'; x.textBaseline = 'middle'; x.letterSpacing = '6px'; x.shadowColor = 'rgba(4,6,12,.9)'; x.shadowBlur = 16; rows.forEach((r, i) => x.fillText(r, 16, 128 * i + 64)); const t = new THREE.CanvasTexture(c); t.minFilter = THREE.LinearMipmapLinearFilter; t.anisotropy = 8; const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: t, transparent: true, depthWrite: false, fog: false })); const W = w || 12.5; s.scale.set(W * c.width / 1024, W / 8 * rows.length, 1); s.center.set(0, .5); s.userData.label = true; s.userData.rows = rows.length; return s; };
+    if (meas(text) > 1900 && seg.length > 1) { let best = null; for (let i = 1; i < seg.length; i++) { const a = seg.slice(0, i).join(' · '), b = seg.slice(i).join(' · '); const d = Math.abs(meas(a) - meas(b)); if (!best || d < best.d) best = { d, rows: [a, b] }; } rows = best.rows; }
+    c.height = 128 * rows.length; c.width = Math.max(1024, Math.ceil(Math.max.apply(null, rows.map(meas)) + 48)); x.font = LBF; x.textBaseline = 'middle'; x.letterSpacing = LBS + 'px'; x.lineJoin = 'round';
+    rows.forEach((r, i) => { const y = 128 * i + 66; x.shadowColor = 'rgba(2,4,10,.85)'; x.shadowBlur = 10; x.lineWidth = 11; x.strokeStyle = 'rgba(3,6,14,.78)'; x.strokeText(r, 18, y); x.shadowBlur = 0; x.fillStyle = color || '#67e8f9'; x.fillText(r, 18, y); });
+    const t = new THREE.CanvasTexture(c); t.minFilter = THREE.LinearMipmapLinearFilter; t.anisotropy = 16; const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: t, transparent: true, depthWrite: false, depthTest: false, fog: false })); s.renderOrder = 20; /* a caption is read, not occluded: the volcano used to bite the ends off its field's captions */ const W = w || 12.5; s.scale.set(W * c.width / 1024, W / 8 * rows.length, 1); s.center.set(0, .5); s.userData.label = true; s.userData.rows = rows.length; return s; };
   K.bars = (vals, color, gap) => { const g = new THREE.Group(); const list = []; vals.forEach((v, i) => { const b = K.box(1.4, v, 1.4, solid(color, color, .35, .9), color, .5); b.position.x = i * (gap || 2.2); g.add(b); list.push({ b, v }); }); g.userData.tick = (t) => list.forEach((o, i) => { o.b.scale.y = .82 + .18 * Math.sin(t * 1.2 + i * .7); }); return g; };
-  const boardTex = (W, H, draw) => { const c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext('2d'); draw(x, W, H); const t = new THREE.CanvasTexture(c); srgb(t); t.anisotropy = 8; return t; };
+  const boardTex = (W, H, draw) => { const c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext('2d'); draw(x, W, H); const t = new THREE.CanvasTexture(c); srgb(t); t.minFilter = THREE.LinearMipmapLinearFilter; t.anisotropy = 16; return t; }; /* 16x anisotropy: a board seen at an angle keeps its lettering instead of smearing it along the slant */
   const mono = (x, px, wt) => { x.font = (wt || 500) + ' ' + px + 'px "JetBrains Mono", monospace'; };
+  /* One typographic system for the display boards, sized for how large a board actually appears (a 2048 px face
+     shown 500-700 px wide, so 1 px on screen is ~3.5 px here). The old faces set 20 px captions and 34 px figures --
+     6 and 10 px on screen -- and ran a figure's unit into the next column. Now: a 68 px title, its claim on a line of
+     its own, then at most four figures as large numerals with the unit set small beside them, each shrunk to fit its
+     column rather than overrun it, and a chart box below with 30 px axis type. Returns the chart box. */
+  const face = (x, tw, th, o) => {
+    x.fillStyle = '#060b15'; x.fillRect(0, 0, tw, th); const gr = x.createLinearGradient(0, 0, 0, th); gr.addColorStop(0, o.tint || 'rgba(34,211,238,.10)'); gr.addColorStop(1, 'rgba(52,211,153,.04)'); x.fillStyle = gr; x.fillRect(0, 0, tw, th);
+    const L = 64, R = tw - 64; x.textBaseline = 'alphabetic'; x.textAlign = 'left'; x.letterSpacing = '0px';
+    x.fillStyle = '#f1f5fb'; mono(x, 68, 600); x.fillText(o.title, L, 104);
+    if (o.badge) { mono(x, 32, 600); const bw = x.measureText(o.badge).width + 48; x.strokeStyle = o.badgeC || '#34d399'; x.lineWidth = 3; x.beginPath(); if (x.roundRect) x.roundRect(R - bw, 54, bw, 64, 32); else x.rect(R - bw, 54, bw, 64); x.stroke(); x.fillStyle = o.badgeC || '#34d399'; x.fillText(o.badge, R - bw + 24, 97); }
+    if (o.sub) { x.fillStyle = o.subC || '#67e8f9'; mono(x, 32); x.fillText(o.sub, L, 158); }
+    const n = o.kpis ? o.kpis.length : 0, cw = (R - L) / Math.max(1, n);
+    for (let i = 0; i < n; i++) { const [k, v, u, c] = o.kpis[i], X = L + i * cw;
+      x.fillStyle = '#8391a7'; mono(x, 30); x.letterSpacing = '3px'; x.fillText(k, X, 232); x.letterSpacing = '0px';
+      mono(x, 32); const uw = u ? x.measureText(u).width + 14 : 0; let fs = 84; mono(x, fs, 600); let vw = x.measureText(v).width;
+      while (fs > 44 && vw + uw > cw - 40) { fs -= 4; mono(x, fs, 600); vw = x.measureText(v).width; }
+      x.fillStyle = c || '#eaf0f8'; x.fillText(v, X, 318); if (u) { x.fillStyle = '#9aa7bb'; mono(x, 32); x.fillText(u, X + vw + 14, 318); } }
+    x.strokeStyle = 'rgba(103,232,249,.35)'; x.lineWidth = 4; x.strokeRect(6, 6, tw - 12, th - 12);
+    return { L, R, top: n ? 380 : 210, bot: th - 104 };
+  };
+  /* a chart's horizontal rules and its axis ticks, in the board's type */
+  const axes = (x, b, rules, ticks) => { x.strokeStyle = 'rgba(103,232,249,.10)'; x.lineWidth = 2; for (let i = 0; i <= rules; i++) { const y = b.bot - (b.bot - b.top) * i / rules; x.beginPath(); x.moveTo(b.L, y); x.lineTo(b.R, y); x.stroke(); }
+    x.strokeStyle = 'rgba(103,232,249,.55)'; x.lineWidth = 3; x.beginPath(); x.moveTo(b.L, b.bot); x.lineTo(b.R, b.bot); x.stroke();
+    x.fillStyle = '#8b96a8'; mono(x, 30); x.textAlign = 'center'; ticks.forEach(([u, t]) => { const X = b.L + (b.R - b.L) * u; x.fillRect(X - 1.5, b.bot - 10, 3, 20); x.fillText(t, Math.min(b.R - 40, Math.max(b.L + 40, X)), b.bot + 54); }); x.textAlign = 'left'; };
   const paper = (w, h, draw) => boardTex(w, h, (x, tw, th) => { x.fillStyle = '#e6ebf2'; x.fillRect(0, 0, tw, th); const g = x.createLinearGradient(0, 0, tw, th); g.addColorStop(0, 'rgba(255,255,255,.35)'); g.addColorStop(1, 'rgba(120,140,170,.18)'); x.fillStyle = g; x.fillRect(0, 0, tw, th); x.textBaseline = 'alphabetic'; draw(x, tw, th); });
   /* The handover package as it sits on a site-office table: a drawing set, a bound dossier, the model printout, a
      tablet with the field pack, a rolled sheet. Every page is a canvas texture, so a reader can tell a layout from a
@@ -684,15 +728,17 @@
     /* the data structure: the indicator matrix on a pad, one cell per month and indicator, written every tick */
     const MX = 46, MZ = 26, my = T.userData.h(MX, MZ); const mpad = K.pad(30, 22, TX.concrete); mpad.position.set(MX, my, MZ); root.add(mpad); const COLS = 12, ROWS = 8; const cells = new THREE.InstancedMesh(new THREE.BoxGeometry(1.9, .3, 1.9), solid(P.cyan, P.cyan, .5, .95), COLS * ROWS); root.add(cells); const cm = new THREE.Matrix4(); const cellAt = (i, j, hh) => { cm.makeScale(1, hh, 1); cm.setPosition(MX - 13 + i * 2.3, my + .2 + .15 * hh, MZ - 8.5 + j * 2.3); }; for (let i = 0; i < COLS; i++) for (let j = 0; j < ROWS; j++) { cellAt(i, j, .4); cells.setMatrixAt(i * ROWS + j, cm); } const ml = K.label('INDICATOR MATRIX · 12 MONTHS × 8 INDICATORS · WRITTEN EVERY TICK', '#93c5fd', 20); ml.position.set(MX, my + 6.5, MZ - 11); root.add(ml); root.add(K.tube([V3(COM[2][0], COM[2][2] - 4, COM[2][1]), V3(36, 14, 12), V3(MX - 10, my + 1.2, MZ - 6)], P.blue2, .12, .6, 3, .8));
     /* the board */
-    const board = K.screen(30, 12.6, (x, tw, hh) => { x.fillStyle = '#070c16'; x.fillRect(0, 0, tw, hh); const gr = x.createLinearGradient(0, 0, 0, hh); gr.addColorStop(0, 'rgba(34,211,238,.12)'); gr.addColorStop(1, 'rgba(52,211,153,.05)'); x.fillStyle = gr; x.fillRect(0, 0, tw, hh); x.textBaseline = 'alphabetic'; x.fillStyle = '#eaf0f8'; mono(x, 40, 600); x.fillText('BEHAVIOURAL TWIN', 60, 66); x.fillStyle = '#67e8f9'; mono(x, 22); x.fillText('TREATMENT ARM AGAINST ITS OWN COUNTERFACTUAL · SIGNED', 520, 66);
-      [['AGENTS', '481 personas', '#67e8f9'], ['POOL', '4 reasoning / tick', '#e2e8f0'], ['INCOME', '+11% measured', '#6ee7b7'], ['COUNTERFACTUAL', '+3%', '#93c5fd'], ['ATTRIBUTABLE', '+8 pts', '#6ee7b7']].forEach(([k, v, cc2], i) => { const X = 60 + i * 300; x.fillStyle = '#6f7b91'; mono(x, 19); x.fillText(k, X, 118); x.fillStyle = cc2; mono(x, 30, 600); x.fillText(v, X, 158); });
-      const x0 = 60, x1 = tw - 60, y0 = hh - 60, y1 = 205; x.fillStyle = 'rgba(52,211,153,.10)'; x.fillRect(x0, y1, (x1 - x0) * 3 / 15, y0 - y1); x.fillStyle = '#6ee7b7'; mono(x, 15); x.fillText('PLACEBO · PRE-ENERGISATION', x0 + 10, y1 + 24); x.strokeStyle = 'rgba(103,232,249,.09)'; x.lineWidth = 2; for (let i = 0; i <= 4; i++) { const y = y0 - (y0 - y1) * i / 4; x.beginPath(); x.moveTo(x0, y); x.lineTo(x1, y); x.stroke(); }
-      x.fillStyle = '#6f7b91'; mono(x, 17); x.textAlign = 'center'; for (let m = -3; m <= 12; m += 3) x.fillText((m < 0 ? 'M' : 'M+') + m, x0 + (x1 - x0) * (m + 3) / 15, y0 + 30); x.textAlign = 'left';
-      const X = (m) => x0 + (x1 - x0) * (m + 3) / 15, Y = (v) => y0 - (y0 - y1) * (v + 2) / 16; const tr = (m) => m < 0 ? .3 * Math.sin(m * 2) : 11 * (1 - Math.exp(-m / 4.5)) + .5 * Math.sin(m * 1.7), cf = (m) => m < 0 ? .3 * Math.sin(m * 2) : 3 * (1 - Math.exp(-m / 4)) + .3 * Math.sin(m * 1.3);
-      x.fillStyle = 'rgba(110,231,183,.14)'; x.beginPath(); for (let m = 0; m <= 12; m += .25) { const px = X(m), py = Y(tr(m)); m ? x.lineTo(px, py) : x.moveTo(px, py); } for (let m = 12; m >= 0; m -= .25) x.lineTo(X(m), Y(cf(m))); x.closePath(); x.fill();
-      x.strokeStyle = '#6ee7b7'; x.lineWidth = 5; x.beginPath(); for (let m = -3; m <= 12; m += .25) { m === -3 ? x.moveTo(X(m), Y(tr(m))) : x.lineTo(X(m), Y(tr(m))); } x.stroke(); x.strokeStyle = '#93c5fd'; x.lineWidth = 3; x.setLineDash([12, 8]); x.beginPath(); for (let m = -3; m <= 12; m += .25) { m === -3 ? x.moveTo(X(m), Y(cf(m))) : x.lineTo(X(m), Y(cf(m))); } x.stroke(); x.setLineDash([]);
-      x.fillStyle = '#6ee7b7'; mono(x, 16); x.fillText('— TREATMENT · HOUSEHOLD INCOME INDEX', x0 + (x1 - x0) * .22, y1 + 24); x.fillStyle = '#93c5fd'; x.fillText('- - COUNTERFACTUAL · SAME PERSONAS, NO MICROGRID', x0 + (x1 - x0) * .22, y1 + 48); x.fillStyle = '#6ee7b7'; x.fillText('SHADED · ATTRIBUTABLE', X(9), Y(7));
-      x.strokeStyle = 'rgba(103,232,249,.35)'; x.lineWidth = 4; x.strokeRect(6, 6, tw - 12, hh - 12); }); const BX = -46, BZ = -20, by = T.userData.h(BX, BZ); board.position.set(BX, by + .1, BZ); board.rotation.y = .55; root.add(board); const bpad = K.pad(36, 9, TX.concrete); bpad.position.set(BX, by, BZ); bpad.rotation.y = .55; root.add(bpad);
+    const board = K.screen(30, 12.6, (x, tw, hh) => {
+      const b = face(x, tw, hh, { title: 'BEHAVIOURAL TWIN', sub: 'TREATMENT ARM AGAINST ITS OWN COUNTERFACTUAL · SIGNED', tint: 'rgba(34,211,238,.12)',
+        kpis: [['AGENTS', '481', 'personas', '#67e8f9'], ['INCOME', '+11%', 'measured', '#6ee7b7'], ['COUNTERFACTUAL', '+3%', '', '#93c5fd'], ['ATTRIBUTABLE', '+8', 'pts', '#6ee7b7']] });
+      const X = (m) => b.L + (b.R - b.L) * (m + 3) / 15, Y = (v) => b.bot - (b.bot - b.top) * (v + 2) / 16;
+      x.fillStyle = 'rgba(52,211,153,.10)'; x.fillRect(b.L, b.top, X(0) - b.L, b.bot - b.top); x.fillStyle = '#6ee7b7'; mono(x, 26, 600); x.fillText('PLACEBO', b.L + 16, b.top + 38);
+      axes(x, b, 4, [-3, 0, 3, 6, 9, 12].map((m) => [(m + 3) / 15, (m < 0 ? 'M' : 'M+') + m]));
+      const tr = (m) => m < 0 ? .3 * Math.sin(m * 2) : 11 * (1 - Math.exp(-m / 4.5)) + .5 * Math.sin(m * 1.7), cf = (m) => m < 0 ? .3 * Math.sin(m * 2) : 3 * (1 - Math.exp(-m / 4)) + .3 * Math.sin(m * 1.3);
+      x.fillStyle = 'rgba(110,231,183,.16)'; x.beginPath(); for (let m = 0; m <= 12; m += .25) { m ? x.lineTo(X(m), Y(tr(m))) : x.moveTo(X(m), Y(tr(m))); } for (let m = 12; m >= 0; m -= .25) x.lineTo(X(m), Y(cf(m))); x.closePath(); x.fill();
+      x.lineCap = 'round'; x.strokeStyle = '#34d399'; x.lineWidth = 8; x.beginPath(); for (let m = -3; m <= 12; m += .25) { m === -3 ? x.moveTo(X(m), Y(tr(m))) : x.lineTo(X(m), Y(tr(m))); } x.stroke();
+      x.strokeStyle = '#93c5fd'; x.lineWidth = 5; x.setLineDash([16, 12]); x.beginPath(); for (let m = -3; m <= 12; m += .25) { m === -3 ? x.moveTo(X(m), Y(cf(m))) : x.lineTo(X(m), Y(cf(m))); } x.stroke(); x.setLineDash([]);
+      mono(x, 30, 600); x.fillStyle = '#6ee7b7'; x.fillText('TREATMENT', X(12) - 250, Y(tr(12)) - 26); x.fillStyle = '#93c5fd'; x.fillText('COUNTERFACTUAL', X(12) - 330, Y(cf(12)) + 52); x.fillStyle = '#a7f3d0'; x.fillText('+8 PTS ATTRIBUTABLE', X(5.2), Y((tr(8) + cf(8)) / 2) + 10); }, 2.4, 2048); const BX = -46, BZ = -20, by = T.userData.h(BX, BZ); board.position.set(BX, by + .1, BZ); board.rotation.y = .55; root.add(board); const bpad = K.pad(36, 9, TX.concrete); bpad.position.set(BX, by, BZ); bpad.rotation.y = .55; root.add(bpad);
     const lbl = K.label('SOCIAL GRAPH · 7 COMMUNITIES · 750 NODES SHOWN OF 18,400', '#e2e8f0', 24); lbl.position.set(0, 50, 0); root.add(lbl);
     /* four agents think at a time: their node swells and flares, then the axon carries the action */
     /* Four agents reason at a time, and a decision does not stay where it was made: from the seed household the
@@ -769,15 +815,15 @@
       x.beginPath(); x.moveTo(0, py(surf(0))); for (let j = 0; j <= 80; j++) x.lineTo(px(j / 80), py(surf(j / 80))); x.strokeStyle = 'rgba(167,205,255,.9)'; x.lineWidth = 3.5; x.stroke();
       const lens = (k, fill, line) => { x.beginPath(); for (let j = 0; j <= 64; j++) { const a2 = j / 64 * 6.2832; x.lineTo(px(RCX + Math.cos(a2) * RW * k * (1 + .10 * Math.sin(a2 * 3))), py(RCY + Math.sin(a2) * RH * k * (1 + .13 * Math.cos(a2 * 2)))); } x.closePath(); if (fill) { x.fillStyle = fill; x.fill(); } if (line) { x.strokeStyle = line; x.lineWidth = 3; x.stroke(); } };
       lens(1, 'rgba(34,211,238,.13)', 'rgba(59,130,246,.55)'); lens(.68, 'rgba(103,232,249,.17)', 'rgba(34,211,238,.7)'); lens(.36, 'rgba(223,246,255,.26)', 'rgba(167,240,255,.85)');
-      mono(x, 20); x.textBaseline = 'middle'; x.fillStyle = '#93c5fd'; x.fillText('200 \u00b0C', px(RCX + RW) + 12, py(RCY - RH * .55)); x.fillStyle = '#67e8f9'; x.fillText('240 \u00b0C', px(RCX + RW * .68) - 30, py(RCY + RH * .95)); x.fillStyle = '#dff6ff'; x.fillText('265 \u00b0C', px(RCX) - 34, py(RCY));
+      mono(x, 30, 600); x.textBaseline = 'middle'; x.fillStyle = '#93c5fd'; x.fillText('200 \u00b0C', px(RCX + RW) + 14, py(RCY - RH * .6)); x.fillStyle = '#67e8f9'; x.fillText('240 \u00b0C', px(RCX + RW * .68) - 44, py(RCY + RH * 1.05)); x.fillStyle = '#dff6ff'; x.fillText('265 \u00b0C', px(RCX) - 52, py(RCY));
       const well = (u0, u1, vEnd, col, w) => { x.beginPath(); x.moveTo(px(u0), py(surf(u0))); x.bezierCurveTo(px(u0), py(GL + .26), px(u0 + (u1 - u0) * .55), py(vEnd - .10), px(u1), py(vEnd)); x.strokeStyle = col; x.lineWidth = w; x.lineCap = 'round'; x.stroke(); };
       [[.24, RCX - .10, .8], [.30, RCX, 1], [.36, RCX + .10, .8]].forEach(([u0, u1, br], i) => { well(u0, u1, RCY + (i - 1) * .022, 'rgba(8,14,24,.85)', 9); well(u0, u1, RCY + (i - 1) * .022, i === 1 ? 'rgba(223,246,255,.98)' : 'rgba(103,232,249,.9)', 4.5); x.beginPath(); x.arc(px(u0), py(surf(u0)), 7, 0, 6.2832); x.fillStyle = '#dff6ff'; x.fill(); });
       well(.86, RCX + RW * .9, RCY - RH * .5, 'rgba(8,14,24,.85)', 9); well(.86, RCX + RW * .9, RCY - RH * .5, 'rgba(96,165,250,.92)', 4.5); x.beginPath(); x.arc(px(.86), py(surf(.86)), 7, 0, 6.2832); x.fillStyle = '#93c5fd'; x.fill();
-      x.strokeStyle = 'rgba(96,165,250,.14)'; x.lineWidth = 2; mono(x, 21); x.fillStyle = '#60a5fa';
-      [[600, .46], [1200, .61], [1800, .76], [2400, .91]].forEach(([m, v]) => { x.beginPath(); x.moveTo(px(.045), py(v)); x.lineTo(tw, py(v)); x.stroke(); x.fillText(m + ' m', 16, py(v)); });
-      x.textBaseline = 'alphabetic'; x.fillStyle = '#eaf0f8'; mono(x, 34, 600); x.fillText('SUBSURFACE MODEL', 52, 56);
-      x.fillStyle = '#67e8f9'; mono(x, 21); x.fillText('P50 71 MWe \u00b7 3 PRODUCERS \u00b7 1 REINJECTOR', 470, 56);
-      mono(x, 20); x.fillStyle = '#93c5fd'; x.fillText('PRODUCTION', px(.24), py(surf(.30)) - 22); x.fillText('REINJECTION', px(.79), py(surf(.86)) - 22);
+      x.strokeStyle = 'rgba(96,165,250,.14)'; x.lineWidth = 2; mono(x, 28); x.fillStyle = '#7fb2fb';
+      [[600, .46], [1200, .61], [1800, .76], [2400, .91]].forEach(([m, v]) => { x.beginPath(); x.moveTo(px(.045), py(v)); x.lineTo(tw, py(v)); x.stroke(); x.fillText(m + ' m', 18, py(v) - 18); });
+      x.textBaseline = 'alphabetic'; x.fillStyle = '#f1f5fb'; mono(x, 50, 600); x.fillText('SUBSURFACE MODEL', 52, 72);
+      x.fillStyle = '#67e8f9'; mono(x, 28); x.fillText('P50 71 MWe \u00b7 3 PRODUCERS \u00b7 1 REINJECTOR', 52, 116);
+      mono(x, 28, 600); x.fillStyle = '#93c5fd'; x.fillText('PRODUCTION', px(.2), py(surf(.30)) - 26); x.textAlign = 'right'; x.fillText('REINJECTION', px(.97), py(surf(.86)) - 26); x.textAlign = 'left';
     }, 1.2, 1600);
     section.position.set(secX, gy(secX, secZ), secZ); section.rotation.y = .5; deep.add(section);
     const secGlow = sprite(P.cyan, 17, .09); secGlow.position.set(secX, gy(secX, secZ) + 5.5, secZ); deep.add(secGlow);
@@ -811,14 +857,19 @@
     const MX = 34, MZ = -16, my = gy(MX, MZ); const mast = named(K.tower(11, P.green), 'MONITORING MAST · PYRANOMETER · METER · 5-MIN DATA'); mast.position.set(MX, my, MZ); root.add(mast); F.push(mast); const inst = K.box(.8, .5, .8, solid(0xe2e8f0, P.green, .5), P.green, .8); inst.position.set(MX + .9, my + 10.4, MZ); root.add(inst); const cab = K.box(1.2, 1.4, .7, solid(0xd6e0ec, P.green, .2), P.green, .6); cab.position.set(MX + 1.6, my + .05, MZ + 1.2); root.add(cab); root.add(K.tube([V3(MX + 1.6, my + 1.4, MZ + 1.2), V3(MX - 6, my + 1.8, MZ - 6), V3(LX0 + 14, gy(LX0 + 14, LZ0 + 2) + 2.2, LZ0 + 2)], P.green, .07, .8, 3, .8));
     const sat = K.sat(P.green); root.add(sat); const swath = new THREE.Mesh(new THREE.PlaneGeometry(26, 14), new THREE.MeshBasicMaterial({ color: P.green, transparent: true, opacity: .07, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide })); swath.rotation.x = -Math.PI / 2; root.add(swath); const swEdge = new THREE.LineSegments(new THREE.EdgesGeometry(swath.geometry), edgeMat(P.green, .5)); swEdge.rotation.x = -Math.PI / 2; root.add(swEdge); const nadir = K.beam(30, P.green, .35); root.add(nadir);
     /* the ledger: a board that reads like the annual verification it is */
-    const LX = 12, LZ = -34, ly = gy(LX, LZ); const ledger = K.screen(30, 12.6, (x, tw, th) => { x.fillStyle = '#070c16'; x.fillRect(0, 0, tw, th); const gr = x.createLinearGradient(0, 0, 0, th); gr.addColorStop(0, 'rgba(52,211,153,.10)'); gr.addColorStop(1, 'rgba(34,211,238,.04)'); x.fillStyle = gr; x.fillRect(0, 0, tw, th); x.textBaseline = 'alphabetic'; x.fillStyle = '#eaf0f8'; mono(x, 40, 600); x.fillText('CARBON LEDGER', 60, 66); x.fillStyle = '#6ee7b7'; mono(x, 24); x.fillText('ANNUAL VERIFICATION · SATELLITE RE-OBSERVED · SIGNED', 460, 66);
-      [['AVOIDED', '1,202 tCO2e / yr', '#6ee7b7'], ['EMBODIED', '2,180 tCO2e', '#cbd5e1'], ['PAYBACK', '1.8 yr', '#6ee7b7'], ['25-YR NET', '−27,900 tCO2e', '#6ee7b7'], ['STATUS', 'VERIFIED Y1', '#67e8f9']].forEach(([k, v, c], i) => { const X = 60 + i * 300; x.fillStyle = '#6f7b91'; mono(x, 20); x.fillText(k, X, 120); x.fillStyle = c; mono(x, 34, 600); x.fillText(v, X, 162); });
-      const x0 = 60, x1 = tw - 60, y0 = th - 60, y1 = 210; x.strokeStyle = 'rgba(103,232,249,.09)'; x.lineWidth = 2; for (let i = 0; i <= 4; i++) { const y = y0 - (y0 - y1) * i / 4; x.beginPath(); x.moveTo(x0, y); x.lineTo(x1, y); x.stroke(); } x.fillStyle = '#6f7b91'; mono(x, 20); x.textAlign = 'center'; for (let yv = 0; yv <= 25; yv += 5) { const X = x0 + (x1 - x0) * yv / 25; x.fillText('Y' + yv, X, y0 + 34); } x.textAlign = 'left';
-      const emb = y0 - (y0 - y1) * (2180 / 30000); x.strokeStyle = '#cbd5e1'; x.setLineDash([12, 8]); x.beginPath(); x.moveTo(x0, emb); x.lineTo(x1, emb); x.stroke(); x.setLineDash([]); x.fillStyle = '#cbd5e1'; mono(x, 18); x.fillText('EMBODIED 2,180', x1 - 200, emb - 10);
-      x.strokeStyle = '#34d399'; x.lineWidth = 5; x.beginPath(); for (let yv = 0; yv <= 25; yv += .5) { const X = x0 + (x1 - x0) * yv / 25, Y = y0 - (y0 - y1) * (1202 * yv / 30000); yv ? x.lineTo(X, Y) : x.moveTo(X, Y); } x.stroke(); x.fillStyle = '#34d399'; x.fillText('CUMULATIVE AVOIDED', x0 + 30, y1 + 30);
-      const cx = x0 + (x1 - x0) * 1.8 / 25; x.strokeStyle = '#67e8f9'; x.lineWidth = 2; x.beginPath(); x.moveTo(cx, y0); x.lineTo(cx, emb - 40); x.stroke(); x.fillStyle = '#67e8f9'; mono(x, 18); x.fillText('CARBON PAYBACK · Y1.8', cx + 12, emb - 48);
-      for (let yv = 1; yv <= 25; yv++) { const X = x0 + (x1 - x0) * yv / 25; x.fillStyle = yv <= 1 ? 'rgba(103,232,249,.9)' : 'rgba(52,211,153,.18)'; x.fillRect(X - 9, y0 - 14, 18, 14); } x.fillStyle = '#67e8f9'; mono(x, 16); x.fillText('▮ VERIFIED', x0, y0 + 60); x.fillStyle = 'rgba(52,211,153,.6)'; x.fillText('▮ PROJECTED', x0 + 170, y0 + 60);
-      x.strokeStyle = 'rgba(103,232,249,.35)'; x.lineWidth = 4; x.strokeRect(6, 6, tw - 12, th - 12); }); ledger.position.set(LX, ly + .1, LZ); ledger.rotation.y = -.25; root.add(ledger); const lpad = K.pad(36, 10, TX.concrete); lpad.position.set(LX, ly, LZ); lpad.rotation.y = -.25; root.add(lpad); const cross = sprite(P.cyan2, 2.4, .9); root.add(cross); ledger.updateMatrixWorld(); cross.position.copy(ledger.localToWorld(V3(-30 * .5 + 30 * (60 + (1600 - 120) * 1.8 / 25) / 1600, 2.4 + 12.6 * (1 - (ledger.userData.TH - 60 - (ledger.userData.TH - 270) * 2180 / 30000) / ledger.userData.TH), .7)));
+    const LX = 12, LZ = -34, ly = gy(LX, LZ); const LG = {}; const ledger = K.screen(30, 12.6, (x, tw, th) => {
+      const b = face(x, tw, th, { title: 'CARBON LEDGER', sub: 'ANNUAL VERIFICATION · SATELLITE RE-OBSERVED · SIGNED', badge: 'VERIFIED Y1', badgeC: '#67e8f9', tint: 'rgba(52,211,153,.10)',
+        kpis: [['AVOIDED / YR', '1,202', 'tCO₂e', '#6ee7b7'], ['EMBODIED', '2,180', 'tCO₂e', '#cbd5e1'], ['PAYBACK', '1.8', 'yr', '#6ee7b7'], ['25-YR NET', '−27,900', 'tCO₂e', '#6ee7b7']] });
+      axes(x, b, 4, [[0, 'Y0'], [.2, 'Y5'], [.4, 'Y10'], [.6, 'Y15'], [.8, 'Y20'], [1, 'Y25']]);
+      const X = (yr) => b.L + (b.R - b.L) * yr / 25, Y = (t) => b.bot - (b.bot - b.top) * t / 30000, emb = Y(2180);
+      for (let yv = 1; yv <= 25; yv++) { x.fillStyle = yv <= 1 ? 'rgba(103,232,249,.95)' : 'rgba(52,211,153,.22)'; x.fillRect(X(yv) - 12, b.bot - 18, 24, 18); }
+      x.strokeStyle = '#cbd5e1'; x.lineWidth = 4; x.setLineDash([16, 12]); x.beginPath(); x.moveTo(b.L, emb); x.lineTo(b.R, emb); x.stroke(); x.setLineDash([]);
+      x.fillStyle = '#cbd5e1'; mono(x, 30, 600); x.textAlign = 'right'; x.fillText('EMBODIED 2,180', b.R, emb - 18); x.textAlign = 'left';
+      const ga = x.createLinearGradient(0, b.top, 0, b.bot); ga.addColorStop(0, 'rgba(52,211,153,.30)'); ga.addColorStop(1, 'rgba(52,211,153,0)'); x.fillStyle = ga; x.beginPath(); x.moveTo(X(0), Y(0)); x.lineTo(X(25), Y(1202 * 25)); x.lineTo(X(25), b.bot); x.closePath(); x.fill();
+      x.strokeStyle = '#34d399'; x.lineWidth = 8; x.lineCap = 'round'; x.beginPath(); x.moveTo(X(0), Y(0)); x.lineTo(X(25), Y(1202 * 25)); x.stroke();
+      x.fillStyle = '#6ee7b7'; mono(x, 32, 600); x.save(); x.translate(X(13), Y(1202 * 13) - 26); x.rotate(-Math.atan2(Y(0) - Y(1202 * 25), X(25) - X(0))); x.fillText('CUMULATIVE AVOIDED', 0, 0); x.restore();
+      const cx = X(1.8); x.strokeStyle = '#67e8f9'; x.lineWidth = 3; x.beginPath(); x.moveTo(cx, b.bot); x.lineTo(cx, emb - 70); x.stroke(); x.fillStyle = '#67e8f9'; mono(x, 30, 600); x.fillText('CARBON PAYBACK · Y1.8', cx + 18, emb - 82);
+      x.fillStyle = '#67e8f9'; mono(x, 26); x.fillText('▮ VERIFIED', b.L, b.bot - 32); LG.u = cx / tw; LG.v = emb / th; }, 2.4, 2048); ledger.position.set(LX, ly + .1, LZ); ledger.rotation.y = -.25; root.add(ledger); const lpad = K.pad(36, 10, TX.concrete); lpad.position.set(LX, ly, LZ); lpad.rotation.y = -.25; root.add(lpad); const cross = sprite(P.cyan2, 2.4, .9); root.add(cross); ledger.updateMatrixWorld(); cross.position.copy(ledger.localToWorld(V3(-15 + 30 * LG.u, 2.4 + 12.6 * (1 - LG.v), .7)));
     const dust = K.dust(60, 110, 0xa7f3d0); root.add(dust);
     return { layers: L, radius: 44, shadowR: 62, fog: .0026, pitch: .46, spin: .03, theta: -.2, lookX: 8, lookY: 3.5, lookZ: -8, focusables: F, tick(t, dt) { const a = t * .3; sat.position.set(Math.cos(a) * 60, 34, Math.sin(a) * 60); sat.userData.aim(a); const sx = Math.cos(a) * 60 * .45, sz = Math.sin(a) * 60 * .45; swath.position.set(sx, gy(sx, sz) + .3, sz); swEdge.position.copy(swath.position); nadir.position.set(sx, gy(sx, sz) + .3, sz); nadir.userData.mat.opacity = .08 + .05 * Math.sin(t * 2); houses.forEach((hs, i) => { hs.userData.win.material.opacity = .3 + .3 * Math.max(0, Math.sin(t * 1.1 + i)); }); cross.material.opacity = .5 + .45 * Math.sin(t * 3); dust.userData.tick(t); } }; };
   S['pipe-home'] = () => { const L = [], F = [], mk = () => { const g = new THREE.Group(); L.push(g); return g; }; const T = K.terrain(220, 100, 1.6, .045, 0xffffff, true, TX.grass); const L0 = mk(); L0.add(T, K.grid(220, 72, P.cyan, .05)); const V0 = villageLayout(T, rnd(7)); const bx = -12, bz = V0.roadZ(-12), by = T.userData.h(bx, bz); const beam = K.beam(26, P.blue2, .9); beam.position.set(bx, by, bz); L0.add(beam); const mk0 = K.marker(P.blue2, 5); mk0.position.set(bx, by + .15, bz); L0.add(mk0); const lb0 = K.label('-8.6427, 120.0132 · SITE LOCKED', '#93c5fd', 16); lb0.position.set(bx + 1.5, by + 13, bz); L0.add(lb0); const dust = K.dust(60, 120); L0.add(dust);
@@ -857,13 +908,30 @@
   S['hero-port'] = () => Object.assign(S.port(), { pitch: .36, theta: -.2, spin: .03, radius: 70, lookY: 4, frame: 1.55 });
 
   /* ---------- runtime ---------- */
-  /* quality governor: one number every renderer multiplies its pixel ratio by. Slow frames step it down
-     (1 -> .85 -> .72 -> .66), fast frames step it back up. Lives here so the hero and the scenes agree. */
-  /* quality governor v2: Q.k is the INTERNAL render scale, not the canvas resolution. The drawing buffer always
-     sits at device resolution; the scene renders into a k-scaled region of it and the composite pass upsamples with a
-     contrast-adaptive sharpen, so a slow GPU gets a slightly softer render, never a blurry canvas. Fed by the GPU
-     timer (milliseconds per rendered frame) when EXT_disjoint_timer_query_webgl2 exists, else by render cadence. */
-  const Q = { k: 1, fr: 0, acc: 0, n: 0, cool: 0, gpu: 0, sample(ms, exact) { if (this.cool > 0) { this.cool--; return; } this.acc += ms; this.n++; if (this.n < 16) return; const avg = this.acc / this.n; this.acc = 0; this.n = 0; this.gpu = avg; const kf = LOW ? .5 : .6; const hi = exact ? 12.5 : 21.5, lo = exact ? 7.5 : 17.2; if (avg > hi && this.k > kf) { this.k = Math.max(kf, +(this.k * (avg > hi * 1.8 ? .72 : .85)).toFixed(2)); this.cool = 20; } else if (avg < lo && this.k < 1) { this.k = Math.min(1, +(this.k / .85).toFixed(2)); this.cool = exact ? 60 : 240; } } };
+  /* Quality governor v3. v2 was fed by EXT_disjoint_timer_query, and on ANGLE/D3D11 that timer counts the idle gaps
+     between command flushes as GPU work: every scene read ~15 ms at any size -- a 209 px card the same as a 1440 px
+     hero -- so the governor held every scene at 60% resolution and sharpened the upscale, which is exactly what made
+     the illustrations look low-quality and crawl. The GPU was in fact idle most of the frame.
+     v3 reads what a viewer sees: display frames missed while scenes are drawing. The display interval is learned
+     from the steady cadence; a window of 90 drawn frames in which more than a fifth ran long (a mount or a tab
+     switch is held out of the count) walks one rung down a ladder ordered by what a viewer notices least:
+       live scenes 3 -> 2 -> 1, then 4x -> 2x multisampling, then render scale 1 -> .88 -> .78 -> .70 (never lower,
+       and still multisampled, so even the bottom rung is cleaner than the old 60% + FXAA + sharpen).
+     Two rungs at once when most frames miss. Three clean windows climb back one rung; a rung that fails again
+     after being regained has to earn it with twice the patience, so a contended GPU settles instead of oscillating. */
+  const LADDER = [[4, 1], [2, 1], [2, .88], [2, .78], [2, .7]];
+  const Q = { k: 1, level: 0, live: 1, ceil: 3, fr: 0, iv: 0, n: 0, miss: 0, clean: 0, hold: 150, fails: [0, 0, 0, 0, 0],
+    get ms() { return LADDER[this.level][0]; }, get scale() { return LADDER[this.level][1]; }, get budget() { return this.scale; },
+    sample(dt) {
+      if (!(dt > 0) || dt > 250) return;
+      this.iv = !this.iv ? dt : dt < this.iv ? this.iv * .8 + dt * .2 : this.iv * .998 + dt * .002;
+      if (this.hold > 0) { this.hold--; return; }
+      this.n++; if (dt > Math.max(this.iv * 1.6, this.iv + 6)) this.miss++;
+      if (this.n < 90) return;
+      const r = this.miss / this.n; this.n = this.miss = 0;
+      if (r > .2) { this.clean = 0; this.hold = 45; if (this.live > 1) { this.ceil = --this.live; } else if (this.level < LADDER.length - 1) { this.fails[this.level]++; this.level = Math.min(LADDER.length - 1, this.level + (r > .45 ? 2 : 1)); } }
+      else if (r < .04) { const need = this.level > 0 ? 3 << Math.min(3, this.fails[this.level - 1]) : 3; if (++this.clean >= need) { this.clean = 0; if (this.level > 0) this.level--; else if (this.live < this.ceil) this.live++; } }
+      else this.clean = 0; } };
   /* a scene draws only once every program it compiled has finished linking (non-blocking query via
      KHR_parallel_shader_compile); without this the first draw stalls the main thread for up to a second */
   const isReady = (st) => { if (st.ready) return true; const now = performance.now(); if (st.polled && now - st.polled < 250) return false; st.polled = now; /* each status query is a GPU-process round trip: poll 4x a second, not every frame */ const gl = st.renderer.getContext(); if (st.ext === undefined) st.ext = gl.getExtension('KHR_parallel_shader_compile'); if (!st.ext || performance.now() - st.born > 4000) return (st.ready = true); const ps = st.renderer.info.programs; for (let i = 0; i < ps.length; i++) if (!gl.getProgramParameter(ps[i].program, st.ext.COMPLETION_STATUS_KHR)) return false; return (st.ready = true); };
@@ -880,20 +948,17 @@
        an ImageBitmap (a GPU mailbox transfer). The old 2D drawImage copy made the CPU wait for the GPU every frame. */
     const off = !canvas && typeof OffscreenCanvas !== 'undefined' && 'transferToImageBitmap' in OffscreenCanvas.prototype;
     let renderer; try { renderer = new THREE.WebGLRenderer({ canvas: canvas || (off ? new OffscreenCanvas(4, 4) : document.createElement('canvas')), antialias: false, alpha: true, powerPreference: 'high-performance' }); } catch (e) { return null; }
-    renderer.debug.checkShaderErrors = false; renderer.setClearColor(0x000000, 0); const dprCap = Math.min(LOW ? 1.5 : 2, window.devicePixelRatio || 1); renderer.setPixelRatio(dprCap);
-    /* GPU frame timer: one query in flight, read back a frame or two later */
-    const gl = renderer.getContext(); const tq = gl.getExtension('EXT_disjoint_timer_query_webgl2'); let q = null, live = false;
+    renderer.debug.checkShaderErrors = false; renderer.setClearColor(0x000000, 0); const dprCap = Math.min(2, window.devicePixelRatio || 1);
     renderer.shadowMap.enabled = !LOW; renderer.shadowMap.type = THREE.PCFShadowMap; renderer.shadowMap.autoUpdate = false;
-    let post = null; try { post = makePost(renderer); renderer.toneMapping = THREE.NoToneMapping; renderer.outputColorSpace = THREE.LinearSRGBColorSpace; /* the composite pass encodes sRGB itself; linear output means compile() and the bloom target build the same program */ } catch (e) { renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.15; }
-    /* The buffer only ever grows: a hero and a card drawn in the same frame used to resize the drawing buffer and the
-       three bloom targets back and forth on every frame. Now each scene renders into its own viewport of one buffer. */
-    return { renderer, post, dprCap, tq, off, W: 0, H: 0, env: envFor(renderer),
-      fit(w, h) { if (w !== this.W || h !== this.H) { this.W = w; this.H = h; renderer.setSize(w, h, false); } if (post) post.region(Math.floor(w * dprCap), Math.floor(h * dprCap), Q.k); },
+    let post = null; try { post = makePost(renderer); renderer.toneMapping = THREE.NoToneMapping; renderer.outputColorSpace = THREE.LinearSRGBColorSpace; /* the composite pass encodes sRGB itself; linear output means compile() and the bloom target build the same program */ } catch (e) { post = null; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.15; }
+    /* Pixels per CSS pixel for a panel: the display's own density, unless the panel is so large that it would pass the
+       pixel budget (a full-bleed hero on a 3440 px ultrawide), and scaled down by the governor only when frames are missed. */
+    const BUDGET = (LOW ? 2.2 : 4.2) * 1e6;
+    return { renderer, post, dprCap, off, W: 0, H: 0, px: 0, env: envFor(renderer),
+      ratio(w, h) { return Math.max(.5, Math.min(dprCap, Math.sqrt(BUDGET / Math.max(1, w * h))) * Q.scale); },
+      fit(w, h) { const px = Math.round(this.ratio(w, h) * 100) / 100; if (w !== this.W || h !== this.H || px !== this.px) { this.W = w; this.H = h; this.px = px; renderer.setDrawingBufferSize(w, h, px); } if (post) post.region(Math.floor(w * px), Math.floor(h * px)); },
       /* deliver the finished frame to a page canvas */
-      show(cv, ctx) { const src = renderer.domElement; if (off) { ctx.transferFromImageBitmap(src.transferToImageBitmap()); return; } const pw = src.width, ph = src.height; if (cv.width !== pw || cv.height !== ph) { cv.width = pw; cv.height = ph; } else ctx.clearRect(0, 0, pw, ph); ctx.drawImage(src, 0, 0); },
-      begin() { if (!tq || live || this.pending) return; if (!q) q = gl.createQuery(); gl.beginQuery(tq.TIME_ELAPSED_EXT, q); live = true; },
-      end() { if (!tq || !live) return; gl.endQuery(tq.TIME_ELAPSED_EXT); live = false; this.pending = true; },
-      poll() { if (!tq || !q || !this.pending || live) return null; if (!gl.getQueryParameter(q, gl.QUERY_RESULT_AVAILABLE)) return null; this.pending = false; if (gl.getParameter(tq.GPU_DISJOINT_EXT)) return null; return gl.getQueryParameter(q, gl.QUERY_RESULT) / 1e6; } };
+      show(cv, ctx) { const src = renderer.domElement; if (off) { ctx.transferFromImageBitmap(src.transferToImageBitmap()); return; } const pw = src.width, ph = src.height; if (cv.width !== pw || cv.height !== ph) { cv.width = pw; cv.height = ph; } else ctx.clearRect(0, 0, pw, ph); ctx.drawImage(src, 0, 0); } };
   };
   let SHARED = null; const acquire = () => SHARED || (SHARED = makeRenderer(null));
   function mount(cv) {
@@ -905,19 +970,19 @@
     lightRig(scene, def.shadowR || def.radius, !!def.frame || cv.clientWidth > 900, def.bright);
     const cam = new THREE.PerspectiveCamera(def.fov || 36, 1, 1, 1600); /* heroes take a wider lens: more depth, more scale */
     const th0 = def.theta == null ? -.6 : def.theta, look0 = V3(def.lookX || 0, def.lookY == null ? def.radius * .12 : def.lookY, def.lookZ || 0);
-    const st = { cv, R, blit, renderer, post, scene, cam, def, t: Math.random() * 50, theta: th0, phi: def.pitch || .78, tTheta: th0, vTheta: 0, drag: false, moved: 0, lx: 0, vis: false, step: cv.dataset.step != null ? +cv.dataset.step : def.layers.length - 1, shown: def.layers.map(() => 1), spin: def.spin || .1, mx: 0, my: 0, W: 0, H: 0, hover: null, focus: null, look: look0.clone(), lookT: look0.clone(), look0, labels, zoom: 1, zoomT: 1, fit: 1, fitT: 1, vc: 0, vcT: 0, phiT: def.pitch || .78, label: null, px: 9, py: 0, fr: 0, ready: false, born: performance.now(), card: !name.startsWith('pipe') && !name.startsWith('hero'), hero: name.startsWith('hero'), track: cv.closest('.hs'), su: 0, faded: false, op1: getComputedStyle(cv).opacity, sdirty: 3 };
+    const st = { cv, R, blit, renderer, post, scene, cam, def, t: Math.random() * 50, theta: th0, phi: def.pitch || .78, tTheta: th0, vTheta: 0, drag: false, moved: 0, lx: 0, vis: false, step: cv.dataset.step != null ? +cv.dataset.step : def.layers.length - 1, shown: def.layers.map(() => 1), spin: def.spin || .1, mx: 0, my: 0, W: 0, H: 0, hover: null, focus: null, look: look0.clone(), lookT: look0.clone(), look0, labels, zoom: 1, zoomT: 1, fit: 1, fitT: 1, vc: 0, vcT: 0, phiT: def.pitch || .78, label: null, px: 9, py: 0, fr: 0, ready: false, born: performance.now(), card: !name.startsWith('pipe') && !name.startsWith('hero'), hero: name.startsWith('hero'), track: cv.closest('.hs'), su: 0, faded: false, op1: getComputedStyle(cv).opacity, sdirty: 3, need: 2, ease: 0, area: 0 };
     /* every scene fades in on its first drawn frame, like the hero behind the preloader */
     cv.style.opacity = '0'; cv.style.transition = 'opacity 1.2s ease, filter .5s'; void getComputedStyle(cv).opacity;
     def.layers.forEach((g, i) => { g.visible = i <= st.step; });
     inst.set(cv, st); home(st);
-    const size = () => { const w = cv.clientWidth, h = cv.clientHeight; if (!w || !h || (w === st.W && h === st.H)) return; st.W = w; st.H = h; cam.aspect = w / h; cam.updateProjectionMatrix(); };
+    const size = () => { const w = cv.clientWidth, h = cv.clientHeight; if (!w || !h || (w === st.W && h === st.H)) return; st.W = w; st.H = h; cam.aspect = w / h; cam.updateProjectionMatrix(); st.need = 2; };
     size(); new ResizeObserver(size).observe(cv);
-    new IntersectionObserver((e) => { st.vis = e[0].isIntersecting; }).observe(cv);
+    new IntersectionObserver((e) => { st.vis = e[0].isIntersecting; if (st.vis) st.need = Math.max(st.need, 1); }).observe(cv);
     cv.style.cursor = 'grab'; cv.style.touchAction = 'pan-y';
     cv.addEventListener('pointerdown', (e) => { st.drag = true; st.moved = 0; st.lx = e.clientX; cv.style.cursor = 'grabbing'; cv.setPointerCapture(e.pointerId); });
     cv.addEventListener('pointermove', (e) => { const r = cv.getBoundingClientRect(); st.mx = (e.clientX - r.left) / r.width - .5; st.my = (e.clientY - r.top) / r.height - .5; st.px = st.mx * 2; st.py = -st.my * 2; if (!st.drag) return; const dx = e.clientX - st.lx; st.lx = e.clientX; st.moved += Math.abs(dx); st.tTheta += dx * .008; st.vTheta = dx * .008; });
     const up = () => { const was = st.drag; st.drag = false; cv.style.cursor = st.hover ? 'pointer' : 'grab'; if (was && st.moved < 4) { if (st.hover) { st.focus = st.hover; st.hover.getWorldPosition(st.lookT); st.zoomT = .62; } else { st.focus = null; home(st); } } };
-    cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up); cv.addEventListener('pointerleave', () => { st.mx = st.my = 0; st.px = 9; });
+    cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up); cv.addEventListener('pointerleave', () => { st.mx = st.my = 0; st.px = 9; st.need = Math.max(st.need, 2); });
   }
   /* the resting camera for the current step (pipelines move the camera per step) */
   function home(st) { const s = st.def.steps && st.def.steps[st.step]; st.phiT = (s && s.pitch) || st.def.pitch || .78; if (s) { st.lookT.set(s.look[0], s.look[1], s.look[2]); st.zoomT = (s.mzoom && st.W / Math.max(1, st.H) < .9 && s.mzoom) || s.zoom || 1; } else { st.lookT.copy(st.look0); st.zoomT = 1; } }
@@ -947,13 +1012,15 @@
     if (!o || !o.visible) return;
     if (!o.userData.s0) o.userData.s0 = o.scale.clone();
     o.scale.copy(o.userData.s0);
-    o.getWorldPosition(lbv); const d = st.cam.position.distanceTo(lbv);
+    o.getWorldPosition(lbv); const d = CWP.distanceTo(lbv);
     lbv.project(st.cam); if (lbv.z > 1 || !isFinite(lbv.x) || !isFinite(lbv.y)) return;
     const m = .03, L = lmin + m, Rr = 1 - m;
     /* a panel that pulled back to frame its subject would otherwise render its readouts too small to read, so a
        line under about fifteen pixels tall grows until it is legible -- and only then is trimmed to fit. */
+    /* and every caption lands in one legible band -- rows of 20 to 28 px -- whatever its authored size and however
+       far the camera has pulled back or pushed in, so the pack's step caption no longer shouts over the pack */
     const hpx = o.scale.y / Math.max(.001, d * tv) * .5 * st.H / (o.userData.rows || 1);
-    if (hpx < 15) o.scale.multiplyScalar(Math.min(1.55, 15 / Math.max(.001, hpx)));
+    if (hpx < 20) o.scale.multiplyScalar(Math.min(2, 20 / Math.max(.001, hpx))); else if (hpx > 28) o.scale.multiplyScalar(28 / hpx);
     let w = o.scale.x / Math.max(.001, d * tv * asp);
     if (w > Rr - L) { const k = Math.max(.6, (Rr - L) / w); o.scale.multiplyScalar(k); w *= k; }
     const cx0 = 1 - (Rr - lbv.x) / w, cx1 = (lbv.x - L) / w;
@@ -964,7 +1031,7 @@
   }
   function fitLabels(st) {
     if (!st.labels.length && !st.label) return;
-    st.cam.updateMatrixWorld();
+    st.cam.updateMatrixWorld(); st.cam.getWorldPosition(CWP); /* world, not local: the home hero's camera rides a rotating rig */
     const tv = Math.tan(st.cam.fov * Math.PI / 360), asp = st.cam.aspect;
     /* a pipeline composes its subject to one side because the other side carries the copy, so its readouts are
        held inside the half the scene actually owns rather than being pushed in under the paragraph. */
@@ -972,7 +1039,27 @@
     const lmin = sh && !narrow ? Math.min(.55, Math.max(-1, 2 * (sh.x - .18) - 1)) : -1;
     for (let i = 0; i < st.labels.length; i++) clampLabel(st.labels[i], st, tv, asp, lmin);
     clampLabel(st.label, st, tv, asp, lmin);
+    /* Captions never print over one another. Rendered crisp, two captions anchored near the same spot (the geothermal
+       field's resource line over its benchmark line) read as one garbled line. They are placed in priority order --
+       the hover caption, then the newest step's -- and one that would land on a placed caption steps just below or
+       above it; if neither fits it sits this frame out (clampLabel restores its scale on the next). */
+    LR.length = 0; const gap = .014, list = [];
+    if (st.label && st.label.visible) list.push(st.label);
+    for (let i = st.labels.length - 1; i >= 0; i--) if (st.labels[i].visible) list.push(st.labels[i]);
+    for (let k = 0; k < list.length; k++) {
+      const o = list[k]; if (!o.userData.s0 || !o.scale.x) continue;
+      o.getWorldPosition(lbv); const d = CWP.distanceTo(lbv); lbv.project(st.cam); if (lbv.z > 1) continue;
+      const w = o.scale.x / Math.max(.001, d * tv * asp), h = o.scale.y / Math.max(.001, d * tv), x0 = lbv.x - o.center.x * w;
+      const hit = (yy) => { for (let j = 0; j < LR.length; j++) { const r = LR[j]; if (x0 < r[2] + gap && x0 + w > r[0] - gap && yy < r[3] + gap && yy + h > r[1] - gap) return r; } return null; };
+      let y0 = lbv.y - o.center.y * h; const r = hit(y0);
+      if (r) { const a = r[1] - gap - h, b = r[3] + gap, opts = Math.abs(a - y0) < Math.abs(b - y0) ? [a, b] : [b, a]; let ok = null;
+        for (let j = 0; j < 2; j++) { const yy = opts[j]; if (Math.abs(yy - y0) < h * 1.8 && yy > -.97 && yy + h < .97 && !hit(yy)) { ok = yy; break; } }
+        if (ok == null) { o.scale.set(0, 0, 0); continue; }
+        o.center.y = (lbv.y - ok) / h; y0 = ok; }
+      LR.push([x0, y0, x0 + w, y0 + h]);
+    }
   }
+  const LR = [], CWP = new THREE.Vector3();
   /* How far does the subject actually reach across the panel? Every named object in the scene -- the cranes, the
      ship, the substation, the tower -- is projected corner by corner into panel space; ground, water and grid
      are left out because those are meant to run off the edges. The reach becomes the camera distance for the
@@ -1027,7 +1114,7 @@
     if (y1 > y0) { const yc = (y0 + y1) / 2; st.vcT = Math.max(-.16, Math.min(.16, isFinite(yc) ? yc / 2 : 0)); }
   }
   function frame(st, dt) {
-    st.t += dt; const fs = st.def.steps && st.def.steps[st.step]; if (!st.drag) { if (fs && fs.face != null) { const want = fs.face + Math.sin(st.t * .12) * (fs.span || .35); st.tTheta += (want - st.tTheta) * (1 - Math.pow(.95, dt * 60)) * .6 + st.vTheta; } else st.tTheta += (reduce ? 0 : st.spin * dt) + st.vTheta; st.vTheta *= .92; } const e1 = 1 - Math.pow(.88, dt * 60), e2 = 1 - Math.pow(.95, dt * 60); st.theta += (st.tTheta - st.theta) * e1;
+    st.t += dt; const fs = st.def.steps && st.def.steps[st.step]; if (!st.drag) { if (fs && fs.face != null) { const want = fs.face + Math.sin(st.t * .12) * (fs.span || .35); st.tTheta += (want - st.tTheta) * (1 - Math.pow(.95, dt * 60)) * .6 + st.vTheta; } else st.tTheta += (reduce ? 0 : st.spin * dt) + st.vTheta; st.vTheta *= .92; } const still = dt === 0, e1 = still ? 1 : 1 - Math.pow(.88, dt * 60), e2 = still ? 1 : 1 - Math.pow(.95, dt * 60); /* a held scene redrawn once lands its camera on its targets: it will not get the frames to glide there */ st.theta += (st.tTheta - st.theta) * e1;
     st.zoom += (st.zoomT - st.zoom) * e2; st.phi += (st.phiT - st.phi) * e2; st.look.lerp(st.lookT, e2);
     st.fit += (st.fitT - st.fit) * e2; st.vc += (st.vcT - st.vc) * e2;
     /* scroll rig, as on the home hero: a hero tracks the first viewport of scroll and lifts to an overview; a card tracks
@@ -1043,7 +1130,9 @@
     st.cam.position.set(st.look.x + Math.sin(th) * Math.cos(phi) * R, st.look.y + Math.sin(phi) * R, st.look.z + Math.cos(th) * Math.cos(phi) * R); st.cam.lookAt(st.look); lens(st.cam, sx, sy + st.vc);
     st.def.layers.forEach((g, i) => { if (i > st.step) { g.visible = false; return; } g.visible = true; if (st.shown[i] < 1) { st.shown[i] = Math.min(1, st.shown[i] + dt * .9); build(g, st.shown[i]); } else if (!g.userData.built) build(g, 1); });
     if (st.def.tick) st.def.tick(st.t, reduce ? 0 : dt, st.step, st.shown[3] == null ? 1 : st.shown[3]);
-    if (narrow) for (let i = 0; i < st.labels.length; i++) st.labels[i].visible = false;
+    /* a caption only earns its place where it can be read: a phone-shaped panel or a thumbnail card carries its
+       words in the HTML beside it, so the scene there stays clean instead of wearing a line of illegible glyphs */
+    if (narrow || (st.card && st.W < 560)) for (let i = 0; i < st.labels.length; i++) st.labels[i].visible = false;
     /* a pipeline's earlier captions leave the frame two steps on, so the board and the table are read on their own */
     else if (st.def.steps) for (let i = 0; i < st.labels.length; i++) { const li = st.labels[i].userData.layer; if (li > 0 && li < st.step - 1) st.labels[i].visible = false; }
     fitLabels(st);
@@ -1055,19 +1144,50 @@
     if (st.post) { const wide = st.hero && !narrow; st.post.fade(wide ? 0 : -1, wide ? .34 : -1); st.post.render(st.scene, st.cam); } else st.renderer.render(st.scene, st.cam);
     if (st.blit) st.R.show(st.cv, st.blit);
     if (!st.faded) { st.faded = true; st.cv.style.opacity = st.op1; }
-    if (st.card && (st.fr & 7) === 0) autoFrame(st);
+    if (st.card && (still || ((st.af = (st.af | 0) + 1) & 7) === 1)) autoFrame(st); /* its own counter: st.fr only advances in dynamic scenes, so this ran every frame */
   }
-  /* One loop draws everything, at most ~60 times a second: a 120 or 240 Hz panel scrolls natively at its own rate
-     while the 3D redraws at 60, which leaves the GPU three times the budget per frame. The GPU timer brackets the
-     whole frame's draws (scenes and the driven home hero) and feeds the governor. */
-  let lastR = 0, clock = 0; const DRIVEN = [];
-  function loop(now) { requestAnimationFrame(loop); if (now - lastR < 13.5) return; const dt = Math.max(0, Math.min(.05, lastR ? (now - lastR) / 1000 : .016)); lastR = now; clock += reduce ? 0 : dt; EM.forEach((m) => { m.uniforms.t.value = clock; }); FLOWS.forEach((f) => { f.u = (f.u + dt * f.v) % 1; if (!(f.u >= 0)) f.u = 0; f.at(f.u, f.s.position); f.s.material.opacity = .35 + .65 * Math.sin(f.u * Math.PI); }); let nvis = 0; inst.forEach((st) => { if (st.vis) nvis++; }); DRIVEN.forEach((d) => { if (d.vis()) nvis++; }); if (!nvis) return; const R = SHARED; if (R) R.begin(); let ci = 0; inst.forEach((st) => { if (!st.vis || !isReady(st)) return; if (st.card && nvis > 2 && ((ci++ + Q.fr) & 1)) return; if (st.W) frame(st, dt); }); DRIVEN.forEach((d) => { if (d.vis()) d.draw(dt); }); Q.fr++; if (R) { R.end(); const ms = R.poll(); if (ms != null) Q.sample(ms, true); else if (!R.tq) Q.sample(dt * 1000, false); } }
+  /* One loop, in lockstep with the page's own scroll, and a scheduler deciding what animates. The old loop capped
+     the 3D at ~60 (a 99 Hz panel got 49.5) and, with more than two scenes in view, drew each card every other frame:
+     25-30 fps cards on a smoothly scrolling page, which is the judder people saw. Drawing everything every frame is
+     not the answer either: six live cards are ~1,500 draw calls a frame, more than a laptop's integrated GPU can
+     turn around in 16 ms. So a scene animates only when it is the thing being looked at:
+       - the largest feature in view (a hero, a pinned pipeline, a full-width scene) is live at full rate; a faster GPU
+         earns a second and third (Q.live);
+       - in a grid of thumbnail cards one card at a time is live -- the one under the pointer, else a spotlight that
+         moves on every few seconds -- and it eases in and out of motion rather than starting and stopping;
+       - everything else holds its last frame, which costs nothing, and is redrawn once whenever it needs to be
+         (it came into view, it was resized, its step or focus changed).
+     Above ~140 Hz it draws every second display frame, which is still an even cadence. */
+  let lastR = 0, clock = 0, drew = false, spot = null, spotT = 0; const DRIVEN = [];
+  const building = (st) => { for (let i = 0; i <= st.step && i < st.shown.length; i++) if (st.shown[i] < 1) return true; return false; };
+  const onScreen = (cv, vw, vh) => { const r = cv.getBoundingClientRect(); return Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0)) * Math.max(0, Math.min(r.right, vw) - Math.max(r.left, 0)); };
+  function loop(now) { requestAnimationFrame(loop); if (lastR && now - lastR < 7) return; const ms = lastR ? now - lastR : 16.7, dt = Math.max(0, Math.min(.05, ms / 1000)); lastR = now; clock += reduce ? 0 : dt; EM.forEach((m) => { m.uniforms.t.value = clock; }); FLOWS.forEach((f) => { f.u = (f.u + dt * f.v) % 1; if (!(f.u >= 0)) f.u = 0; f.at(f.u, f.s.position); f.s.material.opacity = .35 + .65 * Math.sin(f.u * Math.PI); });
+    const vw = window.innerWidth, vh = window.innerHeight, feats = [], grid = [];
+    inst.forEach((st) => { st.hot = false; if (!st.vis || !st.W || !isReady(st)) return; st.area = onScreen(st.cv, vw, vh); if (st.area > 0) (st.card && st.W < 560 ? grid : feats).push(st); });
+    DRIVEN.forEach((d) => { d.hot = false; if (d.vis()) { d.area = d.cv ? onScreen(d.cv, vw, vh) : vw * vh; if (d.area > 0) feats.push(d); } });
+    feats.sort((a, b) => b.area - a.area);
+    for (let i = 0; i < feats.length; i++) { const f = feats[i]; f.hot = i < Q.live || !!(f.drag || f.focus || f.pin || (f.px != null && f.px <= 2) || (f.shown && building(f))); }
+    if (grid.length) {
+      const hov = grid.find((st) => st.px <= 2 || st.drag);
+      if (hov) { spot = hov; spotT = now; } else if (!spot || grid.indexOf(spot) < 0 || now - spotT > 7000) { spot = grid[(grid.indexOf(spot) + 1) % grid.length]; spotT = now; }
+      spot.hot = true; grid.forEach((st) => { if (st.focus || st.pin || building(st)) st.hot = true; });
+    }
+    let did = false;
+    const run = (st, isGrid) => { if (st.hot) st.ease = Math.min(1, st.ease + ms / 600); else st.ease = isGrid ? Math.max(0, st.ease - ms / 700) : 0;
+      if (st.ease > 0 || st.need > 0) { frame(st, dt * sm(st.ease)); if (st.need > 0) st.need--; did = true; } };
+    feats.forEach((f) => { if (f.draw) { if (f.hot || !f.drawn) { f.draw(dt); f.drawn = true; did = true; } } else run(f, false); });
+    grid.forEach((st) => run(st, true));
+    if (!warmed || busy) Q.hold = Math.max(Q.hold, 30); /* compiles and mounts are not the GPU's steady state */
+    Q.fr++; if (did && drew) Q.sample(ms); drew = did; }
   /* mount each scene when it comes within 900 px of the viewport, one per idle slot, and compile its shaders
      right away so the GPU links them in the background long before the first real draw */
   const queue = []; let busy = false;
   const idle = window.requestIdleCallback ? (f) => window.requestIdleCallback(f, { timeout: 300 }) : (f) => setTimeout(f, 16);
   /* after compile, one 2x2 render builds the scene's shadow-depth and bloom variants while it is still off screen */
-  const pump = () => { if (busy || !queue.length || !warmed) return; busy = true; const cv = queue.shift(); idle(() => { try { mount(cv); const st = inst.get(cv); if (st) { st.renderer.compile(st.scene, st.cam); st.R.fit(2, 2); st.renderer.shadowMap.needsUpdate = true; if (st.post) st.post.render(st.scene, st.cam); else st.renderer.render(st.scene, st.cam); } } catch (e) { console.warn('holo mount', e); } busy = false; pump(); }); };
+  /* mounting waits for the lettering face, not for the warm-up: a scene compiles its own programs on mount and isReady()
+     holds its first draw until they link, so gating every scene behind the whole warm-up only delayed the page */
+  let fontsIn = false;
+  const pump = () => { if (busy || !queue.length || !fontsIn) return; busy = true; const cv = queue.shift(); idle(() => { try { mount(cv); const st = inst.get(cv); if (st) { st.renderer.compile(st.scene, st.cam); st.R.fit(2, 2); st.renderer.shadowMap.needsUpdate = true; if (st.post) st.post.render(st.scene, st.cam); else st.renderer.render(st.scene, st.cam); } } catch (e) { console.warn('holo mount', e); } Q.hold = Math.max(Q.hold, 20); /* a mount is a one-off stall, not a slow GPU */ busy = false; pump(); }); };
   const queued = new Set(); const enqueue = (cv, front) => { if (queued.has(cv)) return; queued.add(cv); if (front) queue.unshift(cv); else queue.push(cv); pump(); };
   const lazy = new IntersectionObserver((es) => { es.forEach((e) => { if (!e.isIntersecting) return; lazy.unobserve(e.target); enqueue(e.target, true); }); }, { rootMargin: '900px 0px' });
   const all = [...document.querySelectorAll('canvas[data-holo]')]; all.forEach((cv) => lazy.observe(cv));
@@ -1091,19 +1211,24 @@
   let warmed = false; const onWarm = [];
   const warm = () => { const R = acquire(); if (!R) { warmed = true; onWarm.splice(0).forEach((f) => f()); return; } const fams = warmFams(R.env); const cam = new THREE.PerspectiveCamera(36, 1, 1, 100); cam.position.set(0, 2, 6); cam.lookAt(0, 0, 0);
     const mk = (obj) => { const sc = new THREE.Scene(); sc.fog = new THREE.FogExp2(P.bg, .0034); lightRig(sc, 40, true); obj.castShadow = obj.receiveShadow = !!obj.isMesh; sc.add(obj); return sc; };
-    const step = () => { if (fams.length) { try { R.renderer.compile(mk(fams.shift()()), cam); } catch (e) { console.warn('warm', e); } idle(step); return; }
+    /* as many families per idle slot as the slot has time for: one per slot, each slot up to 300 ms apart, made the
+       warm-up take seconds on a busy machine, and everything waited behind it */
+    const step = (dl) => { let k = 0; while (fams.length && (k++ === 0 || (dl && dl.timeRemaining && dl.timeRemaining() > 5))) { try { R.renderer.compile(mk(fams.shift()()), cam); } catch (e) { console.warn('warm', e); } } if (fams.length) { idle(step); return; }
       /* one 2x2 render with a casting mesh and an instanced mesh: shadow-depth variants, bloom passes */
       try { const sc = mk(new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), solid(0x888888))); const im = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), solid(0x888888), 1); im.castShadow = im.receiveShadow = true; sc.add(im); R.fit(2, 2); R.renderer.shadowMap.needsUpdate = true; if (R.post) R.post.render(sc, cam); else R.renderer.render(sc, cam); } catch (e) { console.warn('warm render', e); }
       warmed = true; onWarm.splice(0).forEach((f) => f()); };
     idle(step); };
-  idle(warm); onWarm.push(pump);
+  /* every scene draws its captions and boards into canvases, so nothing is built until the lettering face is in:
+     otherwise the first scenes baked their labels in a fallback monospace. Never waits more than 2.5 s. */
+  const fonts = !document.fonts ? Promise.resolve() : Promise.race([Promise.all([document.fonts.load('600 74px "JetBrains Mono"'), document.fonts.load('500 40px "JetBrains Mono"')]), new Promise((r) => setTimeout(r, 2500))]).catch(() => {});
+  fonts.then(() => { fontsIn = true; pump(); idle(warm); });
   /* and everything else in page order during idle time, so no scroll ever meets an unbuilt scene */
   onWarm.push(() => all.forEach((cv) => enqueue(cv, false)));
   requestAnimationFrame(loop);
-  window.Holo = { Q, acquire, drive(d) { DRIVEN.push(d); }, whenWarm(f) { if (warmed) f(); else onWarm.push(f); }, inspect(cv) { const st = inst.get(cv); return st && { step: st.step, look: st.look.toArray(), lookT: st.lookT.toArray(), zoom: st.zoom, zoomT: st.zoomT, cam: st.cam.position.toArray(), theta: st.theta, phi: st.phi, W: st.W, H: st.H }; }, setStep(cv, i) { const st = inst.get(cv); if (!st) return; if (i !== st.step) { for (let k = st.step + 1; k <= i; k++) { st.shown[k] = 0; st.def.layers[k].userData.built = false; } st.step = i; st.sdirty = 3; if (!st.focus) home(st); } },
+  window.Holo = { Q, acquire, fonts, fitLabels, drive(d) { DRIVEN.push(d); }, whenWarm(f) { if (warmed) f(); else onWarm.push(f); }, inspect(cv) { const st = inst.get(cv); return st && { step: st.step, look: st.look.toArray(), lookT: st.lookT.toArray(), zoom: st.zoom, zoomT: st.zoomT, cam: st.cam.position.toArray(), theta: st.theta, phi: st.phi, W: st.W, H: st.H }; }, setStep(cv, i) { const st = inst.get(cv); if (!st) return; st.need = Math.max(st.need, 2); if (i !== st.step) { for (let k = st.step + 1; k <= i; k++) { st.shown[k] = 0; st.def.layers[k].userData.built = false; } st.step = i; st.sdirty = 3; if (!st.focus) home(st); } },
     /* Point the scene at one named object from outside it, so a list of documents beside the panel can drive
        the camera the same way clicking the object does. A falsy needle lets the scene go home again. */
-    focus(cv, needle) { const st = inst.get(cv); if (!st || !st.def.focusables) return;
+    focus(cv, needle) { const st = inst.get(cv); if (!st || !st.def.focusables) return; st.need = Math.max(st.need, 30);
       const o = needle ? st.def.focusables.find((f) => (f.userData.name || '').indexOf(needle) === 0) : null;
       if (st.pin && st.pin !== o) { setGlow(st.pin, false); st.pin = null; }
       if (!o) { st.focus = null; home(st); return; }

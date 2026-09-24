@@ -258,6 +258,13 @@ main{position:relative;z-index:1}
 .pcell:hover canvas{opacity:1}
 .pcell:hover::before{opacity:1}
 .pcell:hover>em{color:var(--fc)}
+/* the survey sweep over a landed field: a transform animation the compositor runs without repainting the canvas */
+.pf-sweep{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;opacity:0;transition:opacity 1.2s var(--ease)}
+.pf-sweep.on{opacity:1}
+.pf-sweep::before{content:"";position:absolute;top:0;bottom:0;left:0;width:32%;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.055),rgba(255,255,255,0));transform:translate3d(-130%,0,0)}
+.pf-sweep.on::before{animation:pf-sweep 9.4s linear infinite}
+@keyframes pf-sweep{to{transform:translate3d(340%,0,0)}}
+@media (prefers-reduced-motion:reduce){.pf-sweep{display:none}}
 
 /* the second rank of proof: the figures that describe the machine, not the map */
 .prail{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;margin-top:1px;background:var(--line);border:1px solid var(--line);border-top:0;border-radius:0 0 var(--r) var(--r);overflow:hidden}

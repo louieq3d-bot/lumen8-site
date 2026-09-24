@@ -3,8 +3,15 @@
    counts: village clusters across an archipelago, berths along a coast,
    a lattice of tower sites, a mosaic of classified parcels. The field
    fills in as the number counts up, then holds with a slow survey sweep.
-   One shared rAF, only while the band is on screen. Static under
-   prefers-reduced-motion. No dependencies. */
+   One shared rAF, only while a field is still filling in. Static under
+   prefers-reduced-motion. No dependencies.
+
+   v2: a field is painted every frame only while it fills in (~2 s). After that
+   it is painted once, as a still, and the canvas is left alone: four canvases
+   re-rasterising hundreds of arcs every frame, forever, for a twinkle, cost the
+   GPU process the time the 3D scenes and the scroll itself needed. The survey
+   sweep is now a CSS transform on an overlay, which the compositor animates
+   without repainting anything. */
 (function () {
   'use strict';
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -161,7 +168,8 @@
   document.querySelectorAll('[data-field]').forEach((cv) => {
     const kind = cv.dataset.field;
     if (!BUILD[kind]) return;
-    cells.push({ cv, kind, col: getComputedStyle(cv).getPropertyValue('--fc').trim() || '#22d3ee', ctx: cv.getContext('2d'), g: null, w: 0, h: 0, k: 0, on: false });
+    const sw = document.createElement('i'); sw.className = 'pf-sweep'; sw.setAttribute('aria-hidden', 'true'); cv.after(sw);
+    cells.push({ cv, sw, kind, col: getComputedStyle(cv).getPropertyValue('--fc').trim() || '#22d3ee', ctx: cv.getContext('2d'), g: null, w: 0, h: 0, k: 0, on: false, done: false });
   });
   if (!cells.length) return;
 
@@ -176,28 +184,26 @@
     return true;
   };
 
+  /* the still a landed field holds: every mark at a fixed phase of its twinkle, so the field keeps its texture */
+  const HOLD = 2.4;
   const paint = (s, t) => {
     if (!size(s)) return;
     const c = s.ctx; c.clearRect(0, 0, s.w, s.h);
     DRAW[s.kind](c, s.w, s.h, s.g, s.k, t, s.col);
-    /* survey sweep — a soft band that walks the field once the count has landed */
-    if (!reduce && s.k >= 1) {
-      const u = ((t * .16) % 1.5) - .25, x = u * s.w;
-      const grd = c.createLinearGradient(x - s.w * .16, 0, x + s.w * .16, 0);
-      grd.addColorStop(0, 'rgba(255,255,255,0)'); grd.addColorStop(.5, 'rgba(255,255,255,.055)'); grd.addColorStop(1, 'rgba(255,255,255,0)');
-      c.globalAlpha = 1; c.fillStyle = grd; c.fillRect(x - s.w * .16, 0, s.w * .32, s.h);
-    }
     c.globalAlpha = 1;
   };
+  /* the count has landed: paint the still once, hand the sweep to the compositor, stop drawing */
+  const land = (s) => { s.k = 1; paint(s, HOLD); s.done = true; if (!reduce) s.sw.classList.add('on'); };
 
   let running = false, t0 = 0;
   const tick = (now) => {
     if (!t0) t0 = now;
     const t = (now - t0) / 1000; let live = false;
     cells.forEach((s) => {
-      if (!s.on) return; live = true;
-      if (s.k < 1) s.k = Math.min(1, s.k + 1 / 110);
-      paint(s, t);
+      if (!s.on || s.done) return;
+      s.k = Math.min(1, s.k + 1 / 110);
+      /* the fill-in eases every mark towards its held phase, so landing is not a jump */
+      if (s.k < 1) { paint(s, HOLD - (1 - s.k) * 1.5); live = true; } else land(s);
     });
     if (live) requestAnimationFrame(tick); else running = false;
   };
@@ -207,10 +213,10 @@
     es.forEach((e) => {
       const s = cells.find((x) => x.cv === e.target); if (!s) return;
       s.on = e.isIntersecting;
-      if (e.isIntersecting) { if (reduce) { s.k = 1; paint(s, 0); } else start(); }
+      if (e.isIntersecting) { if (reduce || s.done) land(s); else start(); }
     });
   }, { threshold: .12 });
   cells.forEach((s) => io.observe(s.cv));
 
-  let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { cells.forEach((s) => { s.w = 0; if (reduce) paint(s, 0); }); start(); }, 160); }, { passive: true });
+  let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { cells.forEach((s) => { s.w = 0; if (s.done) paint(s, HOLD); }); start(); }, 160); }, { passive: true });
 })();

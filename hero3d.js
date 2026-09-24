@@ -13,6 +13,8 @@
   if (!cv || typeof THREE === 'undefined' || !window.Holo) return;
   const H = window.Holo, K = H.kit, M = H.mats, TX = H.tex, P = H.P;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* built once the lettering face is loaded: the board and captions are drawn into canvases */
+  const boot = () => {
   /* the hero draws through the site's one shared renderer and blits into its own canvas */
   const R = H.acquire(); if (!R) return; const renderer = R.renderer, post = R.post, blit = cv.getContext(R.off ? 'bitmaprenderer' : '2d');
   const field = document.querySelector('canvas[data-field]'); if (field) field.style.display = 'none';
@@ -76,11 +78,16 @@
   /* ---------- energy → money: the current, and the board that turns it into revenue ---------- */
   const CX = 72, CZ = -62, cy = terrainH(CX, CZ);
   const BW = 30, HB = 12.6, legH = 2.6, x0 = -BW * .46, x1 = BW * .3, gap = (x1 - x0) / 26, zero = HB * .3, top = HB * .68;
-  const board = K.screen(BW, HB, (x, tw, th) => { const px = (u) => (u + BW / 2) / BW * tw, py = (v) => (1 - v / HB) * th; x.fillStyle = '#070c16'; x.fillRect(0, 0, tw, th); const gr = x.createLinearGradient(0, 0, 0, th); gr.addColorStop(0, 'rgba(52,211,153,.12)'); gr.addColorStop(1, 'rgba(34,211,238,.04)'); x.fillStyle = gr; x.fillRect(0, 0, tw, th); x.textBaseline = 'alphabetic'; x.fillStyle = '#eaf0f8'; x.font = '600 40px "JetBrains Mono", monospace'; x.fillText('REVENUE · 25 YEARS', 60, 64); x.fillStyle = '#6ee7b7'; x.font = '500 22px "JetBrains Mono", monospace'; x.fillText('128 MWp + WIND 12.6 MW · P50 · USD', 640, 64);
-    [['REVENUE', '$13.1 M / yr', '#6ee7b7'], ['IRR', '14.2%', '#6ee7b7'], ['NPV', '$48 M', '#bfdbfe'], ['DSCR', '1.41', '#bfdbfe'], ['TARIFF', '$0.061 / kWh', '#bfdbfe']].forEach(([k, v, c], i) => { const X = 60 + i * 300; x.fillStyle = '#6f7b91'; x.font = '500 20px "JetBrains Mono", monospace'; x.fillText(k, X, 118); x.fillStyle = c; x.font = '600 34px "JetBrains Mono", monospace'; x.fillText(v, X, 160); });
-    x.strokeStyle = 'rgba(103,232,249,.09)'; x.lineWidth = 2; for (let i = 1; i <= 4; i++) { const y = py(zero + (top - zero) * i / 4); x.beginPath(); x.moveTo(px(x0), y); x.lineTo(px(x1), y); x.stroke(); } x.strokeStyle = 'rgba(103,232,249,.7)'; x.lineWidth = 3; x.beginPath(); x.moveTo(px(x0), py(zero)); x.lineTo(px(x1), py(zero)); x.stroke();
-    x.fillStyle = '#8b96a8'; x.font = '500 22px "JetBrains Mono", monospace'; x.textAlign = 'center'; for (let yv = 0; yv <= 25; yv += 5) { const X = px(x0 + gap * (yv + .5)); x.fillRect(X - 1, py(zero) - 6, 2, 12); x.fillText('Y' + yv, X, py(zero) + 38); } x.textAlign = 'left';
-    x.fillStyle = '#34d399'; x.font = '500 18px "JetBrains Mono", monospace'; x.fillText('▮ REVENUE / YEAR', px(x0), py(top) - 12); x.fillStyle = '#67e8f9'; x.fillText('— CUMULATIVE · DEBT REPAID Y12', px(x0) + 330, py(top) - 12); x.strokeStyle = 'rgba(103,232,249,.35)'; x.lineWidth = 4; x.strokeRect(6, 6, tw - 12, th - 12); }, legH);
+  /* the board's lettering is set for how small it sits in the hero: four figures as large numerals over a chart
+     whose bars and cumulative line are real geometry in front of the face */
+  const board = K.screen(BW, HB, (x, tw, th) => { const px = (u) => (u + BW / 2) / BW * tw, py = (v) => (1 - v / HB) * th; x.fillStyle = '#070c16'; x.fillRect(0, 0, tw, th); const gr = x.createLinearGradient(0, 0, 0, th); gr.addColorStop(0, 'rgba(52,211,153,.12)'); gr.addColorStop(1, 'rgba(34,211,238,.04)'); x.fillStyle = gr; x.fillRect(0, 0, tw, th);
+    const mono = (s, w) => { x.font = (w || 500) + ' ' + s + 'px "JetBrains Mono", monospace'; }; x.textBaseline = 'alphabetic'; x.textAlign = 'left';
+    x.fillStyle = '#f1f5fb'; mono(56, 600); x.fillText('REVENUE · 25 YEARS', 64, 84); x.fillStyle = '#6ee7b7'; mono(30); x.textAlign = 'right'; x.fillText('128 MWp + 12.6 MW WIND · P50 · USD', tw - 64, 80); x.textAlign = 'left';
+    [['REVENUE / YR', '$13.1M', '#6ee7b7'], ['IRR', '14.2%', '#6ee7b7'], ['NPV', '$48M', '#bfdbfe'], ['DSCR', '1.41', '#bfdbfe']].forEach(([k, v, c], i) => { const X = 64 + i * (tw - 128) / 4; x.fillStyle = '#8391a7'; mono(28); x.fillText(k, X, 150); x.fillStyle = c; mono(72, 600); x.fillText(v, X, 228); });
+    x.strokeStyle = 'rgba(103,232,249,.10)'; x.lineWidth = 2; for (let i = 1; i <= 4; i++) { const y = py(zero + (top - zero) * i / 4); x.beginPath(); x.moveTo(px(x0), y); x.lineTo(px(x1), y); x.stroke(); } x.strokeStyle = 'rgba(103,232,249,.7)'; x.lineWidth = 4; x.beginPath(); x.moveTo(px(x0), py(zero)); x.lineTo(px(x1), py(zero)); x.stroke();
+    x.fillStyle = '#9aa6ba'; mono(30); x.textAlign = 'center'; for (let yv = 0; yv <= 25; yv += 5) { const X = px(x0 + gap * (yv + .5)); x.fillRect(X - 1.5, py(zero) - 8, 3, 16); x.fillText('Y' + yv, X, py(zero) + 46); } x.textAlign = 'left';
+    x.fillStyle = '#34d399'; mono(28, 600); x.fillText('▮ REVENUE / YEAR', px(x1) + 40, py(top) + 40); x.fillStyle = '#67e8f9'; x.fillText('— CUMULATIVE', px(x1) + 40, py(top) + 88); x.fillStyle = '#93c5fd'; mono(28); x.fillText('DEBT REPAID Y12', px(x1) + 40, py(top) + 136);
+    x.strokeStyle = 'rgba(103,232,249,.35)'; x.lineWidth = 4; x.strokeRect(6, 6, tw - 12, th - 12); }, legH, 2048);
   board.position.set(CX, cy + .1, CZ); board.rotation.y = -.55; scene.add(board); const bpad = K.pad(36, 10, TX.concrete); bpad.position.set(CX, cy, CZ); bpad.rotation.y = -.55; scene.add(bpad);
   const NB = 25, barH = []; for (let i = 0; i < NB; i++) barH.push((top - zero) * (.42 + i * .016 + Math.sin(i * 1.3) * .04));
   const barsM = new THREE.InstancedMesh(new THREE.BoxGeometry(gap * .58, 1, .8), M.solid(0x34d399, 0x34d399, .5, .95), NB); board.add(barsM);
@@ -108,6 +115,10 @@
   for (let i = 0; i < 26; i++) { const a = r() * 6.28, d = 14 + r() * 40, x = 26 + Math.cos(a) * d, z = 26 + Math.sin(a) * d * .8; if (houses.some((h) => Math.hypot(h.position.x - x, h.position.z - z) < 5) || rd.some((p) => Math.hypot(p.x - x, p.z - z) < 4) || Math.hypot(x, z) < 8) continue; const tr = K.tree(1 + r(), r()); tr.position.set(x, terrainH(x, z), z); scene.add(tr); }
   const vilLabel = K.label('481 HH · 100% CONNECTED', '#67e8f9', 14); vilLabel.position.set(30, 10, 34); scene.add(vilLabel);
   H.shadowify(scene);
+  /* the hero's captions go through the same fitting as every other scene: a legible size band, kept inside the
+     frame, clear of one another, and to the right of the headline column */
+  const labels = []; scene.traverse((o) => { if (o.userData.label) labels.push(o); });
+  const pst = { cam: camera, W: 0, H: 0, labels, label: null, def: { shift: { x: .63 } } };
 
   /* ---------- energy waveforms ---------- */
   const waves = [];
@@ -137,11 +148,15 @@
     glow(t, t > 2.2); /* the village comes on a moment after the hero lands, home by home down the line */
     waves.forEach((w) => { const p = w.l.geometry.attributes.position; for (let i = 0; i < w.n; i++) { const x = -170 + i / (w.n - 1) * 340; const env = Math.exp(-Math.pow((x - 30) / 120, 2)); const y = w.y + (Math.sin(x * .06 + t * 1.4 + w.ph) * 6 + Math.sin(x * .17 - t * 2.2 + w.ph) * 2.2) * env; p.setXYZ(i, x, y, -50 + Math.sin(x * .02 + w.ph) * 30); } p.needsUpdate = true; });
     dust.userData.tick(t);
+    rig.updateMatrixWorld(true); pst.W = W0; pst.H = H0; const tall = W0 / Math.max(1, H0) < .9; labels.forEach((l) => { l.visible = !tall; }); if (!tall && H.fitLabels) H.fitLabels(pst);
     if (post) { post.fade(-1, -1); post.render(scene, camera); } else renderer.render(scene, camera);
     R.show(cv, blit);
   }
-  /* submit every shader now; the GPU links them in the background while the preloader is still up */
-  H.whenWarm(() => { renderer.compile(scene, camera); const gl = renderer.getContext(), ext = gl.getExtension('KHR_parallel_shader_compile'), born = performance.now();
+  /* submit every shader now; the GPU links them in the background while the preloader is still up. The hero does not
+     wait for the site-wide warm-up (that is for the scenes further down): it is the first thing anyone sees. */
+  (() => { renderer.compile(scene, camera); const gl = renderer.getContext(), ext = gl.getExtension('KHR_parallel_shader_compile'), born = performance.now();
     const linked = () => !ext || performance.now() - born > 4000 || renderer.info.programs.every((p) => gl.getProgramParameter(p.program, ext.COMPLETION_STATUS_KHR));
-    const start = () => { if (linked()) H.drive({ vis: () => vis, draw }); else setTimeout(start, 200); }; start(); });
+    const start = () => { if (linked()) H.drive({ cv, vis: () => vis, draw }); else setTimeout(start, 100); }; start(); })();
+  };
+  (H.fonts || Promise.resolve()).then(boot);
 })();
