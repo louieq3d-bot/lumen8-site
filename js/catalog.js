@@ -12,11 +12,11 @@
  * Home is more generous; the site says only what a buyer could use today.
  */
 export const PILLARS = [
-  { id: 'power', name: 'Clean power', color: '#38bdf8', sdgs: [7, 13] },
-  { id: 'access', name: 'Energy access', color: '#2dd4bf', sdgs: [1, 7, 10] },
-  { id: 'land', name: 'Food, land & water', color: '#4ade80', sdgs: [2, 6, 14, 15] },
-  { id: 'trade', name: 'Connectivity & trade', color: '#60a5fa', sdgs: [9, 12] },
-  { id: 'intel', name: 'Intelligence & impact', color: '#e2e8f0', sdgs: [13, 17] },
+  { id: 'power', name: 'Clean power', color: 'var(--p-power)', sdgs: [7, 13] },
+  { id: 'access', name: 'Energy access', color: 'var(--p-access)', sdgs: [1, 7, 10] },
+  { id: 'land', name: 'Food, land & water', color: 'var(--p-land)', sdgs: [2, 6, 14, 15] },
+  { id: 'trade', name: 'Connectivity & trade', color: 'var(--p-trade)', sdgs: [9, 12] },
+  { id: 'intel', name: 'Intelligence & impact', color: 'var(--p-intel)', sdgs: [13, 17] },
 ];
 
 export const SDG = {

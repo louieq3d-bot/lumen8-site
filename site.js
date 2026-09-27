@@ -537,3 +537,39 @@
   });
   set.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') aim(null); });
 })();
+
+/* ---------- day and night ----------
+   The choice is made before the first paint (the inline script in <head>) and kept in localStorage. The switch
+   flips it; where the browser can, the new theme opens out of the switch as a circle over the old one. Anything
+   drawn on a canvas that follows the theme listens for 'l8:theme'. */
+(() => {
+  const root = document.documentElement, KEY = 'l8-theme';
+  const btns = [...document.querySelectorAll('.theme-toggle')];
+  if (!btns.length) return;
+  const meta = document.querySelector('meta[name="theme-color"]');
+  const isLight = () => root.getAttribute('data-theme') === 'light';
+  const sync = () => {
+    const light = isLight();
+    btns.forEach((b) => { b.setAttribute('aria-checked', String(light)); b.title = light ? 'Switch to night mode' : 'Switch to day mode'; });
+    if (meta) meta.setAttribute('content', light ? '#fbfcfe' : '#04060c');
+  };
+  const apply = (light) => {
+    if (light) root.setAttribute('data-theme', 'light'); else root.removeAttribute('data-theme');
+    try { localStorage.setItem(KEY, light ? 'light' : 'dark'); } catch (e) { /* private mode: the choice lasts the visit */ }
+    sync();
+    window.dispatchEvent(new CustomEvent('l8:theme', { detail: { light } }));
+  };
+  btns.forEach((b) => b.addEventListener('click', () => {
+    const light = !isLight();
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!document.startViewTransition || still) { apply(light); return; }
+    const r = b.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+    const end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+    const vt = document.startViewTransition(() => apply(light));
+    vt.ready.then(() => root.animate({ clipPath: ['circle(0px at ' + x + 'px ' + y + 'px)', 'circle(' + end + 'px at ' + x + 'px ' + y + 'px)'] },
+      { duration: 700, easing: 'cubic-bezier(.16,1,.3,1)', pseudoElement: '::view-transition-new(root)' })).catch(() => {});
+  }));
+  /* another tab changed it */
+  window.addEventListener('storage', (e) => { if (e.key === KEY) apply(e.newValue === 'light'); });
+  sync();
+})();
