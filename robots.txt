@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /investors.html
 Disallow: /investors/
-Sitemap: https://www.lumen8.ai/sitemap.xml
+Sitemap: https://lumen8.ai/sitemap.xml
