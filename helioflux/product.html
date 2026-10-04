@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product · Helioflux Agrivoltaic Studio</title>
+<meta name="description" content="The eight steps of Helioflux Agrivoltaic Studio, from a field boundary to a lender's model, shown on real product screens.">
+<link rel="icon" type="image/svg+xml" href="assets/helioflux/helioflux-mark-dark.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/helioflux/png/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/helioflux/png/apple-touch-icon-180.png">
+<meta name="theme-color" content="#000000">
+<meta property="og:site_name" content="Helioflux">
+<meta property="og:image" content="https://lumen8.ai/helioflux/assets/helioflux/png/social-card-1200x630.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@200;300;400;500;600&amp;family=Geist+Mono:wght@400;500&amp;family=Outfit:wght@500;600&amp;display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  .phero{padding:clamp(72px,10vw,140px) 0 clamp(40px,5vw,64px)}
+  .phero h1{margin:22px 0 26px}
+  /* the eight steps as a line */
+  .flow{display:grid; grid-template-columns:repeat(8,minmax(0,1fr)); margin-top:64px; border-top:1px solid var(--line)}
+  @media (max-width:900px){.flow{grid-template-columns:repeat(4,minmax(0,1fr))}}
+  .flow a{position:relative; display:block; padding:18px 12px 18px 0; text-decoration:none; border-bottom:1px solid var(--line)}
+  .flow a::before{content:""; position:absolute; left:0; top:-4px; width:7px; height:7px; background:var(--page); border:1px solid var(--text-3); transition:background var(--dur), border-color var(--dur)}
+  .flow a:hover::before{background:var(--sunleaf); border-color:var(--sunleaf)}
+  .flow b{display:block; font:500 10.5px var(--f-mono); letter-spacing:.02em; color:var(--text-3)}
+  .flow span{display:block; margin-top:8px; font:500 17px var(--f-display); letter-spacing:-.02em; color:var(--text)}
+  .flow small{display:block; margin-top:2px; font:400 11px var(--f-mono); color:var(--text-3)}
+  .flow a:hover span{color:var(--sunleaf)}
+  /* chapters */
+  .chapter{display:grid; grid-template-columns:minmax(0,.78fr) minmax(0,1.3fr); gap:clamp(32px,5vw,80px); align-items:start; padding:clamp(64px,8vw,112px) 0; border-top:1px solid var(--line); scroll-margin-top:calc(var(--nav-h) + 8px)}
+  @media (max-width:980px){.chapter{grid-template-columns:minmax(0,1fr)}}
+  .chapter__text{position:sticky; top:calc(var(--nav-h) + 40px)}
+  @media (max-width:980px){.chapter__text{position:static}}
+  .chapter__n{display:flex; align-items:baseline; gap:14px; font:500 10.5px var(--f-mono); letter-spacing:.02em; text-transform:none; color:var(--text-3)}
+  .chapter__n b{font:300 64px/1 var(--f-display); letter-spacing:-.06em; color:var(--text); text-transform:none}
+  .chapter h2{font:500 clamp(28px,3vw,42px)/1.04 var(--f-display); letter-spacing:-.04em; margin:18px 0 16px}
+  .chapter p{color:var(--text-2); font-size:16px; line-height:1.65; max-width:46ch}
+  .pair{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px}
+  .stack{display:grid; gap:12px}
+  .views3{display:grid; gap:0; border-top:1px solid var(--line)}
+  .views3 div{display:grid; grid-template-columns:150px minmax(0,1fr); gap:16px; padding:18px 0; border-bottom:1px solid var(--line)}
+  @media (max-width:560px){.views3 div{grid-template-columns:minmax(0,1fr)}}
+  .views3 dt{font:500 15px var(--f-display); letter-spacing:-.02em}
+  .views3 dd{margin:0; color:var(--text-2); font-size:14.5px}
+  /* build trace */
+  .trace{border-top:1px solid var(--line-2)}
+  .trace__row{display:grid; grid-template-columns:150px minmax(0,1fr) 80px; gap:16px; align-items:center; padding:9px 0; border-bottom:1px solid var(--line); font:500 12.5px var(--f-mono)}
+  .trace__row span{color:var(--text-2)}
+  .trace__row em{font-style:normal; text-align:right; color:var(--text); font-variant-numeric:tabular-nums}
+  .trace__bar{position:relative; height:8px}
+  .trace__bar i{position:absolute; top:0; bottom:0; left:var(--l); width:max(2px, var(--w)); background:var(--text-2); transform-origin:left; transform:scaleX(0); transition:transform 900ms var(--ease)}
+  .trace.is-in .trace__bar i{transform:scaleX(1)}
+  .trace__row.is-net i{background:var(--water)} .trace__row.is-light i{background:var(--par-5)} .trace__row.is-pv i{background:var(--energy)}
+  .trace__row.is-crop i{background:var(--crop)} .trace__row.is-money i{background:var(--money)} .trace__row.is-rule i{background:var(--fits)}
+  .trace__sum{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; padding:16px 0; font:500 11px var(--f-mono); letter-spacing:.02em; text-transform:none; color:var(--text-3)}
+  .trace__sum b{color:var(--sunleaf); font-weight:500}
+  @media (max-width:560px){.trace__row{grid-template-columns:110px minmax(0,1fr) 64px}}
+  /* views index with a live preview */
+  .vix{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.15fr); gap:clamp(32px,5vw,72px); align-items:start}
+  @media (max-width:980px){.vix{grid-template-columns:minmax(0,1fr)} .vix__prev{display:none}}
+  .vix__list{list-style:none; margin:0; padding:0; border-top:1px solid var(--line)}
+  .vix__list li{border-bottom:1px solid var(--line)}
+  .vix__list button{width:100%; display:grid; grid-template-columns:36px minmax(0,1fr) auto; gap:14px; align-items:baseline; padding:14px 0; border:0; background:transparent; color:inherit; text-align:left; cursor:pointer; font:inherit}
+  .vix__list b{font:500 11px var(--f-mono); color:var(--text-3)}
+  .vix__list strong{display:block; font:500 17px var(--f-display); letter-spacing:-.02em; color:var(--text-2); transition:color var(--dur)}
+  .vix__list span{display:block; margin-top:4px; font-size:13.5px; color:var(--text-3); line-height:1.5; max-height:0; overflow:hidden; transition:max-height 400ms var(--ease)}
+  .vix__list small{font:500 10.5px var(--f-mono); color:var(--text-3)}
+  .vix__list button:hover strong, .vix__list button[aria-pressed="true"] strong{color:var(--text)}
+  .vix__list button[aria-pressed="true"] b{color:var(--sunleaf)}
+  .vix__list button[aria-pressed="true"] span{max-height:80px}
+  .vix__list .is-build strong{color:var(--text-3)}
+  .vix__prev{position:sticky; top:calc(var(--nav-h) + 32px)}
+  .vix__prev .frame img{transition:opacity 260ms var(--ease)}
+</style>
+</head>
+<body data-page="product">
+<a class="skip" href="#main">Skip to content</a>
+<header id="site-nav"></header>
+<main id="main">
+
+<section class="phero shero" data-stage aria-labelledby="h-prod">
+  <div class="shero__gl" data-scene="steps"></div>
+  <div class="shero__veil"></div>
+  <div class="wrap shero__in">
+    <div>
+      <span class="eyebrow">Product</span>
+      <h1 id="h-prod" class="h1">From a field boundary to a lender's model</h1>
+      <p class="lede">Eight steps and one engine, with sixteen views of the result. Every screen on this page is the real studio, captured from two demo projects: strawberries under a rain-shelter canopy near Stellenbosch, and chili under an overhead array in West Java.</p>
+    </div>
+    <aside class="hud" aria-label="The eight steps, as played in the figure">
+      <div class="hud__h"><span>Fig. 0 · Steps</span><b>● Running</b></div>
+      <ol class="hud__steps"><li data-step><button type="button"><b>01</b><span>Place</span><i>Lokasi</i></button></li><li data-step><button type="button"><b>02</b><span>Crop</span><i>Tanaman</i></button></li><li data-step><button type="button"><b>03</b><span>Design</span><i>Desain</i></button></li><li data-step><button type="button"><b>04</b><span>Build</span><i>Bangun</i></button></li><li data-step><button type="button"><b>05</b><span>Results</span><i>Hasil</i></button></li><li data-step><button type="button"><b>06</b><span>Compare</span><i>Bandingkan</i></button></li><li data-step><button type="button"><b>07</b><span>Export</span><i>Ekspor</i></button></li><li data-step><button type="button"><b>08</b><span>Monitor</span><i>Pantau</i></button></li></ol>
+      <div class="hud__bar"><i data-step-bar></i></div>
+      <div class="hud__eq"><span>Ground light, array · <span data-ro="st-design">9 m pitch</span></span><b data-ro="st-light">—</b></div>
+      <p>An illustration of the flow on one site. Every screen below the header is the real studio.</p>
+    </aside>
+  </div>
+</section>
+
+<section class="substrip" aria-label="Jump to a step">
+  <div class="wrap">
+    <nav class="flow rv" style="margin-top:0" aria-label="The eight steps">
+      <a href="#place"><b>01</b><span>Place</span><small>Lokasi</small></a>
+      <a href="#crop"><b>02</b><span>Crop</span><small>Tanaman</small></a>
+      <a href="#design"><b>03</b><span>Design</span><small>Desain</small></a>
+      <a href="#build"><b>04</b><span>Build</span><small>Bangun</small></a>
+      <a href="#results"><b>05</b><span>Results</span><small>Hasil</small></a>
+      <a href="#compare"><b>06</b><span>Compare</span><small>Bandingkan</small></a>
+      <a href="#export"><b>07</b><span>Export</span><small>Ekspor</small></a>
+      <a href="#monitor"><b>08</b><span>Monitor</span><small>Pantau</small></a>
+    </nav>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0; border-top:0">
+  <div class="wrap">
+
+    <article class="chapter" id="place">
+      <div class="chapter__text rv">
+        <div class="chapter__n"><b>01</b>Place · Lokasi</div>
+        <h2>Start from the real field</h2>
+        <p>Drop a square, trace the boundary corner by corner, or import the file you already have. Set the headland and per-edge setbacks; the site panel shows what fraction of the parcel the array can use, and which rule sets apply.</p>
+        <dl class="kv"><div><dt>Import</dt><dd>GeoJSON · KML · KMZ · Shapefile · CSV</dd></div><div><dt>Projections</dt><dd>UTM · TM-3 · Lo · Web Mercator</dd></div><div><dt>Screen a district</dt><dd>up to 100 km² · 7 factors</dd></div></dl>
+      </div>
+      <figure class="rv rv-d1" style="margin:0"><div class="pair">
+        <div class="crop" style="--x:.01;--y:.07;--w:.263;--h:.91;aspect-ratio:.487"><img class="zoomable" loading="lazy" src="assets/shots/id-step-place.webp" width="3048" height="1808" alt="Place step, left panel: a square parcel with size and rotation controls, draw and import options, and the field-edge setback."></div>
+        <div class="crop" style="--x:.767;--y:.07;--w:.223;--h:.78;aspect-ratio:.482"><img class="zoomable" loading="lazy" src="assets/shots/id-step-place.webp" width="3048" height="1808" alt="Place step, site panel: geodesic area, array size, parcel fill and the South-East Asia voluntary rule set."></div>
+      </div><figcaption style="margin-top:12px">Fig. 1 · Place · parcel tools and the site panel · West Java</figcaption></figure>
+    </article>
+
+    <article class="chapter" id="crop">
+      <div class="chapter__text rv">
+        <div class="chapter__n"><b>02</b>Crop · Tanaman</div>
+        <h2>Pick what grows in the shade</h2>
+        <p>Thirty-five crops, each with its evidence grade, season and light need. The studio suggests crops for the region by fit or by revenue, prices them per kilogram with the source, and takes the farmer's own yield if they know it.</p>
+        <dl class="kv"><div><dt>Library</dt><dd>35 crops · EN / ID names</dd></div><div><dt>Evidence</dt><dd>strong · moderate · low · none</dd></div><div><dt>Prices</dt><dd>per kg and per t, sourced</dd></div></dl>
+      </div>
+      <figure class="rv rv-d1" style="margin:0"><div class="pair">
+        <div class="crop" style="--x:.012;--y:.07;--w:.273;--h:.91;aspect-ratio:.506"><img class="zoomable" loading="lazy" src="assets/shots/za-step-crop.webp" width="3048" height="1808" alt="Crop step: crops suggested for the Western Cape with prices, and the searchable library of 35 crops."></div>
+        <div class="crop" style="--x:.752;--y:.07;--w:.238;--h:.91;aspect-ratio:.441"><img class="zoomable" loading="lazy" src="assets/shots/za-step-crop.webp" width="3048" height="1808" alt="Selected crop panel for strawberry: shade tolerance, season, light need, wholesale price with source, and the typical-yield input."></div>
+      </div><figcaption style="margin-top:12px">Fig. 2 · Crop · regional suggestions and the selected crop · Western Cape</figcaption></figure>
+    </article>
+
+    <article class="chapter" id="design">
+      <div class="chapter__text rv">
+        <div class="chapter__n"><b>03</b>Design · Desain</div>
+        <h2>Choose the structure, then tune it</h2>
+        <p>Five archetypes, ranked for the crop you picked. A to-scale preview redraws the solstice shadows as you change the structure, the tilt and the row spacing. Covered designs compare themselves with the plastic they replace.</p>
+        <dl class="kv"><div><dt>Archetypes</dt><dd>A · C · D · E · F</dd></div><div><dt>Panes</dt><dd>Structure · Parameters · Economics</dd></div><div><dt>Tilt study</dt><dd>5–7 full engine runs</dd></div></dl>
+        <a class="link" href="archetypes.html" style="margin-top:22px">The five archetypes <span aria-hidden="true">→</span></a>
+      </div>
+      <figure class="rv rv-d1" style="margin:0"><div class="pair">
+        <div class="crop" style="--x:.012;--y:.07;--w:.265;--h:.9;aspect-ratio:.497"><img class="zoomable" loading="lazy" src="assets/shots/za-step-design.webp" width="3048" height="1808" alt="Design step: five structure cards ranked for strawberry, each with a suitability badge."></div>
+        <div class="crop" style="--x:.752;--y:.07;--w:.238;--h:.88;aspect-ratio:.456"><img class="zoomable" loading="lazy" src="assets/shots/za-step-design.webp" width="3048" height="1808" alt="Design step live preview: the canopy to scale with summer and winter sun angles and shadow reach."></div>
+      </div><figcaption style="margin-top:12px">Fig. 3 · Design · ranked structures and the live preview</figcaption></figure>
+    </article>
+
+    <article class="chapter" id="build">
+      <div class="chapter__text rv">
+        <div class="chapter__n"><b>04</b>Build · Bangun</div>
+        <h2>Thirteen stages, in the browser</h2>
+        <p>Pick a weather source and year. The picker shows each source's licence before you build, so a commercial project never rests on non-commercial data. Then every stage runs, from site to ledger, and checks itself off.</p>
+        <dl class="kv"><div><dt>Weather sources</dt><dd>NASA POWER · PVGIS-SARAH3 · ERA5</dd></div><div><dt>Years</dt><dd>21 offered · QC grade A–D</dd></div><div><dt>Stages</dt><dd>13 · site → ledger</dd></div></dl>
+      </div>
+      <figure class="rv rv-d1" style="margin:0"><div class="crop" style="--x:.515;--y:.325;--w:.325;--h:.485;aspect-ratio:1.13"><img class="zoomable" loading="lazy" src="assets/shots/za-step-build.webp" width="3048" height="1808" alt="Build step: NASA POWER 2023 with a commercial-use chip, and all 13 stages complete with their run times."></div><figcaption style="margin-top:12px">Fig. 4 · Build · 13 of 13 stages in 8.7 s · NASA POWER 2023, commercial use OK</figcaption></figure>
+    </article>
+
+    <article class="chapter" id="results">
+      <div class="chapter__text rv">
+        <div class="chapter__n"><b>05</b>Results · Hasil</div>
+        <h2>The answer, then sixteen views</h2>
+        <p>One sentence says what the design produces and whether it pays. The land and money trade-off sits beneath it, and every number opens its basis and sources when clicked.</p>
+        <dl class="kv"><div><dt>Headline</dt><dd>energy · crop · LER · NPV</dd></div><div><dt>Views</dt><dd>16 tabs</dd></div><div><dt>Every number</dt><dd>value · band · basis · sources</dd></div></dl>
+        <a class="link" href="#views" style="margin-top:22px">All sixteen views <span aria-hidden="true">→</span></a>
+      </div>
+      <figure class="rv rv-d1" style="margin:0"><div class="crop" style="--x:.017;--y:.282;--w:.718;--h:.388;aspect-ratio:3.12"><img class="zoomable" loading="lazy" src="assets/shots/za-overview.webp" width="3048" height="1808" alt="Overview: the one-sentence answer, then the land trade-off (crop, energy, both) and year-one money."></div><figcaption style="margin-top:12px">Fig. 5 · Results · the overview's first screen</figcaption></figure>
+    </article>
+
+    <article class="chapter" id="compare">
+      <div class="chapter__text rv">
+        <div class="chapter__n"><b>06</b>Compare · Bandingkan</div>
+        <h2>Searching the design space</h2>
+        <p>Save builds side by side, sweep two parameters at once, or ask the studio what to build for a crop, or what to grow under a structure.</p>
+      </div>
+      <dl class="views3 rv rv-d1" style="margin:0">
+        <div><dt>Saved variants</dt><dd>Up to 12 builds side by side, every measure as a delta against the baseline.</dd></div>
+        <div><dt>Explore designs</dt><dd>A two-parameter sweep of up to 25 full engine runs, plotted as energy against relative crop yield with the Pareto front. Apply any point.</dd></div>
+        <div><dt>What should I build?</dt><dd>For a crop: a Latin-hypercube search over every structure with a three-way Pareto front of energy, yield and CAPEX. For a structure: crops ranked by evidence-weighted yield and price; a crop with no evidence is refused.</dd></div>
+      </dl>
+    </article>
+
+    <article class="chapter" id="export">
+      <div class="chapter__text rv">
+        <div class="chapter__n"><b>07</b>Export · Ekspor</div>
+        <h2>Twelve formats, one stamp</h2>
+        <p>A project dossier, a compliance PDF, an Excel workbook, CSVs, a reproducible run file, GeoJSON, KML and a DXF layout. Every file carries the tier, the run hash and its sources, or download everything as one ZIP.</p>
+        <dl class="kv"><div><dt>Reports</dt><dd>dossier · compliance · methods</dd></div><div><dt>Data</dt><dd>XLSX · CSV · JSON</dd></div><div><dt>Maps · engineering</dt><dd>GeoJSON · KML · DXF</dd></div></dl>
+      </div>
+      <figure class="rv rv-d1" style="margin:0"><div class="stack">
+        <div class="crop" style="--x:.05;--y:.085;--w:.91;--h:.185;aspect-ratio:8.29"><img class="zoomable" loading="lazy" src="assets/shots/za-step-export.webp" width="3048" height="1808" alt="Export step header: 12 formats ready, and the stamp written into every file: indicative interactive tier, run hash and 87 sources."></div>
+        <div class="crop" style="--x:.405;--y:.535;--w:.55;--h:.155;aspect-ratio:5.98"><img class="zoomable" loading="lazy" src="assets/shots/za-step-export.webp" width="3048" height="1808" alt="The project dossier's twelve sections, from executive summary to disclaimers."></div>
+      </div><figcaption style="margin-top:12px">Fig. 6 · Export · the stamp in every file, and the dossier's twelve sections</figcaption></figure>
+    </article>
+
+    <article class="chapter" id="monitor">
+      <div class="chapter__text rv">
+        <div class="chapter__n"><b>08</b>Monitor · Pantau</div>
+        <h2>Measuring what was modelled</h2>
+        <p>The studio generates the sensor kit for the design, under the array, between rows and in the open-field control. Upload logger files and it compares the two with paired statistics.</p>
+        <dl class="kv"><div><dt>Logger formats</dt><dd>8 · TOA5 · HOBO · ZENTRA …</dd></div><div><dt>Statistics</dt><dd>bootstrap · Newey–West · BACI</dd></div><div><dt>Live telemetry</dt><dd>in build</dd></div></dl>
+      </div>
+      <figure class="rv rv-d1" style="margin:0"><div class="crop" style="--x:.01;--y:.172;--w:.98;--h:.738;aspect-ratio:2.24"><img class="zoomable" loading="lazy" src="assets/shots/za-step-monitor.webp" width="3048" height="1808" alt="Sensor kit for the design: 16 units across 11 groups — PAR quantum sensors under, between and in the control, a pyranometer in the module plane, a met station, air and soil probes, flow and pressure, a phenocam and loggers."></div><figcaption style="margin-top:12px">Fig. 7 · Monitor · the generated sensor kit, by zone</figcaption></figure>
+    </article>
+  </div>
+</section>
+
+<!-- the trace of one real build -->
+<section class="section">
+  <div class="wrap rail">
+    <div class="rail__idx rv"><span class="sq"></span>09<b>One real build</b></div>
+    <div>
+      <h2 class="h2 rv">One build, stage by stage</h2>
+      <p class="lede rv" style="margin:20px 0 40px">Stage timings from the Stellenbosch demo build shown in Fig. 4, in a laptop browser. Fetching the hourly weather year is 8.3 s of the 8.7 s; the thirteen engine stages that follow take 281 ms between them.</p>
+      <div class="trace rv" id="trace" aria-label="Stage timings of one build"></div>
+    </div>
+  </div>
+</section>
+
+<!-- sixteen views -->
+<section class="section" id="views">
+  <div class="wrap">
+    <div class="rail" style="margin-bottom:56px">
+      <div class="rail__idx rv"><span class="sq"></span>10<b>Sixteen views</b></div>
+      <div class="rv"><h2 class="h2">Sixteen result views, in English and Bahasa Indonesia</h2></div>
+    </div>
+    <div class="vix">
+      <ol class="vix__list" id="vixList"></ol>
+      <div class="vix__prev"><div class="frame" style="--ar:3048/1808"><div class="frame__bar"><span id="vixCap">Overview</span></div><div class="frame__in"><img id="vixImg" class="zoomable" loading="lazy" src="assets/shots/za-overview.webp" width="3048" height="1808" alt="The selected results tab of the studio."></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight" style="border-top:0; padding-top:0">
+  <div class="wrap"><div class="cta rv">
+    <span class="eyebrow">Private preview</span>
+    <h2>Walk a real field through all eight steps</h2>
+    <p class="lede">Bring a boundary and a crop. We build it live and leave you with the dossier.</p>
+    <div class="cta__btns"><a class="btn btn--primary btn--lg" href="demo.html">Request access <span class="arr" aria-hidden="true">→</span></a><a class="btn btn--ghost btn--lg" href="features.html">Every feature</a></div>
+  </div></div>
+</section>
+</main>
+<footer id="site-foot"></footer>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
+<script src="assets/site.js"></script>
+<script>
+(function(){
+  // build trace: stage timings read off the Build screen (Fig. 4)
+  const T = [['Site',1,''],['Weather year',8300,'is-net'],['Design',1,''],['Row layout',7,''],['PV yield',88,'is-pv'],['Crop light',76,'is-light'],['Microclimate',1,'is-crop'],['Crop and water',34,'is-crop'],['Irrigation',3,'is-crop'],['Cost',62,'is-money'],['Finance',5,'is-money'],['Compliance',1,'is-rule'],['Ledger',2,'is-money']];
+  const total = T.reduce((a, r) => a + r[1], 0), host = document.getElementById('trace');
+  // log-scaled widths so 1 ms and 8.3 s are both visible; each bar starts where the previous one ended (a waterfall)
+  const lw = (ms) => Math.log10(ms + 1), L = T.reduce((a, r) => a + lw(r[1]), 0);
+  let acc = 0;
+  host.innerHTML = T.map(([n, ms, c]) => { const l = acc / L * 100, w = lw(ms) / L * 100; acc += lw(ms);
+    return `<div class="trace__row ${c}"><span>${n}</span><div class="trace__bar"><i style="--l:${l.toFixed(2)}%;--w:${w.toFixed(2)}%"></i></div><em>${ms >= 1000 ? (ms / 1000).toFixed(1) + ' s' : ms + ' ms'}</em></div>`; }).join('') +
+    `<div class="trace__sum"><span>Bar widths on a log scale · times as shown on the Build screen</span><span>Engine stages <b>${total - 8300} ms</b> · weather 8.3 s · build reported 8.7 s</span></div>`;
+  new IntersectionObserver((es, o) => es.forEach(e => { if (e.isIntersecting){ host.classList.add('is-in'); o.disconnect(); } }), { threshold: .3 }).observe(host);
+
+  // sixteen views index
+  const V = [
+    ['Overview','Ringkasan','za-overview','The answer in one sentence, the land and money trade-off, and the points to check.'],
+    ['Solar yield','Hasil surya','za-solar-yield','Loss waterfall, monthly performance ratio, an 8,760-hour heatmap, P50 and P90.'],
+    ['3D','3D','za-3d','The whole parcel with ground light by month, season or hour, the sun path and the crop growing.'],
+    ['Light','Cahaya','za-light','Daily light integral under, between and in the open, against the crop floor.'],
+    ['Crop','Tanaman','za-crop','Relative yield per zone with a shade guardrail and the literature behind it.'],
+    ['Water','Air','za-water','An FAO-56 root-zone balance, open field against under the array.'],
+    ['Irrigation','Irigasi','za-irrigation','Demand, then a drip layout in 3D or plan derived from the rows.'],
+    ['Energy system','Sistem energi','za-energy-system','The pump against the array: how much of its energy the panels meet directly.'],
+    ['Economics','Ekonomi','za-economics','CAPEX to line items with rate sources, cash flow, NPV tornado, LCOE.'],
+    ['Compliance','Kepatuhan','za-compliance','Every applicable regime, rule by rule, with metric, threshold, margin and clause.'],
+    ['Ledger','Buku besar','za-ledger','Year-one revenue three ways and a month-by-month ledger.'],
+    ['Evidence','Bukti','za-evidence','Run hash, engine version, a source library by licence, and the validation scorecard.'],
+    ['Lender','Pemberi pinjaman','za-lender','Debt on P90, DSCR by year, sculpting and an Excel model with live formulas.'],
+    ["Farmer's offer",'Penawaran petani','za-farmer-s-offer','A two-sided deal with the band where both farmer and developer come out ahead.'],
+    ['Bill of materials','—','za-bill-of-materials','Every member, bolt, cable and pipe, priced from a dated rate book and shown in 3D.'],
+    ['Climate risk','Risiko iklim','','In build: the engine exists; the tab is not switched on yet.'],
+  ];
+  const list = document.getElementById('vixList'), img = document.getElementById('vixImg'), cap = document.getElementById('vixCap');
+  list.innerHTML = V.map((v, i) => `<li><button type="button" aria-pressed="${i === 0}" ${v[2] ? '' : 'class="is-build"'} data-i="${i}"><b>${String(i + 1).padStart(2, '0')}</b><div><strong>${v[0]}</strong><span>${v[3]}</span></div><small>${v[2] ? v[1] : 'IN BUILD'}</small></button></li>`).join('');
+  const pick = (i) => {
+    const v = V[i]; list.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.i === i)));
+    if (!v[2]) return;
+    cap.textContent = v[0] + ' · ' + v[1]; img.style.opacity = .25;
+    const n = new Image(); n.onload = () => { img.src = n.src; img.alt = v[0] + ' tab: ' + v[3]; img.style.opacity = 1; }; n.src = 'assets/shots/' + v[2] + '.webp';
+  };
+  list.addEventListener('pointerover', e => { const b = e.target.closest('button'); if (b) pick(+b.dataset.i); });
+  list.addEventListener('focusin', e => { const b = e.target.closest('button'); if (b) pick(+b.dataset.i); });
+  list.addEventListener('click', e => { const b = e.target.closest('button'); if (b) pick(+b.dataset.i); });
+})();
+</script>
+</body>
+</html>

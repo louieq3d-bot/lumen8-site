@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Archetypes · Helioflux Agrivoltaic Studio</title>
+<meta name="description" content="The five structure archetypes in Helioflux Agrivoltaic Studio, drawn to scale from their default specifications, with every default and its range.">
+<link rel="icon" type="image/svg+xml" href="assets/helioflux/helioflux-mark-dark.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/helioflux/png/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/helioflux/png/apple-touch-icon-180.png">
+<meta name="theme-color" content="#000000">
+<meta property="og:site_name" content="Helioflux">
+<meta property="og:image" content="https://lumen8.ai/helioflux/assets/helioflux/png/social-card-1200x630.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@200;300;400;500;600&amp;family=Geist+Mono:wght@400;500&amp;family=Outfit:wght@500;600&amp;display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  .phero{padding:clamp(72px,10vw,140px) 0 clamp(40px,5vw,64px)}
+  .phero h1{margin:22px 0 26px}
+  .flow{display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); margin-top:64px; border-top:1px solid var(--line)}
+  @media (max-width:700px){.flow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  .flow a{position:relative; display:block; padding:18px 12px 20px 0; text-decoration:none; border-bottom:1px solid var(--line)}
+  .flow a::before{content:""; position:absolute; left:0; top:-4px; width:7px; height:7px; background:var(--page); border:1px solid var(--text-3); transition:background var(--dur), border-color var(--dur)}
+  .flow a:hover::before{background:var(--sunleaf); border-color:var(--sunleaf)}
+  .flow b{display:block; font:300 56px/1 var(--f-display); letter-spacing:-.06em; color:var(--text)}
+  .flow span{display:block; margin-top:12px; font:500 15px var(--f-display); letter-spacing:-.02em; color:var(--text-2)}
+  .flow small{display:block; margin-top:3px; font:500 10.5px var(--f-mono); letter-spacing:.02em; text-transform:none; color:var(--text-3)}
+  .flow a:hover b, .flow a:hover span{color:var(--sunleaf)}
+
+  .chapter{display:grid; grid-template-columns:minmax(0,.72fr) minmax(0,1.3fr); gap:clamp(32px,5vw,80px); align-items:start; padding:clamp(64px,8vw,112px) 0; border-top:1px solid var(--line); scroll-margin-top:calc(var(--nav-h) + 8px)}
+  @media (max-width:980px){.chapter{grid-template-columns:minmax(0,1fr)}}
+  .chapter__text{position:sticky; top:calc(var(--nav-h) + 40px)}
+  @media (max-width:980px){.chapter__text{position:static}}
+  .chapter__n{display:flex; align-items:baseline; gap:16px; font:500 10.5px var(--f-mono); letter-spacing:.02em; text-transform:none; color:var(--text-3)}
+  .chapter__n b{font:300 96px/.8 var(--f-display); letter-spacing:-.07em; color:var(--text); text-transform:none}
+  .chapter h2{font:500 clamp(28px,3vw,40px)/1.04 var(--f-display); letter-spacing:-.04em; margin:22px 0 14px}
+  .chapter p{color:var(--text-2); font-size:16px; line-height:1.65; max-width:46ch}
+  .kv dd small{font:400 11px var(--f-mono); color:var(--text-3); margin-left:6px}
+  .plate{border-radius:6px; overflow:hidden; border:1px solid var(--line-2); background:var(--panel)}
+  .plate svg{width:100%; height:auto; display:block}
+  .notes{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); margin-top:24px; border-top:1px solid var(--line)}
+  @media (max-width:640px){.notes{grid-template-columns:minmax(0,1fr)}}
+  .notes div{padding:18px 20px 0 0}
+  .notes div + div{padding-left:20px; border-left:1px solid var(--line)}
+  @media (max-width:640px){.notes div + div{padding-left:0; border-left:0}}
+  .notes b{display:block; font:500 10.5px var(--f-mono); letter-spacing:.02em; text-transform:none; color:var(--text-3); margin-bottom:8px}
+  .notes p{margin:0; font-size:14.5px; color:var(--text-2); line-height:1.6}
+
+  .mx table.t{min-width:860px}
+  .mx th:not(:first-child), .mx td:not(:first-child){font:500 13px var(--f-mono); font-variant-numeric:tabular-nums; color:var(--text)}
+  .mx thead th:not(:first-child){font:300 32px/1 var(--f-display); letter-spacing:-.05em; color:var(--text); text-transform:none}
+  .mx thead th small{display:block; margin-top:6px; font:500 10px var(--f-mono); letter-spacing:.02em; text-transform:none; color:var(--text-3)}
+  .mx td small{display:block; margin-top:3px; font:400 11px var(--f-mono); color:var(--text-3)}
+  .mx td:first-child{color:var(--text-2); font-size:14px}
+  .mx tr.grp td{padding-top:26px; font:500 10.5px var(--f-mono); letter-spacing:.02em; text-transform:none; color:var(--text-3)}
+  .pair{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px}
+</style>
+</head>
+<body data-page="archetypes">
+<a class="skip" href="#main">Skip to content</a>
+<header id="site-nav"></header>
+<main id="main">
+
+<section class="phero shero" data-stage aria-labelledby="h-arch">
+  <div class="shero__gl" data-scene="arch"></div>
+  <div class="shero__veil"></div>
+  <div class="wrap shero__in">
+    <div>
+      <span class="eyebrow">Archetypes</span>
+      <h1 id="h-arch" class="h1">Five ways to build over a field</h1>
+      <p class="lede">Every design starts with a structure, and each one shares light between modules and plants differently: overhead, on its edge, on a turning axis, as a roof that sheds rain, or as the roof of a tunnel. Each plate below is drawn to true scale from the archetype's default specification, with the sun where it stands at 33.9° S.</p>
+    </div>
+    <aside class="hud" aria-label="Readout of the structure shown">
+      <div class="hud__h"><span>Fig. 0 · Readout</span><b>● Running</b></div>
+      <div class="hud__big"><b data-ro="arch-id">A</b><span data-ro="arch-name">Overhead stilted</span></div>
+      <dl>
+        <div><dt data-ro="arch-k0">Clearance</dt><dd data-ro="arch-v0">4.5 m</dd></div>
+        <div><dt data-ro="arch-k1">Tilt</dt><dd data-ro="arch-v1">12° to the equator</dd></div>
+        <div><dt data-ro="arch-k2">Ground cover</dt><dd data-ro="arch-v2">GCR 0.30</dd></div>
+      </dl>
+      <div class="hud__eq"><span>Daily light under the array</span><b data-ro="arch-light">—</b></div>
+      <div class="hud__pick" role="group" aria-label="Show an archetype"><button type="button" data-arch-pick aria-pressed="true">A</button><button type="button" data-arch-pick aria-pressed="false">C</button><button type="button" data-arch-pick aria-pressed="false">D</button><button type="button" data-arch-pick aria-pressed="false">E</button><button type="button" data-arch-pick aria-pressed="false">F</button></div>
+      <p>Illustrative model: shadow rays and a coarse sky view cast against each structure on 21 March. Table width, bay and span are illustrative, as on the plates.</p>
+    </aside>
+  </div>
+</section>
+
+<section class="substrip" aria-label="Jump to an archetype">
+  <div class="wrap">
+    <nav class="flow rv" style="margin-top:0" aria-label="The five archetypes">
+      <a href="#a"><b>A</b><span>Overhead stilted</span><small>Open · fixed</small></a>
+      <a href="#c"><b>C</b><span>Vertical fence</span><small>Open · bifacial</small></a>
+      <a href="#d"><b>D</b><span>Single-axis tracker</span><small>Open · tracking</small></a>
+      <a href="#e"><b>E</b><span>Rain-shelter canopy</span><small>Covered</small></a>
+      <a href="#f"><b>F</b><span>PV polytunnel</span><small>Covered</small></a>
+    </nav>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0; border-top:0">
+  <div class="wrap">
+
+    <article class="chapter" id="a">
+      <div class="chapter__text rv">
+        <div class="chapter__n"><b>A</b>Open · fixed tilt</div>
+        <h2>Overhead stilted, fixed</h2>
+        <p>Fixed tables on stilts, high enough to farm and drive under. The best-evidenced archetype: the Heggelbach research plant in Germany is built this way.</p>
+        <dl class="kv"><div><dt>Clearance</dt><dd>4.5 m<small>2.1–5.0</small></dd></div><div><dt>Row pitch</dt><dd>9.5 m<small>7–12</small></dd></div><div><dt>Tilt to the equator</dt><dd>12°<small>8–20</small></dd></div><div><dt>Ground cover ratio</dt><dd>0.30<small>0.2–0.4</small></dd></div><div><dt>Machinery under it</dt><dd>2.5 m wide · 3.0 m high</dd></div></dl>
+      </div>
+      <figure class="rv rv-d1" style="margin:0">
+        <div class="fig__head"><b>Plate A · north–south section</b><span>Solar noon · both solstices · 33.9° S</span></div>
+        <div class="plate" data-arch-plate="A" data-label="Archetype A to scale: three fixed tables on stilts with a 4.5 metre clearance, tilted 12 degrees to the north, with their shadows at solar noon on the December and June solstices in the Western Cape."></div>
+        <div class="notes"><div><b>Read the plate</b><p>In midsummer the sun is high and each table's shadow sits almost under it. In midwinter it stretches south across the next bed. The studio follows that shadow through every month.</p></div><div><b>Choose it when</b><p>Machinery has to work under the array and the crop needs open ground. A 2.1 m variant suits hand-tractor plots.</p></div></div>
+      </figure>
+    </article>
+
+    <article class="chapter" id="c">
+      <div class="chapter__text rv">
+        <div class="chapter__n"><b>C</b>Open · vertical bifacial</div>
+        <h2>Vertical bifacial E–W fence</h2>
+        <p>Vertical bifacial fences facing east and west, with wide lanes between them. The lightest touch on the field: about five per cent of the ground is covered.</p>
+        <dl class="kv"><div><dt>Height to the top</dt><dd>2.5 m</dd></div><div><dt>Row pitch</dt><dd>10 m<small>8–20</small></dd></div><div><dt>Ground cover ratio</dt><dd>0.05<small>0.02–0.1</small></dd></div><div><dt>Machinery width</dt><dd>3.5 m<small>3.0–6.0</small></dd></div><div><dt>Bifacial rear side</dt><dd>on by default</dd></div></dl>
+      </div>
+      <figure class="rv rv-d1" style="margin:0">
+        <div class="fig__head"><b>Plate C · east–west section</b><span>09:00 solar time · 21 March · 33.9° S</span></div>
+        <div class="plate" data-arch-plate="C" data-label="Archetype C to scale: three vertical fences 2.5 metres tall and 10 metres apart, with their shadows at 9 am on 21 March in the Western Cape."></div>
+        <div class="notes"><div><b>Read the plate</b><p>A fence takes the morning sun on one face and the afternoon sun on the other, so its shadow swings across the lane and is thinnest at noon.</p></div><div><b>Watch out</b><p>Within 20° of the equator the sun is mostly overhead and a fence gives up 15–30 % of its energy against a tilted array. There the studio treats C as advisory only.</p></div></div>
+      </figure>
+    </article>
+
+    <article class="chapter" id="d">
+      <div class="chapter__text rv">
+        <div class="chapter__n"><b>D</b>Open · single-axis tracking</div>
+        <h2>Single-axis tracker, wide rows</h2>
+        <p>Trackers that follow the sun on wide inter-rows, with backtracking. Their angle is a choice, so they can also turn away and give light back to the crop.</p>
+        <dl class="kv"><div><dt>Hub height</dt><dd>2.5 m<small>2.1–4.0</small></dd></div><div><dt>Row pitch</dt><dd>9.5 m<small>9–12</small></dd></div><div><dt>Rotation</dt><dd>±55°<small>50–60</small></dd></div><div><dt>Ground cover ratio</dt><dd>0.30<small>0.2–0.4</small></dd></div><div><dt>Power density</dt><dd>0.7 MWp/ha<small>0.5–0.9</small></dd></div></dl>
+      </div>
+      <figure class="rv rv-d1" style="margin:0">
+        <div class="fig__head"><b>Plate D · east–west section</b><span>09:00 solar time · 21 March · 33.9° S</span></div>
+        <div class="plate" data-arch-plate="D" data-label="Archetype D to scale: three trackers with a 2.5 metre hub and 9.5 metre pitch, rotated to follow the 9 am sun on 21 March in the Western Cape, with the plus or minus 55 degree rotation range marked."></div>
+        <div class="notes"><div><b>Read the plate</b><p>At 9 a.m. the trackers turn east to face the sun and their shadows fall long to the west across the lanes. By noon they lie nearly flat and the shadow sits under the row.</p></div><div><b>Fits</b><p>Lowland vegetables and maize–rice rotations on flat ground. The tracker figure further down puts the rotation policy in your hands.</p></div></div>
+      </figure>
+    </article>
+
+    <article class="chapter" id="e">
+      <div class="chapter__text rv">
+        <div class="chapter__n"><b>E</b>Covered · canopy</div>
+        <h2>PV rain-shelter / fruit canopy</h2>
+        <p>A semi-transparent canopy that takes the place of the plastic rain shelters used over cane fruit, highland strawberry, chili and leafy greens in tropical rain.</p>
+        <dl class="kv"><div><dt>Clearance</dt><dd>3.0 m<small>2.5–4.0</small></dd></div><div><dt>Module transmittance</dt><dd>0.40<small>0.3–0.5</small></dd></div><div><dt>Ground cover ratio</dt><dd>0.70<small>0.55–0.8</small></dd></div><div><dt>Film it replaces</dt><dd>200 µm PE · 3-yr life</dd></div><div><dt>Power density</dt><dd>1.0 MWp/ha<small>0.6–1.2</small></dd></div></dl>
+      </div>
+      <figure class="rv rv-d1" style="margin:0">
+        <div class="fig__head"><b>Plate E · north–south section</b><span>Solar noon · both solstices · 33.9° S</span></div>
+        <div class="plate" data-arch-plate="E" data-label="Archetype E to scale: a row of gabled canopy bays about 3 metres high with semi-transparent modules, with light shade on the beds at solstice noon in the Western Cape."></div>
+        <div class="notes"><div><b>Read the plate</b><p>The roof is continuous, so it sheds rain like the shelter it replaces, and the beds under it are evenly shaded rather than striped. It can need more irrigation than the open field.</p></div><div><b>Against your plastic</b><p>The studio compares the canopy with an open field, a rain shelter or a tunnel, and prices the film spend avoided over 25 years.</p></div></div>
+      </figure>
+    </article>
+
+    <article class="chapter" id="f">
+      <div class="chapter__text rv">
+        <div class="chapter__n"><b>F</b>Covered · tunnel</div>
+        <h2>PV polytunnel / greenhouse roof</h2>
+        <p>PV strips over the film of a tunnel or greenhouse roof. The default is set for South African strawberry tunnels, where about 600 ha of the crop already grows under plastic.</p>
+        <dl class="kv"><div><dt>Gutter height</dt><dd>4.5 m<small>3.5–6.0</small></dd></div><div><dt>Roof under PV</dt><dd>25 %<small>10–40</small></dd></div><div><dt>Module transmittance</dt><dd>0.40<small>0.3–0.6</small></dd></div><div><dt>Film</dt><dd>200 µm PE · 2-yr life</dd></div><div><dt>Power density</dt><dd>0.3 MWp/ha<small>0.15–0.5</small></dd></div></dl>
+      </div>
+      <figure class="rv rv-d1" style="margin:0">
+        <div class="fig__head"><b>Plate F · section across the tunnels</b><span>Solar noon · both solstices · 33.9° S</span></div>
+        <div class="plate" data-arch-plate="F" data-label="Archetype F to scale: three polytunnels with PV strips over part of the roof, at solstice noon in the Western Cape."></div>
+        <div class="notes"><div><b>Read the plate</b><p>Only part of each roof carries modules. The rest stays film, so most of the tunnel keeps its light and the strips put moving bands of shade across the crop.</p></div><div><b>Not modelled yet</b><p>The microclimate inside the enclosure is not yet modelled. Light, energy and water are; air temperature and humidity under the film are not.</p></div></div>
+      </figure>
+    </article>
+  </div>
+</section>
+
+<!-- side by side -->
+<section class="section">
+  <div class="wrap">
+    <div class="rail" style="margin-bottom:48px">
+      <div class="rail__idx rv"><span class="sq"></span>Spec<b>Side by side</b></div>
+      <div class="rv"><h2 class="h2">Defaults and ranges</h2></div>
+    </div>
+    <div class="table-wrap mx rv">
+      <table class="t" aria-label="Archetype defaults and ranges">
+        <thead><tr><th>Parameter</th><th>A<small>Overhead</small></th><th>C<small>Fence</small></th><th>D<small>Tracker</small></th><th>E<small>Canopy</small></th><th>F<small>Tunnel</small></th></tr></thead>
+        <tbody>
+          <tr class="grp"><td colspan="6">Geometry</td></tr>
+          <tr><td>Clearance / hub / gutter</td><td>4.5 m<small>2.1–5.0</small></td><td>0.5 m lower edge<small>0.3–1.5</small></td><td>2.5 m<small>2.1–4.0</small></td><td>3.0 m<small>2.5–4.0</small></td><td>4.5 m<small>3.5–6.0</small></td></tr>
+          <tr><td>Row pitch</td><td>9.5 m<small>7–12</small></td><td>10 m<small>8–20</small></td><td>9.5 m<small>9–12</small></td><td>3.5 m<small>3–5</small></td><td>8 m<small>4–12</small></td></tr>
+          <tr><td>Tilt or rotation</td><td>12°<small>8–20</small></td><td>90°<small>60–90</small></td><td>±55°<small>50–60</small></td><td>0°<small>0–10</small></td><td>5°<small>0–15</small></td></tr>
+          <tr><td>Ground cover ratio</td><td>0.30<small>0.2–0.4</small></td><td>0.05<small>0.02–0.1</small></td><td>0.30<small>0.2–0.4</small></td><td>0.70<small>0.55–0.8</small></td><td>0.25<small>0.1–0.4</small></td></tr>
+          <tr class="grp"><td colspan="6">Light and cover</td></tr>
+          <tr><td>Module transmittance</td><td>0</td><td>0</td><td>0</td><td>0.40<small>0.3–0.5</small></td><td>0.40<small>0.3–0.6</small></td></tr>
+          <tr><td>Film under the PV</td><td>—</td><td>—</td><td>—</td><td>200 µm PE<small>3-yr life</small></td><td>200 µm PE<small>2-yr life</small></td></tr>
+          <tr class="grp"><td colspan="6">Yield and work</td></tr>
+          <tr><td>Power density</td><td>0.55 MWp/ha<small>0.4–0.8</small></td><td>0.4 MWp/ha<small>0.2–0.6</small></td><td>0.7 MWp/ha<small>0.5–0.9</small></td><td>1.0 MWp/ha<small>0.6–1.2</small></td><td>0.3 MWp/ha<small>0.15–0.5</small></td></tr>
+          <tr><td>Machinery width × height</td><td>2.5 × 3.0 m</td><td>3.5 × 3.0 m</td><td>2.5 × 3.0 m</td><td>1.8 × 2.5 m</td><td>1.8 × 2.5 m</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="faint rv" style="margin-top:16px; font-size:13.5px; max-width:72ch">A sixth archetype, B (dynamic louvres), is deferred.</p>
+  </div>
+</section>
+
+<!-- in the studio -->
+<section class="section">
+  <div class="wrap">
+    <article class="spec" style="padding-top:0">
+      <div class="spec__text rv">
+        <span class="spec__idx"><b>In the studio</b> · Design step</span>
+        <h3>Pick a structure. The preview redraws</h3>
+        <p>The Design step lists all five, ordered by how well they suit your crop, each with a badge: suits, conditional or unsuitable. A to-scale preview shows the shadow at both solstices as you change the structure, the tilt and the row spacing.</p>
+        <dl class="kv"><div><dt>Suitability</dt><dd>judged for the crop you picked</dd></div><div><dt>Tilt</dt><dd>inside the sourced range</dd></div><div><dt>Shortcut</dt><dd>keys 1–5</dd></div></dl>
+      </div>
+      <figure class="rv rv-d1" style="margin:0"><div class="pair"><div class="crop" style="--x:.012;--y:.07;--w:.265;--h:.9;aspect-ratio:.497"><img class="zoomable" loading="lazy" src="assets/shots/za-step-design.webp" width="3048" height="1808" alt="Design step, left panel: five structure cards ranked for strawberry, each with a suitability badge."></div><div class="crop" style="--x:.752;--y:.07;--w:.238;--h:.88;aspect-ratio:.456"><img class="zoomable" loading="lazy" src="assets/shots/za-step-design.webp" width="3048" height="1808" alt="Design step, live preview: the PV rain-shelter drawn to scale with the summer and winter sun angles and how far the shadow reaches."></div></div><figcaption style="margin-top:12px">Fig. 1 · Design step · structure cards and the live to-scale preview</figcaption></figure>
+    </article>
+  </div>
+</section>
+
+<!-- tracker -->
+<section class="section">
+  <div class="wrap">
+    <div class="rail" style="margin-bottom:56px">
+      <div class="rail__idx rv"><span class="sq"></span>D<b>Give light back</b></div>
+      <div class="rv"><h2 class="h2">Tracker policy and the light on the ground</h2>
+        <p class="lede" style="margin-top:20px">Follow the sun for energy, turn the modules edge-on at midday to let light through, or hold them flat. The readout shows what each choice costs and gives.</p></div>
+    </div>
+    <div class="fig__head rv"><b>Fig. 2 · Light under a tracker array</b><span>Illustrative model · drag the time, change the policy</span></div>
+    <div class="rv" data-tracker-plate></div>
+  </div>
+</section>
+
+<!-- 3D -->
+<section class="section">
+  <div class="wrap">
+    <div class="rail" style="margin-bottom:56px">
+      <div class="rail__idx rv"><span class="sq"></span>3D<b>Whole parcel</b></div>
+      <div class="rv"><h2 class="h2">The structures at parcel scale</h2></div>
+    </div>
+    <div class="grid g2" style="background:transparent; border:0; gap:12px">
+      <figure class="rv" style="margin:0"><div class="crop" style="--x:.02;--y:.235;--w:.73;--h:.745;aspect-ratio:1.652"><img class="zoomable" loading="lazy" src="assets/shots/za-3d.webp" width="3048" height="1808" alt="Archetype E over a strawberry site near Stellenbosch in the 3D seasonal light analyser."></div><figcaption style="margin-top:12px">Fig. 3 · Archetype E · strawberry · Stellenbosch</figcaption></figure>
+      <figure class="rv rv-d1" style="margin:0"><div class="crop" style="--x:.02;--y:.235;--w:.73;--h:.745;aspect-ratio:1.652"><img class="zoomable" loading="lazy" src="assets/shots/id-3d.webp" width="3048" height="1808" alt="Archetype A over a chili site in West Java in the 3D seasonal light analyser, with ground light between the rows."></div><figcaption style="margin-top:12px">Fig. 4 · Archetype A · chili · West Java</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight" style="border-top:0; padding-top:0">
+  <div class="wrap">
+    <div class="cta rv">
+      <span class="eyebrow">Not sure which one fits?</span>
+      <h2>Let the studio rank them</h2>
+      <p class="lede">Bring a field and a crop. We run all five and show which structure suits it, and what each one costs in light, energy and money.</p>
+      <div class="cta__btns"><a class="btn btn--primary btn--lg" href="demo.html">Request access <span class="arr" aria-hidden="true">→</span></a><a class="btn btn--ghost btn--lg" href="science.html">How the light model works</a></div>
+    </div>
+  </div>
+</section>
+</main>
+<footer id="site-foot"></footer>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
+<script src="assets/site.js"></script>
+<script src="assets/arch-plates.js"></script>
+<script src="assets/tracker-plate.js"></script>
+</body>
+</html>

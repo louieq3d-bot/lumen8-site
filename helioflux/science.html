@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Methods · Helioflux Agrivoltaic Studio</title>
+<meta name="description" content="How Helioflux Agrivoltaic Studio computes a field: the light, crop, water and land-use equations behind every run, how uncertainty is carried, and how the engine is checked against measured sites.">
+<link rel="icon" type="image/svg+xml" href="assets/helioflux/helioflux-mark-dark.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/helioflux/png/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/helioflux/png/apple-touch-icon-180.png">
+<meta name="theme-color" content="#000000">
+<meta property="og:site_name" content="Helioflux">
+<meta property="og:image" content="https://lumen8.ai/helioflux/assets/helioflux/png/social-card-1200x630.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@200;300;400;500;600&amp;family=Geist+Mono:wght@400;500&amp;family=Outfit:wght@500;600&amp;display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  .phero{padding:clamp(72px,10vw,140px) 0 clamp(48px,6vw,80px)}
+  .phero h1{margin:24px 0 0; max-width:16ch}
+  .abstract{display:grid; grid-template-columns:minmax(150px,.26fr) minmax(0,1fr); gap:clamp(24px,4vw,64px); margin-top:clamp(48px,6vw,80px); padding-top:28px; border-top:1px solid var(--line)}
+  @media (max-width:860px){.abstract{grid-template-columns:minmax(0,1fr)}}
+  .abstract dl{margin:0; font:400 11.5px/1.6 var(--f-mono); color:var(--text-3)}
+  .abstract dl div{display:flex; justify-content:space-between; gap:12px; padding:6px 0; border-bottom:1px solid var(--line)}
+  .abstract dd{margin:0; color:var(--text-2); text-align:right}
+  .abstract p{margin:0 0 14px; font-size:17px; line-height:1.7; color:var(--text-2); max-width:66ch}
+  .abstract p b{color:var(--text); font-weight:400}
+  .toc{display:flex; flex-wrap:wrap; gap:6px 22px; margin-top:22px; font:400 11.5px var(--f-mono); color:var(--text-3)}
+  .toc a{color:var(--text-2); text-decoration:none} .toc a:hover{color:var(--text)}
+  .toc a span{color:var(--text-3); margin-right:6px}
+
+  .art{scroll-margin-top:calc(var(--nav-h) + 16px)}
+  .art .rail{align-items:start}
+  .side{position:sticky; top:calc(var(--nav-h) + 32px)}
+  @media (max-width:860px){.side{position:static}}
+  .side h2{font:300 clamp(24px,2.2vw,30px)/1.1 var(--f-display); letter-spacing:-.03em; margin:10px 0 18px; max-width:12ch}
+  .side .n{font:400 11.5px var(--f-mono); color:var(--text-3)}
+  .side p{margin:0 0 10px; font:400 12px/1.6 var(--f-mono); color:var(--text-3); max-width:30ch}
+  @media (max-width:860px){.side p{display:none}}
+  .body > p{color:var(--text-2); font-size:16.5px; line-height:1.75; max-width:68ch}
+  .body > p b{color:var(--text); font-weight:400}
+  .body h3{font:400 17px var(--f-display); letter-spacing:-.015em; margin:44px 0 12px; color:var(--text)}
+  .body figure{margin:36px 0}
+
+  .metrics--4{grid-template-columns:repeat(4,minmax(0,1fr)); margin-top:28px}
+  @media (max-width:980px){.metrics--4{grid-template-columns:repeat(2,minmax(0,1fr))} .metrics--4 .metric:nth-child(2){border-right:0} .metrics--4 .metric:nth-child(3){padding-left:0}}
+  @media (max-width:560px){.metrics--4{grid-template-columns:minmax(0,1fr)}}
+  .metrics--4 .metric b{font-size:clamp(34px,3.2vw,50px); white-space:nowrap}
+  .metric b small{font-size:.42em; color:var(--text-3); margin-left:2px}
+
+  .worked{margin:30px 0; border:1px solid var(--line); border-radius:2px}
+  .worked__h{padding:10px 16px; border-bottom:1px solid var(--line); font:400 11.5px var(--f-mono); color:var(--text-3)}
+  .worked table{width:100%; border-collapse:collapse; font:400 13px var(--f-mono)}
+  .worked td{padding:10px 16px; border-bottom:1px solid var(--line); color:var(--text-2)}
+  .worked td:last-child{text-align:right; color:var(--text); white-space:nowrap}
+  .worked tr:last-child td{border-bottom:0; color:var(--text)}
+
+  .tiers td:first-child{width:56px; font:300 28px/1 var(--f-display); letter-spacing:-.04em; color:var(--text)}
+  .tiers tr.is-plan td{color:var(--text-3)}
+  .tiers td b{display:block; font:400 15px var(--f-display); color:var(--text); margin-bottom:2px}
+  .tiers td{color:var(--text-2); font-size:14px}
+  table.t.tiers, table.t.wx{min-width:620px}
+
+  .grades__bar{display:flex; gap:2px; height:10px; margin-bottom:6px}
+  .grades .g-strong{background:var(--sunleaf)} .grades .g-moderate{background:var(--crop)} .grades .g-low{background:var(--warn)} .grades .g-none{background:var(--text-4)}
+  .grades dt{display:flex; align-items:center; gap:10px}
+  .grades dt span{width:8px; height:8px; display:inline-block}
+  .grades dd small{display:block; margin-top:4px; font:400 12px/1.45 var(--f-body); color:var(--text-3); text-align:right; max-width:40ch; margin-left:auto}
+
+  .pair{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; align-items:start}
+  @media (max-width:640px){.pair{grid-template-columns:minmax(0,1fr)}}
+  .basis{list-style:none; margin:24px 0 0; padding:0; border-top:1px solid var(--line)}
+  .basis li{display:grid; grid-template-columns:110px minmax(0,1fr); gap:16px; padding:10px 0; border-bottom:1px solid var(--line); font-size:14.5px; color:var(--text-2)}
+  .basis b{font:400 12px var(--f-mono); color:var(--text); display:flex; align-items:center; gap:8px; padding-top:2px}
+  .basis b::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--c)}
+
+  .vsum{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin:28px 0}
+  @media (max-width:760px){.vsum{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  .vsum div{padding:24px 18px 20px 0}
+  .vsum div + div{padding-left:18px; border-left:1px solid var(--line)}
+  @media (max-width:760px){.vsum div:nth-child(3){padding-left:0; border-left:0} .vsum div:nth-child(n+3){border-top:1px solid var(--line)}}
+  .vsum b{display:block; font:200 clamp(38px,3.6vw,56px)/.95 var(--f-display); letter-spacing:-.05em; font-variant-numeric:tabular-nums}
+  .vsum b small{font-size:.4em; color:var(--text-3); letter-spacing:0; margin-left:4px}
+  .vsum span{display:block; margin-top:12px; font:400 11.5px/1.5 var(--f-mono); color:var(--text-3)}
+
+  .lic{display:inline-flex; align-items:center; gap:8px; font:400 12px var(--f-mono); color:var(--text)}
+  .lic::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--fits)}
+  .lic--no::before{background:var(--cost)}
+  .wx td{color:var(--text-2)} .wx td:first-child{color:var(--text)}
+
+  .refs{list-style:none; margin:0; padding:0; counter-reset:r; border-top:1px solid var(--line)}
+  .refs li{counter-increment:r; display:grid; grid-template-columns:44px minmax(0,1fr); gap:8px; padding:12px 0; border-bottom:1px solid var(--line); font-size:14px; line-height:1.6; color:var(--text-2); scroll-margin-top:calc(var(--nav-h) + 24px)}
+  .refs li::before{content:"[" counter(r) "]"; font:400 12px var(--f-mono); color:var(--text-3); padding-top:2px}
+  .refs li:target{background:rgba(255,255,255,.025)}
+  .refs i{color:var(--text)}
+  .refs a{color:var(--text-3); text-decoration:none; font-family:var(--f-mono); font-size:12px; word-break:break-all}
+  .refs a:hover{color:var(--text)}
+  .figno{color:var(--text-2)}
+  .body > p.figcap{font-size:11.5px; line-height:1.55; color:var(--text-3)}
+  .body .fig__head{display:block; line-height:1.6}
+</style>
+</head>
+<body data-page="science">
+<a class="skip" href="#main">Skip to content</a>
+<header id="site-nav"></header>
+<main id="main">
+
+<section class="phero shero" data-stage aria-labelledby="h-sci">
+  <div class="shero__gl" data-scene="sky"></div>
+  <div class="shero__veil"></div>
+  <div class="wrap shero__in">
+    <div>
+      <span class="eyebrow">Methods · technical note</span>
+      <h1 id="h-sci" class="h1" style="max-width:16ch">How the studio computes a field</h1>
+      <p class="lede">Light first. From every point on the ground, the share of sky the modules leave open decides the diffuse light that point receives. The figure walks a probe across one row pitch and counts it.</p>
+    </div>
+    <aside class="hud" aria-label="Readout of the sky view figure">
+      <div class="hud__h"><span>Fig. 0 · Readout</span><b>● Running</b></div>
+      <dl>
+        <div><dt>Probe across the pitch</dt><dd data-ro="sky-x">—</dd></div>
+        <div><dt>F, crossed strings, eq. (2)</dt><dd data-ro="sky-cs">—</dd></div>
+        <div><dt>F, rays in this figure</dt><dd data-ro="sky-mc">—</dd></div>
+        <div><dt>Rays stopped by a module</dt><dd data-ro="sky-blk">—</dd></div>
+      </dl>
+      <div class="hud__sub">F across one pitch · <span style="color:var(--sunleaf)">line</span> eq. (2) · <span style="color:var(--text)">dots</span> rays</div>
+      <canvas data-spark aria-hidden="true"></canvas>
+      <p>Rows are infinitely long in eq. (2) and 48 m long in the figure, so a few low rays escape along the rows.</p>
+    </aside>
+  </div>
+</section>
+
+<section class="substrip" aria-label="Abstract">
+  <div class="wrap">
+    <div class="abstract rv" style="margin-top:0">
+      <dl>
+        <div><dt>Engine</dt><dd>13 stages</dd></div>
+        <div><dt>Time step</dt><dd>1 h · 8,760 h</dd></div>
+        <div><dt>Light tier</dt><dd>T0, live</dd></div>
+        <div><dt>Revised</dt><dd>October 2026</dd></div>
+      </dl>
+      <div>
+        <p>A run couples five models on one weather year: <b>light</b> on the ground from a two-dimensional sky view factor and the projected shadow of every row; <b>energy</b> from an hourly loss chain; <b>crop</b> growth from a radiation-use model driven by the light in each zone; <b>water</b> from the FAO-56 root-zone balance; and <b>land use</b> as the land equivalent ratio. Each output carries its basis and a band, and the engine is re-run against published agrivoltaic trials.</p>
+        <p>This note gives the governing equations, the assumptions that limit them, and what is not yet modelled.</p>
+        <nav class="toc" aria-label="Contents"><a href="#light"><span>1</span>Light</a><a href="#energy"><span>2</span>Energy</a><a href="#crop"><span>3</span>Crop</a><a href="#water"><span>4</span>Water</a><a href="#land"><span>5</span>Land use</a><a href="#uncertainty"><span>6</span>Uncertainty</a><a href="#validation"><span>7</span>Validation</a><a href="#data"><span>8</span>Data</a><a href="#references"><span>R</span>References</a></nav>
+      </div>
+    
+  </div>
+</section>
+
+<!-- 1 LIGHT -->
+<section class="section art" id="light">
+  <div class="wrap rail">
+    <aside class="side rv"><span class="n">1</span><h2>Light on the ground</h2><p>Bins of about 5 cm across one row pitch, every hour of the year.</p></aside>
+    <div class="body">
+      <p>Photosynthetically active radiation is taken from global horizontal irradiance with a conversion factor that rises from clear to overcast skies, then split into beam and diffuse parts <a class="ref" href="#r1">[1]</a>.</p>
+      <div class="eq"><math display="block"><mrow><mi>PAR</mi><mo>=</mo><msub><mi>k</mi><mtext>PAR</mtext></msub><mo stretchy="false">(</mo><mi>q</mi><mo stretchy="false">)</mo><mo>·</mo><mi>GHI</mi><mo>,</mo><mspace width="1.2em"></mspace><mi>q</mi><mo>=</mo><mfrac><mi>DHI</mi><mi>GHI</mi></mfrac><mo>,</mo><mspace width="1.2em"></mspace><msub><mi>k</mi><mtext>PAR</mtext></msub><mo>∈</mo><mo stretchy="false">[</mo><mn>0.47</mn><mo>,</mo><mn>0.50</mn><mo stretchy="false">]</mo></mrow></math><span class="eq__n">(1)</span></div>
+      <p>The sky is treated as isotropic. A ground point sees the fraction of it the rows leave open, by the crossed-strings rule summed over every row of the periodic array:</p>
+      <div class="eq"><math display="block"><mrow><mi>F</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mn>1</mn><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mo>−</mo><mi>K</mi></mrow><mi>K</mi></munderover><mo stretchy="false">(</mo><mi>sin</mi><mo>&#x2061;</mo><msub><mi>θ</mi><mrow><mtext>far</mtext><mo>,</mo><mi>k</mi></mrow></msub><mo>−</mo><mi>sin</mi><mo>&#x2061;</mo><msub><mi>θ</mi><mrow><mtext>near</mtext><mo>,</mo><mi>k</mi></mrow></msub><mo stretchy="false">)</mo></mrow></math><span class="eq__n">(2)</span></div>
+      <p>Each module edge is projected onto the ground along the sun's profile direction; a bin inside that interval, modulo the pitch, is in shadow. Support posts thin both components:</p>
+      <div class="eq"><math display="block"><mrow><msub><mi>PAR</mi><mtext>g</mtext></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi>PAR</mi><mtext>d</mtext></msub><mspace width=".15em"></mspace><mi>F</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mrow><mo>(</mo><mn>1</mn><mo>−</mo><mfrac><mi>π</mi><mn>2</mn></mfrac><mi>n</mi><mi>b</mi><mi>H</mi><mo>)</mo></mrow><mo>+</mo><msub><mi>PAR</mi><mtext>b</mtext></msub><mspace width=".15em"></mspace><mi>s</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mspace width=".15em"></mspace><msup><mi>e</mi><mrow><mo>−</mo><mi>n</mi><msub><mi>b</mi><mo>⊥</mo></msub><mi>H</mi><mi>cot</mi><mo>&#x2061;</mo><mi>ε</mi></mrow></msup></mrow></math><span class="eq__n">(3)</span></div>
+      <ul class="where">
+        <li><span>s(x)</span><span>1 in sun, the module transmittance τ<sub>m</sub> in shadow; semi-transparent modules also pass τ<sub>m</sub> of the sky they block</span></li>
+        <li><span>n, b, H</span><span>post density per m², post width, post height</span></li>
+        <li><span>ε</span><span>solar elevation; b<sub>⊥</sub> is the post width seen from the sun's azimuth</span></li>
+      </ul>
+      <p>Covered designs add the film: its cycle-mean transmittance, aged over one replacement life, with a haze share of the beam scattered into diffuse light.</p>
+
+      <h3>1.1 The edge of a finite parcel</h3>
+      <p>Equation (2) describes an interior row with identical neighbours on both sides. On a small site the outer rows see more sky. Against a three-dimensional ray trace of a one-hectare parcel:</p>
+      <div class="metrics metrics--4">
+        <div class="metric"><b>+0.5<small>%</small></b><span>interior rows, 2-D model against 3-D ray trace</span></div>
+        <div class="metric"><b>+13–20<small>%</small></b><span>additional sky at the edge rows</span></div>
+        <div class="metric"><b>+6–7<small>%</small></b><span>parcel mean above the interior</span></div>
+        <div class="metric"><b>3.6<small>%</small></b><span>interior sky removed by the posts</span></div>
+      </div>
+      <p class="figcap" style="margin-top:14px">Internal measurement, 23 September 2026.</p>
+      <figure class="fig rv">
+        <div class="fig__head"><b>Figure 1.</b> Ground light across a finite parcel. An illustrative model written for this page, not the studio's engine.</div>
+        <div data-parcel-light></div>
+      </figure>
+      <p>The studio's light map is labelled <b>"edge rows not modelled"</b> where it is read. A finite-parcel tier that ray-casts the real parcel is in build.</p>
+      <div class="table-wrap" style="margin-top:28px">
+        <table class="t tiers" aria-label="Light model tiers">
+          <thead><tr><th>Tier</th><th>Method</th><th>Output</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>T0</td><td><b>2-D sky view factor</b>Interior row, tiled across the parcel; in the browser</td><td>PAR and DLI by zone and month</td><td><span class="pill pill--live">live</span></td></tr>
+            <tr><td>T1</td><td><b>Finite-parcel ray cast</b>Real parcel geometry; in a browser worker</td><td>Annual PAR at 0.25 m; P50–P90 by zone</td><td><span class="pill pill--build">in build</span></td></tr>
+            <tr class="is-plan"><td>T2</td><td><b>Hosted ray-traced solver</b>Server-side</td><td>The tier an engineered report would cite</td><td><span class="pill">planned</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 ENERGY -->
+<section class="section art" id="energy">
+  <div class="wrap rail">
+    <aside class="side rv"><span class="n">2</span><h2>Energy</h2><p>Hourly over the weather year; P10–P90 over 15 years.</p></aside>
+    <div class="body">
+      <p>Irradiance is transposed to the plane of the array with the Perez model <a class="ref" href="#r2">[2]</a>, and incidence-angle losses are applied per component (beam, sky diffuse and ground-reflected) with equivalent angles for the diffuse parts <a class="ref" href="#r3">[3]</a>. Cell temperature, DC and AC conversion follow. Where reanalysis diffuse is implausible it is re-split with the Erbs correlation <a class="ref" href="#r4">[4]</a>, and every weather year is graded A–D before use.</p>
+      <p>Bifacial rear-side gain is a port of the infinite-sheds model, with ground albedo linked to the crop. It is on for the vertical fence and optional for fixed and tracking arrays.</p>
+      <figure class="rv">
+        <div class="crop" style="--x:.015;--y:.468;--w:.565;--h:.532;aspect-ratio:1.79"><img class="zoomable" loading="lazy" src="assets/shots/za-solar-yield.webp" width="3048" height="1808" alt="Solar yield tab: a loss waterfall from horizontal irradiance through transposition, shading, optical, module, electrical and plant losses to net AC energy."></div>
+        <figcaption style="margin-top:12px"><span class="figno">Figure 2.</span> Loss waterfall from horizontal irradiance to net AC energy, grouped by stage family. 1,604 kWp rain-shelter canopy, Stellenbosch. Product screen.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- 3 CROP -->
+<section class="section art" id="crop">
+  <div class="wrap rail">
+    <aside class="side rv"><span class="n">3</span><h2>Crop</h2><p>Daily step, per zone under the array and in the open field.</p></aside>
+    <div class="body">
+      <p>Biomass accumulates with the SIMPLE crop model <a class="ref" href="#r5">[5]</a>, driven by the radiation each zone receives:</p>
+      <div class="eq"><math display="block"><mrow><mi>Δ</mi><mi>B</mi><mo>=</mo><mi>Rad</mi><mo>·</mo><msub><mi>f</mi><mtext>Solar</mtext></msub><mo>·</mo><mi>RUE</mi><mo>·</mo><msub><mi>f</mi><msub><mtext>CO</mtext><mn>2</mn></msub></msub><mo>·</mo><msub><mi>f</mi><mtext>Temp</mtext></msub><mo>·</mo><mi>min</mi><mo stretchy="false">(</mo><msub><mi>f</mi><mtext>Heat</mtext></msub><mo>,</mo><msub><mi>f</mi><mtext>Water</mtext></msub><mo stretchy="false">)</mo><mo>,</mo><mspace width="1.2em"></mspace><mi>Y</mi><mo>=</mo><mi>B</mi><mo>·</mo><mi>HI</mi></mrow></math><span class="eq__n">(4)</span></div>
+      <p>The water-stress term is not estimated separately: <i>f</i><sub>Water</sub> is the FAO-56 stress coefficient <i>K</i><sub>s</sub> of section 4, so crop and water share one root-zone balance. Each zone's diffuse light is carried into a diffuse-light efficiency term, since a shaded canopy uses scattered light better.</p>
+      <h3>3.1 Evidence labels</h3>
+      <p>Every crop carries the weaker of two labels: its shade-response prior and its crop-model parameters. Most parameters are analogues, and the library says so. Tropical sites are capped at low until South-East Asian field data exists. Behind the priors sit 296 trial observations from 54 sources; they are shown beside the result and do not yet move the headline yield.</p>
+      <figure class="rv"><div class="fig__head"><b>Figure 3.</b> Evidence labels across the 35-crop library.</div><!--gen:grades--><div class="grades" role="figure" aria-label="Evidence labels across the 35-crop library"><div class="grades__bar"><i class="g-moderate" style="flex:1"></i><i class="g-low" style="flex:9"></i><i class="g-none" style="flex:25"></i></div><dl class="kv"><div><dt><span class="g-strong"></span>Strong</dt><dd>0</dd></div><div><dt><span class="g-moderate"></span>Moderate</dt><dd>1<small>Soybean</small></dd></div><div><dt><span class="g-low"></span>Low</dt><dd>9<small>Dry bean (common bean), Green bean (snap bean), Groundnut (peanut), Maize, Potato, Rice (aerobic, drip), Sweet corn, Tomato, Wheat</small></dd></div><div><dt><span class="g-none"></span>None</dt><dd>25</dd></div></dl></div><!--/gen:grades--></figure>
+      <p>When a design shades a crop beyond the range its evidence covers, the yield is flagged as outside the tested range, on the tab and in the points to check.</p>
+      <figure class="rv">
+        <div class="crop" style="--x:.015;--y:.276;--w:.97;--h:.21;aspect-ratio:7.78"><img class="zoomable" loading="lazy" src="assets/shots/za-crop.webp" width="3048" height="1808" alt="Crop tab: the crop keeps about 52 % of its covered-reference yield, flagged outside the tested range because the design shades 56 % of the light beyond the 35 % the evidence covers, with an evidence card reading none."></div>
+        <figcaption style="margin-top:12px"><span class="figno">Figure 4.</span> Crop tab, first screen: 56 % shade against evidence that covers 35 %. Strawberry under a rain-shelter canopy. Product screen.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- 4 WATER -->
+<section class="section art" id="water">
+  <div class="wrap rail">
+    <aside class="side rv"><span class="n">4</span><h2>Water</h2><p>Daily root-zone balance, open field and under the array, on the same weather.</p></aside>
+    <div class="body">
+      <p>Reference evapotranspiration follows FAO-56 Penman–Monteith with a dual crop coefficient, and root-zone depletion is stepped daily <a class="ref" href="#r6">[6]</a>:</p>
+      <div class="eq"><math display="block"><mrow><msub><mi>D</mi><mrow><mi>r</mi><mo>,</mo><mi>i</mi></mrow></msub><mo>=</mo><msub><mi>D</mi><mrow><mi>r</mi><mo>,</mo><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>−</mo><msub><mrow><mo stretchy="false">(</mo><mi>P</mi><mo>−</mo><mi>RO</mi><mo stretchy="false">)</mo></mrow><mi>i</mi></msub><mo>−</mo><msub><mi>I</mi><mi>i</mi></msub><mo>−</mo><msub><mi>CR</mi><mi>i</mi></msub><mo>+</mo><msub><mi>ET</mi><mrow><mi>c</mi><mo>,</mo><mi>i</mi></mrow></msub><mo>+</mo><msub><mi>DP</mi><mi>i</mi></msub></mrow></math><span class="eq__n">(5)</span></div>
+      <p>Runoff uses the daily curve number <a class="ref" href="#r7">[7]</a>. Drip irrigation refills the root zone to field capacity once depletion passes the readily available water, and mass is conserved exactly over the season. A covered design sheds the rain, so everything the crop drinks under it is irrigation.</p>
+      <figure class="rv">
+        <div class="crop" style="--x:.015;--y:.425;--w:.97;--h:.535;aspect-ratio:3.06"><img class="zoomable" loading="lazy" src="assets/shots/za-water.webp" width="3048" height="1808" alt="Water tab: the cover sheds the rain; a monthly balance of rain, irrigation and crop evapotranspiration open against under the array; and a season balance where rain reaching the crop falls 88 % and net irrigation rises 13 %."></div>
+        <figcaption style="margin-top:12px"><span class="figno">Figure 5.</span> Monthly and seasonal water balance. Rain reaching the crop falls by 88 % under the canopy and net irrigation rises by 13 %. Product screen.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- 5 LAND -->
+<section class="section art" id="land">
+  <div class="wrap rail">
+    <aside class="side rv"><span class="n">5</span><h2>Land use</h2><p>The whole parcel is the land basis.</p></aside>
+    <div class="body">
+      <p>The land equivalent ratio compares the shared field with the two separate uses it replaces. The parcel, not the cropped area, is the land basis, so land lost to posts and lanes counts against the crop exactly once.</p>
+      <div class="eq"><math display="block"><mrow><mi>LER</mi><mo>=</mo><msub><mi>RY</mi><mtext>crop</mtext></msub><mo>+</mo><msub><mi>RY</mi><mtext>elec</mtext></msub><mo>=</mo><mfrac><msub><mi>Y</mi><mtext>APV</mtext></msub><msub><mi>Y</mi><mtext>open</mtext></msub></mfrac><mo>+</mo><mfrac><msub><mi>E</mi><mtext>APV</mtext></msub><msub><mi>E</mi><mtext>PV</mtext></msub></mfrac></mrow></math><span class="eq__n">(6)</span></div>
+      <p><i>E</i><sub>PV</sub> is a reference ground-mount plant on the same parcel and weather, at 1.1 MWp per hectare.</p>
+      <div class="worked rv">
+        <div class="worked__h">Worked value used to check the implementation of equation (6)</div>
+        <table>
+          <tr><td>Parcel · cropped</td><td>1.0 ha · 0.9 ha</td></tr>
+          <tr><td>Crop: 0.9 ha × 4.4 t/ha against 5.5 t/ha open</td><td>RY<sub>crop</sub> = 0.720</td></tr>
+          <tr><td>Energy: 820 MWh against 1,200 MWh</td><td>RY<sub>elec</sub> = 0.683</td></tr>
+          <tr><td>Land equivalent ratio</td><td>1.403</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 UNCERTAINTY -->
+<section class="section art" id="uncertainty">
+  <div class="wrap rail">
+    <aside class="side rv"><span class="n">6</span><h2>Uncertainty</h2><p>Every number: value, band, basis, note, sources.</p></aside>
+    <div class="body">
+      <p>No number is printed without its basis. Selecting any figure in the studio opens its record: the exact value, the band around it, the basis it rests on, a note and every source. Bands over weather come from fifteen real years run one by one and are reported as P10, P50 and P90.</p>
+      <figure class="rv">
+        <div class="pair">
+          <div class="crop" style="--x:.727;--y:.058;--w:.27;--h:.43;aspect-ratio:1.06"><img class="zoomable" loading="lazy" src="assets/shots/za-drawer-0.webp" width="3048" height="1808" alt="Evidence record for annual energy: 1.87 GWh a year, exact value, modelled basis, the P90 to P10 band and a note."></div>
+          <div class="crop" style="--x:.004;--y:.058;--w:.272;--h:.53;aspect-ratio:.865"><img class="zoomable" loading="lazy" src="assets/shots/za-drawer-5.webp" width="3048" height="1808" alt="Evidence record for CAPEX: 48.7 million rand, assumed basis, flagged as a floor because items are unpriced, with the rate-book band and sources."></div>
+        </div>
+        <figcaption style="margin-top:12px"><span class="figno">Figure 6.</span> Evidence records for annual energy (modelled) and CAPEX (assumed; a floor, as items are unpriced). Product screens.</figcaption>
+      </figure>
+      <ul class="basis">
+        <li style="--c:var(--info)"><b>Modelled</b><span>Output of a physical model run on the site's inputs.</span></li>
+        <li style="--c:var(--crop)"><b>Derived</b><span>Computed from other results.</span></li>
+        <li style="--c:var(--money)"><b>Literature</b><span>Taken from a published reference, with the citation.</span></li>
+        <li style="--c:var(--warn)"><b>Assumed</b><span>Not verified from a primary source, and labelled as such.</span></li>
+        <li style="--c:var(--text)"><b>Input</b><span>Entered by the user: a price, a rate, the farmer's own yield.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 7 VALIDATION -->
+<section class="section art" id="validation">
+  <div class="wrap rail">
+    <aside class="side rv"><span class="n">7</span><h2>Validation</h2><p>The full scorecard is on the Evidence tab.</p></aside>
+    <div class="body">
+      <p>The engine is re-run on published agrivoltaic trials in Germany, Sweden and Indonesia <a class="ref" href="#r8">[8–10]</a>, and every modelled value is set against its measurement. The scorecard ships inside the product, failing rows first.</p>
+      <div class="vsum rv">
+        <div><b>4<small>/ 20</small></b><span>engine rows within tolerance</span></div>
+        <div><b>43<small>/ 44</small></b><span>steps matching pvlib <a class="ref" href="#r11">[11]</a></span></div>
+        <div><b>26</b><span>measured targets</span></div>
+        <div><b>3</b><span>trial sites</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 DATA -->
+<section class="section art" id="data">
+  <div class="wrap rail">
+    <aside class="side rv"><span class="n">8</span><h2>Data</h2><p>The last 21 complete weather years are offered.</p></aside>
+    <div class="body">
+      <p>Three weather sources are wired, each labelled with whether a commercial project may use it before the run starts.</p>
+      <div class="table-wrap" style="margin-top:24px">
+        <table class="t wx" aria-label="Weather sources and their licences">
+          <thead><tr><th>Source</th><th>Data</th><th>Commercial use</th><th>In the studio</th></tr></thead>
+          <tbody>
+            <tr><td>Open-Meteo · ERA5</td><td>Hourly reanalysis</td><td><span class="lic lic--no">free API: no</span></td><td>Default</td></tr>
+            <tr><td>NASA POWER</td><td>Hourly irradiance and weather</td><td><span class="lic">allowed</span></td><td>Selectable</td></tr>
+            <tr><td>PVGIS · SARAH-3</td><td>Hourly, satellite-derived</td><td><span class="lic">allowed</span></td><td>Selectable</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REFERENCES -->
+<section class="section art" id="references">
+  <div class="wrap rail">
+    <aside class="side rv"><span class="n">R</span><h2>References</h2></aside>
+    <ol class="refs body">
+      <li id="r1">Spitters CJT, Toussaint HAJM, Goudriaan J (1986). Separating the diffuse and direct component of global radiation and its implications for modeling canopy photosynthesis. Part I. <i>Agricultural and Forest Meteorology</i> 38:217–229.</li>
+      <li id="r2">Perez R, Ineichen P, Seals R, Michalsky J, Stewart R (1990). Modeling daylight availability and irradiance components from direct and global irradiance. <i>Solar Energy</i> 44(5):271–289.</li>
+      <li id="r3">Duffie JA, Beckman WA (2013). <i>Solar Engineering of Thermal Processes</i>, 4th ed. Wiley. §5.4, equivalent incidence angles.</li>
+      <li id="r4">Erbs DG, Klein SA, Duffie JA (1982). Estimation of the diffuse radiation fraction for hourly, daily and monthly-average global radiation. <i>Solar Energy</i> 28(4):293–302.</li>
+      <li id="r5">Zhao C, Liu B, Xiao L, Hoogenboom G, Boote KJ, Kassie BT et al. (2019). A SIMPLE crop model. <i>European Journal of Agronomy</i> 104:97–106. <a href="https://doi.org/10.1016/j.eja.2019.01.009">doi:10.1016/j.eja.2019.01.009</a></li>
+      <li id="r6">Allen RG, Pereira LS, Raes D, Smith M (1998). <i>Crop evapotranspiration: guidelines for computing crop water requirements</i>. FAO Irrigation and Drainage Paper 56. FAO, Rome. Eqs. 82–88.</li>
+      <li id="r7">USDA NRCS. <i>National Engineering Handbook</i>, Part 630 Hydrology, ch. 9: Hydrologic soil-cover complexes.</li>
+      <li id="r8">Weselek A, Bauerle A, Hartung J, Zikeli S, Lewandowski I, Högy P (2021). Agrivoltaic system impacts on microclimate and yield of different crops within an organic crop rotation in a temperate climate. <i>Agronomy for Sustainable Development</i> 41:59. <a href="https://doi.org/10.1007/s13593-021-00714-y">doi:10.1007/s13593-021-00714-y</a></li>
+      <li id="r9">Campana PE, Stridh B, Hörndahl T et al. (2024). Experimental results, integrated model validation, and economic aspects of agrivoltaic systems at northern latitudes. <i>Journal of Cleaner Production</i> 437:140235. <a href="https://doi.org/10.1016/j.jclepro.2023.140235">doi:10.1016/j.jclepro.2023.140235</a></li>
+      <li id="r10">Yoon S, Kim M, Han S, Lee J-Y (2026). Agrivoltaics in the tropics: soybean yield stability and microclimate buffering across wet and dry seasons. <i>Agronomy</i> 16(1):116. <a href="https://doi.org/10.3390/agronomy16010116">doi:10.3390/agronomy16010116</a></li>
+      <li id="r11">pvlib python, version 0.15.2: the reference implementation for the step check (sun position, incidence, transposition, incidence-angle modifier, cell temperature, DC and AC power) on four reference systems.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="wrap">
+    <div class="cta rv">
+      <span class="eyebrow">Review</span>
+      <h2>Audit a run with us</h2>
+      <p class="lede">We open a demo parcel, the engine stages, the evidence records and the scorecard, and take the questions a reviewing engineer would ask.</p>
+      <div class="cta__btns"><a class="btn btn--primary btn--lg" href="demo.html">Request access <span class="arr" aria-hidden="true">→</span></a><a class="btn btn--ghost btn--lg" href="features.html">All features</a></div>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer id="site-foot"></footer>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
+<script src="assets/site.js"></script>
+<script src="assets/parcel-light.js"></script>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pricing · Helioflux Agrivoltaic Studio</title>
+<meta name="description" content="Pricing for Helioflux Agrivoltaic Studio: Explorer free, Pro per seat, Team with API access, plus a planned engineered report and a managed monitoring service. Launch pricing, list hypotheses.">
+<link rel="icon" type="image/svg+xml" href="assets/helioflux/helioflux-mark-dark.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/helioflux/png/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/helioflux/png/apple-touch-icon-180.png">
+<meta name="theme-color" content="#000000">
+<meta property="og:site_name" content="Helioflux">
+<meta property="og:image" content="https://lumen8.ai/helioflux/assets/helioflux/png/social-card-1200x630.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@200;300;400;500;600&amp;family=Geist+Mono:wght@400;500&amp;family=Outfit:wght@500;600&amp;display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  .phero{padding:clamp(72px,10vw,140px) 0 clamp(40px,5vw,64px)}
+  .phero h1{margin:22px 0 26px}
+  .note{display:inline-flex; gap:10px; align-items:center; margin-top:8px; font:500 10.5px var(--f-mono); letter-spacing:.02em; text-transform:none; color:var(--text-3)}
+  .note::before{content:""; width:6px; height:6px; background:var(--warn)}
+
+  .plans{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1px; background:var(--line); border:1px solid var(--line)}
+  @media (max-width:980px){.plans{grid-template-columns:minmax(0,1fr)}}
+  .plan{position:relative; display:flex; flex-direction:column; gap:22px; padding:clamp(28px,3vw,40px); background:var(--page); min-width:0}
+  .plan--core{background:linear-gradient(180deg, rgba(61,187,126,.035), transparent 40%), var(--page)}
+  .plan--core::before{content:""; position:absolute; left:-1px; right:-1px; top:-1px; height:2px; background:var(--sunleaf)}
+  .plan__top{display:flex; justify-content:space-between; align-items:center; gap:12px; font:500 10.5px var(--f-mono); letter-spacing:.02em; text-transform:none; color:var(--text-3)}
+  .plan__top b{font:500 12px var(--f-mono); letter-spacing:.02em; color:var(--text)}
+  .plan__price{display:flex; flex-direction:column; align-items:flex-start; gap:10px}
+  .plan__price small{font:500 11px var(--f-mono); letter-spacing:.02em; color:var(--text-3)}
+  .plan__price b{font:300 clamp(56px,5.6vw,84px)/.9 var(--f-display); letter-spacing:-.06em; font-variant-numeric:tabular-nums}
+  .plan__price span{font:400 14px var(--f-body); color:var(--text-2)}
+  .plan__who{margin:0; color:var(--text-2); font-size:15px; line-height:1.6; min-height:4.8em}
+  .plan .kv{margin-top:0}
+  .plan .kv dd{max-width:60%}
+  .plan__cta{margin-top:auto}
+  .plan__cta .btn{width:100%}
+
+  .addons{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-top:0}
+  @media (max-width:980px){.addons{grid-template-columns:minmax(0,1fr)}}
+  .addon{padding:clamp(24px,3vw,36px); background:var(--page); display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px 24px; align-items:baseline}
+  .addon h3{font:500 20px var(--f-display); letter-spacing:-.025em; display:flex; gap:12px; align-items:center; flex-wrap:wrap}
+  .addon__price{font:500 13px var(--f-mono); color:var(--text); text-align:right}
+  .addon__price small{display:block; color:var(--text-3); font-size:11px}
+  .addon p{grid-column:1/-1; margin:6px 0 0; color:var(--text-2); font-size:15px; max-width:60ch}
+
+  .formats{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1px; background:var(--line); border:1px solid var(--line)}
+  @media (max-width:980px){.formats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media (max-width:460px){.formats{grid-template-columns:minmax(0,1fr)}}
+  .formats div{background:var(--page); padding:18px 18px 16px; min-width:0}
+  .formats b{display:block; font:500 10.5px var(--f-mono); letter-spacing:.02em; color:var(--sunleaf)}
+  .formats span{display:block; margin-top:8px; font:500 15px var(--f-display); letter-spacing:-.02em; color:var(--text)}
+  .formats div.is-all{background:var(--fill)}
+
+  .mx td:not(:first-child), .mx th:not(:first-child){text-align:center}
+  .mx td:not(:first-child){font:500 13px var(--f-mono); color:var(--text)}
+  .mx td:first-child{color:var(--text-2)}
+  .mx th.is-core{color:var(--text)}
+  .mx td .dot{vertical-align:middle}
+
+  .faq{border-top:1px solid var(--line)}
+  .faq details{border-bottom:1px solid var(--line)}
+  .faq summary{cursor:pointer; list-style:none; display:grid; grid-template-columns:48px minmax(0,1fr) 24px; gap:12px; align-items:baseline; padding:22px 0; font:500 clamp(17px,1.6vw,20px)/1.35 var(--f-display); letter-spacing:-.02em; color:var(--text)}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary b{font:500 11px var(--f-mono); color:var(--text-3); letter-spacing:.02em}
+  .faq summary::after{content:"+"; font:400 20px var(--f-mono); color:var(--text-3); text-align:right; transition:transform var(--dur) var(--ease)}
+  .faq details[open] summary::after{transform:rotate(45deg); color:var(--sunleaf)}
+  .faq details[open] summary b{color:var(--sunleaf)}
+  .faq__body{padding:0 36px 24px 60px; color:var(--text-2); font-size:15.5px; line-height:1.7; max-width:80ch}
+  @media (max-width:560px){.faq summary{grid-template-columns:34px minmax(0,1fr) 20px} .faq__body{padding-left:46px; padding-right:0}}
+  .faq__body p{margin:0 0 10px}
+</style>
+</head>
+<body data-page="pricing">
+<a class="skip" href="#main">Skip to content</a>
+<header id="site-nav"></header>
+<main id="main">
+
+<section class="phero shero" data-stage aria-labelledby="h-price">
+  <div class="shero__gl" data-scene="sites"></div>
+  <div class="shero__veil"></div>
+  <div class="wrap shero__in">
+    <div>
+      <span class="eyebrow">Pricing</span>
+      <h1 id="h-price" class="h1">Priced per seat</h1>
+      <p class="lede">Pay for the people who design, screen and decide, not for the land you run. Explorer is the free way in, Pro is the studio, and Team adds seats and an API.</p>
+      <span class="note">Launch pricing · list hypotheses · USD per year · may change</span>
+    </div>
+    <aside class="hud" aria-label="Readout of the pricing figure">
+      <div class="hud__h"><span>Fig. 0 · Readout</span><b>● Running</b></div>
+      <div class="hud__big"><b>1,500</b><span>USD per Pro seat, per year</span></div>
+      <dl>
+        <div><dt>Sites run in the figure</dt><dd><span data-ro="s-run">0</span> of <span data-ro="s-total">—</span></dd></div>
+        <div><dt>Plants grown across them</dt><dd data-ro="s-plants">0</dd></div>
+        <div><dt>Seats used</dt><dd>1</dd></div>
+        <div><dt>Studio plans priced by area</dt><dd>No</dd></div>
+      </dl>
+      <p>Illustrative. Studio plans are priced per seat. The bankable report, when it ships, is priced per project.</p>
+    </aside>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0; border-top:0">
+  <div class="wrap">
+    <div class="plans rv">
+      <article class="plan">
+        <div class="plan__top"><b>Explorer</b><span>Free</span></div>
+        <div class="plan__price"><small>USD</small><b>0</b><span>free</span></div>
+        <p class="plan__who">See what the studio does on a small parcel before you commit.</p>
+        <dl class="kv"><div><dt>Projects</dt><dd>1, in this browser</dd></div><div><dt>Size cap</dt><dd>5 acres · 100 kW DC</dd></div><div><dt>Studio</dt><dd>on screen</dd></div><div><dt>Exports</dt><dd>—</dd></div><div><dt>Compliance pack</dt><dd>—</dd></div></dl>
+        <div class="plan__cta"><a class="btn btn--ghost btn--lg" href="demo.html">Start exploring</a></div>
+      </article>
+      <article class="plan plan--core">
+        <div class="plan__top"><b>Pro</b><span style="color:var(--sunleaf)">Core plan</span></div>
+        <div class="plan__price"><small>USD</small><b>1,500</b><span>per seat, per year</span></div>
+        <p class="plan__who">For whoever designs the feasibility study, screens the district or owns the dossier that goes to a lender.</p>
+        <dl class="kv"><div><dt>Studio</dt><dd>every step, every tab</dd></div><div><dt>Exports</dt><dd>all 12 formats + ZIP</dd></div><div><dt>Compliance</dt><dd>12 regimes screened</dd></div><div><dt>Weather bands</dt><dd>15-year P10 · P50 · P90</dd></div><div><dt>Lender and offer</dt><dd>.xlsx model · EN / ID PDF</dd></div></dl>
+        <div class="plan__cta"><a class="btn btn--primary btn--lg" href="demo.html">Request access <span class="arr" aria-hidden="true">→</span></a></div>
+      </article>
+      <article class="plan">
+        <div class="plan__top"><b>Team</b><span class="pill pill--build">In build</span></div>
+        <div class="plan__price"><small>USD</small><b>12,000</b><span>per year</span></div>
+        <p class="plan__who">For a small team that shares one tenant and one bill.</p>
+        <dl class="kv"><div><dt>Seats</dt><dd>5</dd></div><div><dt>Tenant</dt><dd>single, shared projects</dd></div><div><dt>Everything in Pro</dt><dd>per seat</dd></div><div><dt>API</dt><dd>the engine in your pipeline</dd></div></dl>
+        <div class="plan__cta"><a class="btn btn--ghost btn--lg" href="demo.html">Talk to us</a></div>
+      </article>
+    </div>
+    <div class="addons rv">
+      <article class="addon">
+        <h3>Bankable report <span class="pill">Planned</span></h3>
+        <div class="addon__price">from USD 8,000<small>+ USD 500 / ha · per project</small></div>
+        <p>A per-project service for a dossier that has to stand up to a lender or development-finance review. It needs the hosted ray-traced tier and a signed engineering partner in your jurisdiction before it ships.</p>
+      </article>
+      <article class="addon">
+        <h3>Monitoring</h3>
+        <div class="addon__price">Talk to us<small>managed service</small></div>
+        <p>A sensor kit generated for your design, logger uploads in 8 formats, and paired statistics under the array against a control plot. Live telemetry is not yet in the studio.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- what a seat exports -->
+<section class="section">
+  <div class="wrap">
+    <div class="rail" style="margin-bottom:48px">
+      <div class="rail__idx rv"><span class="sq"></span>01<b>What leaves the studio</b></div>
+      <div class="rv"><h2 class="h2">What leaves the studio</h2></div>
+    </div>
+    <div class="formats rv">
+      <div><b>PDF</b><span>Project dossier</span></div>
+      <div><b>PDF</b><span>Compliance screening</span></div>
+      <div><b>MD</b><span>Methods and assumptions</span></div>
+      <div><b>XLSX</b><span>Project workbook</span></div>
+      <div><b>CSV</b><span>Monthly ledger</span></div>
+      <div><b>CSV</b><span>Cashflow</span></div>
+      <div><b>CSV</b><span>CAPEX lines</span></div>
+      <div><b>CSV</b><span>Hourly 8,760 energy</span></div>
+      <div><b>JSON</b><span>Reproducible run</span></div>
+      <div><b>GeoJSON</b><span>Parcel and rows</span></div>
+      <div><b>KML</b><span>Parcel and rows for Google Earth</span></div>
+      <div><b>DXF</b><span>Layout drawing</span></div>
+      <div class="is-all"><b>ZIP</b><span>Everything, with a README and the bands CSV</span></div>
+      <div><b>XLSX</b><span>Lender model, live formulas</span></div>
+      <div><b>PDF · EN / ID</b><span>Farmer's offer</span></div>
+      <div><b>CSV · XLSX</b><span>Bill of materials</span></div>
+    </div>
+    <p class="figcap rv" style="margin-top:12px">Twelve formats on the Export step · the ZIP · three more downloads from inside the Lender, Offer and BOM tabs</p>
+  </div>
+</section>
+
+<!-- matrix -->
+<section class="section">
+  <div class="wrap rail">
+    <div class="rail__idx rv"><span class="sq"></span>02<b>Plan by plan</b></div>
+    <div>
+      <h2 class="h2 rv">Plans compared</h2>
+      <div class="table-wrap mx rv" style="margin-top:40px">
+        <table class="t" aria-label="Plan comparison">
+          <thead><tr><th>Feature</th><th>Explorer</th><th class="is-core">Pro</th><th>Team</th></tr></thead>
+          <tbody>
+            <tr><td>Projects</td><td>1</td><td>Unlimited</td><td>Unlimited</td></tr>
+            <tr><td>Size cap</td><td>5 acres · 100 kW</td><td>None</td><td>None</td></tr>
+            <tr><td>Every step and result tab, on screen</td><td><span class="dot dot--yes"><span class="sr">Yes</span></span></td><td><span class="dot dot--yes"><span class="sr">Yes</span></span></td><td><span class="dot dot--yes"><span class="sr">Yes</span></span></td></tr>
+            <tr><td>Exports, 12 formats and the ZIP</td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot dot--yes"><span class="sr">Yes</span></span></td><td><span class="dot dot--yes"><span class="sr">Yes</span></span></td></tr>
+            <tr><td>Compliance screening pack</td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot dot--yes"><span class="sr">Yes</span></span></td><td><span class="dot dot--yes"><span class="sr">Yes</span></span></td></tr>
+            <tr><td>15-year weather bands</td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot dot--yes"><span class="sr">Yes</span></span></td><td><span class="dot dot--yes"><span class="sr">Yes</span></span></td></tr>
+            <tr><td>Lender model and farmer's offer</td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot dot--yes"><span class="sr">Yes</span></span></td><td><span class="dot dot--yes"><span class="sr">Yes</span></span></td></tr>
+            <tr><td>Seats</td><td>1</td><td>1</td><td>5</td></tr>
+            <tr><td>Shared tenant</td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot dot--yes"><span class="sr">Yes</span></span></td></tr>
+            <tr><td>API access</td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot dot--yes"><span class="sr">Yes</span></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- compare -->
+<section class="section">
+  <div class="wrap rail">
+    <div class="rail__idx rv"><span class="sq"></span>03<b>The field</b></div>
+    <div>
+      <h2 class="h2 rv">Against the tools in use today</h2>
+      <div class="table-wrap rv" style="margin-top:40px">
+        <table class="t" aria-label="Comparison with public tools">
+          <thead><tr><th>Tool</th><th>Crop model</th><th>Irrigation</th><th>Compliance screening</th><th>Finite-parcel light</th><th>Priced design</th></tr></thead>
+          <tbody>
+            <tr class="is-us"><td><b>Helioflux</b></td><td><span class="dot dot--yes"><span class="sr">Yes</span></span></td><td><span class="dot dot--yes"><span class="sr">Yes</span></span></td><td><span class="dot dot--yes"><span class="sr">Yes</span></span></td><td><span class="dot dot--part" title="T0 tiles an interior row; the finite-parcel tier is in build"><span class="sr">Partly</span></span></td><td><span class="dot dot--yes"><span class="sr">Yes</span></span></td></tr>
+            <tr><td>PVsyst<div class="faint" style="font-size:12.5px">PV engineering</div></td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot"><span class="sr">No</span></span></td></tr>
+            <tr><td>HelioScope<div class="faint" style="font-size:12.5px">PV layout and yield</div></td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot"><span class="sr">No</span></span></td></tr>
+            <tr><td>PVcase<div class="faint" style="font-size:12.5px">Ground-mount, tracker, roof, yield</div></td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot"><span class="sr">No</span></span></td></tr>
+            <tr><td>KU Leuven AgriPV<div class="faint" style="font-size:12.5px">Free research tool, crop-group curves</div></td><td><span class="dot dot--part"><span class="sr">Partly</span></span></td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot"><span class="sr">No</span></span></td></tr>
+            <tr><td>NLR ADAM<div class="faint" style="font-size:12.5px">Free research tool, rectangular parcels</div></td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot"><span class="sr">No</span></span></td><td><span class="dot"><span class="sr">No</span></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="faint rv" style="margin-top:14px; font-size:12.5px">Based on public product pages and release notes, September 2026. A filled dot ships today; a half dot ships in part.</p>
+    </div>
+  </div>
+</section>
+
+<!-- faq -->
+<section class="section">
+  <div class="wrap rail">
+    <div class="rail__idx rv"><span class="sq"></span>04<b>Questions</b></div>
+    <div>
+      <h2 class="h2 rv" style="margin-bottom:40px">Questions</h2>
+      <div class="faq rv">
+        <details open><summary><b>01</b>What does "Indicative · T0" mean?</summary><div class="faq__body"><p>Every number the studio prints is computed in your browser on one weather year with the interactive light tier, T0, and stamped "Indicative · T0" on screen and on every exported file. A finite-parcel tier, T1, is in build. A hosted ray-traced tier, T2, is planned, and it is the tier an engineered report would rest on.</p></div></details>
+        <details><summary><b>02</b>Which countries does it cover?</summary><div class="faq__body"><p>Indonesia first, South Africa second. The studio maps 20 jurisdictions to a currency and locale across 14 currencies. Cost rate books cover South Africa, Indonesia, Germany and the United States, with a generic book everywhere else; crop prices cover South Africa, Indonesia, the United States, Germany and Italy.</p><p>Compliance screening covers Germany, France, Italy, Japan and two US states, with voluntary profiles for South-East Asia and Southern Africa.</p></div></details>
+        <details><summary><b>03</b>Is the compliance check a permit?</summary><div class="faq__body"><p>No. It is screening, not legal advice. Each applicable regime is run rule by rule with the metric, threshold, margin, clause and source. Voluntary and draft rules never show a pass.</p></div></details>
+        <details><summary><b>04</b>Which weather data can a paid project use?</summary><div class="faq__body"><p>Three sources are wired. Open-Meteo's ERA5 feed is the default, and its free API is non-commercial. NASA POWER and PVGIS SARAH-3 both allow commercial use. The weather card shows a licence chip for each before you build.</p></div></details>
+        <details><summary><b>05</b>Is there a Bahasa Indonesia interface?</summary><div class="faq__body"><p>Yes. The studio header has an EN / ID toggle for the steps and the result tabs. The farmer's offer PDF prints in either language; the other exports are in English.</p></div></details>
+        <details><summary><b>06</b>What does Monitoring include?</summary><div class="faq__body"><p>A sensor kit generated for your design, each line tagged to the regulation or design rule it serves. Logger uploads in 8 formats, from Campbell TOA5 to ChirpStack v4. And a paired analysis of the array against a control plot: block bootstrap with AR(1) and Newey-West intervals, BACI difference-in-differences, and a Welch-log / Fieller yield ratio. Live telemetry is not yet in the studio.</p></div></details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight" style="border-top:0; padding-top:0">
+  <div class="wrap">
+    <div class="cta rv">
+      <span class="eyebrow">Private preview</span>
+      <h2>See it on your own parcel</h2>
+      <p class="lede">A one-hour walkthrough on a real field, with a real structure choice and a real crop. You leave with the dossier.</p>
+      <div class="cta__btns"><a class="btn btn--primary btn--lg" href="demo.html">Request access <span class="arr" aria-hidden="true">→</span></a><a class="btn btn--ghost btn--lg" href="features.html">All features</a></div>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer id="site-foot"></footer>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>

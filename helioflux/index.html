@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Helioflux Agrivoltaic Studio</title>
+<meta name="description" content="Design software for food and power on one site. Light, crop, water and money under a solar array, modelled before anything is built.">
+<link rel="icon" type="image/svg+xml" href="assets/helioflux/helioflux-mark-dark.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/helioflux/png/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/helioflux/png/apple-touch-icon-180.png">
+<meta name="theme-color" content="#000000">
+<meta property="og:site_name" content="Helioflux">
+<meta property="og:image" content="https://lumen8.ai/helioflux/assets/helioflux/png/social-card-1200x630.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@200;300;400;500;600&amp;family=Geist+Mono:wght@400;500&amp;family=Outfit:wght@500;600&amp;display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  /* ── hero: a sticky stage; the page scroll drives the season ── */
+  .hero{position:relative; height:340vh}
+  .hero__stage{position:sticky; top:var(--nav-h); height:calc(100svh - var(--nav-h)); overflow:hidden; background:#040506}
+  .hero__gl{position:absolute; inset:0}
+  .hero__gl canvas{width:100%; height:100%; display:block; opacity:0; transition:opacity 1800ms var(--ease-io)}
+  .hero__gl.is-on canvas{opacity:1}
+  .hero__veil{position:absolute; inset:0; pointer-events:none;
+    background:
+      radial-gradient(120% 90% at 60% 40%, transparent 40%, rgba(4,5,6,.7) 100%),
+      linear-gradient(180deg, rgba(4,5,6,.65) 0%, rgba(4,5,6,0) 18%, rgba(4,5,6,0) 52%, rgba(4,5,6,.86) 90%, #040506 100%),
+      linear-gradient(90deg, rgba(4,5,6,.72) 0%, rgba(4,5,6,0) 46%)}
+  .hero__corners{position:absolute; z-index:2; top:22px; left:0; right:0; pointer-events:none}
+  .hero__corners .wrap{display:flex; justify-content:space-between; gap:16px; font:400 11px/1.7 var(--f-mono); color:var(--text-3)}
+  .hero__corners b{display:block; color:var(--text-2); font-weight:400}
+  .hero__in{position:absolute; z-index:3; left:0; right:0; bottom:74px; display:grid; grid-template-columns:minmax(0,1.5fr) minmax(280px,.6fr); gap:48px; align-items:end; pointer-events:none}
+  .hero__in > *{min-width:0}
+  .hero__in a, .hero__in button, .hud{pointer-events:auto}
+  .chs{display:grid}
+  .chs > *{grid-area:1/1; align-self:end; will-change:opacity, transform}
+  .hero h1{margin:22px 0 24px}
+  .hero .lede{max-width:50ch; color:#b3b8c1}
+  .hero .eyebrow{color:var(--text-2); text-shadow:0 1px 12px #040506}
+  .hero__ctas{display:flex; gap:10px; flex-wrap:wrap; margin-top:32px}
+  .ch{max-width:520px; visibility:hidden; opacity:0}
+  .ch__k{font:400 11.5px var(--f-mono); color:var(--sunleaf)}
+  .ch h2{font:300 clamp(30px,3.6vw,52px)/1.02 var(--f-display); letter-spacing:-.045em; margin:14px 0 16px}
+  .ch p{color:#aeb3bc; font-size:16px; line-height:1.6; margin:0}
+  .ch__read{display:flex; gap:22px; flex-wrap:wrap; margin-top:20px; padding-top:14px; border-top:1px solid var(--line-2); font:400 11.5px var(--f-mono); color:var(--text-3)}
+  .ch__read b{display:block; font:300 28px/1.1 var(--f-display); letter-spacing:-.03em; color:var(--text); margin-top:4px; font-variant-numeric:tabular-nums}
+  .hud{border:1px solid var(--line-2); border-radius:4px; background:rgba(4,5,6,.62); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); font-family:var(--f-mono)}
+  .hud__h{display:flex; justify-content:space-between; gap:12px; padding:10px 14px; border-bottom:1px solid var(--line); font-size:11px; color:var(--text-3)}
+  .hud__h b{color:var(--sunleaf); font-weight:400}
+  .hud dl{margin:0; padding:4px 14px}
+  .hud dl div{display:flex; justify-content:space-between; gap:12px; padding:6px 0; border-bottom:1px solid var(--line); font-size:12px}
+  .hud dl div:last-child{border-bottom:0}
+  .hud dt{color:var(--text-3); font-size:11px; padding-top:1px; display:flex; align-items:center; gap:8px}
+  .hud dd{margin:0; color:var(--text); font-variant-numeric:tabular-nums; white-space:nowrap}
+  .hud__sub{padding:10px 14px 0; border-top:1px solid var(--line); font-size:11px; color:var(--text-2)}
+  .k{display:inline-block; width:12px; height:2px; background:var(--sunleaf)}
+  .k--lit{background:var(--crop)} .k--open{background:repeating-linear-gradient(90deg,#c8ccd2 0 3px,transparent 3px 5px)}
+  .hud canvas{display:block; width:calc(100% - 28px); height:64px; margin:4px 14px 10px; border:1px solid var(--line)}
+  .hud__eq{padding:9px 14px; border-top:1px solid var(--line); font-size:11.5px; color:var(--text-2); display:flex; justify-content:space-between; gap:10px}
+  .hud__eq b{color:var(--text); font-weight:400}
+  .hud p{margin:0; padding:9px 14px 11px; border-top:1px solid var(--line); font:400 11px/1.5 var(--f-body); color:var(--text-3)}
+  .labels{position:absolute; inset:0; z-index:2; pointer-events:none}
+  .labels span{position:absolute; left:0; top:0; opacity:0; font:400 10.5px/1 var(--f-mono); color:var(--text); white-space:nowrap; margin-top:-9px; will-change:transform}
+  .labels span > em{display:inline-block; margin-left:16px; padding:4px 7px; font-style:normal; background:rgba(4,5,6,.72); border:1px solid var(--line-2); backdrop-filter:blur(6px)}
+  .labels span::before{content:""; position:absolute; left:0; top:50%; width:9px; height:9px; margin:-5px 0 0 -5px; border:1px solid var(--text); border-radius:50%; background:rgba(4,5,6,.5)}
+  .labels span::after{content:""; position:absolute; left:5px; top:50%; width:7px; height:1px; background:var(--text-3)}
+  .season{position:absolute; z-index:3; left:0; right:0; bottom:22px; pointer-events:none}
+  .season .wrap{display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:16px; align-items:center; font:400 11px var(--f-mono); color:var(--text-3)}
+  .season__bar{position:relative; height:9px;
+    background:repeating-linear-gradient(90deg, rgba(255,255,255,.18) 0 1px, transparent 1px calc(100% / 12)) left center/100% 5px no-repeat,
+      linear-gradient(rgba(255,255,255,.12),rgba(255,255,255,.12)) left center/100% 1px no-repeat}
+  .season__bar i{position:absolute; left:0; right:0; top:4px; height:1px; background:var(--sunleaf); transform-origin:left; transform:scaleX(0)}
+  .season [data-season-day]{color:var(--text); min-width:8ch; text-align:right}
+  @media (max-width:980px){
+    .hero{height:300vh}
+    .hero__in{grid-template-columns:minmax(0,1fr); bottom:64px}
+    .hud{display:none}
+    .labels{display:none}
+    .hero__veil{background:linear-gradient(180deg, rgba(4,5,6,.5) 0%, rgba(4,5,6,0) 20%, rgba(4,5,6,0) 38%, rgba(4,5,6,.9) 72%, #040506 100%)}
+  }
+  @media (max-width:640px){ .hero__corners{display:none} .ch__read b{font-size:22px} .season .wrap > span:first-child{display:none} .season .wrap{grid-template-columns:minmax(0,1fr) auto} }
+  @media (prefers-reduced-motion: reduce){ .hero{height:auto} .hero__stage{position:relative; top:0; height:calc(100svh - var(--nav-h))} .ch:not([data-from="0"]){display:none} .ch[data-from="0"]{visibility:visible; opacity:1} }
+
+  /* ── the model, as a chain ── */
+  .chain{list-style:none; margin:0; padding:0; position:relative; --draw:0}
+  .chain::before{content:""; position:absolute; left:19px; top:6px; bottom:6px; width:1px; background:var(--line-2)}
+  .chain::after{content:""; position:absolute; left:19px; top:6px; bottom:6px; width:1px; background:linear-gradient(var(--sunleaf), rgba(61,187,126,.25)); transform-origin:top; transform:scaleY(var(--draw))}
+  .chain li{position:relative; display:grid; grid-template-columns:40px minmax(0,.9fr) minmax(0,1.25fr) minmax(0,.55fr); gap:clamp(18px,3vw,44px); align-items:center; padding:30px 0; border-bottom:1px solid var(--line)}
+  .chain li:first-child{padding-top:6px}
+  .chain li::before{content:""; position:absolute; left:15px; top:calc(50% - 4px); width:9px; height:9px; border-radius:50%; background:var(--page); border:1px solid var(--line-3)}
+  .chain li::after{content:""; position:absolute; left:15px; top:calc(50% - 4px); width:9px; height:9px; border-radius:50%; background:var(--sunleaf); opacity:clamp(0, calc((var(--draw) - var(--at)) * 30), 1); transition:opacity 200ms}
+  .chain li:first-child::before, .chain li:first-child::after{top:calc(50% - 16px)}
+  .chain__t span{font:400 11.5px var(--f-mono); color:var(--text-3)}
+  .chain__t b{display:block; font:300 clamp(22px,2.2vw,30px)/1.1 var(--f-display); letter-spacing:-.035em; margin:6px 0 8px; color:var(--text)}
+  .chain__t p{margin:0; color:var(--text-2); font-size:14.5px; line-height:1.55; max-width:42ch}
+  .chain__eq{overflow-x:auto; padding:10px 0}
+  .chain__eq math{font-size:1.22em; color:var(--text)}
+  .chain__out{font:400 11.5px/1.6 var(--f-mono); color:var(--text-2); border-left:1px solid var(--line-2); padding-left:14px}
+  .chain__out b{display:block; color:var(--text); font-weight:400}
+  @media (max-width:1100px){ .chain li{grid-template-columns:40px minmax(0,1fr) minmax(0,1fr)} .chain__out{grid-column:2 / -1} }
+  @media (max-width:700px){ .chain li{grid-template-columns:40px minmax(0,1fr)} .chain__eq, .chain__out{grid-column:2} .chain__eq math{font-size:1.02em} }
+
+  .markets{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); border-top:1px solid var(--line)}
+  @media (max-width:760px){.markets{grid-template-columns:minmax(0,1fr)}}
+  .markets > div{padding:36px 32px 36px 0}
+  .markets > div + div{border-left:1px solid var(--line); padding-left:32px}
+  @media (max-width:760px){.markets > div + div{border-left:0; border-top:1px solid var(--line); padding-left:0}}
+  .markets h3{font:300 clamp(30px,3.4vw,52px)/1 var(--f-display); letter-spacing:-.045em; margin:14px 0 14px}
+  .markets p{color:var(--text-2); margin:0}
+</style>
+</head>
+<body data-page="home">
+<a class="skip" href="#main">Skip to content</a>
+<header id="site-nav"></header>
+<main id="main">
+
+<!-- ═══ HERO: one site, one season ═══ -->
+<section class="hero" aria-labelledby="h-hero" data-hero>
+  <div class="hero__stage">
+    <div class="hero__gl" data-field3d></div>
+    <div class="hero__veil"></div>
+    <div class="labels" aria-hidden="true">
+      <span data-anchor="53,24,1.4"><em>Open-field reference</em></span>
+      <span data-anchor="-26,0,5.4"><em>Module table · 4.8 m</em></span>
+      <span data-anchor="shade"><em>Least-lit third</em></span>
+    </div>
+    <div class="wrap hero__in">
+      <div class="chs">
+        <div class="ch" data-ch data-from="0" data-to=".12" style="visibility:visible; opacity:1">
+          <span class="eyebrow">Agrivoltaic design software</span>
+          <h1 id="h-hero" class="display">The field beneath the array</h1>
+          <p class="lede">The light, the crop, the water and the money under a solar array, modelled hour by hour before a single post goes in.</p>
+          <div class="hero__ctas">
+            <a class="btn btn--primary btn--lg" href="demo.html">Request access <span class="arr" aria-hidden="true">→</span></a>
+            <a class="btn btn--ghost btn--lg" href="science.html">Read the method</a>
+          </div>
+        </div>
+        <div class="ch" data-ch data-from=".17" data-to=".40">
+          <span class="ch__k">§ 0.1 · Days 0 to 40</span>
+          <h2>Every plant starts equal</h2>
+          <p>Same seed, same soil, same water. The one thing the array changes is light: the module edges and the posts take a different share of sun from every square metre, every hour.</p>
+          <div class="ch__read"><span>Ground light under the array, now<b data-hud="light">—</b></span></div>
+        </div>
+        <div class="ch" data-ch data-from=".44" data-to=".66">
+          <span class="ch__k">§ 0.2 · Days 40 to 80</span>
+          <h2>Where the light is lower, the canopy closes later</h2>
+          <p>Plants in the least-lit third grow on a slower clock. The model follows that square metre by square metre, because a crop answers to the light it receives, not to the field average.</p>
+          <div class="ch__read"><span>Canopy, least-lit third<b data-hud="h-shade">—</b></span><span>Open field<b data-hud="h-open">—</b></span></div>
+        </div>
+        <div class="ch" data-ch data-from=".70" data-to="1">
+          <span class="ch__k">§ 0.3 · Days 80 to 120</span>
+          <h2>At harvest, the difference is a number</h2>
+          <p>Crop under the array as a share of open field is one half of the land equivalent ratio. The kilowatt-hours are the other half. The studio computes both, every hour, for 25 years.</p>
+          <div class="ch__read"><span>Season light, array ÷ open<b data-hud="ratio">—</b></span><span>Day<b data-hud="day">—</b></span></div>
+        </div>
+      </div>
+      <aside class="hud" aria-label="Live readout of the model behind this page">
+        <div class="hud__h"><span>Fig. 0 · Readout</span><b>● Running</b></div>
+        <dl>
+          <div><dt>Day after sowing</dt><dd data-hud="day">—</dd></div>
+          <div><dt>Solar time · sun</dt><dd data-hud="time">—</dd></div>
+          <div><dt>Ground light, array</dt><dd data-hud="light">—</dd></div>
+        </dl>
+        <div class="hud__sub">Canopy height</div>
+        <dl>
+          <div><dt><i class="k"></i>Least-lit third</dt><dd data-hud="h-shade">—</dd></div>
+          <div><dt><i class="k k--lit"></i>Best-lit third</dt><dd data-hud="h-lit">—</dd></div>
+          <div><dt><i class="k k--open"></i>Open field</dt><dd data-hud="h-open">—</dd></div>
+        </dl>
+        <canvas data-spark aria-hidden="true"></canvas>
+        <div class="hud__eq"><span>Season light, array ÷ open</span><b data-hud="ratio">—</b></div>
+        <p>Illustrative model of archetype A. Each plant grows on a clock set by the light it receives. Not the studio's engine.</p>
+      </aside>
+    </div>
+    <div class="season" aria-hidden="true"><div class="wrap"><span>Sown 21 Sep</span><div class="season__bar"><i data-season-cursor></i></div><span data-season-day>Day 0</span></div></div>
+  </div>
+</section>
+
+<!-- ═══ 01 THESIS ═══ -->
+<section class="section">
+  <div class="wrap rail">
+    <div class="rail__idx rv"><span class="sq"></span>01<b>The problem</b></div>
+    <div>
+      <p class="thesis rv">Solar and farming compete for the same land. What decides the outcome is how much light each receives, hour by hour, over twenty-five years.</p>
+      <div class="stitch rv" aria-label="Five separate tools, replaced by one model">
+        <s>PV tool</s><s>GIS</s><s>Spreadsheet</s><s>FAO-56 sheet</s><s>LER template</s><b>One model</b>
+      </div>
+      <div class="metrics">
+        <div class="metric rv"><b data-count="8760">8,760</b><span>Hours simulated in every run</span></div>
+        <div class="metric rv rv-d1"><b data-count="35">35</b><span>Crops with sourced parameters</span></div>
+        <div class="metric rv rv-d2"><b data-count="12">12</b><span>Compliance regimes screened</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 02 THE MODEL ═══ -->
+<section class="section">
+  <div class="wrap">
+    <div class="rail" style="margin-bottom:64px">
+      <div class="rail__idx rv"><span class="sq"></span>02<b>The model</b></div>
+      <div><h2 class="h2">One chain, from the sky to the balance sheet</h2>
+        <p class="lede rv" style="margin-top:20px">Five models run for every hour of the year, each handing its answer to the next. You set the site, the crop and the structure; the studio does the rest.</p></div>
+    </div>
+    <ol class="chain" data-draw-scroll>
+      <li style="--at:0.02"><span></span>
+        <div class="chain__h rv"><span>2.1 · Sky</span><b>Weather to usable light</b></div>
+        <p class="chain__p rv rv-d1">Fifteen years of hourly weather, turned into the light a leaf can actually use.</p>
+        <div class="chain__out rv rv-d2">Out<b>Usable light, every hour</b></div></li>
+      <li style="--at:0.22"><span></span>
+        <div class="chain__h rv"><span>2.2 · Light</span><b>Light under the array</b></div>
+        <p class="chain__p rv rv-d1">How much sun and sky each patch of ground keeps once the modules are overhead.</p>
+        <div class="chain__out rv rv-d2">Out<b>A light map of the whole site</b></div></li>
+      <li style="--at:0.42"><span></span>
+        <div class="chain__h rv"><span>2.3 · Crop</span><b>Light into harvest</b></div>
+        <p class="chain__p rv rv-d1">Day by day, the crop turns the light it receives into growth, held back by heat and dry spells.</p>
+        <div class="chain__out rv rv-d2">Out<b>Yield under the array</b></div></li>
+      <li style="--at:0.62"><span></span>
+        <div class="chain__h rv"><span>2.4 · Water</span><b>Water the crop needs</b></div>
+        <p class="chain__p rv rv-d1">Rain, shade and evaporation, tracked through the root zone every day of the season.</p>
+        <div class="chain__out rv rv-d2">Out<b>Irrigation per season</b></div></li>
+      <li style="--at:0.82"><span></span>
+        <div class="chain__h rv"><span>2.5 · Land</span><b>Two harvests, one answer</b></div>
+        <p class="chain__p rv rv-d1">Food and power from the same land, set against growing or generating on their own.</p>
+        <div class="chain__out rv rv-d2">Out<b>Land equivalent ratio</b></div></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══ 03 THE INSTRUMENT ═══ -->
+<section class="section">
+  <div class="wrap">
+    <div class="rail" style="margin-bottom:56px">
+      <div class="rail__idx rv"><span class="sq"></span>03<b>The instrument</b></div>
+      <div><h2 class="h2">Ground light across the whole field, month by month</h2></div>
+    </div>
+    <figure class="fig" style="margin:0">
+      <div class="fig__head rv"><b>Fig. 1 · 3D seasonal light analyser</b><span>Real product screen · chili under archetype A · West Java</span></div>
+      <div data-tilt>
+      <div class="crop" style="--x:.02;--y:.235;--w:.73;--h:.745;aspect-ratio:1.652">
+        <img class="zoomable" src="assets/shots/id-3d.webp" width="3048" height="1808" alt="The studio's 3D seasonal light analyser: a chili site under an overhead stilted array in West Java, with ground light under and between the rows shown as a share of the open field, an open-field reference plot, and a timeline of months." fetchpriority="high">
+        <span class="spot" style="left:22%;top:4.4%" aria-hidden="true">1</span>
+        <span class="spot" style="left:46.6%;top:4.4%" aria-hidden="true">2</span>
+        <span class="spot" style="left:38.6%;top:66.5%" aria-hidden="true">3</span>
+        <span class="spot" style="left:8.6%;top:93.6%" aria-hidden="true">4</span>
+        <span class="spot" style="left:64.4%;top:83.6%" aria-hidden="true">5</span>
+      </div>
+      </div>
+      <div class="legend">
+        <div class="rv"><i>1</i><b>Season or hour</b><p>Ground light by month, by season, or hour by hour on a representative day.</p></div>
+        <div class="rv rv-d1"><i>2</i><b>Three readings</b><p>Share of open-field light, daily light integral, or days below the crop's own floor.</p></div>
+        <div class="rv rv-d2"><i>3</i><b>Open-field reference</b><p>A control plot beside the array, so every number has something to be measured against.</p></div>
+        <div class="rv rv-d3"><i>4</i><b>A year in a strip</b><p>Press play and the year runs month by month, with wet and dry seasons marked.</p></div>
+        <div class="rv rv-d3"><i>5</i><b>It says what it leaves out</b><p>"Edge rows not modelled" is printed on the screen, not hidden in a manual.</p></div>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<!-- ═══ 04 SPECIMENS ═══ -->
+<section class="section">
+  <div class="wrap">
+    <div class="rail" style="margin-bottom:72px">
+      <div class="rail__idx rv"><span class="sq"></span>04<b>What it computes</b></div>
+      <div><h2 class="h2">What a single run computes</h2></div>
+    </div>
+
+    <article class="spec" data-tone="light">
+      <div class="spec__text rv">
+        <span class="spec__idx"><b>04.1</b> · Light</span>
+        <h3>The light under the modules, against the crop's floor</h3>
+        <p>A seasonal map across one row pitch shows where and when the shade bites, and counts the days a year the crop sits below the light it needs.</p>
+        <dl class="kv"><div><dt>Daily light integral</dt><dd>under · between · open</dd></div><div><dt>Light homogeneity</dt><dd>% across the row</dd></div><div><dt>Shade hours</dt><dd>h / yr</dd></div></dl>
+        <a class="link" href="features.html#light">Light and energy <span aria-hidden="true">→</span></a>
+      </div>
+      <figure class="rv rv-d1" style="margin:0"><div class="crop" style="--x:.015;--y:.505;--w:.645;--h:.47;aspect-ratio:2.31"><img class="zoomable" loading="lazy" src="assets/shots/za-light.webp" width="3048" height="1808" alt="Seasonal light map: share of open-field light across one row pitch for every month of the year."></div><figcaption style="margin-top:12px">Fig. 2 · Seasonal light map · strawberries under archetype E · Stellenbosch</figcaption></figure>
+    </article>
+
+    <article class="spec spec--flip" data-tone="crop">
+      <div class="spec__text rv">
+        <span class="spec__idx"><b>04.2</b> · Structure</span>
+        <h3>Five structures, ranked for your crop</h3>
+        <p>Pick an archetype and a to-scale preview redraws the shadow at both solstices. Each card says whether it suits the crop you chose.</p>
+        <dl class="kv"><div><dt>Archetypes</dt><dd>A · C · D · E · F</dd></div><div><dt>Suitability</dt><dd>suits · conditional · unsuitable</dd></div><div><dt>Preview</dt><dd>solstice sun, shadow reach</dd></div></dl>
+        <a class="link" href="archetypes.html">The five archetypes <span aria-hidden="true">→</span></a>
+      </div>
+      <figure class="rv rv-d1" style="margin:0"><div style="display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px"><div class="crop" style="--x:.012;--y:.07;--w:.265;--h:.9;aspect-ratio:.497"><img class="zoomable" loading="lazy" src="assets/shots/za-step-design.webp" width="3048" height="1808" alt="Design step, left panel: five structure cards ranked for strawberry, each with a suitability badge."></div><div class="crop" style="--x:.752;--y:.07;--w:.238;--h:.88;aspect-ratio:.456"><img class="zoomable" loading="lazy" src="assets/shots/za-step-design.webp" width="3048" height="1808" alt="Design step, live preview: the PV rain-shelter drawn to scale with the summer and winter sun angles and how far the shadow reaches."></div></div><figcaption style="margin-top:12px">Fig. 3 · Design step · structure cards (left) and the live to-scale preview (right)</figcaption></figure>
+    </article>
+
+    <article class="spec" data-tone="water">
+      <div class="spec__text rv">
+        <span class="spec__idx"><b>04.3</b> · Water</span>
+        <h3>A drip layout, derived from the rows</h3>
+        <p>How much water the crop needs under the array, then laterals, emitters, mainline, tank and a PV-direct pump drawn across the parcel. A schematic, and labelled as one.</p>
+        <dl class="kv"><div><dt>Irrigation</dt><dd>m³ / yr · m³ / ha</dd></div><div><dt>Peak day</dt><dd>mm / d</dd></div><div><dt>Pumping energy</dt><dd>kWh · direct-PV share</dd></div></dl>
+        <a class="link" href="features.html#water">Water and irrigation <span aria-hidden="true">→</span></a>
+      </div>
+      <figure class="rv rv-d1" style="margin:0"><div class="crop" style="--x:.346;--y:.28;--w:.638;--h:.705;aspect-ratio:1.526"><img class="zoomable" loading="lazy" src="assets/shots/za-irrigation.webp" width="3048" height="1808" alt="Irrigation layout in 3D: 115 drip laterals across the parcel, mainline, storage tank, water source and PV-direct pump."></div><figcaption style="margin-top:12px">Fig. 4 · Irrigation layout · 115 laterals · 31,740 emitters</figcaption></figure>
+    </article>
+
+    <article class="spec spec--flip" data-tone="money">
+      <div class="spec__text rv">
+        <span class="spec__idx"><b>04.4</b> · Money</span>
+        <h3>The question a bank actually asks</h3>
+        <p>Debt sized on P90 energy, DSCR year by year, sculpted repayment and an Excel model with live formulas, next to NPV, IRR and a farmer–developer offer.</p>
+        <blockquote class="quote">Lends 16.8M ZAR on P90 and clears the 1.35× DSCR target with min DSCR 1.37×.<small>The Lender tab's own answer · demo run · indicative, not a credit decision</small></blockquote>
+        <a class="link" href="features.html#money">Finance, lender and deal <span aria-hidden="true">→</span></a>
+      </div>
+      <figure class="rv rv-d1" style="margin:0"><div class="crop" style="--x:.016;--y:.582;--w:.562;--h:.398;aspect-ratio:2.38"><img class="zoomable" loading="lazy" src="assets/shots/za-lender.webp" width="3048" height="1808" alt="DSCR by year at P50 and P90 against the target line, from the Lender tab."></div><figcaption style="margin-top:12px">Fig. 5 · DSCR by year · P50 and P90 against target</figcaption></figure>
+    </article>
+
+    <article class="spec" data-tone="compliance">
+      <div class="spec__text rv">
+        <span class="spec__idx"><b>04.5</b> · Rules</span>
+        <h3>Screened against the rules that apply, with the clause</h3>
+        <p>Twelve regimes across Germany, France, Italy, Japan and the United States, plus voluntary profiles where no statute exists. Every rule shows its metric, threshold, margin and source.</p>
+        <dl class="kv"><div><dt>Statutory</dt><dd>9 regimes</dd></div><div><dt>Draft · voluntary</dt><dd>1 · 2</dd></div><div><dt>Output</dt><dd>screening, not a permit</dd></div></dl>
+        <a class="link" href="features.html#compliance">All twelve regimes <span aria-hidden="true">→</span></a>
+      </div>
+      <figure class="rv rv-d1" style="margin:0"><div class="crop" style="--x:.016;--y:.28;--w:.62;--h:.52;aspect-ratio:2.01"><img class="zoomable" loading="lazy" src="assets/shots/za-compliance.webp" width="3048" height="1808" alt="Compliance tab: South Africa has no statute, so the voluntary profile is screened rule by rule with value against threshold, margin and source."></div><figcaption style="margin-top:12px">Fig. 6 · Southern Africa voluntary profile · rule by rule</figcaption></figure>
+    </article>
+  </div>
+</section>
+
+<!-- ═══ 05 PHYSICS ═══ -->
+<section class="section">
+  <div class="wrap">
+    <div class="rail" style="margin-bottom:56px">
+      <div class="rail__idx rv"><span class="sq"></span>05<b>The trade-off</b></div>
+      <div><h2 class="h2">Tilt is a trade between kilowatt-hours and kilograms</h2>
+        <p class="lede rv" style="margin-top:20px">A single-axis tracker, drawn to scale. Follow the sun for energy, or turn the modules away at midday and give the light back to the crop. The readout shows what each choice costs.</p></div>
+    </div>
+    <div class="fig__head rv"><b>Fig. 7 · Light under a tracker array</b><span>Illustrative model · drag the time, change the policy</span></div>
+    <div class="rv" data-tracker-plate></div>
+  </div>
+</section>
+
+<!-- ═══ 06 PROOF ═══ -->
+<section class="section">
+  <div class="wrap proof">
+    <div>
+      <div class="rail__idx rv" style="margin-bottom:28px"><span class="sq"></span>06<b>Proof, not promises</b></div>
+      <h2 class="h2">Every number carries its basis</h2>
+      <ol class="rules">
+        <li class="rv"><div><b>Click any number</b><span>Its value, band, basis (modelled, derived, assumed or your input), note and sources open beside it.</span></div></li>
+        <li class="rv"><div><b>Evidence grades on every crop</b><span>Strong, moderate, low or none. A crop with no evidence is refused rather than estimated.</span></div></li>
+        <li class="rv"><div><b>Weather bands</b><span>Fifteen real weather years give P10, P50 and P90 for energy, crop, land use, NPV and water.</span></div></li>
+        <li class="rv"><div><b>Problems listed first</b><span>The overview leads with the points a reviewer should check, including a negative NPV when the prices say so.</span></div></li>
+      </ol>
+    </div>
+    <figure class="rv rv-d1" style="margin:0; position:sticky; top:calc(var(--nav-h) + 24px)">
+      <div class="crop" style="--x:.735;--y:.282;--w:.25;--h:.33;aspect-ratio:1.277"><img class="zoomable" loading="lazy" src="assets/shots/za-overview.webp" width="3048" height="1808" alt="Points to check on the overview: NPV is negative at the default prices, days below the crop light floor, extra irrigation needed, CAPEX is a floor with unpriced items, no published yield band at this shade, and no statute to screen."></div>
+      <figcaption style="margin-top:12px">Fig. 8 · Points to check · the overview's first screen</figcaption>
+      <p class="faint" style="margin-top:20px; font-size:13.5px; max-width:52ch">Every result is stamped "Indicative · T0" until a hosted ray-traced tier exists. Nothing on this site is a bankable result.</p>
+    </figure>
+  </div>
+</section>
+
+<!-- ═══ 07 MARKETS ═══ -->
+<section class="section section--tight">
+  <div class="wrap">
+    <div class="rail__idx rv" style="margin-bottom:28px"><span class="sq"></span>07<b>Where we start</b></div>
+    <div class="markets">
+      <div class="rv"><span class="pill pill--live">First</span><h3>Indonesia</h3><p>A Bahasa Indonesia interface, IDR throughout, regional crop prices and yields, and a voluntary South-East Asia profile with permitting checklists.</p></div>
+      <div class="rv rv-d1"><span class="pill pill--plain">Second</span><h3>South Africa</h3><p>Strawberries under tunnels, ZAR throughout, and a voluntary Southern Africa profile where no agrivoltaic statute exists yet.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CLOSE ═══ -->
+<section class="section section--tight" style="border-top:0; padding-top:0">
+  <div class="wrap">
+    <div class="cta rv">
+      <span class="eyebrow">Private preview</span>
+      <h2>Bring us a site</h2>
+      <p class="lede">We run your parcel from boundary to dossier: structure, crop, light, water and money, in one sitting.</p>
+      <div class="cta__btns"><a class="btn btn--primary btn--lg" href="demo.html">Request access <span class="arr" aria-hidden="true">→</span></a><a class="btn btn--ghost btn--lg" href="product.html">Take the product tour</a></div>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer id="site-foot"></footer>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
+<script src="assets/site.js"></script>
+<script src="assets/field3d.js"></script>
+<script src="assets/tracker-plate.js"></script>
+</body>
+</html>

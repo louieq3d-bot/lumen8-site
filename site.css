@@ -1285,3 +1285,6 @@ p,.lead,.faq details p{text-wrap:pretty}
 :root[data-theme="light"] .prail{margin-top:0;padding-top:1px}
 :root[data-theme="light"] .subnav{margin-top:14px}
 @media (max-width:900px){:root[data-theme="light"] .hero{margin-top:calc(var(--nav-h) + 4px)}}
+
+/* a module that has its own product site links to it */
+.mod-cta{margin-top:22px; display:flex; gap:10px; flex-wrap:wrap}

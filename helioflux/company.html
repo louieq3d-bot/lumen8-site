@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Company · Helioflux Agrivoltaic Studio</title>
+<meta name="description" content="Why now, where we start and what is in build at Helioflux Agrivoltaic Studio: food and power from the same site, in one model.">
+<link rel="icon" type="image/svg+xml" href="assets/helioflux/helioflux-mark-dark.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/helioflux/png/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/helioflux/png/apple-touch-icon-180.png">
+<meta name="theme-color" content="#000000">
+<meta property="og:site_name" content="Helioflux">
+<meta property="og:image" content="https://lumen8.ai/helioflux/assets/helioflux/png/social-card-1200x630.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@200;300;400;500;600&amp;family=Geist+Mono:wght@400;500&amp;family=Outfit:wght@500;600&amp;display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  .phero{padding:clamp(72px,10vw,140px) 0 clamp(40px,5vw,64px)}
+  .phero h1{margin:22px 0 26px}
+
+  /* why now: five sourced figures */
+  .why{display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); border-top:1px solid var(--line)}
+  @media (max-width:1100px){.why{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media (max-width:560px){.why{grid-template-columns:minmax(0,1fr)}}
+  .why div{display:flex; flex-direction:column; padding:28px 22px 22px 0; border-bottom:1px solid var(--line)}
+  .why div + div{padding-left:22px; border-left:1px solid var(--line)}
+  @media (max-width:1100px){.why div:nth-child(odd){padding-left:0; border-left:0}}
+  @media (max-width:560px){.why div{padding-left:0!important; border-left:0!important}}
+  .why b{white-space:nowrap; font:300 clamp(40px,3.9vw,60px)/.95 var(--f-display); letter-spacing:-.06em; font-variant-numeric:tabular-nums}
+  .why b small{font-size:.38em; letter-spacing:-.01em; color:var(--text-3); margin-left:4px}
+  .why p{margin:14px 0 18px; font-size:14.5px; color:var(--text-2); line-height:1.5}
+  .why cite{margin-top:auto; font:500 10px/1.6 var(--f-mono); font-style:normal; letter-spacing:.02em; text-transform:none; color:var(--text-3)}
+
+  /* latitude figure */
+  .lat{border-top:1px solid var(--line-2)}
+  .lat__row{display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,2.1fr); gap:20px; align-items:center; padding:10px 0; border-bottom:1px solid var(--line)}
+  .lat__g{padding:22px 0 8px; font:500 10.5px var(--f-mono); letter-spacing:.02em; text-transform:none; color:var(--text-3); border-bottom:1px solid var(--line)}
+  .lat__lab{font-size:14px; color:var(--text); line-height:1.35}
+  .lat__lab small{display:block; margin-top:2px; font:500 10.5px var(--f-mono); color:var(--text-3)}
+  .lat__tr{position:relative; height:22px}
+  .lat__tr::before{content:""; position:absolute; left:42%; width:40%; top:-11px; bottom:-11px; background:rgba(255,255,255,.025)}
+  .lat__tr::after{content:""; position:absolute; left:62%; top:-11px; bottom:-11px; width:1px; background:var(--line-3)}
+  .lat__tr i{position:absolute; top:7px; height:8px; background:var(--text-3)}
+  .lat__tr i.is-v{background:transparent; border:1px solid var(--text-3)}
+  .lat__tr i.is-l{background:var(--sunleaf); box-shadow:0 0 14px var(--sunleaf-glow)}
+  .lat__tr i.is-d{background:repeating-linear-gradient(90deg, var(--text-3) 0 3px, transparent 3px 6px)}
+  .lat__tr b{position:absolute; top:5px; width:12px; height:12px; margin-left:-6px; border-radius:50%; background:var(--page); border:1px solid var(--text); z-index:1}
+  .lat__tr b.is-m{background:var(--text)}
+  .lat__tr b span{position:absolute; left:16px; top:-3px; white-space:nowrap; font:500 10.5px var(--f-mono); color:var(--text-2)}
+  .lat__tr b.is-flip span{left:auto; right:16px}
+  .lat__axis{position:relative; height:28px}
+  .lat__axis span{position:absolute; top:8px; transform:translateX(-50%); font:500 10.5px var(--f-mono); color:var(--text-3)}
+  .lat__axis span.eq{color:var(--text)}
+  @media (max-width:700px){.lat__30{display:none} .lat__row{grid-template-columns:minmax(0,1fr)} .lat__axis-lab{display:none} .lat__tr b span{display:none}}
+
+  .markets{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); border-top:1px solid var(--line); margin-top:clamp(56px,7vw,96px)}
+  @media (max-width:760px){.markets{grid-template-columns:minmax(0,1fr)}}
+  .markets > div{padding:36px 32px 36px 0}
+  .markets > div + div{border-left:1px solid var(--line); padding-left:32px}
+  @media (max-width:760px){.markets > div + div{border-left:0; border-top:1px solid var(--line); padding-left:0}}
+  .markets h3{font:500 clamp(28px,3vw,44px)/1 var(--f-display); letter-spacing:-.045em; margin:14px 0 14px}
+  .markets p{color:var(--text-2); margin:0 0 18px}
+
+  .aud{list-style:none; margin:0; padding:0; border-top:1px solid var(--line)}
+  .aud li{display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.6fr); gap:24px; padding:22px 0; border-bottom:1px solid var(--line)}
+  @media (max-width:700px){.aud li{grid-template-columns:minmax(0,1fr); gap:6px}}
+  .aud b{font:500 clamp(19px,1.8vw,24px) var(--f-display); letter-spacing:-.03em}
+  .aud span{color:var(--text-2); font-size:15.5px}
+
+  .road td:first-child b{display:block; font:500 16px var(--f-display); letter-spacing:-.02em; color:var(--text)}
+  .road td{color:var(--text-2)}
+  .road td:last-child{white-space:nowrap}
+</style>
+</head>
+<body data-page="company">
+<a class="skip" href="#main">Skip to content</a>
+<header id="site-nav"></header>
+<main id="main">
+
+<section class="phero shero" data-stage aria-labelledby="h-co">
+  <div class="shero__gl" data-scene="globe"></div>
+  <div class="shero__veil"></div>
+  <div class="shero__labels" aria-hidden="true"><span data-globe-label><em>Indonesia · first</em></span><span data-globe-label><em>South Africa · second</em></span></div>
+  <div class="wrap shero__in">
+    <div>
+      <span class="eyebrow">Company</span>
+      <h1 id="h-co" class="h1">Food and power from the same site</h1>
+      <p class="lede">One model for the trade-off between kilowatt-hours and kilograms. We start in Indonesia and South Africa, where land is contested, the sun is strong and no agrivoltaic statute exists yet to lean on.</p>
+    </div>
+    <aside class="hud" aria-label="Readout of the globe figure">
+      <div class="hud__h"><span>Fig. 0 · Readout</span><b>● Running</b></div>
+      <div class="hud__big"><b>2</b><span>launch markets</span></div>
+      <dl>
+        <div><dt>Indonesia · demo</dt><dd>West Java · 6.9° S</dd></div>
+        <div><dt>Noon sun, 21 March</dt><dd data-ro="g-id-sun">—</dd></div>
+        <div><dt>South Africa · demo</dt><dd>Stellenbosch · 33.9° S</dd></div>
+        <div><dt>Noon sun, 21 March</dt><dd data-ro="g-za-sun">—</dd></div>
+      </dl>
+      <p>Land outlines from Natural Earth. The sun stands 90° minus the latitude at noon on the equinox.</p>
+    </aside>
+  </div>
+</section>
+
+<!-- 01 why now -->
+<section class="section" style="padding-top:0; border-top:0">
+  <div class="wrap">
+    <div class="rail" style="margin-bottom:48px">
+      <div class="rail__idx rv"><span class="sq"></span>01<b>Why now</b></div>
+      <div class="rv"><h2 class="h2">A market that has outgrown its design tools</h2></div>
+    </div>
+    <div class="why rv">
+      <div><b><span data-count="14">14</span><small>GWp</small></b><p>agrivoltaics installed worldwide by 2021</p><cite>REN21 · Global Status Report 2024</cite></div>
+      <div><b><span data-count="2036">2,036</span><small>MW</small></b><p>across 1,393 projects in Japan by the end of FY2024</p><cite>TaiyangNews</cite></div>
+      <div><b><small style="margin:0 6px 0 0">≈</small>600<small>ha</small></b><p>of strawberries under tunnels in South Africa</p><cite>Haygrove SA · Farmer's Weekly</cite></div>
+      <div><b><small style="margin:0 6px 0 0">≈</small>42.6<small>GW</small></b><p>of renewable additions planned in Indonesia's RUPTL 2025–2034</p><cite>RAP</cite></div>
+      <div><b>6.1<small>USD bn</small></b><p>global agrivoltaics market in 2024</p><cite>Mordor Intelligence · Grand View Research · paywalled estimates</cite></div>
+    </div>
+    <p class="faint rv" style="margin-top:16px; font-size:13px; max-width:80ch">Each figure is what its publisher wrote. Market-size estimates are paywalled and marked so; we do not reconcile them into one number.</p>
+  </div>
+</section>
+
+<!-- 02 the gap -->
+<section class="section">
+  <div class="wrap rail">
+    <div class="rail__idx rv"><span class="sq"></span>02<b>The gap</b></div>
+    <div>
+      <p class="thesis rv">A feasibility study today is spread across five tools, and the trade-off between kilowatt-hours and kilograms belongs to none of them.</p>
+      <div class="stitch rv" aria-label="Five separate tools, replaced by one model"><s>PV tool</s><s>GIS</s><s>Spreadsheet</s><s>FAO-56 sheet</s><s>LER template</s><b>One model</b></div>
+      <p class="lede rv" style="margin-top:40px">Thirteen engine stages run from the parcel to the ledger. Change the structure and the light, the crop, the water and the money move together, in one run, with one stamp.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 03 where -->
+<section class="section" id="markets">
+  <div class="wrap">
+    <div class="rail" style="margin-bottom:48px">
+      <div class="rail__idx rv"><span class="sq"></span>03<b>Where</b></div>
+      <div class="rv"><h2 class="h2">Where the rules are, and where we start</h2>
+        <p class="lede" style="margin-top:20px">Every statute the studio screens sits between about 24° and 55° N. Our launch markets have no agrivoltaic statute, so the studio ships voluntary profiles and permitting checklists for both, and says plainly that they are not law.</p></div>
+    </div>
+    <figure class="fig rv" style="margin:0">
+      <div class="fig__head"><b>Fig. 1 · By latitude</b><span>Regimes, launch markets and measured sites · approximate extents</span></div>
+      <div class="lat" role="figure" aria-label="Latitude chart: statutory regimes in Germany, France, Italy, Japan and two US states lie between about 24 and 55 degrees north; voluntary profiles and the launch markets Indonesia and South Africa lie between 6 degrees north and 35 degrees south; measured validation sites are in Sweden, Germany and Indonesia.">
+        <div class="lat__row"><span class="lat__lab lat__axis-lab"></span><div class="lat__axis"><span style="left:2%">60° N</span><span style="left:22%">40° N</span><span style="left:42%">20° N</span><span class="eq" style="left:62%">0°</span><span style="left:82%">20° S</span><span class="lat__30" style="left:92%">30° S</span></div></div>
+        <div class="lat__g">Statutory regimes · 9 · and one draft</div>
+        <div class="lat__row"><span class="lat__lab">Germany<small>DIN SPEC 91434 · DIN SPEC 91492</small></span><div class="lat__tr"><i style="left:6.9%;width:7.8%"></i></div></div>
+        <div class="lat__row"><span class="lat__lab">France<small>Décret 2024-318 · arrêté of 5 July 2024</small></span><div class="lat__tr"><i style="left:10.9%;width:9.8%"></i></div></div>
+        <div class="lat__row"><span class="lat__lab">Italy<small>MASE 2022 · DM 436/2023</small></span><div class="lat__tr"><i style="left:14.9%;width:11.6%"></i></div></div>
+        <div class="lat__row"><span class="lat__lab">Japan<small>MAFF 2013 · MAFF 2026 draft</small></span><div class="lat__tr"><i style="left:16.5%;width:21.5%"></i></div></div>
+        <div class="lat__row"><span class="lat__lab">United States<small>Massachusetts SMART · New Jersey dual-use pilot</small></span><div class="lat__tr"><i style="left:19.1%;width:1.7%"></i><i style="left:20.6%;width:2.5%"></i></div></div>
+        <div class="lat__g">Voluntary profiles · not law</div>
+        <div class="lat__row"><span class="lat__lab">South-East Asia 2026<small>voluntary best practice</small></span><div class="lat__tr"><i class="is-v" style="left:39%;width:34%"></i></div></div>
+        <div class="lat__row"><span class="lat__lab">Southern Africa 2026<small>voluntary best practice</small></span><div class="lat__tr"><i class="is-v" style="left:79%;width:18%"></i></div></div>
+        <div class="lat__g">Launch markets</div>
+        <div class="lat__row"><span class="lat__lab">Indonesia · first<small>Bahasa UI · IDR · 34 regions</small></span><div class="lat__tr"><i class="is-l" style="left:56%;width:17%"></i></div></div>
+        <div class="lat__row"><span class="lat__lab">South Africa · second<small>ZAR · 9 regions</small></span><div class="lat__tr"><i class="is-l" style="left:84.1%;width:12.7%"></i></div></div>
+        <div class="lat__row"><span class="lat__lab">Demo projects<small>Pangalengan · Stellenbosch</small></span><div class="lat__tr"><b style="left:69.2%"><span>Pangalengan</span></b><b class="is-flip" style="left:95.9%"><span>Stellenbosch</span></b></div></div>
+        <div class="lat__g">Measured validation sites</div>
+        <div class="lat__row"><span class="lat__lab">Sites the engine is re-run against<small>Kärrbo · Heggelbach · Bogor</small></span><div class="lat__tr"><b class="is-m" style="left:2.4%"><span>Kärrbo</span></b><b class="is-m" style="left:14.15%"><span>Heggelbach</span></b><b class="is-m" style="left:68.6%"><span>Bogor</span></b></div></div>
+      </div>
+      <p class="figcap" style="margin-top:14px">Shaded band · within 20° of the equator, where the vertical fence (C) is advisory only · line at 0° is the equator</p>
+    </figure>
+    <div class="markets">
+      <div class="rv"><span class="pill pill--live">First</span><h3>Indonesia</h3><p>A Bahasa Indonesia interface, IDR throughout, regional crop prices and yields for 34 regions, Fields of The World outlines for snapping, and the voluntary South-East Asia profile with its permitting checklist.</p><dl class="kv"><div><dt>Demo</dt><dd>chili · archetype A</dd></div><div><dt>Rate book</dt><dd>IDN-2026</dd></div></dl></div>
+      <div class="rv rv-d1"><span class="pill pill--plain">Second</span><h3>South Africa</h3><p>About 600 ha of strawberries already grow under tunnels: the covered archetypes compare a PV roof with the film it replaces. ZAR throughout, with a ZAR lender case and the voluntary Southern Africa profile.</p><dl class="kv"><div><dt>Demo</dt><dd>strawberry · archetype E</dd></div><div><dt>Rate book</dt><dd>ZAF-2026</dd></div></dl></div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 who -->
+<section class="section">
+  <div class="wrap rail">
+    <div class="rail__idx rv"><span class="sq"></span>04<b>Who it is for</b></div>
+    <div>
+      <h2 class="h2 rv" style="margin-bottom:40px">Who uses it</h2>
+      <ul class="aud rv">
+        <li><b>Solar EPCs and developers</b><span>Replace the five-tool stitch with one model and one dossier.</span></li>
+        <li><b>Agribusiness estates</b><span>Screen land for food-plus-power before paying for a feasibility study.</span></li>
+        <li><b>Lenders and development finance</b><span>P90 energy, crop bands and a lender workbook in one export.</span></li>
+        <li><b>Growers under plastic</b><span>Compare a PV canopy with the film you replace every few seasons.</span></li>
+        <li><b>Researchers</b><span>An open methods note, a validation scorecard and evidence labels on every parameter.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 05 roadmap -->
+<section class="section" id="roadmap">
+  <div class="wrap rail">
+    <div class="rail__idx rv"><span class="sq"></span>05<b>In build</b></div>
+    <div>
+      <h2 class="h2 rv">In build</h2>
+      <p class="lede rv" style="margin-top:20px">Nothing in this table is in the live studio. No dates, no quarters.</p>
+      <div class="table-wrap rv" style="margin-top:40px">
+        <table class="t road" aria-label="Roadmap">
+          <thead><tr><th>Item</th><th>What it changes</th><th>State</th></tr></thead>
+          <tbody>
+            <tr><td><b>Finite-parcel light · T1</b></td><td>Ray-cast ground light over the real parcel at 0.25 m, so edge rows stop being an approximation.</td><td><span class="pill pill--build">In build</span></td></tr>
+            <tr><td><b>Design optimiser</b></td><td>Search verified on the finite-parcel light, with a library of tracker policies.</td><td><span class="pill pill--build">In build</span></td></tr>
+            <tr><td><b>Irrigation hydraulics</b></td><td>Pipe sizing and PV-direct pumping, beyond today's schematic drip layout.</td><td><span class="pill pill--build">In build</span></td></tr>
+            <tr><td><b>Climate risk · CMIP6</b></td><td>The engine and its data exist; the tab is not yet wired to them.</td><td><span class="pill pill--build">Built · not wired</span></td></tr>
+            <tr><td><b>Live telemetry</b></td><td>The server route exists; the studio only takes logger file uploads today.</td><td><span class="pill pill--build">Built · not wired</span></td></tr>
+            <tr><td><b>Hosted ray-traced solver · T2</b></td><td>The tier an engineered report would cite.</td><td><span class="pill">Planned</span></td></tr>
+            <tr><td><b>Literature meta-analysis</b></td><td>Priors from a structured review with a PRISMA flow, to grow the evidence behind each crop.</td><td><span class="pill">Planned</span></td></tr>
+            <tr><td><b>Standalone accounts</b></td><td>Sign-up, teams, billing and white-label exports.</td><td><span class="pill">Planned</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 principles -->
+<section class="section">
+  <div class="wrap proof">
+    <div>
+      <div class="rail__idx rv" style="margin-bottom:28px"><span class="sq"></span>06<b>Principles</b></div>
+      <h2 class="h2 rv">Principles</h2>
+    </div>
+    <ol class="rules" style="margin-top:0">
+      <li class="rv"><div><b>Every number says how sure it is</b><span>Its basis, its band and its sources, one click from the figure.</span></div></li>
+      <li class="rv"><div><b>Weather bands</b><span>Fifteen weather years and P10 · P50 · P90, instead of one optimistic number.</span></div></li>
+      <li class="rv"><div><b>Screening only</b><span>Rule tables with margins and clauses. Voluntary and draft rules never show a pass.</span></div></li>
+      <li class="rv"><div><b>Problems listed first</b><span>A negative NPV, an untested shade level or a failed validation row is shown at the top of the result.</span></div></li>
+    </ol>
+  </div>
+</section>
+
+<section class="section section--tight" style="border-top:0; padding-top:0">
+  <div class="wrap">
+    <div class="cta rv">
+      <span class="eyebrow">Private preview</span>
+      <h2>Walk a real field with us</h2>
+      <p class="lede">From boundary to dossier in one sitting: structure, crop, light, water and money, on a parcel you choose.</p>
+      <div class="cta__btns"><a class="btn btn--primary btn--lg" href="demo.html">Request access <span class="arr" aria-hidden="true">→</span></a><a class="btn btn--ghost btn--lg" href="pricing.html">See pricing</a></div>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer id="site-foot"></footer>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
+<script src="assets/land.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>
