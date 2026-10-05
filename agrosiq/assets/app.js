@@ -45,7 +45,10 @@
     coins: 'M9 10c3.9 0 7-1.3 7-3s-3.1-3-7-3-7 1.3-7 3 3.1 3 7 3zM2 7v5c0 1.7 3.1 3 7 3s7-1.3 7-3V7M8 18.5c.3 0 .7.1 1 .1 3.9 0 7-1.3 7-3M16 11c3.4.2 6 1.4 6 3v5c0 1.7-3.1 3-7 3-2 0-3.8-.3-5-.9',
     arrow: 'M4 12h16M14 6l6 6-6 6', plus: 'M12 5v14M5 12h14', search: 'M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM21 21l-5-5',
     home: 'M3 11l9-7 9 7v10H3zM9 21v-6h6v6', bell: 'M6 16V11a6 6 0 0 1 12 0v5l2 2H4zM10 21h4', settings: 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19 12l2-1-1-3-2 .2-1.2-1.5.4-2-3-1-1 1.8h-2L10 3.7l-3 1 .4 2L6.2 8.3 4 8l-1 3 2 1v.1L3 13l1 3 2.2-.2 1.2 1.5-.4 2 3 1 1-1.8h2l1 1.8 3-1-.4-2 1.2-1.5 2.2.2 1-3z',
-    eye: 'M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z', zap: 'M13 2L4 14h7l-1 8 9-12h-7z',
+    eye: 'M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z',
+    sprout: 'M12 21v-8M12 13c0-4-3-6-7-6 0 4 3 6 7 6zM12 11c0-4 3-7 7-7 0 4-3 7-7 7z', leaf: 'M5 19c0-9 6-14 15-14 0 9-5 15-14 15zM5 19l8-8',
+    waves: 'M2 8c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2M2 14c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2M2 20c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2',
+    storm: 'M7 16a5 5 0 1 1 1.5-9.8A6 6 0 0 1 19.5 9 4 4 0 0 1 18 16M13 13l-2 4h3l-2 4', zap: 'M13 2L4 14h7l-1 8 9-12h-7z',
   };
   const icon = (n) => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="' + (P[n] || P.sparkle) + '"/></svg>';
   const fillIcons = (scope) => (scope || document).querySelectorAll('.ic[data-ic]:not(.done)').forEach(i => { i.innerHTML = icon(i.dataset.ic); i.classList.add('done'); });

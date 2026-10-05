@@ -88,6 +88,8 @@
     return { AL, key, nearest, info, alertF, creekF, pivotF };
   }
 
+  AGQ.world = world;
+
   /* ════════ HERO STORY ════════ */
   const story = $('hero'), host = $('heroGL'), walk = $('walk'), cue = $('cue');
   document.querySelectorAll('#hero [data-go]').forEach(b => b.addEventListener('click', (e) => {
@@ -129,6 +131,8 @@
       const p = story._p || 0; sp += (p - sp) * Math.min(1, dt * 5);
       const target = camAt(sp); C = C ? C.map((v, k) => v + (target[k] - v) * Math.min(1, dt * 4)) : target;
       Object.assign(A.cam, AerialGL.lookCam(AL[0] + C[0], AL[1] + C[1], 0, C[2] + (reduce ? 0 : t * .005), C[3], C[4], 36));
+      // bank gently through the dive and the swing round to the zones, like a camera on a long lens
+      A.cam.roll = reduce ? 0 : .055 * Math.sin(Math.PI * sm(.08, .34, sp)) - .035 * Math.sin(Math.PI * sm(.36, .56, sp)) + .03 * Math.sin(Math.PI * sm(.66, .86, sp));
       const P = A.p, mob = small();
       P.shift = mob ? [0, .14] : [.17, 0];
       P.stars = 1 - sm(.04, .14, sp); P.sat = 1.12; P.season = .45; P.expo = 1; P.pix = 1;

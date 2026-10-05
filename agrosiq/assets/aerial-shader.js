@@ -6,7 +6,7 @@ precision highp float;
 uniform vec2 uRes; uniform float uTime, uSeed, uPlanet, uAlt;
 uniform vec3 uRo, uR, uU, uF, uSun; uniform float uTan; uniform vec2 uShift;
 uniform float uHealth, uScan, uScanOn, uPix, uAlert, uPatch, uCloud, uOutline, uFocusK, uFocusR, uSeason, uExpo, uSat, uZones, uStack, uSep, uStars, uDim;
-uniform vec2 uAlertPos, uFocus;
+uniform vec2 uAlertPos, uFocus, uJit;
 uniform vec4 uTile, uHi, uSel;
 uniform int uN;   // always 1: loop bounds read it so the D3D compiler cannot unroll (and bloat) them
 out vec4 o;
@@ -297,7 +297,7 @@ vec3 haze(float alt, float day){
 }
 
 void main(){
-  vec2 uv = (gl_FragCoord.xy - .5 * uRes) / (.5 * uRes.y);
+  vec2 uv = (gl_FragCoord.xy + uJit - .5 * uRes) / (.5 * uRes.y);
   vec2 sv = uv - uShift * vec2(uRes.x / uRes.y, 1.);
   vec3 rd = normalize(uF + sv.x * uTan * uR + sv.y * uTan * uU);
   vec3 ro = uRo; float R = uPlanet;
@@ -353,9 +353,9 @@ void main(){
       vec3 hc = veg(gq) * (.82 + .5 * clamp(L / .3, .4, 1.4));
       vec2 cf = fract(p / 10.);
       float fine = (1. - smoothstep(.8, 3., px)) * uPix;
-      hc *= 1. + .16 * (smoothstep(.0, .14, cf.x) * smoothstep(1., .86, cf.y) - .5 * smoothstep(.8, 1., cf.x) - .5 * smoothstep(.2, .0, cf.y)) * fine;
+      hc *= 1. + .11 * (smoothstep(.0, .14, cf.x) * smoothstep(1., .86, cf.y) - .5 * smoothstep(.8, 1., cf.x) - .5 * smoothstep(.2, .0, cf.y)) * fine;
       vec2 ce = abs(cf - .5) * 10.;
-      hc *= 1. - .55 * smoothstep(4.0 - px * .8, 5., max(ce.x, ce.y)) * (1. - smoothstep(1.2, 3.5, px)) * uPix;
+      hc *= 1. - .34 * smoothstep(4.45 - px * .6, 5., max(ce.x, ce.y)) * (1. - smoothstep(1., 2.6, px)) * uPix;
       hc *= .9 + .1 * smoothstep(-.4, .9, dot(nrm, uSun));
       c = mix(c, hc, w * .94);
     }
@@ -457,7 +457,9 @@ void main(){
   }
 #endif
   col *= uExpo * (1. - uDim);
+#ifndef HDR
   col = col / (1. + col * .18) * 1.12;
   col += (h21(gl_FragCoord.xy + fract(uTime)) - .5) / 255.;
-  o = vec4(col, 1.);
+#endif
+  o = vec4(max(col, 0.), 1.);
 }`;

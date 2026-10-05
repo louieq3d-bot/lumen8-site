@@ -187,11 +187,113 @@
   .aud .card__body a svg{width:15px}
   .hs-head{display:flex; justify-content:space-between; align-items:flex-end; gap:24px; margin-bottom:48px}
 
+  /* ── signals explorer ── */
+  .sig-head{max-width:none; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,.8fr); gap:40px; align-items:end}
+  .sig{display:grid; grid-template-columns:minmax(0,360px) minmax(0,1fr); gap:16px; align-items:stretch}
+  .sig__list{display:flex; flex-direction:column; gap:6px}
+  .sig__item{all:unset; box-sizing:border-box; position:relative; cursor:pointer; display:grid; grid-template-columns:44px minmax(0,1fr); gap:14px; align-items:center; padding:14px 16px; border-radius:16px; overflow:hidden;
+    background:rgba(255,255,255,.02); box-shadow:inset 0 0 0 1px var(--line); transition:background .35s, box-shadow .35s}
+  .sig__item:hover{background:rgba(255,255,255,.045)}
+  .sig__item:focus-visible{outline:2px solid var(--sprout); outline-offset:2px}
+  .sig__item .ic-tile{width:44px; height:44px; color:var(--text-3); background:rgba(255,255,255,.03); box-shadow:inset 0 0 0 1px var(--line); transition:all .35s}
+  .sig__item .ic-tile .ic{width:20px; height:20px}
+  .sig__item b{display:block; font-weight:500; font-size:15.5px; letter-spacing:-.02em}
+  .sig__item small{display:block; color:var(--text-3); font-size:13px; line-height:1.4; margin-top:3px}
+  .sig__item[aria-selected="true"]{background:linear-gradient(90deg,rgba(243,169,60,.1),rgba(243,169,60,.02)); box-shadow:inset 0 0 0 1px rgba(243,169,60,.35)}
+  .sig__item[aria-selected="true"] .ic-tile{color:var(--harvest); background:var(--harvest-wash); box-shadow:inset 0 0 0 1px rgba(243,169,60,.35), 0 8px 24px -10px rgba(243,169,60,.6)}
+  .sig__item[aria-selected="true"] small{color:var(--text-2)}
+  .sig__stage{position:relative; min-height:600px; border-radius:24px; overflow:hidden; background:#060807; box-shadow:inset 0 0 0 1px var(--line-2), 0 60px 140px -50px rgba(169,214,70,.25)}
+  .sig__stage .aerial{position:absolute; inset:0}
+  .sig__veil{background:linear-gradient(180deg,rgba(3,4,5,.55),transparent 22%,transparent 70%,rgba(3,4,5,.7))}
+  .sig__top{position:absolute; z-index:3; left:18px; right:18px; top:18px; display:flex; justify-content:space-between; align-items:center; gap:12px}
+  .sig__when{font:500 11px/1 var(--mono); letter-spacing:.06em; text-transform:uppercase; color:var(--text-2); padding:8px 12px; border-radius:999px; background:rgba(8,10,12,.78)}
+  .sig__ring{position:absolute; z-index:2; left:0; top:0; pointer-events:none; opacity:0; transition:opacity .5s}
+  .sig__ring i{position:absolute; left:-46px; top:-46px; width:92px; height:92px; border-radius:50%; border:1px solid rgba(243,169,60,.75); animation:sigr 2.4s var(--ease) infinite}
+  .sig__ring i + i{animation-delay:1.2s}
+  @keyframes sigr{0%{transform:scale(.25); opacity:1} 100%{transform:scale(1.6); opacity:0}}
+  .sig__card{position:absolute; z-index:3; left:0; top:0; width:300px; pointer-events:none; opacity:0; transition:opacity .5s}
+  .sig__card .gcard{box-shadow:inset 0 0 0 1px rgba(243,169,60,.4), 0 30px 80px -10px rgba(0,0,0,.8)}
+  .gcard--solid{background:rgba(9,12,11,.9); backdrop-filter:none; -webkit-backdrop-filter:none}
+  .sig__do{margin-top:12px; padding-top:12px; border-top:1px solid var(--line)}
+  .sig__do .t-mono{font-size:10.5px; color:var(--sprout)} .sig__do p{margin:6px 0 0; color:var(--text); font-size:13.5px; line-height:1.45}
+  .sig__legend{z-index:3}
+  .sig__prog{position:absolute; z-index:3; left:0; right:0; bottom:0; height:2px; background:rgba(255,255,255,.06)}
+  .sig__prog i{display:block; height:100%; width:100%; transform-origin:0 50%; transform:scaleX(var(--k,0)); background:linear-gradient(90deg,var(--harvest),#ffd18a)}
+  .sig__card.go{transition:opacity .5s, transform 0s}
+  @media (max-width:1000px){ .sig-head{grid-template-columns:minmax(0,1fr)} .sig{grid-template-columns:minmax(0,1fr)} .sig__list{flex-direction:row; overflow-x:auto; scrollbar-width:none; margin:0 calc(-1 * var(--gut)); padding:2px var(--gut)}
+    .sig__item{flex:none; width:250px} .sig__stage{min-height:640px} .sig__card{width:min(320px,calc(100% - 32px))} .sig__legend{display:none} }
+  .sig__top .chip,.sig__when{white-space:nowrap}
+  @media (max-width:560px){ .sig__when{display:none} }
+
+  /* ── morning brief ── */
+  #brief{overflow:hidden}
+  .brief{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,440px); gap:clamp(40px,7vw,120px); align-items:center}
+  .brief__copy{display:flex; flex-direction:column; gap:22px; align-items:flex-start}
+  .brief__steps{list-style:none; padding:0; margin:14px 0 0; display:flex; flex-direction:column; gap:2px; width:100%; max-width:560px}
+  .brief__steps li{position:relative; display:grid; grid-template-columns:62px minmax(0,1fr); gap:16px; padding:14px 16px 14px 0; cursor:pointer; border-radius:14px; transition:background .3s}
+  .brief__steps li:hover{background:rgba(255,255,255,.025)}
+  .brief__steps time{font:500 13px/1.6 var(--mono); color:var(--text-4); padding-left:16px; transition:color .3s}
+  .brief__steps b{display:block; font-weight:500; font-size:16px; letter-spacing:-.02em; color:var(--text-2); transition:color .3s}
+  .brief__steps p{margin:0; max-height:0; overflow:hidden; opacity:0; color:var(--text-2); font-size:14.5px; line-height:1.5; transition:max-height .6s var(--ease), opacity .4s, margin .4s}
+  .brief__steps li::before{content:""; position:absolute; left:0; top:12px; bottom:12px; width:2px; border-radius:2px; background:var(--line-2)}
+  .brief__steps li::after{content:""; position:absolute; left:0; top:12px; bottom:12px; width:2px; border-radius:2px; background:var(--sprout); transform-origin:50% 0; transform:scaleY(var(--k,0)); box-shadow:0 0 12px var(--sprout)}
+  .brief__steps li.on{background:rgba(255,255,255,.03)}
+  .brief__steps li.on time{color:var(--sprout)} .brief__steps li.on b{color:var(--text)} .brief__steps li.on p{max-height:120px; opacity:1; margin-top:6px}
+  .brief__steps li.done::after{--k:1; opacity:.35}
+  .brief__dev{display:flex; flex-direction:column; align-items:center; gap:18px}
+  .brief__cap{color:var(--text-4); font-size:11px}
+  .dev{position:relative; width:min(340px,86vw); aspect-ratio:9/19.2; border-radius:52px; padding:11px; background:linear-gradient(145deg,#2a2f33,#0d1012 40%,#1a1e21);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.14), inset 0 0 0 3px #07090a, 0 50px 120px -30px rgba(0,0,0,.95), 0 0 0 1px rgba(0,0,0,.6), 0 0 120px -20px rgba(169,214,70,.18)}
+  .dev::before{content:""; position:absolute; right:-3px; top:24%; width:3px; height:64px; border-radius:2px; background:#23282c}
+  .dev__scr{position:relative; width:100%; height:100%; border-radius:42px; overflow:hidden; background:#050706; isolation:isolate}
+  .dev__scr .aerial{position:absolute; inset:0}
+  .dev__shade{position:absolute; inset:0; z-index:1; background:linear-gradient(180deg,rgba(3,4,5,.5),rgba(3,4,5,.15) 30%,rgba(3,4,5,.2) 60%,rgba(3,4,5,.85)); transition:background .8s}
+  .dev__shade.lock{background:linear-gradient(180deg,rgba(3,4,5,.55),rgba(3,4,5,.72))}
+  .dev__geo{position:absolute; inset:0; z-index:2; width:100%; height:100%; overflow:visible; pointer-events:none; opacity:0; transition:opacity .6s}
+  .dev__geo .route{fill:none; stroke:#fff; stroke-width:2.5; stroke-dasharray:3 7; stroke-linecap:round}
+  .dev__geo .rdot{fill:#5ab0ff; stroke:#fff; stroke-width:2.5}
+  .dev__status{position:absolute; z-index:5; left:0; right:0; top:0; height:46px; display:flex; align-items:center; justify-content:space-between; padding:0 26px 0 30px; font:600 14px/1 var(--f)}
+  .dev__isl{position:absolute; left:50%; top:11px; width:96px; height:28px; margin-left:-48px; border-radius:20px; background:#000}
+  .dev__sig{display:flex; gap:2px; align-items:flex-end} .dev__sig i{width:3px; border-radius:1px; background:#fff} .dev__sig i:nth-child(1){height:4px} .dev__sig i:nth-child(2){height:6px} .dev__sig i:nth-child(3){height:8px} .dev__sig i:nth-child(4){height:10px}
+  .dev__view{position:absolute; inset:0; z-index:4; opacity:0; visibility:hidden; transition:opacity .6s, visibility 0s .6s; padding:56px 14px 16px; display:flex; flex-direction:column}
+  .dev__view.on{opacity:1; visibility:visible; transition:opacity .6s}
+  .dev__lock{text-align:center; margin-top:24px}
+  .dev__lock small{display:block; font-size:15px; color:var(--text-2); font-weight:500}
+  .dev__lock b{display:block; font-size:78px; font-weight:500; letter-spacing:-.05em; line-height:1; margin-top:4px}
+  .dev__notes{margin-top:auto; display:flex; flex-direction:column; gap:8px}
+  .note{display:grid; grid-template-columns:34px minmax(0,1fr); gap:10px; padding:12px; border-radius:20px; background:rgba(28,32,30,.82); box-shadow:inset 0 0 0 1px rgba(255,255,255,.07); font-size:12.5px; line-height:1.35; animation:note .7s var(--ease) both}
+  .note img{width:34px; height:34px; border-radius:9px; background:#0a0d0b; padding:6px; box-shadow:inset 0 0 0 1px var(--line-2)}
+  .note header{display:flex; justify-content:space-between; color:var(--text-3); font-size:11px; margin-bottom:2px} .note b{font-weight:600} .note span{color:var(--text-2)}
+  .note.w{box-shadow:inset 0 0 0 1px rgba(243,169,60,.45)} .note.w b{color:#ffd18a}
+  @keyframes note{from{opacity:0; transform:translateY(16px) scale(.96)}}
+  .dev__bar{display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:14px; background:rgba(10,13,12,.82); font-size:13px}
+  .dev__bar img{width:20px; height:20px} .dev__bar .chip{margin-left:auto; height:22px; font-size:10.5px}
+  .dev__sheet{margin-top:auto; display:flex; flex-direction:column; gap:4px; padding:14px; border-radius:22px; background:rgba(10,13,12,.9); box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+  .dev__sheet .t-mono{font-size:10px} .dev__sheet b{font-size:15px; font-weight:500; letter-spacing:-.02em} .dev__sheet small{color:var(--text-2); font-size:12px; line-height:1.4}
+  .dev__btn{margin-top:8px; display:grid; place-items:center; height:40px; border-radius:12px; background:var(--sprout); color:var(--on-sprout); font-weight:600; font-size:13.5px}
+  .dev__nav{display:flex; gap:12px; align-items:center; padding:12px 14px; border-radius:18px; background:rgba(10,13,12,.86)}
+  .dev__nav b{display:block; font-size:28px; font-weight:500; letter-spacing:-.04em; line-height:1} .dev__nav small{color:var(--text-2); font-size:12px}
+  .dev__arrow{display:grid; place-items:center; width:46px; height:46px; border-radius:50%; background:var(--sprout); color:var(--on-sprout); transition:transform .4s var(--ease)} .dev__arrow svg{width:22px; height:22px}
+  .dev__sheet--min{padding:12px 14px}
+  .dev__photo{position:relative; height:44%; margin-top:6px; border-radius:18px; overflow:hidden; transform:rotate(-2.2deg); box-shadow:0 0 0 4px #f4f2ea, 0 18px 40px rgba(0,0,0,.6);
+    background:linear-gradient(180deg,#9fc3e6 0%,#d9e6ee 30%,#c9c7a0 31%,#8d8a52 40%,#5d6a2c 60%,#3b4a1c 100%)}
+  .dev__photo::before{content:""; position:absolute; left:-60%; right:-60%; top:31%; bottom:-40%; transform-origin:50% 0; transform:perspective(120px) rotateX(58deg);
+    background:repeating-linear-gradient(90deg,rgba(48,70,22,.0) 0 4px,rgba(96,128,44,.8) 4px 8px,rgba(48,70,22,.0) 8px 12px)}
+  .dev__photo::after{content:""; position:absolute; left:18%; right:26%; top:48%; bottom:8%; border-radius:50%; background:radial-gradient(closest-side,rgba(196,170,104,.85),rgba(170,150,90,.35) 60%,transparent); filter:blur(4px)}
+  .dev__photo .t-mono{position:absolute; z-index:1; left:10px; bottom:10px; font-size:9.5px; color:#fff; padding:5px 8px; border-radius:8px; background:rgba(0,0,0,.55)}
+  .dev__chips{display:flex; gap:6px; margin-top:8px} .dev__chips .chip{height:22px; font-size:10.5px}
+  .dev__team{display:flex; align-items:center; margin-top:10px} .dev__team i{display:grid; place-items:center; width:30px; height:30px; margin-right:-8px; border-radius:50%; font:600 10px/1 var(--mono); font-style:normal; color:var(--on-sprout); background:var(--sprout); box-shadow:0 0 0 2px #0a0d0c}
+  .dev__team i:nth-child(2){background:#7fc3a0} .dev__team i:nth-child(3){background:#f0c37a}
+  .dev__team span{margin-left:18px; color:var(--text-2); font-size:12px}
+  @media (max-width:1000px){ .brief{grid-template-columns:minmax(0,1fr)} .brief__dev{order:-1} }
+
   /* ── pricing teaser ── */
   .ptease{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px}
   .ptease a{display:flex; flex-direction:column; gap:6px; padding:24px; border-radius:18px; background:var(--surface); box-shadow:inset 0 0 0 1px var(--line); transition:background .3s, transform .6s var(--ease)}
   .ptease a:hover{background:var(--surface-2); transform:translateY(-4px)}
   .ptease b{font-size:38px; font-weight:500; letter-spacing:-.05em} .ptease small{color:var(--text-3); font-size:14px}
+  .ptease ul{list-style:none; padding:14px 0 0; margin:10px 0 0; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:8px}
+  .ptease li{display:flex; gap:8px; color:var(--text-2); font-size:13.5px; line-height:1.35} .ptease li::before{content:""; flex:none; width:6px; height:6px; margin-top:6px; border-radius:50%; background:var(--sprout)}
   .ptease a.pop{box-shadow:inset 0 0 0 1px rgba(169,214,70,.4); background:linear-gradient(180deg,rgba(169,214,70,.08),transparent)}
   @media (max-width:900px){ .ptease{grid-template-columns:repeat(2,minmax(0,1fr))} }
 </style>
@@ -449,6 +551,36 @@
   </div>
 </section>
 
+<!-- ═════════ SIGNALS: WHAT IT CATCHES ═════════ -->
+<section class="sec" id="signals">
+  <div class="wrap">
+    <div class="sec-head sec-head--left sig-head">
+      <div style="display:flex;flex-direction:column;gap:20px;align-items:flex-start"><span class="eyebrow" data-r>What it catches</span>
+      <h2 class="t-h2" data-split><span class="silver">Six problems it finds before you do</span></h2></div>
+      <p class="t-lede" data-r style="--d:2">Every pass, every field is checked for the trouble that costs you yield. When something turns up you get the spot, the size, and what to do about it.</p>
+    </div>
+    <div class="sig" data-r>
+      <div class="sig__list" role="tablist" aria-label="What AgrosIQ catches" id="sigList"></div>
+      <div class="sig__stage" id="sigStage">
+        <div class="aerial" id="sigGL" data-aerial="health" data-drive="manual" data-seed="3"></div>
+        <div class="veil sig__veil"></div>
+        <div class="sig__top"><span class="chip chip--warn" id="sigChip">Signal 01 of 06</span><span class="sig__when" id="sigWhen">Found 14 Apr · 06:12</span></div>
+        <div class="sig__ring" id="sigRing" aria-hidden="true"><i></i><i></i></div>
+        <div class="sig__card" id="sigCard" aria-live="polite">
+          <div class="gcard gcard--solid">
+            <div class="gcard__h"><b class="amber" id="sigKind">Patchy emergence</b><span id="sigDate">14 Apr</span></div>
+            <div class="gcard__t" id="sigField">Long Acre</div><div class="gcard__s" id="sigWhat">—</div>
+            <dl><dt>Area affected</dt><dd id="sigArea">—</dd><dt>vs. its normal</dt><dd class="amber" id="sigVs">—</dd><dt>Crop</dt><dd id="sigCrop">—</dd></dl>
+            <div class="sig__do"><span class="t-mono">Do this</span><p id="sigDo">—</p></div>
+          </div>
+        </div>
+        <div class="maplegend sig__legend"><span class="legend-ramp" id="sigLegend">Crop health <i></i></span></div>
+        <div class="sig__prog" aria-hidden="true"><i id="sigProg"></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ═════════ INTERACTIVE PRODUCT ═════════ -->
 <section class="sec" id="product">
   <div class="wrap">
@@ -501,6 +633,57 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ MORNING BRIEF: A MORNING WITH AGROSIQ ═════════ -->
+<section class="sec" id="brief">
+  <div class="orb" style="width:760px;height:760px;left:-260px;top:12%"></div>
+  <div class="wrap brief">
+    <div class="brief__copy">
+      <span class="eyebrow" data-r>A morning with AgrosIQ</span>
+      <h2 class="t-h2" data-split><span class="silver">Sorted before breakfast</span></h2>
+      <p class="t-lede" data-r style="--d:3">No dashboards to dig through. AgrosIQ does the looking overnight, and your phone tells you the one thing worth doing first.</p>
+      <ol class="brief__steps" id="briefSteps" data-r style="--d:4"></ol>
+    </div>
+    <div class="brief__dev" data-r style="--d:2">
+      <div class="dev" id="dev">
+        <div class="dev__scr">
+          <div class="aerial" id="briefGL" data-aerial="map" data-drive="manual" data-seed="3"></div>
+          <div class="dev__shade" id="devShade"></div>
+          <svg class="dev__geo" id="devGeo" aria-hidden="true"><path class="route" id="devRoute" d=""/><circle class="rdot" id="devYou" r="6"/></svg>
+          <div class="dev__status"><b id="devClock">06:12</b><span class="dev__isl"></span><span class="dev__sig"><i></i><i></i><i></i><i></i></span></div>
+          <!-- lock screen -->
+          <div class="dev__view" data-v="lock">
+            <div class="dev__lock"><small id="devDay">Tuesday 2 June</small><b id="devBig">06:12</b></div>
+            <div class="dev__notes" id="devNotes"></div>
+          </div>
+          <!-- the map -->
+          <div class="dev__view" data-v="map">
+            <div class="dev__bar"><img src="assets/brand/agrosiq-mark-dark.svg" alt=""><b>North Farm</b><span class="chip chip--warn chip--plain">2 to walk</span></div>
+            <div class="dev__sheet"><span class="t-mono amber">Walk here first</span><b>Ridge Paddock · NE corner</b><small>1.1 ha · −24% vs normal · wheat</small><span class="dev__btn">Walk there</span></div>
+          </div>
+          <!-- the walk -->
+          <div class="dev__view" data-v="walk">
+            <div class="dev__nav"><span class="dev__arrow" id="devArrow"><svg viewBox="0 0 24 24"><path d="M12 3l6 16-6-4-6 4z" fill="currentColor"/></svg></span><div><b id="devDist">205 m</b><small id="devEta">3 min · north-east</small></div></div>
+            <div class="dev__sheet dev__sheet--min"><b>Ridge Paddock</b><small>You're on the right line. The spot is 10 m across.</small></div>
+          </div>
+          <!-- the note -->
+          <div class="dev__view" data-v="note">
+            <div class="dev__photo"><span class="t-mono">Photo · 06:41 · pinned to the pixel</span></div>
+            <div class="dev__sheet"><span class="t-mono ok">Saved to the field record</span><b>"Patchy and pale, dry 5 cm down."</b><small>Ridge Paddock · NE corner · 2 Jun</small>
+              <div class="dev__chips"><span class="chip">Photo</span><span class="chip">GPS</span><span class="chip">Voice note</span></div></div>
+          </div>
+          <!-- shared -->
+          <div class="dev__view" data-v="share">
+            <div class="dev__bar"><img src="assets/brand/agrosiq-mark-dark.svg" alt=""><b>Ridge Paddock</b><span class="chip chip--ok chip--plain">Shared</span></div>
+            <div class="dev__sheet"><span class="t-mono ok">Your agronomist has it</span><b>Same map, same spot, same photo</b><small>They can plan the fix from their desk, and the whole team sees what was done.</small>
+              <div class="dev__team"><i>AG</i><i>FM</i><i>YO</i><span>3 people on this farm</span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="brief__cap t-mono" id="briefCap">Live preview · tap a step</div>
     </div>
   </div>
 </section>
@@ -600,10 +783,10 @@
       <p class="t-lede" data-r style="--d:3">Simple plans for every size of operation. No contracts, cancel any time.</p>
     </div>
     <div class="ptease" data-r>
-      <a href="pricing.html"><small>Free</small><b>$0</b><span class="muted">Up to 40 ha</span></a>
-      <a href="pricing.html"><small>Grower</small><b>$20<small>/mo</small></b><span class="muted">Up to 400 ha</span></a>
-      <a href="pricing.html" class="pop"><small>Farm · most popular</small><b>$99<small>/mo</small></b><span class="muted">Up to 2,000 ha</span></a>
-      <a href="pricing.html"><small>Pro</small><b>$249<small>/mo</small></b><span class="muted">Unlimited hectares</span></a>
+      <a href="pricing.html"><small>Free</small><b>$0</b><span class="muted">Up to 40 ha</span><ul><li>Crop health map after every pass</li><li>Weekly email summary</li></ul></a>
+      <a href="pricing.html"><small>Grower</small><b>$20<small>/mo</small></b><span class="muted">Up to 400 ha</span><ul><li>Instant alerts every pass</li><li>Ten years of history per field</li></ul></a>
+      <a href="pricing.html" class="pop"><small>Farm · most popular</small><b>$99<small>/mo</small></b><span class="muted">Up to 2,000 ha</span><ul><li>Field Analyst: ask anything</li><li>Strong and weak zones</li></ul></a>
+      <a href="pricing.html"><small>Pro</small><b>$249<small>/mo</small></b><span class="muted">Unlimited hectares</span><ul><li>Client workspaces for advisers</li><li>API access</li></ul></a>
     </div>
     <p class="center" style="margin-top:28px" data-r><a class="btn btn--glass" href="pricing.html">Compare plans <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
   </div>
@@ -643,5 +826,6 @@
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
 <script src="assets/app.js"></script>
 <script src="assets/home.js"></script>
+<script src="assets/home-signals.js"></script>
 </body>
 </html>
