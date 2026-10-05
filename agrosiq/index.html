@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AgrosIQ · Grow more. Guess less.</title>
+<meta name="description" content="AgrosIQ watches every field from orbit, spots crop stress early and shows you exactly where to act. Protect yield, cut scouting time and make every input count.">
+<link rel="icon" type="image/svg+xml" href="assets/brand/agrosiq-mark-dark.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/brand/png/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/brand/png/apple-touch-icon-180.png">
+<meta name="theme-color" content="#000000">
+<meta property="og:url" content="https://lumen8.ai/agrosiq/">
+<meta property="og:title" content="AgrosIQ · Grow more. Guess less.">
+<meta property="og:description" content="Crop intelligence from orbit. See every field, catch every problem early, and grow more with less guesswork.">
+<meta property="og:image" content="https://lumen8.ai/agrosiq/assets/brand/png/social-card-1200x630.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+  /* ── hero: one sticky farm, six chapters, from orbit to one square metre ── */
+  #hero{height:940vh}
+  #hero .aerial{position:absolute; inset:0}
+  .hero__text{position:absolute; z-index:6; left:0; right:0; bottom:clamp(56px,9vh,110px); pointer-events:none}
+  .hero__text .wrap{display:grid}
+  .hero__text .story__step{grid-area:1/1; align-self:end; max-width:720px}
+  .hero__text a,.hero__text button{pointer-events:auto}
+  .hero__h1{margin:22px 0 26px; font-size:clamp(52px,8.6vw,138px)}
+  .hero__lede{font-size:clamp(17px,1.4vw,20px); color:#c6cbd1; max-width:54ch; line-height:1.55; text-shadow:0 2px 24px rgba(3,4,5,.9)}
+  .hero__trust{display:flex; flex-wrap:wrap; gap:8px 22px; margin-top:30px; font-size:13.5px; color:var(--text-2)}
+  .hero__trust span{display:inline-flex; align-items:center; gap:8px} .hero__trust .ic{width:16px; height:16px; color:var(--sprout)}
+  .ch-h{font-size:clamp(40px,5.4vw,84px); letter-spacing:-.055em; line-height:.95; margin:18px 0 20px}
+  .rail{position:absolute; z-index:7; left:var(--gut); top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:16px}
+  .rail button{all:unset; cursor:pointer; display:flex; align-items:center; gap:12px; font:500 11px/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--text-3); transition:color .4s}
+  .rail button i{width:20px; height:1px; background:var(--text-4); transition:all .5s var(--ease)}
+  .rail button.on{color:var(--text)} .rail button.on i{width:36px; background:var(--sprout); box-shadow:0 0 12px var(--sprout)}
+  .rail span{opacity:0; transform:translateX(-6px); transition:all .4s var(--ease)} .rail button.on span,.rail:hover span{opacity:1; transform:none}
+  .hero__text .wrap{padding-left:max(var(--gut), 110px)}
+  .walk{position:absolute; z-index:5; left:0; top:0; pointer-events:none; opacity:0}
+  .walk .gcard{position:absolute; left:34px; top:-36px; width:272px; box-shadow:inset 0 0 0 1px rgba(243,169,60,.45), 0 24px 60px rgba(0,0,0,.6)}
+  .walk.flip .gcard{left:auto; right:34px}
+  .walk::before{content:""; position:absolute; left:2px; top:0; width:30px; height:1px; background:linear-gradient(90deg,var(--harvest),transparent)}
+  .walk.flip::before{left:auto; right:2px; transform:scaleX(-1)}
+  .side{position:absolute; z-index:5; right:var(--gut); bottom:clamp(56px,9vh,110px); width:330px; opacity:0; transform:translateY(16px); transition:opacity .6s, transform .8s var(--ease); pointer-events:none}
+  .side.on{opacity:1; transform:none}
+  .sat{position:absolute; left:0; top:0; z-index:5; pointer-events:none}
+  #heroGeo .beam{fill:url(#beamG)} #heroGeo .beamL{stroke:rgba(199,236,114,.55); stroke-width:1; fill:none}
+  #heroGeo .route{fill:none; stroke:#fff; stroke-width:2; stroke-dasharray:3 7; stroke-linecap:round}
+  #heroGeo .rdot{fill:#fff}
+  @media (max-width:900px){ .rail,.side{display:none} .walk .gcard{width:min(300px,calc(100vw - 32px)); left:0; top:0} .walk.flip .gcard{left:0; right:auto} .walk::before{display:none} .hero__text .wrap{padding-left:var(--gut)} }
+
+  /* ── crops marquee ── */
+  .crops{padding:42px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line)}
+  .crops__l{text-align:center; margin-bottom:24px}
+  .crops .marquee__track span{display:inline-flex; align-items:center; gap:12px; font-size:22px; letter-spacing:-.03em; color:var(--text-2); white-space:nowrap}
+  .crops .marquee__track .ic{color:var(--sprout); width:20px; height:20px}
+
+  /* ── pinned layer stack ── */
+  #layers{height:420vh}
+  #layers .aerial{position:absolute; inset:0}
+  .lay__copy{position:absolute; z-index:4; left:0; right:0; top:0; bottom:0; display:flex; align-items:center; pointer-events:none}
+  .lay__copy .wrap{width:100%}
+  .lay__col{max-width:440px; display:flex; flex-direction:column; gap:22px}
+  .lay__steps{display:grid}
+  .lay__steps .story__step{grid-area:1/1}
+  .lay__steps h3{font-size:clamp(26px,2.6vw,38px); letter-spacing:-.04em; margin:12px 0 10px}
+  .lay__steps p{color:var(--text-2); margin:0; font-size:16px}
+  .lay__dots{display:flex; gap:8px} .lay__dots i{width:28px; height:3px; border-radius:2px; background:var(--line-2); transition:background .4s} .lay__dots i.on{background:var(--sprout)}
+  .veil--lay{background:linear-gradient(90deg,rgba(3,4,5,.9) 0%,rgba(3,4,5,.6) 30%,transparent 58%), linear-gradient(180deg,var(--bg),transparent 14%,transparent 86%,var(--bg))}
+  .lstack__lbl{position:absolute; left:0; top:0; z-index:5; white-space:nowrap; pointer-events:none}
+  .lstack__lbl::before{content:""; width:26px; height:1px; background:var(--sprout); margin-right:2px}
+  .lstack__lbl.dim{opacity:.35}
+  @media (max-width:900px){ .veil--lay{background:linear-gradient(180deg,var(--bg),rgba(3,4,5,.5) 30%,transparent 55%,rgba(3,4,5,.9) 85%,var(--bg))} .lay__copy{align-items:flex-start; padding-top:90px} .lstack__lbl small{display:none} }
+
+  /* ── season scrubber ── */
+  #season{height:360vh}
+  #season .aerial{position:absolute; inset:0}
+  .sea__top{position:absolute; z-index:4; left:0; right:0; top:clamp(90px,13vh,140px); pointer-events:none}
+  .sea__top .wrap{display:flex; justify-content:space-between; align-items:flex-start; gap:32px}
+  .sea__now{text-align:right}
+  .sea__month{font-size:clamp(44px,6vw,92px); letter-spacing:-.06em; line-height:.9; font-weight:500}
+  .sea__stage{font:500 12px/1 var(--mono); letter-spacing:.1em; text-transform:uppercase; color:var(--sprout); margin-top:12px}
+  .sea__bot{position:absolute; z-index:4; left:0; right:0; bottom:clamp(36px,6vh,70px)}
+  .sea__panel{display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:16px; align-items:end}
+  .sea__chart{position:relative; height:110px}
+  .sea__chart svg{position:absolute; inset:0; width:100%; height:100%; overflow:visible}
+  .sea__chart .area{fill:url(#seaG)} .sea__chart .ln{fill:none; stroke:var(--sprout); stroke-width:2}
+  .sea__chart .nrm{fill:none; stroke:rgba(255,255,255,.3); stroke-dasharray:3 4}
+  .sea__ev{position:absolute; transform:translate(-50%,-100%); font:500 10.5px/1.3 var(--mono); color:var(--text-2); text-transform:uppercase; letter-spacing:.06em; white-space:nowrap; opacity:0; transition:opacity .4s}
+  .sea__ev.on{opacity:1} .sea__ev.w{color:var(--harvest)}
+  .sea__ev::after{content:""; display:block; width:1px; height:14px; margin:6px auto 0; background:currentColor; opacity:.6}
+  .veil--sea{background:linear-gradient(180deg,var(--bg) 0%,rgba(3,4,5,.78) 18%,rgba(3,4,5,.35) 40%,transparent 52%,rgba(3,4,5,.85) 80%,var(--bg) 100%), linear-gradient(90deg,rgba(3,4,5,.55),transparent 50%)}
+  @media (max-width:900px){ .sea__panel{grid-template-columns:minmax(0,1fr)} .sea__panel .gcard{display:none} .sea__top .wrap{flex-direction:column} .sea__now{text-align:left} }
+
+  /* ── benefit visuals ── */
+  .vis-curve svg{position:absolute; inset:24px 24px 18px}
+  .vis-curve .band{fill:rgba(169,214,70,.08)} .vis-curve .norm{stroke:rgba(255,255,255,.25); stroke-dasharray:3 4; fill:none}
+  .vis-curve .line{stroke:var(--sprout); stroke-width:2.4; fill:none; stroke-dasharray:600; stroke-dashoffset:600; transition:stroke-dashoffset 2.6s var(--ease)}
+  .in .vis-curve .line, .vis-curve.in .line{stroke-dashoffset:0}
+  .vis-curve .dip{fill:var(--harvest); opacity:0; transition:opacity .6s 2.2s} .in .vis-curve .dip, .vis-curve.in .dip{opacity:1}
+  .vis-curve .dipr{fill:none; stroke:var(--harvest); transform-origin:center; transform-box:fill-box; animation:ping 2s infinite}
+  @keyframes ping{0%{transform:scale(.6); opacity:1} 100%{transform:scale(2.6); opacity:0}}
+  .pixgrid{position:absolute; inset:20px; display:grid; gap:3px}
+  .pixgrid i{border-radius:3px; background:var(--c); opacity:0; transform:scale(.4); transition:opacity .5s, transform .7s var(--ease); transition-delay:calc(var(--k) * 6ms)}
+  .in .pixgrid i, .pixgrid.in i{opacity:1; transform:none}
+  .pixgrid i.w{background:var(--harvest); box-shadow:0 0 16px var(--harvest); animation:pulse 1.8s infinite}
+  @keyframes pulse{50%{box-shadow:0 0 2px var(--harvest)}}
+  .route{position:absolute; inset:0}
+  .route path.r{fill:none; stroke:var(--text); stroke-width:2; stroke-dasharray:4 6; animation:march 1.2s linear infinite}
+  @keyframes march{to{stroke-dashoffset:-20}}
+  .ridges path{fill:none; stroke-width:1.3}
+  .chatmini{position:absolute; inset:22px; display:flex; flex-direction:column; gap:10px; justify-content:flex-end}
+  .bub{max-width:82%; padding:10px 14px; border-radius:14px; font-size:13.5px; line-height:1.45}
+  .bub--q{align-self:flex-end; background:var(--surface-2); box-shadow:inset 0 0 0 1px var(--line); border-bottom-right-radius:4px}
+  .bub--a{align-self:flex-start; background:rgba(169,214,70,.08); box-shadow:inset 0 0 0 1px rgba(169,214,70,.2); border-bottom-left-radius:4px}
+  .bub--a b{color:var(--sprout); font-weight:500}
+
+  /* ── interactive product ── */
+  .mock-stage{position:relative; margin-top:56px}
+  .mock-stage .orb{width:900px; height:500px; left:50%; top:10%; margin-left:-450px}
+  .mock .chart{height:96px; position:relative}
+  .mock .chart svg{position:absolute; inset:0; width:100%; height:100%}
+  .mock__main{cursor:crosshair}
+  .maphud{position:absolute; z-index:3; left:16px; top:16px; right:16px; display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+  .seg{display:inline-flex; padding:3px; border-radius:10px; background:rgba(8,10,12,.82); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); box-shadow:inset 0 0 0 1px var(--line-2)}
+  .seg button{border:0; background:none; height:30px; padding:0 12px; border-radius:8px; cursor:pointer; font:500 12.5px/1 var(--f); color:var(--text-2); transition:background .25s, color .25s}
+  .seg button[aria-pressed="true"]{background:var(--sprout); color:var(--on-sprout)}
+  .maphud .hint{margin-left:auto; padding:8px 12px; border-radius:10px; background:rgba(8,10,12,.75)}
+  .maplegend{position:absolute; z-index:3; left:16px; bottom:16px; padding:9px 12px; border-radius:10px; background:rgba(8,10,12,.8)}
+  .fld__name{font-size:19px; font-weight:500; letter-spacing:-.03em}
+  .fld__meta{color:var(--text-3); font-size:12.5px; margin-top:2px}
+  .fld__kpis{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:12px}
+  .fld__kpis .panel{padding:10px} .fld__kpis b{font-size:20px}
+  .mock__right{min-height:0}
+  .mock .alert-row{cursor:pointer}
+
+  /* ── bento ── */
+  .bento .card{min-height:100%}
+  .tile-vis{position:relative; height:220px; overflow:hidden; border-bottom:1px solid var(--line)}
+  .tile-vis .aerial{position:absolute; inset:0}
+  .radar-vis{background:radial-gradient(circle at 50% 50%,rgba(169,214,70,.08),transparent 60%)}
+  .radar-vis .sweep{position:absolute; left:50%; top:50%; width:340px; height:340px; margin:-170px 0 0 -170px; border-radius:50%; background:conic-gradient(from 0deg,rgba(169,214,70,.35),transparent 25%); animation:rot 4s linear infinite}
+  .radar-vis .rings{position:absolute; left:50%; top:50%; width:340px; height:340px; margin:-170px 0 0 -170px; border-radius:50%; background:repeating-radial-gradient(circle,transparent 0 33px,rgba(255,255,255,.07) 33px 34px)}
+  .radar-vis .cl{position:absolute; border-radius:50%; background:rgba(230,235,240,.12); filter:blur(16px)}
+  @keyframes rot{to{transform:rotate(1turn)}}
+  .phone{position:absolute; left:50%; top:24px; width:172px; height:310px; margin-left:-86px; border-radius:28px; background:#0b0d10; box-shadow:inset 0 0 0 1px var(--line-2), 0 0 0 5px #121518, 0 20px 50px rgba(0,0,0,.6); overflow:hidden}
+  .phone .aerial{position:absolute; inset:0}
+  .phone__bar{position:absolute; z-index:2; left:10px; right:10px; bottom:10px; padding:10px; border-radius:14px; background:rgba(8,10,12,.85); font-size:11px}
+  .phone__bar b{display:block; color:var(--harvest); font:600 9.5px/1.3 var(--mono); letter-spacing:.06em; text-transform:uppercase}
+  .bars{position:absolute; inset:28px 28px 22px; display:flex; align-items:flex-end; gap:6px}
+  .bars i{flex:1; border-radius:4px 4px 0 0; background:linear-gradient(180deg,var(--sprout),rgba(27,138,76,.4)); height:calc(var(--h) * 1%); transform-origin:bottom; transform:scaleY(0); transition:transform 1.1s var(--ease); transition-delay:calc(var(--k) * 50ms)}
+  .in .bars i{transform:none}
+  .bars i.cur{background:linear-gradient(180deg,#fff,var(--sprout))}
+  .docs{position:absolute; inset:0; display:grid; place-items:center}
+  .doc{position:absolute; width:150px; height:190px; border-radius:10px; background:#f3f5f0; box-shadow:0 20px 40px rgba(0,0,0,.5); padding:14px; transition:transform .8s var(--ease)}
+  .doc i{display:block; height:6px; border-radius:3px; background:#d5dbd2; margin-bottom:7px} .doc i.g{background:var(--canopy); width:60%} .doc .mapblk{height:60px; border-radius:6px; background:linear-gradient(135deg,#1B8A4C,#A9D646 60%,#0E5A34); margin:10px 0}
+  .card:hover .doc:nth-child(1){transform:rotate(-10deg) translateX(-50px)} .card:hover .doc:nth-child(3){transform:rotate(9deg) translateX(50px)}
+  .doc:nth-child(1){transform:rotate(-6deg) translateX(-30px)} .doc:nth-child(3){transform:rotate(5deg) translateX(30px)}
+
+  /* ── analyst chat ── */
+  .chat{border-radius:24px; padding:22px; background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)); box-shadow:inset 0 0 0 1px var(--line-2), 0 40px 100px -40px rgba(169,214,70,.2); min-height:470px; display:flex; flex-direction:column}
+  .chat__head{display:flex; align-items:center; gap:10px; padding-bottom:16px; border-bottom:1px solid var(--line); font-size:14px}
+  .chat__head .ic-tile{width:34px; height:34px; border-radius:10px} .chat__head .ic{width:17px; height:17px}
+  .chat__log{flex:1; display:flex; flex-direction:column; gap:12px; justify-content:flex-end; padding:20px 0}
+  .chat__log .bub{max-width:88%; font-size:14.5px; animation:bub .6s var(--ease)}
+  @keyframes bub{from{opacity:0; transform:translateY(10px)}}
+  .chat__ev{display:flex; gap:6px; flex-wrap:wrap; margin-top:10px}
+  .chat__in{display:flex; gap:10px; align-items:center; height:50px; padding:0 8px 0 16px; border-radius:14px; background:var(--surface-2); box-shadow:inset 0 0 0 1px var(--line); color:var(--text-3); font-size:14.5px}
+  .chat__in .btn{margin-left:auto; height:36px; width:36px; padding:0}
+  .caret{display:inline-block; width:2px; height:1em; background:var(--sprout); vertical-align:-2px; animation:blink 1s infinite}
+  .dots{display:inline-flex; gap:4px} .dots i{width:6px; height:6px; border-radius:50%; background:var(--sprout); animation:dot 1.2s infinite} .dots i:nth-child(2){animation-delay:.15s} .dots i:nth-child(3){animation-delay:.3s}
+  @keyframes dot{40%{transform:translateY(-4px); opacity:.4}}
+
+  /* ── how it works ── */
+  .flow{position:relative; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px}
+  .flow__line{position:absolute; left:30px; right:30px; top:52px; height:1px; background:var(--line-2); overflow:hidden}
+  .flow__line i{display:block; height:100%; background:linear-gradient(90deg,var(--canopy),var(--sprout)); transform-origin:0 50%; transform:scaleX(var(--k,0))}
+  .flow .step{background:var(--bg-2)}
+  .flow .step::before{position:relative; z-index:1; display:inline-grid; place-items:center; width:44px; height:44px; border-radius:50%; background:var(--bg); box-shadow:inset 0 0 0 1px rgba(169,214,70,.4); margin-bottom:34px}
+  @media (max-width:860px){ .flow{grid-template-columns:minmax(0,1fr)} .flow__line{display:none} }
+
+  /* ── audiences ── */
+  .aud{flex:none; width:min(420px,80vw); min-height:500px; display:flex; flex-direction:column}
+  .aud__art{position:relative; height:250px; overflow:hidden; border-bottom:1px solid var(--line)}
+  .aud__art .aerial{position:absolute; inset:0}
+  .aud .card__body{flex:1; display:flex; flex-direction:column}
+  .aud .card__body a{margin-top:auto; padding-top:20px; color:var(--sprout); font-size:14.5px; display:inline-flex; gap:8px; align-items:center}
+  .aud .card__body a svg{width:15px}
+  .hs-head{display:flex; justify-content:space-between; align-items:flex-end; gap:24px; margin-bottom:48px}
+
+  /* ── pricing teaser ── */
+  .ptease{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px}
+  .ptease a{display:flex; flex-direction:column; gap:6px; padding:24px; border-radius:18px; background:var(--surface); box-shadow:inset 0 0 0 1px var(--line); transition:background .3s, transform .6s var(--ease)}
+  .ptease a:hover{background:var(--surface-2); transform:translateY(-4px)}
+  .ptease b{font-size:38px; font-weight:500; letter-spacing:-.05em} .ptease small{color:var(--text-3); font-size:14px}
+  .ptease a.pop{box-shadow:inset 0 0 0 1px rgba(169,214,70,.4); background:linear-gradient(180deg,rgba(169,214,70,.08),transparent)}
+  @media (max-width:900px){ .ptease{grid-template-columns:repeat(2,minmax(0,1fr))} }
+</style>
+</head>
+<body data-page="home" data-intro>
+<header id="nav"></header>
+<main>
+
+<!-- ═════════ HERO: FROM ORBIT TO ONE SQUARE METRE ═════════ -->
+<section class="story" id="hero" aria-label="AgrosIQ, from orbit to the field">
+  <div class="story__sticky">
+    <div class="aerial" id="heroGL" data-aerial="earth" data-drive="manual" data-seed="3" data-poster style="background-image:url(assets/img/poster-hero.jpg)"></div>
+    <div class="veil veil--hero"></div>
+    <div class="veil veil--l" id="heroVeil" style="opacity:.8"></div>
+
+    <div class="geo" id="heroGeo" aria-hidden="true">
+      <svg><defs><linearGradient id="beamG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c7ec72" stop-opacity=".0"/><stop offset="1" stop-color="#c7ec72" stop-opacity=".16"/></linearGradient></defs>
+        <g id="beam" opacity="0"><polygon class="beam" points="0,0 0,0 0,0"/><polyline class="beamL" points="0,0 0,0 0,0"/></g>
+        <g id="route" opacity="0"><path class="route" d=""/><circle class="rdot" r="5"/></g>
+      </svg>
+      <svg class="sat" id="sat" width="64" height="40" viewBox="0 0 64 40" style="opacity:0"><g fill="none" stroke="#e9f4d0" stroke-width="1.2"><rect x="26" y="14" width="12" height="12" rx="2" fill="#0d120e"/><rect x="2" y="16" width="20" height="8" fill="rgba(169,214,70,.25)"/><rect x="42" y="16" width="20" height="8" fill="rgba(169,214,70,.25)"/><path d="M22 20h4M38 20h4M32 26v6"/></g><circle cx="32" cy="34" r="2" fill="#c7ec72"/></svg>
+      <div id="tags"></div>
+      <div class="geo__tag lbl" id="youTag"><span>You · 205 m</span></div>
+    </div>
+
+    <div class="hud2" id="hud" aria-hidden="true"><div class="gcard">
+      <div class="gcard__h"><span>AgrosIQ Engine</span><b id="hudState">Live</b></div>
+      <div class="t-mono" style="font-size:10.5px">Altitude</div>
+      <div class="alt"><span id="hudAlt">38.2</span><small id="hudAltU">km</small></div>
+      <div class="rowx"><span>Next satellite pass</span><b id="hudPass">02:14:09</b></div>
+      <div class="rowx"><span>Cloud over the farm</span><b id="hudCloud">64%</b></div>
+      <div class="rowx"><span>Fields watched</span><b>33</b></div>
+      <div class="rowx"><span>Need a look</span><b id="hudWalk">0</b></div>
+      <div class="meter"><i id="hudBar"></i></div>
+    </div></div>
+
+    <div class="walk" id="walk" aria-hidden="true"><div class="gcard">
+      <div class="gcard__h"><b class="amber">Walk here first</b><span>2 Jun</span></div>
+      <div class="gcard__t">Ridge Paddock · NE corner</div><div class="gcard__s">Crop health dropped below this field's normal</div>
+      <dl><dt>Health vs. normal</dt><dd class="amber">−24%</dd><dt>Area affected</dt><dd>1.1 ha</dd><dt>Walk from the gate</dt><dd>205 m · 3 min</dd></dl>
+    </div></div>
+
+    <div class="side" id="sideChart" aria-hidden="true"><div class="gcard">
+      <div class="gcard__h"><span>Ridge Paddock · health</span><b class="amber" id="chartState">Drifting</b></div>
+      <svg class="spark-lg" viewBox="0 0 300 130" id="hChart">
+        <line class="ax" x1="0" y1="118" x2="300" y2="118"/>
+        <path class="band" d="M0 110 C40 104 70 66 110 40 C140 22 170 16 200 22 C230 28 260 54 300 84 L300 104 C260 76 230 50 200 44 C170 38 140 46 110 62 C70 88 40 114 0 118Z"/>
+        <path class="mid" d="M0 114 C40 109 70 77 110 51 C140 33 170 27 200 33 C230 39 260 65 300 94"/>
+        <path class="now" id="hNow" d="M0 115 C40 110 70 78 110 53 C130 41 150 39 168 46 C180 51 190 62 200 70"/>
+        <circle id="hDot" cx="200" cy="70" r="4.5" fill="#F3A93C" opacity="0"/>
+        <text x="0" y="129">Mar</text><text x="140" y="129">Jun</text><text x="276" y="129">Sep</text>
+      </svg>
+      <div class="rowx" style="margin-top:6px"><span>vs. its 10-year normal</span><b class="amber" id="chartPct">−0%</b></div>
+    </div></div>
+
+    <div class="side" id="sideZones" aria-hidden="true"><div class="gcard">
+      <div class="gcard__h"><span>Ridge Paddock · zones</span><b>Ready</b></div>
+      <div class="legend-z">
+        <span><i style="background:#a1cf4f"></i>High · ease off, it's already pulling its weight</span>
+        <span><i style="background:#127a43"></i>Average · keep the plan</span>
+        <span><i style="background:#2c3624"></i>Low · find out why before you spend</span>
+      </div>
+      <div class="rowx" style="margin-top:12px"><span>Variable-rate map</span><b class="ok">Export ready</b></div>
+    </div></div>
+
+    <div class="side" id="sideOutlook" aria-hidden="true"><div class="gcard">
+      <div class="gcard__h"><span>North Farm · this week</span><b>On track</b></div>
+      <div class="gcard__t">31 of 33 fields at or above normal</div>
+      <div class="rowx" style="margin-top:10px"><span>Spots to walk</span><b class="amber">2</b></div>
+      <div class="rowx"><span>Fields you didn't have to drive</span><b>31</b></div>
+      <div class="rowx"><span>Next fresh look</span><b>in 2 days</b></div>
+    </div></div>
+
+    <nav class="rail" aria-label="Story chapters">
+      <button data-dot data-go="0"><i></i><span>Orbit</span></button>
+      <button data-dot data-go="1"><i></i><span>Every pass</span></button>
+      <button data-dot data-go="2"><i></i><span>Early warning</span></button>
+      <button data-dot data-go="3"><i></i><span>Where to walk</span></button>
+      <button data-dot data-go="4"><i></i><span>Act where it pays</span></button>
+      <button data-dot data-go="5"><i></i><span>Bigger harvests</span></button>
+    </nav>
+
+    <div class="hero__text"><div class="wrap">
+      <div class="story__step on">
+        <span class="eyebrow">Crop intelligence from orbit</span>
+        <h1 class="t-hero hero__h1" data-split><span class="silver">Grow more.</span><br><span class="hl">Guess less.</span></h1>
+        <p class="hero__lede" data-r style="--d:4">AgrosIQ watches every field from space, spots crop stress before you can see it, and shows you exactly where to act. Protect yield, cut scouting time and make every input count.</p>
+        <div class="btns" data-r style="--d:6"><a class="btn btn--primary btn--lg" href="start.html">Start free <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn btn--glass btn--lg" href="#" data-go="1">Fly in</a></div>
+        <div class="hero__trust" data-r style="--d:8"><span><i class="ic" data-ic="check"></i>Free for your first 40 hectares</span><span><i class="ic" data-ic="check"></i>No hardware, no sensors</span><span><i class="ic" data-ic="check"></i>Set up in five minutes</span></div>
+      </div>
+      <div class="story__step">
+        <span class="kicker"><b>01</b> Every pass</span>
+        <h2 class="ch-h silver">Every field. Every few days.</h2>
+        <p class="hero__lede">Each time a satellite crosses your farm, the AgrosIQ Engine reads it and redraws the health of every field, down to the 10-metre pixel. Cloud doesn't stop it.</p>
+      </div>
+      <div class="story__step">
+        <span class="kicker"><b>02</b> Early warning</span>
+        <h2 class="ch-h silver">Trouble, found while it's small.</h2>
+        <p class="hero__lede">Every field is measured against ten years of its own history. The moment one drifts, you know. Often weeks before it shows from the road.</p>
+      </div>
+      <div class="story__step">
+        <span class="kicker"><b>03</b> Where to walk</span>
+        <h2 class="ch-h silver">Walk straight to the problem.</h2>
+        <p class="hero__lede">No more driving every paddock. AgrosIQ pins the exact spot that needs you, with the evidence attached. Fix it this week, not after harvest.</p>
+      </div>
+      <div class="story__step">
+        <span class="kicker"><b>04</b> Act where it pays</span>
+        <h2 class="ch-h silver">Put every input where it pays.</h2>
+        <p class="hero__lede">See the strong and weak ground inside every field, then turn it into a variable-rate map in one click. Seed, fertiliser and water go where they earn their keep.</p>
+      </div>
+      <div class="story__step">
+        <span class="kicker"><b>05</b> Bigger harvests</span>
+        <h2 class="ch-h silver">More yield from every hectare.</h2>
+        <p class="hero__lede">Catch losses early, spend smarter and plan every season with a decade of memory. That's how good farms become great ones.</p>
+        <div class="btns" style="margin-top:28px"><a class="btn btn--primary btn--lg" href="start.html">Start free <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn btn--glass btn--lg" href="pricing.html">See pricing</a></div>
+      </div>
+    </div></div>
+    <div class="scroll-cue" id="cue" aria-hidden="true"></div>
+  </div>
+</section>
+
+<!-- ═════════ CROPS ═════════ -->
+<section class="crops" aria-label="Crops">
+  <p class="t-mono crops__l">Built for every crop, on every continent</p>
+  <div class="marquee"><div class="marquee__track" id="crops"></div></div>
+</section>
+
+<!-- ═════════ STATS ═════════ -->
+<section class="sec sec--tight">
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat" data-r><div class="stat__n"><span data-count="10">0</span><small>years</small></div><p class="stat__l">of history for every field, the day you sign up</p></div>
+      <div class="stat" data-r style="--d:1"><div class="stat__n"><span data-count="10">0</span><small>m</small></div><p class="stat__l">pixel detail, so you see the corner, not just the field</p></div>
+      <div class="stat" data-r style="--d:2"><div class="stat__n">&lt;<span data-count="5">0</span><small>days</small></div><p class="stat__l">between fresh looks at every hectare you farm</p></div>
+      <div class="stat" data-r style="--d:3"><div class="stat__n"><span data-count="0">0</span><small>hardware</small></div><p class="stat__l">no sensors, no drones, no installs. Just sign in.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ LAYERS (pinned) ═════════ -->
+<section class="story" id="layers" aria-label="Four layers of intelligence">
+  <div class="story__sticky">
+    <div class="aerial" id="layGL" data-aerial="stack" data-drive="manual" data-seed="3"></div>
+    <div class="veil veil--lay"></div>
+    <div class="lstack__lbl" data-l="0"><span>Imagery<small>What the satellite sees</small></span></div>
+    <div class="lstack__lbl" data-l="1"><span>Crop health<small>How hard every 10 m is growing</small></span></div>
+    <div class="lstack__lbl" data-l="2"><span>Zones<small>Strong and weak ground</small></span></div>
+    <div class="lstack__lbl" data-l="3"><span>Actions<small>The spot that needs you</small></span></div>
+    <div class="lay__copy"><div class="wrap"><div class="lay__col">
+      <span class="kicker"><b>Engine</b> How AgrosIQ sees</span>
+      <h2 class="t-h2 silver">One look. Four layers of intelligence.</h2>
+      <div class="lay__steps">
+        <div class="story__step on"><span class="t-mono">Layer 01</span><h3>It starts with the picture.</h3><p>Every pass over your farm is captured, cleaned and lined up with the last one, cloud or shine.</p></div>
+        <div class="story__step"><span class="t-mono">Layer 02</span><h3>Then it reads the crop.</h3><p>Every 10 m pixel gets a health score, set against what that exact spot normally does at this time of year.</p></div>
+        <div class="story__step"><span class="t-mono">Layer 03</span><h3>Then it finds the pattern.</h3><p>Ten seasons reveal the zones that always lead and the ones that always lag. Now you can farm them differently.</p></div>
+        <div class="story__step"><span class="t-mono">Layer 04</span><h3>Then it tells you what to do.</h3><p>All of it boils down to one clear instruction, delivered to your phone: walk here first.</p></div>
+      </div>
+      <div class="lay__dots"><i data-dot></i><i data-dot></i><i data-dot></i><i data-dot></i></div>
+    </div></div></div>
+  </div>
+</section>
+
+<!-- ═════════ BENEFITS ═════════ -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" data-r>Why AgrosIQ</span>
+      <h2 class="t-h2" data-split><span class="silver">The unfair advantage on every hectare</span></h2>
+      <p class="t-lede" data-r style="--d:3">The best farmers already know their fields. AgrosIQ gives you that knowledge on every field, every few days, without leaving the truck.</p>
+    </div>
+    <div class="bento">
+      <article class="card s-4" data-r>
+        <div class="card__vis vis-curve" data-r>
+          <svg viewBox="0 0 320 210" preserveAspectRatio="none" aria-hidden="true">
+            <path class="band" d="M0 190 C40 185 70 150 110 90 C140 50 170 34 200 36 C240 40 280 90 320 150 L320 190 C280 140 240 80 200 70 C170 66 140 84 110 120 C70 170 40 195 0 200Z"/>
+            <path class="norm" d="M0 195 C40 190 70 160 110 105 C140 66 170 50 200 53 C240 58 280 115 320 170"/>
+            <path class="line" d="M0 196 C40 191 70 158 110 104 C130 78 150 66 168 70 C182 74 190 96 204 104"/>
+            <circle class="dip" cx="204" cy="104" r="5"/><circle class="dipr" cx="204" cy="104" r="6"/>
+          </svg>
+        </div>
+        <div class="card__body"><h3 class="t-h4">Protect your yield</h3><p>Every field is compared with its own best seasons. When one falls behind, you hear about it while there's still time to act.</p></div>
+      </article>
+      <article class="card s-4" data-r style="--d:1">
+        <div class="card__vis" data-r>
+          <svg class="route" viewBox="0 0 320 260" aria-hidden="true">
+            <defs><pattern id="pp" width="16" height="16" patternUnits="userSpaceOnUse"><rect width="15" height="15" rx="2" fill="rgba(27,138,76,.35)"/></pattern></defs>
+            <rect x="20" y="20" width="130" height="100" rx="8" fill="url(#pp)"/><rect x="164" y="20" width="136" height="100" rx="8" fill="url(#pp)" opacity=".7"/>
+            <rect x="20" y="134" width="180" height="110" rx="8" fill="url(#pp)" opacity=".85"/><rect x="214" y="134" width="86" height="110" rx="8" fill="url(#pp)" opacity=".6"/>
+            <path class="r" d="M30 250 L30 128 L238 128 L238 70"/>
+            <circle cx="30" cy="250" r="6" fill="#fff"/><rect x="232" y="62" width="14" height="14" rx="3" fill="#F3A93C"/><circle cx="239" cy="69" r="18" fill="none" stroke="#F3A93C" opacity=".5"><animate attributeName="r" values="10;26" dur="1.8s" repeatCount="indefinite"/><animate attributeName="opacity" values=".8;0" dur="1.8s" repeatCount="indefinite"/></circle>
+          </svg>
+        </div>
+        <div class="card__body"><h3 class="t-h4">Cut scouting time</h3><p>Skip the full-farm drive. Go straight to the one spot that needs you, guided to the exact pixel on your phone.</p></div>
+      </article>
+      <article class="card s-4" data-r style="--d:2">
+        <div class="card__vis" data-r><div class="pixgrid" id="zones" style="grid-template-columns:repeat(18,1fr)"></div></div>
+        <div class="card__body"><h3 class="t-h4">Make every input count</h3><p>See the strong and weak zones inside each field, so seed, fertiliser and water go where they'll pay you back.</p></div>
+      </article>
+      <article class="card s-7" data-r>
+        <div class="card__vis" data-r>
+          <svg class="ridges" viewBox="0 0 600 260" preserveAspectRatio="none" style="position:absolute;inset:20px 24px 10px" id="ridges" aria-hidden="true"></svg>
+        </div>
+        <div class="card__body"><h3 class="t-h4">Plan with ten years of memory</h3><p>Every field comes with a decade of seasons already loaded. See which blocks always deliver, which never do, and how this year stacks up, from day one.</p></div>
+      </article>
+      <article class="card s-5" data-r style="--d:1">
+        <div class="card__vis">
+          <div class="chatmini">
+            <div class="bub bub--q">Which fields are behind this week?</div>
+            <div class="bub bub--a"><b>2 of 33.</b> Ridge Paddock and Creek Flat are tracking below their normal for early June. Ridge has a 1.1 ha patch in the NE corner worth a walk.</div>
+          </div>
+        </div>
+        <div class="card__body"><h3 class="t-h4">Answers in plain English</h3><p>Ask your farm anything. Get a straight answer with the maps and dates to back it up.</p></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ SEASON (pinned, scrubbable) ═════════ -->
+<section class="story" id="season" aria-label="A whole season in seconds">
+  <div class="story__sticky">
+    <div class="aerial" id="seaGL" data-aerial="season" data-drive="manual" data-seed="5"></div>
+    <div class="veil veil--sea"></div>
+    <div class="sea__top"><div class="wrap">
+      <div style="max-width:560px; display:flex; flex-direction:column; gap:18px">
+        <span class="kicker"><b>Season</b> Scroll through a year</span>
+        <h2 class="t-h2 silver">Watch a whole season in seconds.</h2>
+        <p class="t-lede">From the first green shoots to the last load out, AgrosIQ records every field, every few days. Scroll to play it.</p>
+      </div>
+      <div class="sea__now" aria-live="polite"><div class="sea__month" id="seaMonth">March</div><div class="sea__stage" id="seaStage">Sowing</div></div>
+    </div></div>
+    <div class="sea__bot"><div class="wrap">
+      <div class="sea__panel">
+        <div>
+          <div class="sea__chart" id="seaChart">
+            <svg viewBox="0 0 1000 110" preserveAspectRatio="none" aria-hidden="true">
+              <defs><linearGradient id="seaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9D646" stop-opacity=".28"/><stop offset="1" stop-color="#A9D646" stop-opacity="0"/></linearGradient>
+                <clipPath id="seaClip"><rect id="seaClipR" x="0" y="-20" width="0" height="140"/></clipPath></defs>
+              <path class="nrm" id="seaNrm" d=""/>
+              <g clip-path="url(#seaClip)"><path class="area" id="seaArea" d=""/><path class="ln" id="seaLn" d=""/></g>
+            </svg>
+          </div>
+          <div class="scrub" style="margin-top:14px">
+            <div class="scrub__track" id="seaTrack" role="slider" aria-label="Season" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0"><div class="scrub__fill" id="seaFill"></div><div class="scrub__knob" id="seaKnob"></div></div>
+            <div class="scrub__months" id="seaMonths"></div>
+          </div>
+        </div>
+        <div class="gcard">
+          <div class="gcard__h"><span>Home Block · wheat</span><b id="seaChip">Live</b></div>
+          <div class="rowx"><span>Crop stage</span><b id="seaS2">Sowing</b></div>
+          <div class="rowx"><span>Health vs. normal</span><b id="seaVs">+0%</b></div>
+          <div class="rowx"><span>Days to harvest</span><b id="seaDays">146</b></div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ═════════ INTERACTIVE PRODUCT ═════════ -->
+<section class="sec" id="product">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" data-r>The platform</span>
+      <h2 class="t-h2" data-split><span class="silver">Your whole farm on one screen</span></h2>
+      <p class="t-lede" data-r style="--d:3">A live health map, a ranked list of what needs you, and every season at your fingertips. Go on, try it: hover any field.</p>
+    </div>
+    <div class="mock-stage">
+      <div class="orb"></div>
+      <div data-tilt>
+        <div class="mock" aria-label="AgrosIQ app preview">
+          <div class="mock__top"><img src="assets/brand/agrosiq-mark-dark.svg" alt=""><span class="mock__crumb">North Farm / <b>Overview</b></span>
+            <span class="mock__search"><i class="ic" data-ic="search" style="width:14px;height:14px"></i>Ask your farm anything…</span><span class="mock__av"></span></div>
+          <div class="mock__body">
+            <div class="mock__side"><i class="on"><span class="ic" data-ic="map"></span></i><i><span class="ic" data-ic="bell"></span></i><i><span class="ic" data-ic="chart"></span></i><i><span class="ic" data-ic="chat"></span></i><i><span class="ic" data-ic="calendar"></span></i><i style="margin-top:auto"><span class="ic" data-ic="settings"></span></i></div>
+            <div class="mock__main" id="mapMain">
+              <div class="aerial mock__map" id="mapGL" data-aerial="map" data-drive="manual" data-seed="3"></div>
+              <div class="maphud">
+                <div class="seg" role="group" aria-label="Map layer"><button type="button" data-layer="truth" aria-pressed="false">True colour</button><button type="button" data-layer="health" aria-pressed="true">Health</button><button type="button" data-layer="zones" aria-pressed="false">Zones</button></div>
+                <span class="hint">Hover a field</span>
+              </div>
+              <div class="maplegend"><span class="legend-ramp" id="mapLegend">Crop health <i></i></span></div>
+              <div class="tip" id="tip"><div class="gcard"><div class="gcard__t" id="tipName">—</div><div class="gcard__s" id="tipMeta">—</div>
+                <div class="rowx" style="margin-top:8px"><span>Health</span><b id="tipH">—</b></div><div class="rowx"><span>Stage</span><b id="tipStage">—</b></div></div></div>
+            </div>
+            <div class="mock__right">
+              <div class="panel" id="fld">
+                <div class="panel__h">Selected field <span id="fldTag" class="amber">Walk first</span></div>
+                <div class="fld__name" id="fldName">Ridge Paddock</div>
+                <div class="fld__meta" id="fldMeta">Wheat · 31.4 ha · Peak growth</div>
+                <div class="fld__kpis">
+                  <div class="panel kpi"><span>Health</span><b id="fldH">62</b></div>
+                  <div class="panel kpi"><span>vs normal</span><b id="fldVs" class="amber">−24%</b></div>
+                  <div class="panel kpi"><span>Area</span><b id="fldA">31</b></div>
+                </div>
+                <div class="chart" style="margin-top:12px"><svg viewBox="0 0 260 96" preserveAspectRatio="none" aria-hidden="true">
+                  <path d="M0 88 C40 82 70 46 110 26 C140 12 170 10 200 16 C230 22 250 40 260 56 L260 74 C250 58 230 42 200 36 C170 30 140 34 110 46 C70 66 40 90 0 94Z" fill="rgba(169,214,70,.1)"/>
+                  <path id="fldLine" d="M0 90 C40 84 70 54 110 36 C140 22 160 26 178 38" fill="none" stroke="#A9D646" stroke-width="2"/>
+                  <circle id="fldDot" cx="178" cy="38" r="4" fill="#F3A93C"/>
+                </svg></div>
+              </div>
+              <div class="panel">
+                <div class="panel__h">Walk these first <span>2</span></div>
+                <div class="alert-row on" data-goto="alert"><i class="w"></i><div><b>Ridge Paddock</b><span>NE corner · 1.1 ha · −24%</span></div><em>NEW</em></div>
+                <div class="alert-row" data-goto="creek"><i class="w"></i><div><b>Creek Flat</b><span>Low strip · 0.6 ha · −15%</span></div><em>2D</em></div>
+                <div class="alert-row" data-goto="pivot"><i></i><div><b>Top Pivot</b><span>Back on track</span></div><em>5D</em></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ FEATURES BENTO ═════════ -->
+<section class="sec" id="features">
+  <div class="wrap">
+    <div class="sec-head sec-head--left" style="max-width:none; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,.8fr); gap:40px; align-items:end">
+      <div style="display:flex;flex-direction:column;gap:20px;align-items:flex-start"><span class="eyebrow" data-r>Everything included</span>
+      <h2 class="t-h2" data-split><span class="silver">One platform. Every answer about your fields.</span></h2></div>
+      <p class="t-lede" data-r style="--d:2">From the first green shoot to the last load out of the paddock, AgrosIQ keeps watch, keeps records and keeps you one step ahead.</p>
+    </div>
+    <div class="bento">
+      <article class="card s-8" data-r>
+        <div class="tile-vis"><div class="aerial" data-aerial="orbit" data-seed="11" data-res=".8"></div><div class="veil veil--b"></div></div>
+        <div class="card__body"><span class="chip chip--ok chip--plain">Field Watch</span><h3 class="t-h3" style="margin-top:14px">Sees through cloud</h3><p>Cloudy week? AgrosIQ keeps reading your fields straight through it, so your alerts keep coming through the wettest weeks of the season.</p></div>
+      </article>
+      <article class="card s-4" data-r style="--d:1">
+        <div class="tile-vis" style="height:220px"><div class="phone"><div class="aerial" data-aerial="pixels" data-seed="3" data-res=".9"></div><div class="phone__bar"><b>Walk here · 140 m</b>Ridge Paddock</div></div></div>
+        <div class="card__body"><span class="chip chip--ok chip--plain">Scout</span><h3 class="t-h4" style="margin-top:14px">Walk straight to the spot</h3><p>Your phone guides you to the pixel that needs you. Snap a photo, add a note, done.</p></div>
+      </article>
+      <article class="card s-4" data-r>
+        <div class="tile-vis"><div class="bars" id="bars"></div></div>
+        <div class="card__body"><span class="chip chip--ok chip--plain">Field Record</span><h3 class="t-h4" style="margin-top:14px">Every season, ranked</h3><p>Ten years of every field, side by side. Know your banker blocks and your problem children.</p></div>
+      </article>
+      <article class="card s-4" data-r style="--d:1">
+        <div class="tile-vis"><div class="aerial" data-aerial="zones" data-seed="7" data-res=".8"></div></div>
+        <div class="card__body"><span class="chip chip--ok chip--plain">Zones</span><h3 class="t-h4" style="margin-top:14px">Strong and weak zones</h3><p>Every field split into the zones that behave the same, season after season.</p></div>
+      </article>
+      <article class="card s-4" data-r style="--d:2">
+        <div class="tile-vis"><div class="docs"><div class="doc"><i class="g"></i><i></i><div class="mapblk"></div><i></i><i style="width:70%"></i></div><div class="doc"><i class="g"></i><i></i><div class="mapblk"></div><i></i><i style="width:50%"></i></div><div class="doc"><i class="g"></i><i></i><div class="mapblk"></div><i></i><i style="width:80%"></i></div></div></div>
+        <div class="card__body"><span class="chip chip--ok chip--plain">Reports</span><h3 class="t-h4" style="margin-top:14px">Share in one click</h3><p>Beautiful field reports for your agronomist, your bank or your landlord.</p></div>
+      </article>
+      <article class="card s-6" data-r>
+        <div class="card__body"><div class="ic-tile"><i class="ic" data-ic="drop"></i></div><h3 class="t-h4" style="margin-top:20px">Weather and water stress</h3><p>Rainfall, heat and dry spells tracked for every field and set against its own history, so you know when the season is turning against you.</p></div>
+      </article>
+      <article class="card s-6" data-r style="--d:1">
+        <div class="card__body"><div class="ic-tile"><i class="ic" data-ic="users"></i></div><h3 class="t-h4" style="margin-top:20px">Your whole team, one map</h3><p>Invite your manager, agronomist and contractors. Everyone sees the same fields, the same alerts and the same plan.</p></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ ANALYST ═════════ -->
+<section class="sec" id="analyst">
+  <div class="orb" style="width:700px;height:700px;right:-200px;top:10%"></div>
+  <div class="wrap split">
+    <div style="display:flex;flex-direction:column;gap:22px;align-items:flex-start">
+      <span class="eyebrow" data-r>Field Analyst</span>
+      <h2 class="t-h2" data-split><span class="silver">Ask your fields anything</span></h2>
+      <p class="t-lede" data-r style="--d:3">Why is the north block behind? Which paddock always yields best? Was this dry spell worse than 2019? Your own crop analyst answers in seconds, and shows its working.</p>
+      <ul data-r style="--d:4; list-style:none; padding:0; margin:8px 0 0; display:flex; flex-direction:column; gap:12px; color:var(--text-2)">
+        <li style="display:flex;gap:12px"><i class="ic" data-ic="check" style="color:var(--sprout)"></i>Answers backed by the maps and dates behind them</li>
+        <li style="display:flex;gap:12px"><i class="ic" data-ic="check" style="color:var(--sprout)"></i>Compares any field, any season, in plain language</li>
+        <li style="display:flex;gap:12px"><i class="ic" data-ic="check" style="color:var(--sprout)"></i>Your data stays private, always</li>
+      </ul>
+    </div>
+    <div class="chat" data-r style="--d:2">
+      <div class="chat__head"><span class="ic-tile"><i class="ic" data-ic="sparkle"></i></span><div><b style="font-weight:500">Field Analyst</b><div class="dim" style="font-size:12.5px">North Farm · 33 fields</div></div></div>
+      <div class="chat__log" id="chatlog" aria-live="polite"></div>
+      <div class="chat__in"><span id="chatin">Ask about any field…</span><span class="btn btn--primary" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ HOW IT WORKS ═════════ -->
+<section class="sec" id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" data-r>How it works</span>
+      <h2 class="t-h2" data-split><span class="silver">Up and running before your coffee's cold</span></h2>
+    </div>
+    <div class="flow steps" id="flow">
+      <div class="flow__line"><i id="flowLine"></i></div>
+      <div class="step" data-r><h3>Draw your fields</h3><p>Trace your boundaries on the map, or let AgrosIQ find them for you. Upload a shapefile if you have one.</p></div>
+      <div class="step" data-r style="--d:1"><h3>We do the heavy lifting</h3><p>Ten years of history loads in minutes. From then on, every new pass is read, checked and ranked automatically.</p></div>
+      <div class="step" data-r style="--d:2"><h3>You act on what matters</h3><p>Get an alert when a field needs you, walk straight to the spot, and watch the season come good.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ AUDIENCES (horizontal) ═════════ -->
+<section class="hscroll" aria-label="Who it's for">
+  <div class="hscroll__sticky">
+    <div class="wrap hs-head"><div style="display:flex;flex-direction:column;gap:18px;align-items:flex-start"><span class="eyebrow">Who it's for</span><h2 class="t-h2 silver">Built for everyone who grows</h2></div>
+      <a class="btn btn--glass" href="solutions.html">All solutions <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+    <div class="hscroll__track" id="aud"></div>
+  </div>
+</section>
+
+<!-- ═════════ PRICING TEASER ═════════ -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" data-r>Pricing</span>
+      <h2 class="t-h2" data-split><span class="silver">Start free. Grow when you're ready.</span></h2>
+      <p class="t-lede" data-r style="--d:3">Simple plans for every size of operation. No contracts, cancel any time.</p>
+    </div>
+    <div class="ptease" data-r>
+      <a href="pricing.html"><small>Free</small><b>$0</b><span class="muted">Up to 40 ha</span></a>
+      <a href="pricing.html"><small>Grower</small><b>$20<small>/mo</small></b><span class="muted">Up to 400 ha</span></a>
+      <a href="pricing.html" class="pop"><small>Farm · most popular</small><b>$99<small>/mo</small></b><span class="muted">Up to 2,000 ha</span></a>
+      <a href="pricing.html"><small>Pro</small><b>$249<small>/mo</small></b><span class="muted">Unlimited hectares</span></a>
+    </div>
+    <p class="center" style="margin-top:28px" data-r><a class="btn btn--glass" href="pricing.html">Compare plans <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
+  </div>
+</section>
+
+<!-- ═════════ FAQ ═════════ -->
+<section class="sec" style="padding-top:0">
+  <div class="wrap wrap--narrow">
+    <div class="sec-head"><h2 class="t-h2" data-split><span class="silver">Questions, answered</span></h2></div>
+    <div class="faq" data-r>
+      <details open><summary>Do I need any hardware, drones or sensors?</summary><div>None at all. AgrosIQ works from space. Sign in, draw your fields and you're done. It works on your laptop, tablet and phone.</div></details>
+      <details><summary>What happens when it's cloudy?</summary><div>AgrosIQ keeps reading your fields straight through cloud, so they stay watched through the wettest weeks of the season.</div></details>
+      <details><summary>How far back does my history go?</summary><div>Every field comes with around ten years of seasons, loaded the day you add it. No waiting a year for the system to learn your farm.</div></details>
+      <details><summary>Which crops does it work with?</summary><div>Broadacre grains, oilseeds, pulses, cotton, sugarcane, pasture, vines and orchards. If it grows in a field and you can see it from above, AgrosIQ can watch it.</div></details>
+      <details><summary>Is my farm data private?</summary><div>Yes. Your fields and records belong to you. We never sell your data, and you can export or delete it at any time.</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ CTA ═════════ -->
+<section class="sec" style="padding-top:0">
+  <div class="wrap">
+    <div class="cta-band" data-r>
+      <div class="aerial" data-aerial="health" data-seed="7"></div>
+      <div class="cta-band__in">
+        <span class="eyebrow">Your next season starts now</span>
+        <h2 class="t-h2" data-split><span class="silver">See your farm from orbit, free</span></h2>
+        <p class="t-lede">Add your first 40 hectares free, forever. Ten years of history, ready in minutes.</p>
+        <div class="btns" style="justify-content:center"><a class="btn btn--primary btn--lg" href="start.html">Start free <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn btn--glass btn--lg" href="start.html#demo">Book a demo</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<footer id="foot"></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/home.js"></script>
+</body>
+</html>

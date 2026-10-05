@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solutions · AgrosIQ</title>
+<meta name="description" content="AgrosIQ is built for everyone who grows. Whether you farm one paddock or run a national supply program, see exactly how AgrosIQ works for growers, agronomists, farm managers and agribusiness.">
+<link rel="icon" type="image/svg+xml" href="assets/brand/agrosiq-mark-dark.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/brand/png/favicon-32.png">
+<meta name="theme-color" content="#000000">
+<meta property="og:url" content="https://lumen8.ai/agrosiq/solutions.html">
+<meta property="og:title" content="Solutions · AgrosIQ">
+<meta property="og:image" content="https://lumen8.ai/agrosiq/assets/brand/png/social-card-1200x630.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+  /* ── hero pills row ── */
+  .pills{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px}
+  .pill{display:inline-flex; align-items:center; gap:8px; height:36px; padding:0 16px; border-radius:999px; background:rgba(255,255,255,.05); box-shadow:inset 0 0 0 1px var(--line-2); color:var(--text-2); font-size:13.5px; transition:background .25s, color .25s, transform .4s var(--ease)}
+  .pill:hover{background:var(--surface-2); color:var(--text); transform:translateY(-2px)}
+  .pill::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--sprout); box-shadow:0 0 0 3px var(--sprout-wash)}
+
+  /* ── grower map visual ── */
+  .v-map{position:relative; aspect-ratio:1.05/1; min-height:420px; border-radius:var(--r); background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01)); box-shadow:inset 0 0 0 1px var(--line); overflow:hidden}
+  @media (max-width:600px){ .v-map{min-height:0; aspect-ratio:auto; height:430px} .v-map__card{left:auto; right:12px; top:auto; bottom:62px; width:min(250px,calc(100% - 24px))} }
+  .v-map__head{position:absolute; z-index:2; left:16px; top:16px; display:flex; gap:8px; flex-wrap:wrap}
+  .v-map__legend{position:absolute; z-index:2; left:16px; bottom:16px; display:flex; align-items:center; gap:10px; padding:8px 12px; border-radius:10px; background:rgba(8,10,12,.8); font:500 11px/1 var(--mono); color:var(--text-3)}
+  .v-map__legend i{display:block; width:120px; height:6px; border-radius:3px; background:linear-gradient(90deg,#3b2b21,#5c4d2b,#0d5c35,#1c9450,#b3e047)}
+  .v-map .pixgrid{position:absolute; inset:64px 24px 56px; gap:3px}
+  .v-map__pin{position:absolute; z-index:3; width:30px; height:30px; margin:-15px 0 0 -15px; pointer-events:none}
+  .v-map__pin::before{content:""; position:absolute; left:50%; top:50%; width:14px; height:14px; margin:-7px 0 0 -7px; background:var(--harvest); border-radius:2px; box-shadow:0 0 18px var(--harvest)}
+  .v-map__pin::after{content:""; position:absolute; inset:-18px; border:1px solid var(--harvest); border-radius:50%; animation:pingR 2s infinite; opacity:.6}
+  @keyframes pingR{0%{transform:scale(.6);opacity:.7} 100%{transform:scale(1.6);opacity:0}}
+  .v-map__card{position:absolute; z-index:4; left:54%; top:38%; width:280px; padding:14px 16px; border-radius:14px; background:rgba(8,10,12,.88); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    box-shadow:inset 0 0 0 1px rgba(243,169,60,.5), 0 24px 60px rgba(0,0,0,.5)}
+  .v-map__card b{display:flex; align-items:center; gap:8px; font:600 10.5px/1 var(--mono); letter-spacing:.07em; text-transform:uppercase; color:var(--harvest)}
+  .v-map__card b::before{content:""; width:7px; height:7px; border-radius:2px; background:var(--harvest)}
+  .v-map__card strong{display:block; font-size:16px; font-weight:500; letter-spacing:-.02em; margin:9px 0 4px}
+  .v-map__card span{font-size:12.5px; color:var(--text-2)}
+  .v-map__card dl{display:grid; grid-template-columns:auto 1fr; gap:4px 14px; margin:12px 0 0; font-size:12px}
+  .v-map__card dt{color:var(--text-3)} .v-map__card dd{margin:0; text-align:right; font-variant-numeric:tabular-nums}
+  .v-map__card .amber{color:var(--harvest)}
+
+  /* ── agronomist list panel ── */
+  .v-list{position:relative; aspect-ratio:1.1/1; min-height:480px; border-radius:var(--r); background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01)); box-shadow:inset 0 0 0 1px var(--line); overflow:hidden; display:flex; flex-direction:column}
+  .v-list__h{display:flex; align-items:center; justify-content:space-between; padding:18px 22px; border-bottom:1px solid var(--line)}
+  .v-list__h b{font-weight:500; font-size:15px; display:inline-flex; align-items:center; gap:8px}
+  .v-list__h b i{width:8px; height:8px; border-radius:50%; background:var(--sprout); box-shadow:0 0 0 3px var(--sprout-wash); animation:blink 1.6s infinite}
+  .v-list__h span{font:500 12px/1 var(--mono); color:var(--text-3); letter-spacing:.06em; text-transform:uppercase}
+  .v-list__rows{flex:1; padding:6px 12px; display:flex; flex-direction:column; gap:6px}
+  .vrow{display:grid; grid-template-columns:1fr auto auto; gap:14px; align-items:center; padding:14px 14px; border-radius:12px; transition:background .35s, box-shadow .35s}
+  .vrow.on{background:var(--surface-2); box-shadow:inset 0 0 0 1px var(--line-2)}
+  .vrow__b{font-size:14px; font-weight:500; letter-spacing:-.01em}
+  .vrow__s{font-size:12px; color:var(--text-3); margin-top:2px}
+  .vrow__ha{font-size:12px; color:var(--text-3); font-variant-numeric:tabular-nums}
+  .v-list__foot{padding:14px 22px; border-top:1px solid var(--line); font-size:12.5px; color:var(--text-3); display:flex; justify-content:space-between}
+
+  /* ── managers KPI panel ── */
+  .v-kpi{position:relative; aspect-ratio:1/1.05; min-height:520px; border-radius:var(--r); background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01)); box-shadow:inset 0 0 0 1px var(--line); padding:22px; display:flex; flex-direction:column; gap:14px; overflow:hidden}
+  .v-kpi__h{display:flex; align-items:center; justify-content:space-between; padding-bottom:14px; border-bottom:1px solid var(--line)}
+  .v-kpi__h b{font-weight:500; font-size:14.5px; letter-spacing:-.01em; display:inline-flex; align-items:center; gap:8px}
+  .v-kpi__h b i{width:8px; height:8px; border-radius:50%; background:var(--sprout); animation:blink 1.5s infinite}
+  .v-kpi__h span{font:500 11px/1 var(--mono); color:var(--text-3); letter-spacing:.06em; text-transform:uppercase}
+  .v-kpi__grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px}
+  .v-kpi__cell{padding:16px 14px; border-radius:12px; background:rgba(255,255,255,.025); box-shadow:inset 0 0 0 1px var(--line)}
+  .v-kpi__cell small{display:block; color:var(--text-3); font-size:12px; margin-bottom:8px}
+  .v-kpi__cell b{font-size:30px; letter-spacing:-.05em; font-weight:500; line-height:1; font-variant-numeric:tabular-nums}
+  .v-kpi__chart{flex:1; padding:16px; border-radius:12px; background:rgba(255,255,255,.025); box-shadow:inset 0 0 0 1px var(--line); display:flex; flex-direction:column; gap:10px; min-height:0}
+  .v-kpi__chart h5{margin:0; font:500 11px/1 var(--mono); letter-spacing:.06em; text-transform:uppercase; color:var(--text-3)}
+  .v-kpi__bars{flex:1; display:flex; gap:6px; align-items:flex-end; min-height:0}
+  .v-kpi__bars i{flex:1; border-radius:4px 4px 0 0; background:linear-gradient(180deg,var(--sprout),rgba(27,138,76,.4)); height:calc(var(--h) * 1%); transform-origin:bottom; transform:scaleY(0); transition:transform 1s var(--ease); transition-delay:calc(var(--k) * 60ms)}
+  .v-kpi.in .v-kpi__bars i{transform:none}
+  .v-kpi__bars i.cur{background:linear-gradient(180deg,#fff,var(--sprout))}
+
+  /* ── enterprise card visuals ── */
+  .ent-vis{position:relative; height:200px; overflow:hidden; border-bottom:1px solid var(--line)}
+  .ent-vis--sup{background:radial-gradient(120% 80% at 80% 0, rgba(169,214,70,.12), transparent 60%)}
+  .ent-vis--sup svg{position:absolute; inset:0; width:100%; height:100%}
+  .ent-vis--len{background:radial-gradient(120% 80% at 0% 100%, rgba(169,214,70,.1), transparent 60%)}
+  .ent-vis--len .ribbons{position:absolute; inset:20px; display:flex; flex-direction:column; gap:6px; justify-content:center}
+  .ent-vis--len .ribbons i{display:block; height:14px; border-radius:4px; background:linear-gradient(90deg, var(--sprout) var(--w, 70%), var(--surface-2) var(--w, 70%)); box-shadow:inset 0 0 0 1px var(--line)}
+  .ent-vis--inp{background:radial-gradient(120% 80% at 50% 50%, rgba(169,214,70,.08), transparent 65%)}
+  .ent-vis--inp .dotmap{position:absolute; inset:20px; display:grid; grid-template-columns:repeat(8,1fr); gap:4px}
+  .ent-vis--inp .dotmap i{aspect-ratio:1; border-radius:50%; background:var(--c)}
+
+  /* ── season hscroll ── */
+  .season-card{flex:none; width:min(380px,82vw); min-height:440px; display:flex; flex-direction:column; gap:0; padding:0; overflow:hidden}
+  .season-card__vis{position:relative; height:200px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:center; overflow:hidden}
+  .season-card__vis .plant{position:relative; width:120px; height:160px; display:flex; align-items:flex-end; justify-content:center}
+  .season-card__vis .plant .stem{position:absolute; left:50%; bottom:6px; width:4px; background:linear-gradient(180deg,var(--canopy),var(--sprout)); border-radius:2px; height:calc(var(--h,30) * 1%); transform:translateX(-50%); transform-origin:bottom; transition:height 1.4s var(--ease); transition-delay:calc(var(--k,0) * 40ms)}
+  .season-card.in .plant .stem{height:calc(var(--H,80) * 1%)}
+  .season-card__vis .plant .leaf{position:absolute; left:50%; width:34px; height:14px; border-radius:14px 14px 14px 4px; background:linear-gradient(180deg,var(--sprout),var(--canopy)); transform-origin:0 50%; opacity:0; transition:opacity .6s, transform .8s var(--ease); transition-delay:calc(var(--k,0) * 40ms + .2s)}
+  .season-card__vis .plant .leaf.r{border-radius:14px 14px 4px 14px; transform-origin:100% 100%}
+  .season-card.in .plant .leaf{opacity:.95}
+  .season-card__stage{position:absolute; top:16px; left:18px; font:500 11px/1 var(--mono); color:var(--text-3); letter-spacing:.06em; text-transform:uppercase}
+  .season-card__stage b{color:var(--sprout); font-weight:500; display:block; margin-top:6px; font-size:18px; letter-spacing:-.02em}
+  .season-card__vis .ground{position:absolute; left:0; right:0; bottom:0; height:18px; background:linear-gradient(180deg,rgba(92,77,43,.25),rgba(59,43,33,.6)); box-shadow:inset 0 1px 0 rgba(169,214,70,.15)}
+  .season-card__body{padding:26px 24px; display:flex; flex-direction:column; gap:10px; flex:1}
+  .season-card h3{font-size:21px; letter-spacing:-.03em; margin:0}
+  .season-card p{margin:0; color:var(--text-2); font-size:15px}
+
+  /* ── outcomes band ── */
+  .outcomes{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:0; border-top:1px solid var(--line); border-bottom:1px solid var(--line)}
+  .outcome{padding:clamp(28px,4vw,56px) clamp(16px,2vw,28px); border-left:1px solid var(--line); display:flex; flex-direction:column; gap:18px}
+  .outcome:first-child{border-left:0}
+  .outcome .ic-tile{width:42px; height:42px}
+  .outcome h3{font-size:clamp(20px,2vw,26px); letter-spacing:-.03em; line-height:1.15; font-weight:500; margin:0}
+  .outcome p{margin:0; color:var(--text-2); font-size:15px; line-height:1.5}
+  @media (max-width:900px){ .outcomes{grid-template-columns:repeat(2,minmax(0,1fr))} .outcome:nth-child(3){border-left:0} .outcome:nth-child(n+3){border-top:1px solid var(--line)} }
+  @media (max-width:560px){ .outcomes{grid-template-columns:minmax(0,1fr)} .outcome:nth-child(2){border-top:1px solid var(--line)} .outcome:nth-child(n+2){border-left:0} }
+
+  /* ── split reverse helper ── */
+  .split--reverse > :first-child{order:2}
+  @media (max-width:1000px){ .split--reverse > :first-child{order:0} }
+</style>
+</head>
+<body data-page="solutions">
+<header id="nav"></header>
+<main>
+
+<!-- ═════════ HERO ═════════ -->
+<section class="phero">
+  <div class="aerial" data-aerial="orbit" data-seed="11"></div>
+  <div class="veil veil--hero"></div>
+  <div class="wrap">
+    <div class="phero__in">
+      <span class="eyebrow" data-r>Solutions</span>
+      <h1 class="t-hero" data-split><span class="silver">Built for everyone</span><br><span class="hl">who grows</span></h1>
+      <p class="t-lede" data-r style="--d:4">One paddock or ten thousand hectares, one grower or a thousand. The way it works scales with the job you help, and fits in next to the tools you already use.</p>
+      <div class="btns" data-r style="--d:6">
+        <a class="btn btn--primary btn--lg" href="start.html">Start free <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn--glass btn--lg" href="start.html#demo">Book a demo</a>
+      </div>
+      <div class="pills" data-r style="--d:8">
+        <a class="pill" href="#growers">Growers</a>
+        <a class="pill" href="#agronomists">Agronomists</a>
+        <a class="pill" href="#managers">Farm managers</a>
+        <a class="pill" href="#enterprise">Agribusiness</a>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-cue" aria-hidden="true"></div>
+</section>
+
+<!-- ═════════ #growers ═════════ -->
+<section class="sec" id="growers">
+  <div class="wrap">
+    <div class="split">
+      <div style="display:flex;flex-direction:column;gap:22px;align-items:flex-start">
+        <span class="eyebrow" data-r>Growers</span>
+        <h2 class="t-h2" data-split><span class="silver">More yield, less time scouting,</span><br><span class="hl">inputs where they pay</span></h2>
+        <p class="t-lede" data-r style="--d:3">You know your land. AgrosIQ keeps a continuous watch on every paddock from space and tells you, in plain words, which one needs you today. Skip the full-farm drive, walk straight to the spot, and put every dollar of input where it pays you back. By harvest you'll have a season record you can hand straight to the bank.</p>
+        <ul data-r style="--d:4; list-style:none; padding:0; margin:6px 0 0; display:flex; flex-direction:column; gap:12px; color:var(--text-2)">
+          <li style="display:flex;gap:12px"><i class="ic" data-ic="check" style="color:var(--sprout)"></i>Catch crop stress while there's still time to act</li>
+          <li style="display:flex;gap:12px"><i class="ic" data-ic="check" style="color:var(--sprout)"></i>Walk the field that needs you, not the whole farm</li>
+          <li style="display:flex;gap:12px"><i class="ic" data-ic="check" style="color:var(--sprout)"></i>See strong and weak zones so inputs go where they pay</li>
+          <li style="display:flex;gap:12px"><i class="ic" data-ic="check" style="color:var(--sprout)"></i>A decade of seasons for every paddock, ready the day you sign up</li>
+        </ul>
+        <div class="btns" data-r style="--d:5"><a class="btn btn--primary" href="start.html">Start free <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+      </div>
+      <div class="v-map" data-r style="--d:2" id="map-root">
+        <div class="v-map__head">
+          <span class="chip chip--ok chip--plain">North Farm · 1,240 ha</span>
+          <span class="chip chip--warn chip--plain">1 needs you</span>
+        </div>
+        <div class="pixgrid" id="map-pix" style="grid-template-columns:repeat(22,1fr)"></div>
+        <div class="v-map__pin" id="map-pin" style="left:62%; top:48%"></div>
+        <div class="v-map__card" id="map-card">
+          <b>Walk here first</b>
+          <strong>Ridge Paddock · NE corner</strong>
+          <span>Crop health dropped below this field's normal for early June.</span>
+          <dl><dt>Health vs. normal</dt><dd class="amber">−24%</dd><dt>Area affected</dt><dd>1.1 ha</dd><dt>Spotted</dt><dd>2 Jun</dd></dl>
+        </div>
+        <div class="v-map__legend">Crop health <i></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ #agronomists ═════════ -->
+<section class="sec" id="agronomists" style="padding-top:0">
+  <div class="wrap">
+    <div class="split split--reverse">
+      <div class="v-list" data-r style="--d:2" id="cli-root">
+        <div class="v-list__h">
+          <b><i></i> Clients</b>
+          <span id="cli-date">5 farms · today</span>
+        </div>
+        <div class="v-list__rows" id="cli-rows"></div>
+        <div class="v-list__foot"><span>Auto-refresh every pass</span><span id="cli-cnt">5 healthy · 1 to walk</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:22px;align-items:flex-start">
+        <span class="eyebrow" data-r>Agronomists</span>
+        <h2 class="t-h2" data-split><span class="silver">Every client's fields,</span><br><span class="hl">on one screen</span></h2>
+        <p class="t-lede" data-r style="--d:3">Stop driving blind. AgrosIQ watches every field for every client and ranks what needs you today. Show up with the evidence, send the report before you leave the farm, and spend your day on the visits that matter.</p>
+        <ul data-r style="--d:4; list-style:none; padding:0; margin:6px 0 0; display:flex; flex-direction:column; gap:12px; color:var(--text-2)">
+          <li style="display:flex;gap:12px"><i class="ic" data-ic="check" style="color:var(--sprout)"></i>Watch every client's fields at once, from your desk</li>
+          <li style="display:flex;gap:12px"><i class="ic" data-ic="check" style="color:var(--sprout)"></i>Rank visits by what needs you today, not by who calls first</li>
+          <li style="display:flex;gap:12px"><i class="ic" data-ic="check" style="color:var(--sprout)"></i>Pull up ten seasons of history before you walk the paddock</li>
+          <li style="display:flex;gap:12px"><i class="ic" data-ic="check" style="color:var(--sprout)"></i>Send beautiful, branded reports in one click</li>
+        </ul>
+        <div class="btns" data-r style="--d:5"><a class="btn btn--primary" href="start.html#demo">Talk to agronomy <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ #managers ═════════ -->
+<section class="sec" id="managers">
+  <div class="wrap">
+    <div class="split">
+      <div style="display:flex;flex-direction:column;gap:22px;align-items:flex-start">
+        <span class="eyebrow" data-r>Farm managers</span>
+        <h2 class="t-h2" data-split><span class="silver">A thousand paddocks,</span><br><span class="hl">one map, one team</span></h2>
+        <p class="t-lede" data-r style="--d:3">Whether you run ten fields or ten thousand, the picture is the same: every paddock on one screen, every member of your team on the same plan, with roles and permissions that match your operation. Start the week knowing exactly what's on, what's behind and what to chase.</p>
+        <ul data-r style="--d:4; list-style:none; padding:0; margin:6px 0 0; display:flex; flex-direction:column; gap:12px; color:var(--text-2)">
+          <li style="display:flex;gap:12px"><i class="ic" data-ic="check" style="color:var(--sprout)"></i>See every field, every alert and every job on one map</li>
+          <li style="display:flex;gap:12px"><i class="ic" data-ic="check" style="color:var(--sprout)"></i>Bring your team on with the right role for each member</li>
+          <li style="display:flex;gap:12px"><i class="ic" data-ic="check" style="color:var(--sprout)"></i>Set alerts by zone, crop, growth stage or manager</li>
+          <li style="display:flex;gap:12px"><i class="ic" data-ic="check" style="color:var(--sprout)"></i>Get a weekly digest on your desk every Monday morning</li>
+        </ul>
+        <div class="btns" data-r style="--d:5"><a class="btn btn--primary" href="start.html#demo">Talk to a manager <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+      </div>
+      <div class="v-kpi" data-r style="--d:2" id="kpi-root">
+        <div class="v-kpi__h">
+          <b><i></i> Operations · this week</b>
+          <span>33 fields</span>
+        </div>
+        <div class="v-kpi__grid">
+          <div class="v-kpi__cell"><small>Fields watched</small><b><span data-count="33">0</span></b></div>
+          <div class="v-kpi__cell"><small>Healthy</small><b><span data-count="94">0</span><small style="display:inline;color:var(--text-3);font-size:18px;letter-spacing:-.02em;margin-left:2px">%</small></b></div>
+          <div class="v-kpi__cell"><small>Need a walk</small><b style="color:var(--harvest)"><span data-count="2">0</span></b></div>
+          <div class="v-kpi__cell"><small>Team online</small><b><span data-count="6">0</span></b></div>
+        </div>
+        <div class="v-kpi__chart">
+          <h5>Season index · last 10 weeks</h5>
+          <div class="v-kpi__bars" id="kpi-bars"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ #enterprise ═════════ -->
+<section class="sec" id="enterprise">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" data-r>Agribusiness · lenders · suppliers</span>
+      <h2 class="t-h2" data-split><span class="silver">Built for the people who fund,</span><br><span class="hl">buy and supply the farm</span></h2>
+      <p class="t-lede" data-r style="--d:3">AgrosIQ Enterprise gives the partners around the grower the same evidence the grower sees. Independent, field-by-field, ready when you need it.</p>
+    </div>
+    <div class="grid-3" data-r>
+      <article class="card">
+        <div class="ent-vis ent-vis--sup">
+          <svg viewBox="0 0 320 200" preserveAspectRatio="none" aria-hidden="true">
+            <defs><linearGradient id="entSup" x1="0" x2="1"><stop offset="0" stop-color="rgba(169,214,70,.05)"/><stop offset="1" stop-color="rgba(169,214,70,.4)"/></linearGradient></defs>
+            <path d="M0 170 C40 165 80 110 130 90 C170 75 210 80 250 100 C290 120 310 145 320 160 L320 200 L0 200Z" fill="url(#entSup)"/>
+            <path d="M0 180 C40 175 90 130 140 110 C180 95 220 100 260 120 C290 135 310 155 320 168" fill="none" stroke="#A9D646" stroke-width="2.2"/>
+            <g fill="#fff" opacity=".8"><circle cx="40" cy="180" r="3"/><circle cx="80" cy="160" r="3"/><circle cx="130" cy="120" r="3"/><circle cx="180" cy="100" r="3"/><circle cx="240" cy="118" r="3"/><circle cx="290" cy="148" r="3"/></g>
+            <g font-family="Geist Mono" font-size="9" fill="#6c727c">
+              <text x="20" y="38">SUPPLY OUTLOOK · 12 WEEKS</text>
+              <text x="248" y="38" fill="#A9D646">+18%</text>
+            </g>
+          </svg>
+        </div>
+        <div class="card__body">
+          <span class="chip chip--ok chip--plain">Agribusiness &amp; food</span>
+          <h3 class="t-h4" style="margin-top:14px">Supply outlook, by field</h3>
+          <p>Forecast yield and quality at the grower level, season after season. Run grower programs with the same evidence your growers see, and plan procurement against what the crop actually looks like from space.</p>
+          <ul style="list-style:none;padding:0;margin:14px 0 0;display:flex;flex-direction:column;gap:8px;font-size:14px;color:var(--text-2)">
+            <li style="display:flex;gap:10px"><i class="ic" data-ic="check" style="color:var(--sprout);margin-top:2px"></i>Field-level yield outlook, refreshed every pass</li>
+            <li style="display:flex;gap:10px"><i class="ic" data-ic="check" style="color:var(--sprout);margin-top:2px"></i>Grower programs scored against ten seasons of history</li>
+            <li style="display:flex;gap:10px"><i class="ic" data-ic="check" style="color:var(--sprout);margin-top:2px"></i>Roll up thousands of paddocks into one sourcing view</li>
+          </ul>
+        </div>
+      </article>
+      <article class="card">
+        <div class="ent-vis ent-vis--len">
+          <div class="ribbons">
+            <i style="--w: 92%"></i>
+            <i style="--w: 78%"></i>
+            <i style="--w: 84%"></i>
+            <i style="--w: 63%"></i>
+            <i style="--w: 71%"></i>
+            <i style="--w: 88%"></i>
+          </div>
+        </div>
+        <div class="card__body">
+          <span class="chip chip--ok chip--plain">Lenders &amp; insurers</span>
+          <h3 class="t-h4" style="margin-top:14px">Independent field history</h3>
+          <p>An independent, season-by-season record of every field you lend against or insure. Verify management, score risk faster and answer claims with the maps and dates behind them.</p>
+          <ul style="list-style:none;padding:0;margin:14px 0 0;display:flex;flex-direction:column;gap:8px;font-size:14px;color:var(--text-2)">
+            <li style="display:flex;gap:10px"><i class="ic" data-ic="check" style="color:var(--sprout);margin-top:2px"></i>Ten-year field-by-field history, audit-ready</li>
+            <li style="display:flex;gap:10px"><i class="ic" data-ic="check" style="color:var(--sprout);margin-top:2px"></i>Risk scores that explain themselves in plain words</li>
+            <li style="display:flex;gap:10px"><i class="ic" data-ic="check" style="color:var(--sprout);margin-top:2px"></i>Faster, fairer decisions on new applications and renewals</li>
+          </ul>
+        </div>
+      </article>
+      <article class="card">
+        <div class="ent-vis ent-vis--inp">
+          <div class="dotmap" id="ent-dots"></div>
+        </div>
+        <div class="card__body">
+          <span class="chip chip--ok chip--plain">Input suppliers &amp; advisers</span>
+          <h3 class="t-h4" style="margin-top:14px">Serve growers with evidence</h3>
+          <p>See the same fields your growers see, recommend with confidence, and back every recommendation with a map. The growers you serve get a better ag experience, the inputs you sell get used where they pay.</p>
+          <ul style="list-style:none;padding:0;margin:14px 0 0;display:flex;flex-direction:column;gap:8px;font-size:14px;color:var(--text-2)">
+            <li style="display:flex;gap:10px"><i class="ic" data-ic="check" style="color:var(--sprout);margin-top:2px"></i>Recommend with the same evidence the grower sees</li>
+            <li style="display:flex;gap:10px"><i class="ic" data-ic="check" style="color:var(--sprout);margin-top:2px"></i>Target the growers and paddocks that need you this week</li>
+            <li style="display:flex;gap:10px"><i class="ic" data-ic="check" style="color:var(--sprout);margin-top:2px"></i>White-label the experience with your own brand</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+    <p class="center" data-r style="margin-top:42px">
+      <a class="btn btn--primary btn--lg" href="start.html#demo">Talk to us about Enterprise <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </p>
+  </div>
+</section>
+
+<!-- ═════════ SEASON hscroll ═════════ -->
+<section class="hscroll" id="season" aria-label="A season with AgrosIQ">
+  <div class="hscroll__sticky">
+    <div class="wrap hs-head">
+      <div style="display:flex;flex-direction:column;gap:18px;align-items:flex-start"><span class="eyebrow">A season with AgrosIQ</span><h2 class="t-h2 silver">With you, every week of the year</h2></div>
+      <span class="t-mono">06 stages</span>
+    </div>
+    <div class="hscroll__track" id="season-track"></div>
+  </div>
+</section>
+
+<!-- ═════════ OUTCOMES ═════════ -->
+<section class="sec sec--tight" style="padding-top:0">
+  <div class="wrap">
+    <div class="outcomes">
+      <article class="outcome" data-r>
+        <div class="ic-tile"><i class="ic" data-ic="alert"></i></div>
+        <h3>Earlier warnings</h3>
+        <p>Stress spotted while it's still small, weeks before it's visible from the road.</p>
+      </article>
+      <article class="outcome" data-r style="--d:1">
+        <div class="ic-tile"><i class="ic" data-ic="map"></i></div>
+        <h3>Fewer wasted trips</h3>
+        <p>Walk straight to the spot that needs you, not the whole farm. Get home for lunch.</p>
+      </article>
+      <article class="outcome" data-r style="--d:2">
+        <div class="ic-tile"><i class="ic" data-ic="layers"></i></div>
+        <h3>Inputs where they pay</h3>
+        <p>See strong and weak zones, so seed, fertiliser and water land where they earn it back.</p>
+      </article>
+      <article class="outcome" data-r style="--d:3">
+        <div class="ic-tile"><i class="ic" data-ic="file"></i></div>
+        <h3>Proof for the bank</h3>
+        <p>A decade of seasons for every field, ready the day your financier asks for it.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ FAQ ═════════ -->
+<section class="sec" style="padding-top:0">
+  <div class="wrap wrap--narrow">
+    <div class="sec-head"><h2 class="t-h2" data-split><span class="silver">Questions from the people who'll use it</span></h2></div>
+    <div class="faq" data-r>
+      <details open><summary>I'm a single grower with a few paddocks. Is AgrosIQ for me?</summary><div>Yes. You can watch your first 40 hectares free, forever, with every feature turned on. As your operation grows, upgrade only when you're ready — no contracts, cancel any time.</div></details>
+      <details><summary>I'm an agronomist with lots of clients. Can I keep my own branding?</summary><div>Yes. Farm and Plan plans let you invite your growers, run reports in your own name and share a single map with everyone you advise. You'll see your clients ranked by what needs you today, every morning.</div></details>
+      <details><summary>I run a large operation with multiple managers. Who can see what?</summary><div>You decide. Invite your team and set who can view which fields, who gets alerts, who can edit records and who only watches. Roles match how your operation actually runs.</div></details>
+      <details><summary>We're an agribusiness with a grower program. Can we use it at scale?</summary><div>Yes. AgrosIQ Enterprise rolls up thousands of paddocks into one sourcing view, with field-level outlook refreshed every pass and grower programs scored against ten seasons of history. Talk to us to set it up.</div></details>
+      <details><summary>How is my data handled?</summary><div>Your fields and records belong to you. We never sell your data, and you can export or delete it at any time. It's encrypted in transit and at rest, private by default, and visible only to the team you choose.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ CTA ═════════ -->
+<section class="sec" style="padding-top:0">
+  <div class="wrap">
+    <div class="cta-band" data-r>
+      <div class="aerial" data-aerial="health" data-seed="7"></div>
+      <div class="cta-band__in">
+        <span class="eyebrow">Your next season starts now</span>
+        <h2 class="t-h2" data-split><span class="silver">Whatever you grow,</span><br><span class="hl">AgrosIQ grows with you</span></h2>
+        <p class="t-lede">Try it free on your first 40 hectares. Ten years of history, ready in minutes. No hardware, no contracts.</p>
+        <div class="btns" style="justify-content:center"><a class="btn btn--primary btn--lg" href="start.html">Start free <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn btn--glass btn--lg" href="start.html#demo">Book a demo</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<footer id="foot"></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  'use strict';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ── grower pixel grid with one amber pin ── */
+  const veg = (v) => {
+    v = Math.max(0, Math.min(1, v));
+    const s = [[0, [59, 43, 33]], [.35, [92, 77, 43]], [.55, [13, 92, 53]], [.78, [28, 148, 80]], [1, [179, 224, 71]]];
+    for (let i = 1; i < s.length; i++) if (v <= s[i][0]){
+      const t = (v - s[i - 1][0]) / (s[i][0] - s[i - 1][0]);
+      return 'rgb(' + s[i - 1][1].map((x, k) => Math.round(x + (s[i][1][k] - x) * t)).join(',') + ')';
+    }
+    return 'rgb(179,224,71)';
+  };
+  const gx = document.getElementById('map-pix');
+  if (gx){
+    const W = 22, H = 13, warnX = 14, warnY = 6;
+    let h = '', k = 0;
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++){
+      const d = Math.hypot(x - warnX, y - warnY);
+      const v = .62 + .22 * Math.sin(x * .45 + 2.1) * Math.cos(y * .5 - 1.7)
+              + .12 * Math.sin((x + y) * .9 + 1.3)
+              - (d < 2.6 ? .5 * (1 - d / 2.6) : 0);
+      h += '<i style="--c:' + veg(v) + ';--k:' + (k++) + '"></i>';
+    }
+    gx.innerHTML = h;
+    gx.style.gridTemplateRows = 'repeat(' + H + ',1fr)';
+  }
+
+  /* ── agronomist client list loop ── */
+  const FARMS = [
+    ['Ridge Paddock', 'North Farm',    'NE corner · 1.1 ha · −24%', 'NEW'],
+    ['Creek Flat',    'Hawkesbury Ag', 'Low strip · 0.6 ha · −15%', '2D'],
+    ['Top Pivot',     'Glenrowan Est', 'Back on track',              '5D'],
+    ['Block 4',       'North Farm',    'Healthy',                    '—'],
+    ['South Forty',   'Glenrowan Est', 'Healthy',                    '—'],
+  ];
+  const rows = document.getElementById('cli-rows');
+  const cnt = document.getElementById('cli-cnt');
+  if (rows){
+    rows.innerHTML = FARMS.map((f, i) =>
+      '<div class="vrow' + (i === 0 ? ' on' : '') + '" data-k="' + i + '">' +
+      '<div><b class="vrow__b">' + f[0] + '</b><div class="vrow__s">' + f[1] + ' · ' + f[2] + '</div></div>' +
+      '<span class="chip ' + (i === 0 ? 'chip--warn' : 'chip--ok') + ' chip--plain">' + (i === 0 ? 'Walk' : i < 3 ? 'On track' : 'Healthy') + '</span>' +
+      '<em class="vrow__ha" style="font-style:normal">' + f[3] + '</em></div>'
+    ).join('');
+    const trs = [...rows.children];
+    let k = 0;
+    setInterval(() => {
+      if (reduce) return;
+      k = (k + 1) % trs.length;
+      trs.forEach((r, i) => r.classList.toggle('on', i === k));
+    }, 1800);
+  }
+
+  /* ── managers KPI panel bars (10 weeks) ── */
+  const bars = [54, 62, 58, 71, 66, 74, 69, 81, 84, 88];
+  const barsEl = document.getElementById('kpi-bars');
+  if (barsEl){
+    barsEl.innerHTML = bars.map((b, i) =>
+      '<i style="--h:' + b + ';--k:' + i + '"' + (i === bars.length - 1 ? ' class="cur"' : '') + '></i>'
+    ).join('');
+  }
+  // add .in when KPI panel becomes visible so bars animate
+  const kpiRoot = document.getElementById('kpi-root');
+  if (kpiRoot){
+    new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); } }), { threshold: .25 }).observe(kpiRoot);
+  }
+
+  /* ── enterprise dotmap ── */
+  const dots = document.getElementById('ent-dots');
+  if (dots){
+    const greens = ['#A9D646', '#1B8A4C', '#0E5A34', '#c7ec72', '#1c9450'];
+    let h = '';
+    for (let i = 0; i < 32; i++){
+      h += '<i style="--c:' + greens[(i * 3 + 1) % greens.length] + ';opacity:' + (.35 + (i % 5) * .13) + '"></i>';
+    }
+    dots.innerHTML = h;
+  }
+
+  /* ── season hscroll cards (6 stages) ── */
+  const STAGES = [
+    ['Before planting', 'Pre-season prep', 'See how the last ten seasons went, where the weak blocks are, and plan this year accordingly. Soil, slope and weather — ten years of memory, ready before you plant.'],
+    ['Emergence', 'Counting the green', 'Watch every field come up at once. Spot a thin stand while you can still replant it. Compare this year against emergence on the same field last year and the ten before that.'],
+    ['Canopy', 'Where the leaves are thick', 'See the canopy fill in. Catch the paddocks that are lagging, the zones that never thicken, the headlands that need a second look. Plan your first foliar with evidence, not instinct.'],
+    ['Flowering', 'The window that matters most', 'Watch flowering sweep across the farm. Spot a stressed block while you can still irrigate, feed or save it. Get a forecast of which paddocks are most at risk, ranked by what needs you today.'],
+    ['Grain fill', 'Protect the weight', 'Watch grain fill progress, paddock by paddock. A dry week or a hot blast shows up the moment it lands. Move water and inputs to the fields that will pay you back at harvest.'],
+    ['Harvest and review', 'Roll the season up', 'Bring every paddock home with a full season of maps and dates. Compare this year to the last ten. Hand the banker a record, and plan a better one for the year ahead.'],
+  ];
+  const track = document.getElementById('season-track');
+  if (track){
+    track.innerHTML = STAGES.map((s, i) =>
+      '<article class="card season-card" data-k="' + i + '">' +
+      '<div class="season-card__vis">' +
+      '<span class="season-card__stage">STAGE 0' + (i + 1) + '<b>' + s[0] + '</b></span>' +
+      '<div class="plant">' +
+          '<div class="stem" style="--h:' + (10 + i * 8) + ';--H:' + (60 + i * 8) + ';--k:' + i + '"></div>' +
+          [...Array(Math.max(0, i))].map((_, n) => {
+              const ly = 18 + n * 22, lh = n % 2 ? 'r' : '';
+              const top = ly + 'px';
+              const dir = lh === 'r' ? 'rotate(35deg) translate(8px, -2px)' : 'rotate(-35deg) translate(-8px, -2px)';
+              return '<div class="leaf ' + lh + '" style="top:' + top + ';transform:' + dir + ';--k:' + (n + 1) + '"></div>';
+            }).join('') +
+        '</div>' +
+        '<div class="ground"></div>' +
+      '</div>' +
+      '<div class="season-card__body"><span class="t-mono">' + s[1] + '</span><h3 style="margin-top:8px">' + s[0] + '</h3><p>' + s[2] + '</p></div>' +
+      '</article>'
+    ).join('');
+    // reveal each card when visible
+    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); } }), { threshold: .25 });
+    track.querySelectorAll('.season-card').forEach(c => io.observe(c));
+  }
+
+  /* ── smooth-scroll pills to anchors (uses Lenis if available) ── */
+  document.querySelectorAll('.pill[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const id = a.getAttribute('href').slice(1);
+      const tgt = document.getElementById(id);
+      if (!tgt) return;
+      e.preventDefault();
+      const top = tgt.getBoundingClientRect().top + scrollY - 90;
+      if (window.AGQ && window.AGQ.lenis) window.AGQ.lenis.scrollTo(top, { duration: 1.4 });
+      else window.scrollTo({ top, behavior: 'smooth' });
+    });
+  });
+})();
+</script>
+</body>
+</html>

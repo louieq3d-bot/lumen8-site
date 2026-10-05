@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pricing · AgrosIQ</title>
+<meta name="description" content="Start free on your first 40 hectares. Simple plans for every size of farm, from family operations to agribusiness.">
+<link rel="icon" type="image/svg+xml" href="assets/brand/agrosiq-mark-dark.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/brand/png/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/brand/png/apple-touch-icon-180.png">
+<meta name="theme-color" content="#000000">
+<meta property="og:url" content="https://lumen8.ai/agrosiq/pricing.html">
+<meta property="og:title" content="Pricing · AgrosIQ">
+<meta property="og:image" content="https://lumen8.ai/agrosiq/assets/brand/png/social-card-1200x630.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+  .ptop{position:relative; padding:170px 0 40px; overflow:hidden}
+  .ptop > .aerial{position:absolute; inset:0 0 auto; height:760px; opacity:.55; -webkit-mask:linear-gradient(180deg,#000 10%,transparent 92%); mask:linear-gradient(180deg,#000 10%,transparent 92%)}
+  .ptop .veil{background:radial-gradient(70% 60% at 50% 30%, rgba(3,4,5,.55), rgba(3,4,5,.9) 75%)}
+  .ptop .sec-head{position:relative; z-index:2; margin-bottom:44px}
+  .plans-wrap{position:relative; z-index:2}
+  .plan__save{font:600 11px/1 var(--mono); color:var(--sprout); letter-spacing:.04em; opacity:0; transform:translateY(-4px); transition:all .4s var(--ease)}
+  .annual .plan__save{opacity:1; transform:none}
+  .price__n{display:inline-block; min-width:2ch}
+  .price__n.tick{animation:tick .5s var(--ease)}
+  @keyframes tick{0%{transform:translateY(0); filter:blur(0)} 40%{transform:translateY(-6px); filter:blur(3px); opacity:.4} 100%{transform:none; filter:none}}
+  .plan__ha{display:flex; align-items:center; gap:8px; padding:10px 12px; border-radius:12px; background:var(--surface-2); font-size:13.5px; color:var(--text)}
+  .plan__ha .ic{width:16px; height:16px; color:var(--sprout)}
+  .plan__div{height:1px; background:var(--line)}
+  .plan__inc{font:500 11.5px/1 var(--mono); letter-spacing:.06em; text-transform:uppercase; color:var(--text-3)}
+
+  /* calculator */
+  .calc{display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr); gap:0; border-radius:28px; overflow:hidden; box-shadow:inset 0 0 0 1px var(--line-2); background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.01))}
+  .calc__l{padding:clamp(28px,4vw,52px); display:flex; flex-direction:column; gap:26px}
+  .calc__r{position:relative; padding:clamp(28px,4vw,52px); border-left:1px solid var(--line); display:flex; flex-direction:column; justify-content:center; gap:16px; background:radial-gradient(90% 80% at 80% 0%, rgba(169,214,70,.10), transparent 60%)}
+  @media (max-width:860px){ .calc{grid-template-columns:minmax(0,1fr)} .calc__r{border-left:0; border-top:1px solid var(--line)} }
+  .ha{font-size:clamp(54px,7vw,96px); letter-spacing:-.06em; line-height:1; font-weight:500; font-variant-numeric:tabular-nums}
+  .ha small{font-size:.32em; color:var(--text-2); letter-spacing:-.02em; margin-left:8px}
+  .slider{position:relative; height:44px}
+  .slider input{position:absolute; inset:0; width:100%; margin:0; opacity:0; cursor:pointer; z-index:3}
+  .slider__track{position:absolute; left:0; right:0; top:50%; height:6px; margin-top:-3px; border-radius:3px; background:var(--surface-2)}
+  .slider__fill{position:absolute; left:0; top:50%; height:6px; margin-top:-3px; border-radius:3px; background:linear-gradient(90deg,var(--deep),var(--sprout)); box-shadow:0 0 20px var(--sprout-glow)}
+  .slider__knob{position:absolute; top:50%; width:28px; height:28px; margin:-14px 0 0 -14px; border-radius:50%; background:#fff; box-shadow:0 0 0 6px rgba(169,214,70,.25), 0 6px 20px rgba(0,0,0,.5); transition:box-shadow .3s}
+  .slider:hover .slider__knob{box-shadow:0 0 0 10px rgba(169,214,70,.22), 0 6px 20px rgba(0,0,0,.5)}
+  .ticks{display:flex; justify-content:space-between; font:500 11px/1 var(--mono); color:var(--text-3)}
+  .farmpix{display:grid; grid-template-columns:repeat(40,minmax(0,1fr)); gap:2px}
+  .farmpix i{aspect-ratio:1; border-radius:1.5px; background:var(--surface-2); transition:background .35s}
+  .farmpix i.on{background:var(--c)}
+  .rec{display:flex; flex-direction:column; gap:6px}
+  .rec__plan{font-size:clamp(34px,4vw,52px); letter-spacing:-.05em; font-weight:500; line-height:1}
+  .rec__price{font-size:20px; letter-spacing:-.02em}
+  .rec__per{display:inline-flex; align-items:center; gap:10px; margin-top:6px; padding:12px 16px; border-radius:14px; background:rgba(169,214,70,.08); box-shadow:inset 0 0 0 1px rgba(169,214,70,.22); color:var(--text); font-size:15px}
+  .rec__per b{color:var(--sprout); font-weight:600; font-size:20px; letter-spacing:-.02em}
+
+  /* enterprise */
+  .ent{position:relative; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(30px,5vw,80px); align-items:center; padding:clamp(32px,5vw,64px); border-radius:28px; overflow:hidden; box-shadow:inset 0 0 0 1px var(--line-2); background:#060809}
+  .ent > .aerial{position:absolute; inset:0; opacity:.5}
+  .ent > *:not(.aerial){position:relative; z-index:2}
+  .ent::before{content:""; position:absolute; inset:0; z-index:1; background:linear-gradient(90deg,rgba(3,4,5,.96) 25%,rgba(3,4,5,.6) 70%,rgba(3,4,5,.3))}
+  .ent ul{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px 22px}
+  .ent li{display:flex; gap:10px; align-items:flex-start; color:var(--text-2); font-size:15px} .ent li .ic{color:var(--sprout); width:18px; height:18px; margin-top:2px}
+  @media (max-width:860px){ .ent{grid-template-columns:minmax(0,1fr)} .ent ul{grid-template-columns:minmax(0,1fr)} }
+
+  /* pays for itself */
+  .pays .card__vis{height:180px}
+  .coinstack{position:absolute; left:50%; bottom:26px; display:flex; gap:10px; align-items:flex-end; transform:translateX(-50%)}
+  .coinstack i{width:34px; border-radius:6px 6px 3px 3px; background:linear-gradient(180deg,var(--sprout),var(--deep)); height:0; transition:height 1.2s var(--ease); transition-delay:calc(var(--k) * 120ms)}
+  .in .coinstack i{height:var(--h)}
+  .clock{position:absolute; left:50%; top:50%; width:110px; height:110px; margin:-55px; border-radius:50%; box-shadow:inset 0 0 0 1.5px var(--line-3)}
+  .clock::before,.clock::after{content:""; position:absolute; left:50%; bottom:50%; width:2px; margin-left:-1px; border-radius:2px; transform-origin:50% 100%; background:var(--sprout)}
+  .clock::before{height:38px; animation:rot 6s linear infinite} .clock::after{height:26px; background:var(--text); animation:rot 36s linear infinite}
+  @keyframes rot{to{transform:rotate(1turn)}}
+  .clock b{position:absolute; inset:-14px; border-radius:50%; background:conic-gradient(var(--sprout-wash) 0 70%, transparent 70%)}
+  .target{position:absolute; left:50%; top:50%; width:130px; height:130px; margin:-65px; border-radius:50%; background:repeating-radial-gradient(circle,rgba(169,214,70,.35) 0 2px,transparent 2px 18px)}
+  .target::after{content:""; position:absolute; left:50%; top:50%; width:12px; height:12px; margin:-6px; border-radius:3px; background:var(--harvest); box-shadow:0 0 20px var(--harvest)}
+</style>
+</head>
+<body data-page="pricing">
+<header id="nav"></header>
+<main>
+
+<section class="ptop">
+  <div class="aerial" data-aerial="health" data-seed="5"></div>
+  <div class="veil"></div>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" data-r>Pricing</span>
+      <h1 class="t-hero" data-split style="font-size:clamp(44px,7vw,104px)"><span class="silver">Simple pricing.</span><br><span class="hl">Serious returns.</span></h1>
+      <p class="t-lede" data-r style="--d:4">Start free on your first 40 hectares. Upgrade when AgrosIQ has already paid for itself. No contracts, cancel any time.</p>
+      <div class="billing" data-r style="--d:5" role="group" aria-label="Billing period">
+        <span class="billing__pill" id="pill"></span>
+        <button type="button" aria-pressed="true" data-bill="m">Monthly</button>
+        <button type="button" aria-pressed="false" data-bill="y">Yearly <span class="save">−20%</span></button>
+      </div>
+    </div>
+    <div class="plans-wrap">
+      <div class="plans" id="plans"></div>
+      <p class="center dim" style="margin-top:22px; font-size:14px" data-r>Prices in USD, excluding tax. Hectare limits are per account, across all your farms.</p>
+    </div>
+  </div>
+</section>
+
+<!-- calculator -->
+<section class="sec sec--tight">
+  <div class="wrap">
+    <div class="calc" data-r>
+      <div class="calc__l">
+        <span class="t-mono">Find your plan</span>
+        <div><div class="ha"><span id="haN">650</span><small>hectares</small></div></div>
+        <div class="slider" id="slider">
+          <div class="slider__track"></div><div class="slider__fill" id="sFill"></div><div class="slider__knob" id="sKnob"></div>
+          <input type="range" id="haIn" min="0" max="1000" value="560" aria-label="Hectares you farm">
+        </div>
+        <div class="ticks"><span>10 ha</span><span>100</span><span>1,000</span><span>10,000+</span></div>
+        <div class="farmpix" id="farmpix" aria-hidden="true"></div>
+      </div>
+      <div class="calc__r">
+        <span class="t-mono">Your best fit</span>
+        <div class="rec"><div class="rec__plan silver" id="recPlan">Farm</div><div class="rec__price muted" id="recPrice">$99 per month</div></div>
+        <div class="rec__per" id="recPer"><b id="recHa">$1.83</b> per hectare, per year</div>
+        <p class="muted" style="margin:6px 0 0; font-size:15px" id="recWhy">Every field watched, every pass, with the Field Analyst on call.</p>
+        <div class="btns" style="margin-top:8px"><a class="btn btn--primary" href="start.html" id="recCta">Start with Farm <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- pays for itself -->
+<section class="sec pays">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" data-r>Why it pays</span>
+      <h2 class="t-h2" data-split><span class="silver">Built to pay for itself, fast</span></h2>
+      <p class="t-lede" data-r style="--d:3">One problem caught early. One wasted trip skipped. One input put where it pays. That's usually all it takes.</p>
+    </div>
+    <div class="grid-3">
+      <article class="card" data-r><div class="card__vis"><div class="coinstack"><i style="--h:40px;--k:0"></i><i style="--h:62px;--k:1"></i><i style="--h:88px;--k:2"></i><i style="--h:120px;--k:3"></i></div></div>
+        <div class="card__body"><h3 class="t-h4">Protect the yield you planted</h3><p>Stress spotted weeks earlier is stress you can still do something about, before it costs you at the weighbridge.</p></div></article>
+      <article class="card" data-r style="--d:1"><div class="card__vis"><div class="clock"><b></b></div></div>
+        <div class="card__body"><h3 class="t-h4">Get your days back</h3><p>Stop driving every paddock to find the one that needs you. Go straight there, then get on with the rest of the farm.</p></div></article>
+      <article class="card" data-r style="--d:2"><div class="card__vis"><div class="target"></div></div>
+        <div class="card__body"><h3 class="t-h4">Spend where it pays</h3><p>Know your strong and weak zones, so seed, fertiliser and water go where they earn their keep.</p></div></article>
+    </div>
+  </div>
+</section>
+
+<!-- compare -->
+<section class="sec" style="padding-top:0" id="compare">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" data-r>Compare plans</span>
+      <h2 class="t-h2" data-split><span class="silver">Everything, side by side</span></h2>
+    </div>
+    <div class="cmp-wrap" data-r>
+      <table class="cmp" id="cmp"></table>
+    </div>
+  </div>
+</section>
+
+<!-- enterprise -->
+<section class="sec" style="padding-top:0">
+  <div class="wrap">
+    <div class="ent" data-r>
+      <div class="aerial" data-aerial="map" data-seed="9"></div>
+      <div style="display:flex;flex-direction:column;gap:20px;align-items:flex-start">
+        <span class="eyebrow">AgrosIQ Enterprise</span>
+        <h2 class="t-h2 silver" style="font-size:clamp(34px,4.2vw,60px)">Field intelligence at portfolio scale</h2>
+        <p class="t-lede">For agribusiness, food companies, lenders and insurers watching thousands of fields across regions and countries.</p>
+        <div class="btns"><a class="btn btn--primary" href="start.html#demo">Talk to sales <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn btn--glass" href="solutions.html#enterprise">Enterprise solutions</a></div>
+      </div>
+      <ul>
+        <li><i class="ic" data-ic="globe"></i>Unlimited fields across regions and countries</li>
+        <li><i class="ic" data-ic="layers"></i>Portfolio dashboards and grower programs</li>
+        <li><i class="ic" data-ic="lock"></i>Single sign-on and advanced permissions</li>
+        <li><i class="ic" data-ic="zap"></i>API and data feeds into your systems</li>
+        <li><i class="ic" data-ic="shield"></i>Uptime commitment and security review</li>
+        <li><i class="ic" data-ic="users"></i>A dedicated success team</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sec" style="padding-top:0" id="faq">
+  <div class="wrap wrap--narrow">
+    <div class="sec-head"><h2 class="t-h2" data-split><span class="silver">Pricing questions</span></h2></div>
+    <div class="faq" data-r>
+      <details open><summary>Is the Free plan really free?</summary><div>Yes. Up to 40 hectares, free forever, no card needed. It's the full health map on every pass, so you can see AgrosIQ working on your own fields before you spend a cent.</div></details>
+      <details><summary>Can I try a paid plan first?</summary><div>Every paid plan starts with a 14-day free trial. Pick a plan, add your fields and see everything it can do. If it isn't for you, you drop back to Free automatically.</div></details>
+      <details><summary>How are hectares counted?</summary><div>We count the area of the fields you add, across all your farms. Roads, yards and bush you don't draw aren't counted. You can add or remove fields at any time.</div></details>
+      <details><summary>Can I change plans later?</summary><div>Any time. Upgrades apply straight away; downgrades take effect at the end of your billing period. Your history always stays with your fields.</div></details>
+      <details><summary>Is there a contract?</summary><div>No lock-in. Pay monthly and cancel whenever you like, or pay yearly and save 20%.</div></details>
+      <details><summary>What happens to my data if I cancel?</summary><div>It's yours. Export everything with one click, and if you ask us to delete it, we delete it.</div></details>
+    </div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:0">
+  <div class="wrap">
+    <div class="cta-band" data-r>
+      <div class="aerial" data-aerial="truth" data-seed="7"></div>
+      <div class="cta-band__in">
+        <span class="eyebrow">Free for your first 40 hectares</span>
+        <h2 class="t-h2" data-split><span class="silver">Start watching your fields today</span></h2>
+        <p class="t-lede">Ten years of history and your first health map in minutes. No card, no hardware, no contract.</p>
+        <div class="btns" style="justify-content:center"><a class="btn btn--primary btn--lg" href="start.html">Start free <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn btn--glass btn--lg" href="start.html#demo">Book a demo</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<footer id="foot"></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  'use strict';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ARROW = '<svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  // one place for every price and limit on this page
+  const PLANS = [
+    { id: 'free', name: 'Free', m: 0, ha: 40, cap: 'Up to 40 ha', for: 'See AgrosIQ working on your own fields.', cta: 'Start free', style: 'glass',
+      inc: 'Includes', items: ['One farm, up to 40 hectares', 'Crop health map after every pass', 'This season\'s history', 'Weekly email summary', 'Web and mobile app'] },
+    { id: 'grower', name: 'Grower', m: 20, ha: 400, cap: 'Up to 400 ha', for: 'For family farms that want every field watched.', cta: 'Start 14-day trial', style: 'glass',
+      inc: 'Everything in Free, plus', items: ['Up to 400 hectares', 'Instant alerts every pass', 'Cloud-proof monitoring', 'Ten years of history per field', 'Walk-here pins and the Scout app', 'Field reports to share'] },
+    { id: 'farm', name: 'Farm', m: 99, ha: 2000, cap: 'Up to 2,000 ha', for: 'For commercial operations that run on data.', cta: 'Start 14-day trial', style: 'primary', pop: true,
+      inc: 'Everything in Grower, plus', items: ['Up to 2,000 hectares', 'Field Analyst: ask anything', 'Strong and weak zones', 'Weather and water stress', 'Season rankings for every field', '5 team seats', 'CSV, KML and shapefile export'] },
+    { id: 'pro', name: 'Pro', m: 249, ha: Infinity, cap: 'Unlimited hectares', for: 'For large operations, agronomists and advisers.', cta: 'Start 14-day trial', style: 'glass',
+      inc: 'Everything in Farm, plus', items: ['Unlimited hectares and farms', 'Unlimited seats and roles', 'Client workspaces for advisers', 'Custom alert rules', 'Branded reports', 'Priority support and onboarding', 'API access'] },
+  ];
+  const yr = (m) => Math.round(m * .8);
+  let annual = false;
+  const root = document.getElementById('plans');
+  root.innerHTML = PLANS.map((p, i) =>
+    '<article class="plan' + (p.pop ? ' plan--pop' : '') + '" data-plan="' + p.id + '" data-r style="--d:' + i + '">' +
+      '<div class="plan__name">' + p.name + (p.pop ? '<span class="badge">Most popular</span>' : '') + '</div>' +
+      '<p class="plan__for">' + p.for + '</p>' +
+      '<div><div class="price"><span class="price__cur">$</span><span class="price__n" data-m="' + p.m + '">' + p.m + '</span><span class="price__per">' + (p.m ? 'per month' : 'forever') + '</span></div></div>' +
+      '<div class="price__note" data-note="' + p.m + '">' + (p.m ? 'Billed monthly' : 'No card needed') + '</div>' +
+      '<div class="plan__ha"><i class="ic" data-ic="map"></i>' + p.cap + '</div>' +
+      '<a class="btn btn--' + p.style + ' btn--block" href="start.html">' + p.cta + ' ' + ARROW + '</a>' +
+      '<div class="plan__div"></div><div class="plan__inc">' + p.inc + '</div>' +
+      '<ul>' + p.items.map(t => '<li>' + t + '</li>').join('') + '</ul>' +
+    '</article>').join('');
+  AGQ.fillIcons(root);
+  root.querySelectorAll('[data-r]').forEach(el => setTimeout(() => el.classList.add('in'), 200 + (+el.style.getPropertyValue('--d')) * 90));
+
+  /* billing toggle */
+  const pill = document.getElementById('pill'), btns = document.querySelectorAll('[data-bill]');
+  const placePill = () => { const on = [...btns].find(b => b.getAttribute('aria-pressed') === 'true'); pill.style.width = on.offsetWidth + 'px'; pill.style.transform = 'translateX(' + (on.offsetLeft - 4) + 'px)'; };
+  function roll(el, to){
+    const from = +el.textContent; if (from === to) return;
+    el.classList.remove('tick'); void el.offsetWidth; el.classList.add('tick');
+    const t0 = performance.now(), D = reduce ? 1 : 520;
+    const step = (now) => { const k = Math.min(1, (now - t0) / D); el.textContent = Math.round(from + (to - from) * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  }
+  function setBill(y){
+    annual = y; document.body.classList.toggle('annual', y);
+    btns.forEach(b => b.setAttribute('aria-pressed', String((b.dataset.bill === 'y') === y)));
+    placePill();
+    document.querySelectorAll('.price__n').forEach(el => roll(el, y ? yr(+el.dataset.m) : +el.dataset.m));
+    document.querySelectorAll('[data-note]').forEach(el => { const m = +el.dataset.note; el.textContent = !m ? 'No card needed' : y ? '$' + (yr(m) * 12).toLocaleString('en-US') + ' billed yearly' : 'Billed monthly'; });
+    updateCalc();
+  }
+  btns.forEach(b => b.addEventListener('click', () => setBill(b.dataset.bill === 'y')));
+  addEventListener('resize', placePill); document.fonts && document.fonts.ready.then(placePill); placePill();
+
+  /* calculator: log slider 10 → 10,000 ha */
+  const inp = document.getElementById('haIn'), fill = document.getElementById('sFill'), knob = document.getElementById('sKnob');
+  const haN = document.getElementById('haN'), fp = document.getElementById('farmpix');
+  const toHa = (v) => { const h = Math.pow(10, 1 + 3 * v / 1000); const r = h < 100 ? 5 : h < 1000 ? 10 : 50; return Math.max(10, Math.round(h / r) * r); };
+  const veg = (v) => { const s = [[0, [59, 43, 33]], [.35, [92, 77, 43]], [.55, [13, 92, 53]], [.78, [28, 148, 80]], [1, [179, 224, 71]]];
+    for (let i = 1; i < s.length; i++) if (v <= s[i][0]){ const t = (v - s[i - 1][0]) / (s[i][0] - s[i - 1][0]); return 'rgb(' + s[i - 1][1].map((x, k) => Math.round(x + (s[i][1][k] - x) * t)).join(',') + ')'; } return 'rgb(179,224,71)'; };
+  const N = innerWidth < 600 ? 320 : 480;
+  fp.innerHTML = Array.from({ length: N }, (_, i) => { const x = i % 40, y = (i / 40) | 0, v = .55 + .3 * Math.sin(x * .35 + 1) * Math.cos(y * .6) + .12 * Math.sin((x + y) * .8); return '<i style="--c:' + veg(Math.max(.1, Math.min(1, v))) + '"></i>'; }).join('');
+  const cells = fp.children;
+  const recPlan = document.getElementById('recPlan'), recPrice = document.getElementById('recPrice'), recHa = document.getElementById('recHa'), recWhy = document.getElementById('recWhy'), recCta = document.getElementById('recCta'), recPer = document.getElementById('recPer');
+  const WHY = { free: 'Your whole farm fits in the Free plan. Every field, every pass, free forever.', grower: 'Every field watched, with instant alerts and ten years of history.', farm: 'Every field watched, every pass, with the Field Analyst on call.', pro: 'Unlimited hectares, unlimited team, and priority support.' };
+  function updateCalc(){
+    const ha = toHa(+inp.value), k = +inp.value / 1000;
+    haN.textContent = ha >= 10000 ? '10,000+' : ha.toLocaleString('en-US');
+    fill.style.width = (k * 100) + '%'; knob.style.left = (k * 100) + '%';
+    const lit = Math.round(N * Math.min(1, Math.log10(ha) / 4));
+    for (let i = 0; i < N; i++) cells[i].classList.toggle('on', i < lit);
+    const plan = PLANS.find(p => ha <= p.ha) || PLANS[3];
+    const m = annual ? yr(plan.m) : plan.m;
+    recPlan.textContent = plan.name;
+    recPrice.textContent = plan.m ? '$' + m + ' per month' + (annual ? ', billed yearly' : '') : 'Free forever';
+    recPer.style.display = plan.m ? '' : 'none';
+    if (plan.m) recHa.textContent = '$' + (m * 12 / ha).toFixed(ha > 2000 ? 3 : 2);
+    recWhy.textContent = WHY[plan.id];
+    recCta.innerHTML = (plan.m ? 'Start with ' + plan.name : 'Start free') + ' ' + ARROW;
+    document.querySelectorAll('.plan').forEach(el => el.classList.toggle('is-match', el.dataset.plan === plan.id));
+  }
+  inp.addEventListener('input', updateCalc); updateCalc();
+
+  /* comparison table */
+  const Y = '<span class="y">●</span>', X = '<span class="n">—</span>';
+  const ROWS = [
+    ['Monitoring'],
+    ['Hectares', '40', '400', '2,000', 'Unlimited'],
+    ['Crop health map every pass', Y, Y, Y, Y],
+    ['Cloud-proof monitoring', X, Y, Y, Y],
+    ['Instant alerts', 'Weekly', Y, Y, Y],
+    ['Walk-here pins and Scout app', X, Y, Y, Y],
+    ['Custom alert rules', X, X, X, Y],
+    ['History and insight'],
+    ['Field history', 'This season', '10 years', '10 years', '10 years'],
+    ['Season rankings', X, X, Y, Y],
+    ['Strong and weak zones', X, X, Y, Y],
+    ['Weather and water stress', X, X, Y, Y],
+    ['Field Analyst'],
+    ['Ask in plain English', X, X, Y, Y],
+    ['Answers with maps and dates', X, X, Y, Y],
+    ['Team and sharing'],
+    ['Team seats', '1', '2', '5', 'Unlimited'],
+    ['Field reports (PDF)', X, Y, Y, 'Branded'],
+    ['CSV, KML and shapefile export', X, X, Y, Y],
+    ['Client workspaces', X, X, X, Y],
+    ['API access', X, X, X, Y],
+    ['Support'],
+    ['Help centre and email', Y, Y, Y, Y],
+    ['Priority support and onboarding', X, X, X, Y],
+  ];
+  const cmp = document.getElementById('cmp');
+  cmp.innerHTML = '<thead><tr><th scope="col"><span class="sr">Feature</span></th>' + PLANS.map(p => '<th scope="col">' + p.name + '</th>').join('') + '</tr></thead><tbody>' +
+    ROWS.map(r => r.length === 1 ? '<tr class="grp"><td colspan="5">' + r[0] + '</td></tr>' : '<tr><td>' + r[0] + '</td>' + r.slice(1).map(c => '<td>' + c + '</td>').join('') + '</tr>').join('') + '</tbody>';
+})();
+</script>
+</body>
+</html>

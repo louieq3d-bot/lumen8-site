@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AgrosIQ · The company behind every field</title>
+<meta name="description" content="AgrosIQ is built by farmers, engineers and scientists who believe every field deserves to be watched from space. Read our mission, meet the team, and join us.">
+<link rel="icon" type="image/svg+xml" href="assets/brand/agrosiq-mark-dark.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/brand/png/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/brand/png/apple-touch-icon-180.png">
+<meta name="theme-color" content="#000000">
+<meta property="og:url" content="https://lumen8.ai/agrosiq/company.html">
+<meta property="og:title" content="AgrosIQ · The company behind every field">
+<meta property="og:image" content="https://lumen8.ai/agrosiq/assets/brand/png/social-card-1200x630.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+  /* ── company page styles ── */
+
+  /* hero copy */
+  .phero__lede{font-size:clamp(17px,1.5vw,21px); color:var(--text-2); max-width:60ch; line-height:1.55}
+  .phero--center .phero__in{align-items:center; text-align:center}
+
+  /* manifesto */
+  .manifesto{padding-top:clamp(80px,10vw,140px)}
+  .manifesto__inner{max-width:920px; margin:0 auto; text-align:center}
+  .manifesto__p{font-size:clamp(26px,3.4vw,46px); letter-spacing:-.035em; line-height:1.18; color:var(--text-3); font-weight:400; text-wrap:balance; margin:0 auto}
+  .manifesto__p .sw{display:inline; transition:opacity .4s}
+
+  /* why-now visuals */
+  .wn-vis{position:absolute; inset:0; overflow:hidden}
+  .wn-orbits{position:absolute; inset:0; display:grid; place-items:center}
+  .wn-orbits .ring{position:absolute; border-radius:50%; box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+  .wn-orbits .sat{position:absolute; width:18px; height:18px; border-radius:50%; background:var(--sprout); box-shadow:0 0 12px var(--sprout)}
+  .wn-orbits .sat::after{content:""; position:absolute; inset:-5px; border-radius:50%; box-shadow:0 0 0 1px var(--sprout-wash)}
+  .wn-orbits .earth{position:absolute; width:120px; height:120px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #1f4d2e, #0a2614 70%); box-shadow:inset 0 0 0 1px rgba(169,214,70,.2), 0 0 60px rgba(169,214,70,.18)}
+
+  .wn-ai{position:absolute; inset:0; display:flex; align-items:center; justify-content:center}
+  .wn-ai .bub{max-width:54%; padding:10px 14px; border-radius:14px; font-size:13.5px; line-height:1.45; backdrop-filter:blur(8px)}
+  .wn-ai .bub--q{align-self:flex-end; background:rgba(255,255,255,.06); box-shadow:inset 0 0 0 1px var(--line); border-bottom-right-radius:4px; transform:translateY(-30px)}
+  .wn-ai .bub--a{align-self:flex-start; background:rgba(169,214,70,.1); box-shadow:inset 0 0 0 1px rgba(169,214,70,.25); border-bottom-left-radius:4px; transform:translateY(30px)}
+  .wn-ai .bub--a b{color:var(--sprout); font-weight:500}
+
+  .wn-farm{position:absolute; inset:0; overflow:hidden}
+  .wn-farm svg{position:absolute; inset:18px; width:calc(100% - 36px); height:calc(100% - 36px)}
+  .wn-farm .storm{animation:op 4s var(--ease) infinite alternate}
+  @keyframes op{from{opacity:.4} to{opacity:.85}}
+
+  /* values bento */
+  .val{position:relative; display:flex; flex-direction:column; gap:18px; min-height:280px; padding:30px; border-radius:var(--r); background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012)); box-shadow:inset 0 0 0 1px var(--line); overflow:hidden}
+  .val .ic-tile{width:52px; height:52px}
+  .val .ic-tile .ic{width:24px; height:24px}
+  .val h3{font-size:clamp(22px,2vw,28px); letter-spacing:-.03em; line-height:1.15}
+  .val p{color:var(--text-2); margin:0; font-size:15px; line-height:1.55}
+  .val__bg{position:absolute; inset:0; z-index:-1; pointer-events:none; opacity:.6}
+  .val__bg--lines{background-image:linear-gradient(90deg,transparent calc(50% - .5px),var(--line) 50%,transparent calc(50% + .5px)); background-size:36px 36px; -webkit-mask:radial-gradient(80% 60% at 50% 0%,#000,transparent); mask:radial-gradient(80% 60% at 50% 0%,#000,transparent)}
+  .val__bg--dots{background-image:radial-gradient(circle, var(--line-3) 1px, transparent 1.4px); background-size:18px 18px; -webkit-mask:radial-gradient(70% 60% at 50% 100%,#000,transparent); mask:radial-gradient(70% 60% at 50% 100%,#000,transparent)}
+  .val__bg--lock{background:conic-gradient(from 220deg at 80% 20%, rgba(169,214,70,.15), transparent 30%)}
+  .val__bg--spark{background:radial-gradient(circle at 50% 100%, rgba(169,214,70,.18), transparent 60%)}
+  .val__bg--grid{background-image:linear-gradient(var(--line-2) 1px,transparent 1px),linear-gradient(90deg,var(--line-2) 1px,transparent 1px); background-size:32px 32px; -webkit-mask:radial-gradient(60% 50% at 50% 50%, #000, transparent); mask:radial-gradient(60% 50% at 50% 50%, #000, transparent)}
+
+  /* timeline (no dates, principles only) */
+  .timeline{position:relative; margin:0 auto; max-width:780px; padding-left:60px}
+  .timeline::before{content:""; position:absolute; left:24px; top:8px; bottom:8px; width:1px; background:linear-gradient(180deg, transparent, var(--line-2) 12%, var(--line-2) 88%, transparent)}
+  .tl-step{position:relative; padding:36px 0; border-bottom:1px solid transparent}
+  .tl-step:last-child{border-bottom:0}
+  .tl-step::before{content:""; position:absolute; left:-44px; top:48px; width:14px; height:14px; border-radius:50%; background:var(--bg); box-shadow:inset 0 0 0 1.5px var(--sprout), 0 0 0 4px var(--bg), 0 0 0 5.5px var(--line-2)}
+  .tl-step.in::before{background:var(--sprout); box-shadow:inset 0 0 0 1.5px var(--sprout), 0 0 0 4px var(--bg), 0 0 0 5.5px rgba(169,214,70,.4), 0 0 14px var(--sprout-glow)}
+  .tl-n{display:block; font:500 11.5px/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--text-3); margin-bottom:10px}
+  .tl-h{font-size:clamp(24px,2.6vw,36px); letter-spacing:-.04em; line-height:1.1; margin:0 0 12px; color:var(--text)}
+  .tl-p{color:var(--text-2); margin:0; font-size:16px; line-height:1.6}
+  @media (max-width:680px){ .timeline{padding-left:40px} .timeline::before{left:14px} .tl-step::before{left:-32px; width:11px; height:11px} }
+
+  /* careers */
+  .perks{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin-top:38px}
+  .perk{padding:24px; border-radius:var(--r); background:var(--surface); box-shadow:inset 0 0 0 1px var(--line); transition:background .3s, transform .6s var(--ease)}
+  .perk:hover{background:var(--surface-2); transform:translateY(-3px)}
+  .perk .ic-tile{width:42px; height:42px}
+  .perk .ic-tile .ic{width:20px; height:20px}
+  .perk h4{font-size:16px; letter-spacing:-.02em; margin:16px 0 6px; font-weight:500}
+  .perk p{margin:0; font-size:14px; color:var(--text-2); line-height:1.55}
+  @media (max-width:900px){ .perks{grid-template-columns:repeat(2,minmax(0,1fr))} }
+  @media (max-width:520px){ .perks{grid-template-columns:minmax(0,1fr)} }
+
+  /* contact */
+  .contact{display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:16px; align-items:stretch}
+  .form-card{padding:34px; border-radius:24px; background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)); box-shadow:inset 0 0 0 1px var(--line-2)}
+  .form-card h3{font-size:clamp(22px,2.2vw,30px); letter-spacing:-.03em; margin:0 0 6px}
+  .form-card .sub{color:var(--text-2); margin:0 0 26px; font-size:15px}
+  .form-grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px}
+  .form-grid .full{grid-column:1/-1}
+  .form-card .btns{margin-top:22px}
+  .form-success{display:none; padding:28px; border-radius:18px; background:var(--sprout-wash); box-shadow:inset 0 0 0 1px rgba(169,214,70,.3); text-align:center}
+  .form-success.show{display:block; animation:success .6s var(--ease)}
+  .form-success b{display:block; font:500 13px/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--sprout); margin-bottom:14px}
+  .form-success h4{font-size:22px; letter-spacing:-.03em; margin:0 0 8px; font-weight:500}
+  .form-success p{margin:0; color:var(--text-2); font-size:14.5px}
+  @keyframes success{from{opacity:0; transform:translateY(8px)}}
+  .contact-side{display:flex; flex-direction:column; gap:12px}
+  .contact-card{padding:22px; border-radius:18px; background:var(--surface); box-shadow:inset 0 0 0 1px var(--line); display:flex; flex-direction:column; gap:8px; transition:background .3s}
+  .contact-card:hover{background:var(--surface-2)}
+  .contact-card .label{font:500 11.5px/1 var(--mono); letter-spacing:.07em; text-transform:uppercase; color:var(--text-3)}
+  .contact-card h4{font-size:18px; letter-spacing:-.02em; margin:0; font-weight:500}
+  .contact-card p{margin:0; font-size:14px; color:var(--text-2); line-height:1.5}
+  .contact-card a{margin-top:auto; padding-top:8px; color:var(--sprout); font-size:14px; display:inline-flex; gap:8px; align-items:center}
+  .contact-card a svg{width:14px}
+  @media (max-width:880px){ .contact{grid-template-columns:minmax(0,1fr)} .form-grid{grid-template-columns:minmax(0,1fr)} }
+</style>
+</head>
+<body data-page="company">
+<header id="nav"></header>
+<main>
+
+<!-- ═════════ HERO ═════════ -->
+<section class="phero phero--center" aria-label="Our mission">
+  <div class="aerial" data-aerial="earth" data-seed="3"></div>
+  <div class="veil veil--hero"></div>
+  <div class="wrap">
+    <div class="phero__in">
+      <span class="eyebrow" data-r>Our mission</span>
+      <h1 class="t-hero" data-split><span class="silver">Every farmer deserves to</span><br><span class="hl">know every field</span></h1>
+      <p class="phero__lede" data-r style="--d:4">We're building the eyes every farm has always deserved. From the sky, in plain English, on every field — so the people who feed the world can finally see what their land is telling them.</p>
+      <div class="btns" data-r style="--d:6; justify-content:center">
+        <a class="btn btn--primary btn--lg" href="#careers">Join us <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn--glass btn--lg" href="#contact">Talk to us</a>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-cue" aria-hidden="true"></div>
+</section>
+
+<!-- ═════════ MANIFESTO ═════════ -->
+<section class="sec manifesto">
+  <div class="wrap">
+    <div class="manifesto__inner">
+      <span class="eyebrow" data-r>The manifesto</span>
+      <h2 class="sr">The thing</h2>
+      <p class="manifesto__p" data-r data-scrub style="--d:2">A farmer's most important work happens before anyone can see it. The way a canopy thins in late spring, the way a low spot drowns out the row before the season turns, the way one corner of a field quietly falls behind. We believe every grower should see those signals the moment they happen — instantly, in plain language, on every field they farm — so good seasons become great ones and bad ones don't have to be.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ WHY NOW ═════════ -->
+<section class="sec" id="why">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" data-r>Why now</span>
+      <h2 class="t-h2" data-split><span class="silver">Three forces came together</span></h2>
+      <p class="t-lede" data-r style="--d:3">For the first time in history, we can watch every farm the way we already watch the weather. Each of these shifts made AgrosIQ possible.</p>
+    </div>
+    <div class="bento">
+      <article class="card s-4" data-r>
+        <div class="card__vis" style="overflow:hidden">
+          <div class="wn-orbits" data-r>
+            <div class="ring" style="width:300px;height:300px;opacity:.7"></div>
+            <div class="ring" style="width:220px;height:220px;opacity:.5"></div>
+            <div class="ring" style="width:140px;height:140px;opacity:.3"></div>
+            <div class="earth"></div>
+            <div class="sat" style="top:14%;left:50%;animation:orbit1 6s linear infinite"></div>
+            <div class="sat" style="top:48%;left:14%;width:14px;height:14px;background:var(--canopy);box-shadow:0 0 10px var(--canopy);animation:orbit2 9s linear infinite"></div>
+            <div class="sat" style="top:74%;left:62%;width:12px;height:12px;animation:orbit3 7.5s linear infinite"></div>
+          </div>
+        </div>
+        <div class="card__body"><h3 class="t-h4">Space got closer</h3><p>A new generation of satellites watches the planet in sharper detail, more often. What was once a rare glimpse is now a steady look at every field, every few days.</p></div>
+      </article>
+      <article class="card s-4" data-r style="--d:1">
+        <div class="card__vis" style="overflow:hidden">
+          <div class="wn-ai">
+            <div class="bub bub--q">Why is the north block behind?</div>
+            <div class="bub bub--a"><b>It's 18% below its normal.</b> A dry patch in the NE corner worth a walk today.</div>
+          </div>
+        </div>
+        <div class="card__body"><h3 class="t-h4">AI got useful</h3><p>The same models that write sentences can read a season of imagery and tell you, in three lines, what your farm is trying to say. Plain English. No jargon.</p></div>
+      </article>
+      <article class="card s-4" data-r style="--d:2">
+        <div class="card__vis" style="overflow:hidden">
+          <div class="wn-farm">
+            <svg viewBox="0 0 320 220" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <defs>
+                <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#0a1410"/><stop offset="1" stop-color="#1a2418"/></linearGradient>
+                <linearGradient id="fld" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#A9D646" stop-opacity=".55"/><stop offset="1" stop-color="#1B8A4C" stop-opacity=".75"/></linearGradient>
+                <pattern id="rows" width="6" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(-8)"><rect width="3" height="10" fill="rgba(255,255,255,.08)"/></pattern>
+              </defs>
+              <rect width="320" height="220" fill="url(#sky)"/>
+              <path d="M0 130 L80 122 L160 134 L320 124 L320 220 L0 220Z" fill="url(#fld)"/>
+              <path d="M0 130 L80 122 L160 134 L320 124 L320 220 L0 220Z" fill="url(#rows)"/>
+              <g class="storm">
+                <path d="M40 50 Q70 30 110 50 Q140 70 180 50 Q220 30 280 50 L280 90 L40 90Z" fill="#1f2a24" opacity=".7"/>
+                <circle cx="240" cy="40" r="14" fill="#cfd6d8" opacity=".5"/>
+                <circle cx="240" cy="40" r="20" fill="none" stroke="#cfd6d8" stroke-width=".6" opacity=".3"/>
+              </g>
+              <g>
+                <path d="M250 60 L255 78 L268 78 L257 90 L262 108 L250 96 L238 108 L243 90 L232 78 L245 78Z" fill="#F3A93C" opacity=".85"/>
+                <path d="M70 100 L74 110 L82 110 L76 116 L80 126 L70 120 L60 126 L64 116 L58 110 L66 110Z" fill="#F3A93C" opacity=".7"/>
+              </g>
+              <line x1="0" y1="180" x2="320" y2="180" stroke="rgba(243,169,60,.5)" stroke-dasharray="2 4"/>
+              <text x="20" y="195" fill="#F3A93C" font-family="Geist Mono,monospace" font-size="9" letter-spacing=".06em">HEATWAVE · DAY 6</text>
+            </svg>
+          </div>
+        </div>
+        <div class="card__body"><h3 class="t-h4">Farming got harder</h3><p>Margins are tighter, weather is wilder, and the cost of getting it wrong keeps rising. The farmers who win the next decade will be the ones who see it coming first.</p></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ VALUES ═════════ -->
+<section class="sec" id="values">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" data-r>What we believe</span>
+      <h2 class="t-h2" data-split><span class="silver">Five things we won't compromise on</span></h2>
+      <p class="t-lede" data-r style="--d:3">These aren't posters in the kitchen. They're how we decide what to build, what to ship and what to kill.</p>
+    </div>
+    <div class="bento">
+      <article class="val s-5" data-r>
+        <div class="val__bg val__bg--lines"></div>
+        <span class="ic-tile"><i class="ic" data-ic="wheat"></i></span>
+        <h3>Farmers first</h3>
+        <p>Every decision starts in a paddock. If it doesn't help a grower walk less, catch more or earn more, it doesn't ship. Every demo, every roadmap, every line of copy is read once with the farmer in mind.</p>
+      </article>
+      <article class="val s-7" data-r style="--d:1">
+        <div class="val__bg val__bg--grid"></div>
+        <span class="ic-tile"><i class="ic" data-ic="scan"></i></span>
+        <h3>Show the evidence</h3>
+        <p>No black boxes. Every alert is tied to the pass it came from, the pixel it sits on, and the season behind it. If we can't show our work, we don't make the claim. Trust is built one map at a time.</p>
+      </article>
+      <article class="val s-4" data-r style="--d:2">
+        <div class="val__bg val__bg--lock"></div>
+        <span class="ic-tile"><i class="ic" data-ic="lock"></i></span>
+        <h3>Your data is yours</h3>
+        <p>Private by default, encrypted in transit and at rest, never sold, exported or deleted on your word. The fields you trust us with belong to you, not to us.</p>
+      </article>
+      <article class="val s-4" data-r>
+        <div class="val__bg val__bg--spark"></div>
+        <span class="ic-tile"><i class="ic" data-ic="sparkle"></i></span>
+        <h3>Simple beats clever</h3>
+        <p>If a grower can't explain it to their neighbour over the fence, we redesign. Clever is easy; clear is hard, and hard is what we ship.</p>
+      </article>
+      <article class="val s-4" data-r style="--d:1">
+        <div class="val__bg val__bg--dots"></div>
+        <span class="ic-tile"><i class="ic" data-ic="globe"></i></span>
+        <h3>Built for every farm</h3>
+        <p>A forty-hectare plot and a forty-thousand-hectare estate use the same product, on the same terms. We don't gate features behind tiers; we make sure the small farm isn't a stripped-down version of anyone else's.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ HOW WE WORK ═════════ -->
+<section class="sec" id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" data-r>How we work</span>
+      <h2 class="t-h2" data-split><span class="silver">Four principles, every day</span></h2>
+      <p class="t-lede" data-r style="--d:3">No slogans on the wall — just the way we build, ship and listen.</p>
+    </div>
+    <div class="timeline" id="timeline">
+      <div class="tl-step" data-r>
+        <span class="tl-n">01</span>
+        <h4 class="tl-h">Start with the field</h4>
+        <p class="tl-p">Every feature begins in a paddock with a grower who's never seen it. We don't whiteboard until we've walked the rows and watched a real farmer try to use what we've sketched.</p>
+      </div>
+      <div class="tl-step" data-r style="--d:1">
+        <span class="tl-n">02</span>
+        <h4 class="tl-h">Watch every pass</h4>
+        <p class="tl-p">If a satellite reads a field, we read it. Nothing is missed on purpose. Every alert we send is one a careful farmer would have sent themselves if they had the time.</p>
+      </div>
+      <div class="tl-step" data-r style="--d:2">
+        <span class="tl-n">03</span>
+        <h4 class="tl-h">Explain everything</h4>
+        <p class="tl-p">Every answer on AgrosIQ shows its work. The maps, the dates, the season behind the call. No magic, no hand-waving, no "trust us."</p>
+      </div>
+      <div class="tl-step" data-r style="--d:3">
+        <span class="tl-n">04</span>
+        <h4 class="tl-h">Grow with our growers</h4>
+        <p class="tl-p">The growers who use AgrosIQ shape the next thing we build. They write in, we read every line. A surprising amount of our roadmap is just good letters from the field.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ CAREERS ═════════ -->
+<section class="sec" id="careers">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" data-r>Careers</span>
+      <h2 class="t-h2" data-split><span class="silver">Build the future of farming with us</span></h2>
+      <p class="t-lede" data-r style="--d:3">We're a small team with a long horizon, working on a problem we care about deeply. If you want your work to feed people, keep reading.</p>
+    </div>
+    <div class="card" data-r style="padding:clamp(28px,4vw,52px); background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)); box-shadow:inset 0 0 0 1px var(--line-2)">
+      <p style="font-size:clamp(18px,1.6vw,22px); line-height:1.55; color:var(--text); max-width:64ch; margin:0 0 8px">We're always looking for exceptional people in engineering, agronomy, design and field operations: people who like real farms as much as clean code. If you've ever wanted a job where your code shows up as a healthier crop, this is it.</p>
+      <div class="perks">
+        <div class="perk"><span class="ic-tile"><i class="ic" data-ic="globe"></i></span><h4>Remote-friendly</h4><p>Work from where you do your best thinking. We sync in person a few times a year.</p></div>
+        <div class="perk"><span class="ic-tile"><i class="ic" data-ic="leaf"></i></span><h4>Real impact</h4><p>Every line of code helps a farmer catch a problem earlier, save a crop, or sleep a little easier.</p></div>
+        <div class="perk"><span class="ic-tile"><i class="ic" data-ic="chart"></i></span><h4>Ownership</h4><p>Real responsibility from day one, a say in what we build, and work you can point to in a farmer's field.</p></div>
+        <div class="perk"><span class="ic-tile"><i class="ic" data-ic="sparkle"></i></span><h4>Learning</h4><p>Stipend for books, courses and conferences. Time set aside to dig into the things that matter to you.</p></div>
+      </div>
+      <div class="btns" style="margin-top:36px; justify-content:center">
+        <a class="btn btn--primary btn--lg" href="#contact">Tell us about you <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ CONTACT ═════════ -->
+<section class="sec" id="contact">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" data-r>Contact</span>
+      <h2 class="t-h2" data-split><span class="silver">Let's talk</span></h2>
+      <p class="t-lede" data-r style="--d:3">Sales, partnerships, press, careers — pick a topic and we'll route it to the right team.</p>
+    </div>
+    <div class="contact" data-r>
+      <div class="form-card">
+        <h3>Send us a note</h3>
+        <p class="sub">We read everything. A real human will get back to you within a working day.</p>
+        <form id="contactForm" novalidate>
+          <div class="form-grid">
+            <label class="field"><span>Name</span><input type="text" name="name" required placeholder="Your name"></label>
+            <label class="field"><span>Email</span><input type="email" name="email" required placeholder="you@example.com"></label>
+            <label class="field full"><span>Organisation</span><input type="text" name="org" placeholder="Farm, company or co-op"></label>
+            <label class="field full"><span>Topic</span>
+              <select name="topic" required>
+                <option value="" disabled selected>Choose one…</option>
+                <option>Sales</option>
+                <option>Partnerships</option>
+                <option>Press</option>
+                <option>Careers</option>
+                <option>Other</option>
+              </select>
+            </label>
+            <label class="field full"><span>Message</span><textarea name="message" required placeholder="What can we help with?"></textarea></label>
+          </div>
+          <div class="btns" style="justify-content:flex-end">
+            <button type="submit" class="btn btn--primary">Send message <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+        </form>
+        <div class="form-success" id="formSuccess" role="status" aria-live="polite">
+          <b>Message sent</b>
+          <h4>Thanks — we'll be in touch.</h4>
+          <p>A real person from the AgrosIQ team will reply within a working day. Watch your inbox.</p>
+        </div>
+      </div>
+      <div class="contact-side">
+        <div class="contact-card">
+          <span class="label">Sales</span>
+          <h4>See it on your farm</h4>
+          <p>Book a guided walkthrough on your own fields. We bring the maps, you bring the questions.</p>
+          <a href="start.html#demo">Book a demo <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+        <div class="contact-card">
+          <span class="label">Support</span>
+          <h4>Already a customer</h4>
+          <p>Your support team is inside the app — every field has a help button that goes straight to a human.</p>
+          <a href="start.html#signin">Sign in <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+        <div class="contact-card">
+          <span class="label">Partnerships</span>
+          <h4>Build with us</h4>
+          <p>Agritech, agribusiness, research and reseller partners. Tell us what you're working on.</p>
+          <a href="#contact" onclick="document.querySelector('select[name=topic]').value='Partnerships';return true;">Pick partnerships <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ CTA ═════════ -->
+<section class="sec" style="padding-top:0">
+  <div class="wrap">
+    <div class="cta-band" data-r>
+      <div class="aerial" data-aerial="orbit" data-seed="9"></div>
+      <div class="cta-band__in">
+        <span class="eyebrow">Work with us</span>
+        <h2 class="t-h2" data-split><span class="silver">Help every farmer see every field</span></h2>
+        <p class="t-lede">If any of the above sounded like you, we'd love to hear from you. Bring your craft, your questions and your favourite field.</p>
+        <div class="btns" style="justify-content:center"><a class="btn btn--primary btn--lg" href="#careers">See open roles <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn btn--glass btn--lg" href="#contact">Just say hi</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<footer id="foot"></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  'use strict';
+
+  /* ── orbit keyframes for why-now visuals ── */
+  const style = document.createElement('style');
+  style.textContent = '@keyframes orbit1{0%{transform:rotate(0deg) translateX(150px) rotate(0deg)}100%{transform:rotate(360deg) translateX(150px) rotate(-360deg)}}' +
+    '@keyframes orbit2{0%{transform:rotate(45deg) translateX(110px) rotate(-45deg)}100%{transform:rotate(405deg) translateX(110px) rotate(-405deg)}}' +
+    '@keyframes orbit3{0%{transform:rotate(120deg) translateX(70px) rotate(-120deg)}100%{transform:rotate(480deg) translateX(70px) rotate(-480deg)}}';
+  document.head.appendChild(style);
+
+  /* ── timeline dot lights up as it scrolls into the top half of the viewport ── */
+  const tlSteps = document.querySelectorAll('#timeline .tl-step');
+  if (tlSteps.length){
+    const io = new IntersectionObserver(es => {
+      es.forEach(e => { if (e.isIntersecting && e.intersectionRatio > .35) e.target.classList.add('in'); });
+    }, { threshold: [.35, .65] });
+    tlSteps.forEach(s => io.observe(s));
+  }
+
+  /* ── contact form: no network request; swap to success card ── */
+  const form = document.getElementById('contactForm');
+  const success = document.getElementById('formSuccess');
+  if (form && success){
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      /* basic native validity, since the brief forbids any backend */
+      if (!form.checkValidity()){ form.reportValidity(); return; }
+      form.style.display = 'none';
+      success.classList.add('show');
+      success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  }
+
+  /* ── partnerships card: pre-fill topic select on click ── */
+  document.querySelectorAll('[data-set-topic]').forEach(b => b.addEventListener('click', (e) => {
+    const t = b.getAttribute('data-set-topic'); if (!t) return;
+    const sel = document.querySelector('select[name="topic"]'); if (sel) sel.value = t;
+  }));
+})();
+</script>
+</body>
+</html>

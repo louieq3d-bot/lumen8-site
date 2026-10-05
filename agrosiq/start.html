@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AgrosIQ · Start free in five minutes</title>
+<meta name="description" content="Start free, book a demo, or sign in to AgrosIQ — crop intelligence from orbit. Your first 40 hectares, free forever. No card needed.">
+<link rel="icon" type="image/svg+xml" href="assets/brand/agrosiq-mark-dark.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/brand/png/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/brand/png/apple-touch-icon-180.png">
+<meta name="theme-color" content="#000000">
+<meta property="og:url" content="https://lumen8.ai/agrosiq/start.html">
+<meta property="og:title" content="AgrosIQ · Start free in five minutes">
+<meta property="og:image" content="https://lumen8.ai/agrosiq/assets/brand/png/social-card-1200x630.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+  /* ─────────────────────────────────────────────
+     START PAGE — full-viewport 2-column hero, glass
+     form card with sliding tab pill, animated check.
+     ───────────────────────────────────────────── */
+
+  /* ── hero layout ── */
+  .start-hero{
+    position:relative; min-height:100vh; min-height:100svh;
+    display:flex; align-items:center; overflow:hidden;
+    padding:calc(var(--nav) + 24px) 0 clamp(60px,8vw,100px);
+  }
+  .start-hero > .aerial{position:absolute; inset:0}
+  .start-hero .veil--hero{opacity:1.05}
+  .start-hero .veil--v{
+    position:absolute; inset:0; pointer-events:none;
+    background:
+      radial-gradient(60% 70% at 80% 50%, rgba(3,4,5,.55), transparent 70%),
+      linear-gradient(180deg, rgba(3,4,5,.7) 0%, rgba(3,4,5,.35) 30%, rgba(3,4,5,.55) 70%, var(--bg) 100%);
+  }
+  .start-hero__cols{
+    position:relative; z-index:3;
+    display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
+    gap:clamp(40px,6vw,96px); align-items:center;
+  }
+
+  /* ── left column copy ── */
+  .start-copy{display:flex; flex-direction:column; gap:26px; max-width:600px}
+  .start-copy h1{margin:6px 0 4px}
+  .start-copy .t-lede{font-size:clamp(17px,1.45vw,21px); max-width:54ch}
+  .checklist{list-style:none; padding:0; margin:8px 0 0; display:flex; flex-direction:column; gap:12px; font-size:15.5px; color:var(--text-2)}
+  .checklist li{display:flex; gap:12px; align-items:center}
+  .checklist .ic{
+    flex:none; width:22px; height:22px; border-radius:50%;
+    background:var(--sprout-wash); color:var(--sprout);
+    display:grid; place-items:center;
+    box-shadow:inset 0 0 0 1px rgba(169,214,70,.25);
+  }
+  .checklist .ic svg{width:13px; height:13px}
+  .checklist b{color:var(--text); font-weight:500}
+
+  /* ── what happens next — mini steps ── */
+  .whnx{margin-top:14px; padding-top:22px; border-top:1px solid var(--line)}
+  .whnx h4{font:500 12px/1 var(--mono); letter-spacing:.06em; text-transform:uppercase; color:var(--text-3); margin:0 0 16px}
+  .whnx__list{display:flex; flex-direction:column; gap:14px; counter-reset:wh}
+  .whnx__row{display:grid; grid-template-columns:34px 1fr; gap:14px; align-items:flex-start}
+  .whnx__n{
+    counter-increment:wh; width:34px; height:34px; border-radius:10px;
+    background:var(--surface-2); box-shadow:inset 0 0 0 1px var(--line-2);
+    display:grid; place-items:center;
+    font:500 12px/1 var(--mono); color:var(--sprout);
+  }
+  .whnx__n::before{content:"0" counter(wh)}
+  .whnx__row b{display:block; color:var(--text); font-size:14.5px; font-weight:500; letter-spacing:-.01em; margin-bottom:3px}
+  .whnx__row span{display:block; color:var(--text-3); font-size:13.5px; line-height:1.5}
+
+  /* ── form card (right column) ── */
+  .form-card{
+    position:relative; padding:24px;
+    border-radius:24px;
+    background:linear-gradient(180deg, rgba(12,15,18,.78), rgba(8,10,12,.62));
+    box-shadow:
+      inset 0 0 0 1px var(--line-2),
+      0 30px 80px -20px rgba(0,0,0,.7),
+      0 0 0 1px rgba(255,255,255,.02),
+      0 0 100px -30px rgba(169,214,70,.18);
+    backdrop-filter:blur(20px) saturate(1.3);
+    -webkit-backdrop-filter:blur(20px) saturate(1.3);
+    max-width:520px; width:100%; justify-self:end;
+  }
+  .form-card__head{display:flex; flex-direction:column; gap:18px; margin-bottom:18px}
+  .form-card__title{font-size:19px; letter-spacing:-.02em; font-weight:500; color:var(--text)}
+
+  /* sliding tab pill */
+  .tabs{
+    position:relative; display:grid; grid-auto-flow:column; grid-auto-columns:1fr;
+    padding:4px; border-radius:999px;
+    background:rgba(255,255,255,.05); box-shadow:inset 0 0 0 1px var(--line);
+  }
+  .tab{
+    position:relative; z-index:1; border:0; background:none;
+    height:36px; padding:0 10px; border-radius:999px; cursor:pointer;
+    font:500 13.5px/1 var(--f); color:var(--text-2);
+    display:inline-flex; align-items:center; justify-content:center;
+    transition:color .35s var(--ease);
+    white-space:nowrap;
+  }
+  .tab.on{color:var(--on-sprout)}
+  .tab-pill{
+    position:absolute; top:4px; bottom:4px; left:4px;
+    width:calc((100% - 8px) / 3);
+    border-radius:999px;
+    background:var(--sprout);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.4), 0 6px 18px -6px var(--sprout-glow);
+    transform:translateX(0);
+    transition:transform .55s var(--ease);
+  }
+
+  /* form body */
+  .form-body{padding-top:6px}
+  .form-pane{display:none; flex-direction:column; gap:14px}
+  .form-pane.on{display:flex; animation:slidein .55s var(--ease)}
+  @keyframes slidein{from{opacity:0; transform:translateY(6px)}}
+  .f-field{display:flex; flex-direction:column; gap:6px}
+  .f-field label{font-size:12.5px; color:var(--text-3); letter-spacing:.01em}
+  .f-field input,
+  .f-field select,
+  .f-field textarea{
+    height:48px; padding:0 14px; border-radius:11px; border:0;
+    background:var(--surface-2); color:var(--text);
+    font:inherit; font-size:15px;
+    box-shadow:inset 0 0 0 1px var(--line);
+    transition:box-shadow .3s;
+    width:100%;
+  }
+  .f-field textarea{height:96px; padding:12px 14px; resize:vertical; line-height:1.45}
+  .f-field select{appearance:none; -webkit-appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%239ea4ad' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='join'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 14px center; background-size:14px;
+    padding-right:36px;
+  }
+  .f-field select option{background:#0b0e11; color:var(--text)}
+  .f-field input::placeholder{color:var(--text-4)}
+  .f-field input:focus,
+  .f-field select:focus,
+  .f-field textarea:focus{
+    outline:none;
+    box-shadow:inset 0 0 0 1px var(--sprout), 0 0 0 4px var(--sprout-wash);
+  }
+  .f-row{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+
+  .f-check{display:flex; gap:10px; align-items:flex-start; font-size:13px; color:var(--text-2); line-height:1.5}
+  .f-check input{
+    appearance:none; -webkit-appearance:none;
+    flex:none; width:18px; height:18px; border-radius:5px;
+    background:var(--surface-2); box-shadow:inset 0 0 0 1px var(--line-2);
+    cursor:pointer; position:relative; margin-top:1px;
+    transition:background .25s, box-shadow .25s;
+  }
+  .f-check input:checked{
+    background:var(--sprout); box-shadow:inset 0 0 0 1px var(--sprout);
+  }
+  .f-check input:checked::after{
+    content:""; position:absolute; left:5px; top:1.5px; width:7px; height:11px;
+    border:solid var(--on-sprout); border-width:0 2px 2px 0; transform:rotate(45deg);
+  }
+  .f-check a{color:var(--text); text-decoration:underline; text-decoration-color:var(--line-2); text-underline-offset:2px}
+  .f-check a:hover{text-decoration-color:var(--sprout)}
+  .f-link{font-size:13px; color:var(--text-2); text-align:right}
+  .f-link a{color:var(--sprout); text-decoration:none}
+  .f-link a:hover{text-decoration:underline}
+
+  .f-actions{display:flex; flex-direction:column; gap:10px; margin-top:6px}
+  .f-actions .btn{height:52px; font-size:15.5px}
+  .f-foot{font-size:12.5px; color:var(--text-3); text-align:center; line-height:1.5}
+
+  /* success state */
+  .form-success{
+    display:none; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; gap:18px; padding:36px 12px 28px; min-height:380px;
+  }
+  .form-success.on{display:flex; animation:slidein .55s var(--ease)}
+  /* when success is up, hide the form card head (tabs + title) — keep the trust row */
+  .form-card:has(.form-success.on) .form-card__head{display:none}
+  .check-anim{
+    width:72px; height:72px; border-radius:50%;
+    background:var(--sprout-wash);
+    display:grid; place-items:center;
+    box-shadow:inset 0 0 0 1px rgba(169,214,70,.3), 0 0 60px -10px var(--sprout-glow);
+  }
+  .check-anim svg{width:40px; height:40px; color:var(--sprout)}
+  .check-anim .ring{
+    stroke:rgba(169,214,70,.25); stroke-width:2; fill:none;
+    transform-origin:center; transform-box:fill-box;
+    animation:ring 1s var(--ease) forwards;
+  }
+  .check-anim .check{
+    stroke:var(--sprout); stroke-width:3; fill:none; stroke-linecap:round; stroke-linejoin:round;
+    stroke-dasharray:42; stroke-dashoffset:42;
+    animation:draw .55s .35s var(--ease) forwards;
+  }
+  @keyframes ring{from{transform:scale(.6); opacity:0} to{transform:scale(1); opacity:1}}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .form-success h3{font-size:22px; letter-spacing:-.025em; max-width:30ch; line-height:1.2; color:var(--text); font-weight:500; margin:0}
+  .form-success p{color:var(--text-2); max-width:38ch; font-size:14.5px; margin:0}
+  .form-success .again{
+    margin-top:10px; background:none; border:0; cursor:pointer;
+    font:500 13px/1 var(--mono); letter-spacing:.06em; text-transform:uppercase;
+    color:var(--text-3);
+  }
+  .form-success .again:hover{color:var(--sprout)}
+
+  /* trust row beneath card */
+  .trust-row{
+    display:flex; flex-wrap:wrap; justify-content:center; gap:8px 22px;
+    margin-top:22px; font-size:13px; color:var(--text-3);
+  }
+  .trust-row span{display:inline-flex; align-items:center; gap:8px}
+  .trust-row .ic{width:15px; height:15px; color:var(--sprout)}
+
+  /* ── "what you get" strip ── */
+  .get-strip{padding-top:clamp(70px,9vw,130px)}
+  .get-strip .sec-head{margin-bottom:clamp(40px,5vw,64px)}
+  .get-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px}
+  .get-card{
+    position:relative; padding:28px;
+    border-radius:20px;
+    background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
+    box-shadow:inset 0 0 0 1px var(--line);
+    display:flex; flex-direction:column; gap:18px;
+    transition:transform .6s var(--ease), box-shadow .5s;
+    overflow:hidden;
+  }
+  .get-card:hover{transform:translateY(-4px); box-shadow:inset 0 0 0 1px rgba(169,214,70,.25), 0 30px 60px -30px rgba(169,214,70,.2)}
+  .get-card__vis{
+    position:relative; height:170px; border-radius:12px;
+    background:radial-gradient(120% 80% at 50% 0%, rgba(169,214,70,.08), transparent 70%);
+    overflow:hidden;
+    box-shadow:inset 0 0 0 1px var(--line);
+  }
+  .get-card__num{
+    font:500 12px/1 var(--mono); color:var(--sprout); letter-spacing:.06em;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .get-card__num::after{content:""; width:30px; height:1px; background:linear-gradient(90deg,var(--sprout),transparent)}
+  .get-card h3{font-size:21px; letter-spacing:-.03em; line-height:1.2; font-weight:500; margin:0}
+  .get-card p{margin:0; color:var(--text-2); font-size:14.5px; line-height:1.55}
+
+  /* visual: history bars */
+  .vis-bars{position:absolute; inset:20px 22px; display:flex; align-items:flex-end; gap:8px}
+  .vis-bars i{flex:1; border-radius:4px 4px 0 0; background:linear-gradient(180deg,var(--sprout),rgba(27,138,76,.35)); height:calc(var(--h)*1%); transform-origin:bottom; transform:scaleY(.05); transition:transform 1s var(--ease); transition-delay:calc(var(--k)*60ms)}
+  .get-card.in .vis-bars i{transform:none}
+  .vis-bars i.cur{background:linear-gradient(180deg,#fff,var(--sprout)); box-shadow:0 0 14px var(--sprout-glow)}
+  .vis-bars .legend{
+    position:absolute; left:0; right:0; bottom:6px;
+    display:flex; justify-content:space-between; padding:0 22px;
+    font:500 10px/1 var(--mono); letter-spacing:.06em; color:var(--text-3);
+  }
+
+  /* visual: alert pin + pixel grid */
+  .vis-alert{position:absolute; inset:18px; border-radius:10px; overflow:hidden}
+  .vis-alert .pg{position:absolute; inset:0; display:grid; gap:3px; padding:14px}
+  .vis-alert .pg i{border-radius:3px; background:var(--c); opacity:0; transform:scale(.4); transition:opacity .5s, transform .7s var(--ease); transition-delay:calc(var(--k)*6ms)}
+  .get-card.in .vis-alert .pg i{opacity:1; transform:none}
+  .vis-alert .pg i.w{background:var(--harvest); box-shadow:0 0 14px var(--harvest); animation:pulse 1.8s infinite}
+  @keyframes pulse{50%{box-shadow:0 0 2px var(--harvest)}}
+  .vis-alert .pin{
+    position:absolute; z-index:2;
+    width:14px; height:14px; border-radius:50%;
+    background:var(--harvest); box-shadow:0 0 0 4px rgba(243,169,60,.18), 0 0 18px var(--harvest);
+    animation:ping 2s infinite;
+  }
+  @keyframes ping{0%,100%{transform:scale(1)} 50%{transform:scale(1.4)}}
+  .vis-alert .scan{
+    position:absolute; left:0; right:0; height:2px;
+    background:linear-gradient(90deg, transparent, var(--sprout), transparent);
+    box-shadow:0 0 18px var(--sprout);
+    animation:scan 3.4s var(--ease) infinite;
+    opacity:.7;
+  }
+  @keyframes scan{0%{top:8%} 50%{top:92%} 100%{top:8%}}
+
+  /* visual: chat bubbles */
+  .vis-chat{position:absolute; inset:16px; display:flex; flex-direction:column; gap:8px; justify-content:flex-end; padding:8px}
+  .vis-chat .bub{
+    max-width:84%; padding:8px 12px; border-radius:12px; font-size:12.5px; line-height:1.4;
+    opacity:0; transform:translateY(6px); transition:opacity .6s, transform .6s var(--ease);
+  }
+  .get-card.in .vis-chat .bub{opacity:1; transform:none}
+  .get-card.in .vis-chat .bub:nth-child(1){transition-delay:.1s}
+  .get-card.in .vis-chat .bub:nth-child(2){transition-delay:.4s}
+  .get-card.in .vis-chat .bub:nth-child(3){transition-delay:.7s}
+  .vis-chat .bub--q{align-self:flex-end; background:var(--surface-2); box-shadow:inset 0 0 0 1px var(--line); border-bottom-right-radius:4px; color:var(--text-2)}
+  .vis-chat .bub--a{align-self:flex-start; background:rgba(169,214,70,.08); box-shadow:inset 0 0 0 1px rgba(169,214,70,.2); border-bottom-left-radius:4px; color:var(--text)}
+  .vis-chat .bub--a b{color:var(--sprout); font-weight:500}
+
+  /* ── faq section ── */
+  .start-faq{padding:clamp(60px,8vw,120px) 0}
+
+  /* ── responsive ── */
+  @media (max-width:980px){
+    .start-hero__cols{grid-template-columns:minmax(0,1fr); gap:40px}
+    .start-copy{max-width:none}
+    .form-card{justify-self:stretch; max-width:none}
+    .get-grid{grid-template-columns:1fr}
+  }
+  @media (max-width:560px){
+    .f-row{grid-template-columns:1fr}
+    .form-card{padding:18px; border-radius:18px}
+    .tab{font-size:12.5px}
+    .start-hero{padding-top:calc(var(--nav) + 12px)}
+  }
+</style>
+</head>
+<body data-page="start">
+<header id="nav"></header>
+<main>
+
+<!-- ═════════ HERO ═════════ -->
+<section class="start-hero" aria-label="Get started with AgrosIQ">
+  <div class="aerial" data-aerial="orbit" data-seed="3"></div>
+  <div class="veil veil--hero"></div>
+  <div class="veil--v"></div>
+
+  <div class="wrap start-hero__cols">
+    <!-- LEFT: copy -->
+    <div class="start-copy" data-r>
+      <span class="eyebrow" data-r>Start in five minutes</span>
+      <h1 class="t-hero" data-split><span class="silver">Your farm from orbit,</span> <span class="hl">in five minutes.</span></h1>
+      <p class="t-lede" data-r style="--d:3">No hardware, no setup call. Draw a field, watch ten years of history load, and get your first alert on the next satellite pass.</p>
+
+      <ul class="checklist" data-r style="--d:4">
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span><b>40 hectares free</b> — for as long as you farm them.</span></li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span><b>Ten years of history</b> — loaded the day you add a field.</span></li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span><b>Alerts every pass</b> — ranked, ready to walk.</span></li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span><b>No card needed</b> — sign up and start watching.</span></li>
+      </ul>
+
+      <div class="whnx" data-r style="--d:5">
+        <h4>What happens next</h4>
+        <div class="whnx__list">
+          <div class="whnx__row">
+            <span class="whnx__n"></span>
+            <div><b>Draw your first fields</b><span>Trace them on the map, let us find them, or upload a shapefile.</span></div>
+          </div>
+          <div class="whnx__row">
+            <span class="whnx__n"></span>
+            <div><b>We load ten years of history</b><span>Every season is ranked against the field's own best, ready in minutes.</span></div>
+          </div>
+          <div class="whnx__row">
+            <span class="whnx__n"></span>
+            <div><b>First alert on the next pass</b><span>Walk straight to the spot. Snap, note, done.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: form card -->
+    <div class="form-card" data-r style="--d:2">
+      <div class="form-card__head">
+        <div class="tabs" role="tablist" aria-label="Choose action">
+          <span class="tab-pill" id="tabPill" aria-hidden="true"></span>
+          <button class="tab on" data-tab="start" role="tab" aria-selected="true">Start free</button>
+          <button class="tab" data-tab="demo" role="tab" aria-selected="false">Book a demo</button>
+          <button class="tab" data-tab="signin" role="tab" aria-selected="false">Sign in</button>
+        </div>
+        <p class="form-card__title" id="formTitle">Start your free account</p>
+      </div>
+
+      <!-- ── START FREE ── -->
+      <form class="form-pane on" id="pane-start" data-pane="start" novalidate>
+        <div class="f-row">
+          <div class="f-field"><label for="sf-name">Your name</label><input id="sf-name" name="name" type="text" required placeholder="Alex Carter" autocomplete="name"></div>
+          <div class="f-field"><label for="sf-email">Email</label><input id="sf-email" name="email" type="email" required placeholder="alex@farm.co" autocomplete="email"></div>
+        </div>
+        <div class="f-field"><label for="sf-pass">Password</label><input id="sf-pass" name="password" type="password" required placeholder="At least 8 characters" autocomplete="new-password"></div>
+        <div class="f-row">
+          <div class="f-field"><label for="sf-size">Farm size</label>
+            <select id="sf-size" name="size" required>
+              <option value="" disabled selected>Choose a size…</option>
+              <option value="under40">Under 40 ha</option>
+              <option value="40-400">40 – 400 ha</option>
+              <option value="400-2000">400 – 2,000 ha</option>
+              <option value="over2000">Over 2,000 ha</option>
+            </select>
+          </div>
+          <div class="f-field"><label for="sf-country">Country</label><input id="sf-country" name="country" type="text" required placeholder="Australia" autocomplete="country-name"></div>
+        </div>
+        <div class="f-field"><label for="sf-crop">Primary crop</label>
+          <select id="sf-crop" name="crop" required>
+            <option value="" disabled selected>What do you mainly grow?</option>
+            <option>Wheat</option><option>Barley</option><option>Canola</option><option>Maize</option>
+            <option>Soybean</option><option>Sorghum</option><option>Cotton</option><option>Rice</option>
+            <option>Sunflower</option><option>Pulses</option><option>Potatoes</option>
+            <option>Sugarcane</option><option>Vineyards</option><option>Orchards</option>
+            <option>Pasture</option><option>Other</option>
+          </select>
+        </div>
+        <label class="f-check">
+          <input type="checkbox" name="terms" required>
+          <span>I agree to the <a href="#">Terms</a> and <a href="#">Privacy Policy</a>. Send me product updates occasionally — I can unsubscribe any time.</span>
+        </label>
+        <div class="f-actions">
+          <button type="submit" class="btn btn--primary btn--block">Create my free account <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <p class="f-foot">No credit card needed. Your first 40 hectares stay free, forever.</p>
+        </div>
+      </form>
+
+      <!-- ── BOOK A DEMO ── -->
+      <form class="form-pane" id="pane-demo" data-pane="demo" novalidate>
+        <div class="f-row">
+          <div class="f-field"><label for="dm-name">Your name</label><input id="dm-name" name="name" type="text" required placeholder="Alex Carter" autocomplete="name"></div>
+          <div class="f-field"><label for="dm-email">Work email</label><input id="dm-email" name="email" type="email" required placeholder="alex@farm.co" autocomplete="email"></div>
+        </div>
+        <div class="f-row">
+          <div class="f-field"><label for="dm-org">Organisation</label><input id="dm-org" name="org" type="text" required placeholder="North Farm Co." autocomplete="organization"></div>
+          <div class="f-field"><label for="dm-role">Your role</label>
+            <select id="dm-role" name="role" required>
+              <option value="" disabled selected>Choose a role…</option>
+              <option>Grower</option>
+              <option>Agronomist</option>
+              <option>Farm manager</option>
+              <option>Researcher</option>
+              <option>Agribusiness</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="f-row">
+          <div class="f-field"><label for="dm-ha">Hectares (optional)</label><input id="dm-ha" name="ha" type="text" inputmode="numeric" placeholder="e.g. 1,200"></div>
+          <div class="f-field"><label for="dm-when">Preferred time</label>
+            <select id="dm-when" name="when" required>
+              <option value="" disabled selected>When suits you?</option>
+              <option>Mornings</option>
+              <option>Afternoons</option>
+              <option>Evenings</option>
+              <option>Anytime</option>
+            </select>
+          </div>
+        </div>
+        <div class="f-field"><label for="dm-msg">Anything we should know? (optional)</label><textarea id="dm-msg" name="msg" placeholder="Crops you grow, what you'd like to see…"></textarea></div>
+        <div class="f-actions">
+          <button type="submit" class="btn btn--primary btn--block">Book a demo <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <p class="f-foot">We'll be in touch within one business day.</p>
+        </div>
+      </form>
+
+      <!-- ── SIGN IN ── -->
+      <form class="form-pane" id="pane-signin" data-pane="signin" novalidate>
+        <div class="f-field"><label for="si-email">Email</label><input id="si-email" name="email" type="email" required placeholder="alex@farm.co" autocomplete="email"></div>
+        <div class="f-field"><label for="si-pass">Password</label><input id="si-pass" name="password" type="password" required placeholder="Your password" autocomplete="current-password"></div>
+        <div class="f-link"><a href="#">Forgot password?</a></div>
+        <div class="f-actions" style="margin-top:14px">
+          <button type="submit" class="btn btn--primary btn--block">Sign in</button>
+          <p class="f-foot">Don't have an account? <a href="#start" style="color:var(--sprout)" data-jump="start">Start free</a> above.</p>
+        </div>
+      </form>
+
+      <!-- ── SUCCESS STATE ── -->
+      <div class="form-success" id="formSuccess" aria-live="polite">
+        <div class="check-anim" aria-hidden="true">
+          <svg viewBox="0 0 60 60">
+            <circle class="ring" cx="30" cy="30" r="26"/>
+            <path class="check" d="M19 30 L27 38 L42 22"/>
+          </svg>
+        </div>
+        <h3 id="successTitle">You're on the list.</h3>
+        <p id="successBody">We'll be in touch shortly with your sign-in link and a quick walkthrough.</p>
+        <button class="again" type="button" id="successReset">Send another</button>
+      </div>
+
+      <div class="trust-row">
+        <span><i class="ic" data-ic="shield"></i> Private by default</span>
+        <span><i class="ic" data-ic="check"></i> Cancel any time</span>
+        <span><i class="ic" data-ic="bolt"></i> No hardware</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ WHAT YOU GET ═════════ -->
+<section class="sec get-strip" aria-label="What you get">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" data-r>What you get</span>
+      <h2 class="t-h2" data-split><span class="silver">Three things, ready the day you sign up</span></h2>
+    </div>
+    <div class="get-grid">
+      <article class="get-card" data-r>
+        <div class="get-card__vis">
+          <div class="vis-bars" id="visBars"></div>
+          <div class="legend"><span>2015</span><span>2025</span></div>
+        </div>
+        <span class="get-card__num">01</span>
+        <h3>Ten years of every field</h3>
+        <p>Every field you add comes with a decade of seasons already loaded, ranked against its own best. No waiting a year for the system to learn your farm.</p>
+      </article>
+      <article class="get-card" data-r style="--d:1">
+        <div class="get-card__vis">
+          <div class="vis-alert">
+            <div class="pg" id="visAlert"></div>
+            <span class="pin" style="left:62%; top:34%"></span>
+            <span class="scan"></span>
+          </div>
+        </div>
+        <span class="get-card__num">02</span>
+        <h3>Alerts on every pass</h3>
+        <p>Each new satellite pass is read automatically and compared with that field's history. The moment one drifts, you hear about it, with the exact 10 m pixel highlighted.</p>
+      </article>
+      <article class="get-card" data-r style="--d:2">
+        <div class="get-card__vis">
+          <div class="vis-chat">
+            <div class="bub bub--q">Why is Ridge behind this week?</div>
+            <div class="bub bub--a"><b>Ridge is 24% below normal</b> for early June — NE corner, 1.1 ha.</div>
+            <div class="bub bub--q">Walk first?</div>
+            <div class="bub bub--a">Yes. Open <b>Scout</b> on the next pass.</div>
+          </div>
+        </div>
+        <span class="get-card__num">03</span>
+        <h3>Answers in plain English</h3>
+        <p>Ask your farm anything in your own words. Get a straight answer, with the maps and dates behind it — so you always see the working.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ FAQ ═════════ -->
+<section class="sec start-faq" aria-label="Questions about getting started">
+  <div class="wrap wrap--narrow">
+    <div class="sec-head">
+      <span class="eyebrow" data-r>Common questions</span>
+      <h2 class="t-h2" data-split><span class="silver">Before you sign up</span></h2>
+    </div>
+    <div class="faq" data-r>
+      <details open>
+        <summary>Do I need a credit card to start?</summary>
+        <div>No. The free plan stays free for the lifetime of your account, up to 40 hectares. You can add a card later if you grow into a paid plan, and you can cancel any time without losing your fields.</div>
+      </details>
+      <details>
+        <summary>What if my farm is bigger than 40 hectares?</summary>
+        <div>You can still start free on your first 40 hectares, then upgrade to Grower (up to 400 ha), Farm (up to 2,000 ha) or Pro (unlimited) directly. No setup call required.</div>
+      </details>
+      <details>
+        <summary>How long does setup actually take?</summary>
+        <div>About five minutes for most farms. Draw a field on the map (or upload a shapefile), and the decade of history and the first satellite pass load automatically. You can add the rest of your fields whenever.</div>
+      </details>
+      <details>
+        <summary>Is my farm data private?</summary>
+        <div>Always. Your fields, alerts and notes belong to you. AgrosIQ is private by default — we never sell your data, and you can export or delete everything at any time.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer id="foot"></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  'use strict';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ── bars visual: 10 years ── */
+  const bars = [62, 74, 55, 81, 69, 48, 77, 85, 71, 90];
+  const vb = document.getElementById('visBars');
+  if (vb) vb.innerHTML = bars.map((b, i) => '<i style="--h:' + b + ';--k:' + i + '"' + (i === 9 ? ' class="cur"' : '') + '></i>').join('');
+
+  /* ── alert pixel grid visual ── */
+  const veg = (v) => { v = Math.max(0, Math.min(1, v));
+    const s = [[0, [59, 43, 33]], [.35, [92, 77, 43]], [.55, [13, 92, 53]], [.78, [28, 148, 80]], [1, [179, 224, 71]]];
+    for (let i = 1; i < s.length; i++) if (v <= s[i][0]){ const t = (v - s[i - 1][0]) / (s[i][0] - s[i - 1][0]); return 'rgb(' + s[i - 1][1].map((x, k) => Math.round(x + (s[i][1][k] - x) * t)).join(',') + ')'; }
+    return 'rgb(179,224,71)';
+  };
+  const va = document.getElementById('visAlert');
+  if (va){
+    const W = 14, H = 9, warn = [8, 5];
+    let h = '', k = 0;
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++){
+      const v = .6 + .22 * Math.sin(x * .45 + 1.7) * Math.cos(y * .5 - 1.1) + .12 * Math.sin((x + y) * .9 + 3) - (Math.hypot(x - warn[0], y - warn[1]) < 2.2 ? .42 : 0);
+      const w = x === warn[0] && y === warn[1];
+      h += '<i' + (w ? ' class="w"' : '') + ' style="--c:' + veg(v) + ';--k:' + (k++) + '"></i>';
+    }
+    va.innerHTML = h;
+    va.style.gridTemplateColumns = 'repeat(' + W + ',1fr)';
+    va.style.gridTemplateRows = 'repeat(' + H + ',1fr)';
+  }
+
+  /* ── tabs (sliding pill) ── */
+  const tabs = [...document.querySelectorAll('.tab')];
+  const pill = document.getElementById('tabPill');
+  const panes = [...document.querySelectorAll('.form-pane')];
+  const title = document.getElementById('formTitle');
+  const TITLES = { start: 'Start your free account', demo: 'Book a demo with our team', signin: 'Welcome back' };
+  const SUCCESS = {
+    start: ['You’re on the list.', 'We’ll be in touch shortly with your sign-in link and a quick walkthrough.'],
+    demo:  ['Demo booked.',         'We’ll be in touch within one business day to pick a time.'],
+    signin:['Your account isn’t active yet.', 'Start free above and we’ll set you up in minutes.'],
+  };
+  function placePill(tab){
+    if (!tab || !pill) return;
+    const parent = tab.parentElement;
+    const tabsInOrder = [...parent.querySelectorAll('.tab')];
+    const i = tabsInOrder.indexOf(tab);
+    pill.style.width = tab.offsetWidth + 'px';
+    pill.style.transform = 'translateX(' + (tab.offsetLeft - 4) + 'px)';
+  }
+  function switchTo(name, push){
+    const tab = tabs.find(t => t.dataset.tab === name);
+    if (!tab) return;
+    tabs.forEach(t => { const on = t === tab; t.classList.toggle('on', on); t.setAttribute('aria-selected', String(on)); });
+    panes.forEach(p => p.classList.toggle('on', p.dataset.pane === name));
+    placePill(tab);
+    if (title) title.textContent = TITLES[name] || '';
+    hideSuccess();
+    if (push){
+      const h = '#' + name;
+      if (location.hash !== h) history.replaceState(null, '', h);
+    }
+  }
+  tabs.forEach(t => t.addEventListener('click', (e) => { e.preventDefault(); switchTo(t.dataset.tab, true); }));
+  window.addEventListener('hashchange', () => switchTo((location.hash || '#start').slice(1) || 'start', false));
+  /* sign-in tab jump link */
+  document.querySelectorAll('[data-jump]').forEach(a => a.addEventListener('click', (e) => { e.preventDefault(); switchTo(a.dataset.jump, true); }));
+
+  /* measure on load and resize */
+  function initTabs(){
+    const initial = (location.hash || '#start').slice(1);
+    switchTo(['start','demo','signin'].includes(initial) ? initial : 'start', false);
+    requestAnimationFrame(() => placePill(tabs.find(t => t.classList.contains('on'))));
+  }
+  initTabs();
+  let rt;
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => placePill(tabs.find(t => t.classList.contains('on'))), 80); });
+
+  /* ── success state ── */
+  const success = document.getElementById('formSuccess');
+  const successTitle = document.getElementById('successTitle');
+  const successBody = document.getElementById('successBody');
+  const successReset = document.getElementById('successReset');
+  function showSuccess(name){
+    const [t, b] = SUCCESS[name] || SUCCESS.start;
+    successTitle.textContent = t;
+    successBody.textContent = b;
+    panes.forEach(p => p.style.display = 'none');
+    success.classList.add('on');
+    tabs.forEach(t => { t.disabled = true; t.style.opacity = .4; });
+  }
+  function hideSuccess(){
+    const success = document.getElementById('formSuccess'); if (!success) return;
+    success.classList.remove('on');
+    panes.forEach(p => p.style.display = '');
+    tabs.forEach(t => { t.disabled = false; t.style.opacity = ''; });
+    const cur = tabs.find(t => t.classList.contains('on'));
+    if (cur) panes.find(p => p.dataset.pane === cur.dataset.tab).classList.add('on');
+  }
+  if (successReset) successReset.addEventListener('click', () => { hideSuccess(); switchTo('start', true); });
+
+  /* ── form validation ── */
+  function invalidField(field){
+    if (!field) return false;
+    if (field.type === 'checkbox') return !field.checked;
+    if (field.required && !String(field.value || '').trim()) return true;
+    if (field.type === 'email' && field.value){
+      return !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value.trim());
+    }
+    return false;
+  }
+  function validateForm(form){
+    let ok = true;
+    [...form.querySelectorAll('input, select, textarea')].forEach(f => {
+      const bad = invalidField(f);
+      f.style.boxShadow = bad ? 'inset 0 0 0 1px var(--harvest)' : '';
+      if (bad) ok = false;
+    });
+    return ok;
+  }
+  document.querySelectorAll('.form-pane').forEach(form => {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!validateForm(form)) return;
+      /* re-trigger check animation */
+      const check = success.querySelector('.check'); if (check){ check.style.animation = 'none'; void check.offsetWidth; check.style.animation = ''; }
+      const ring = success.querySelector('.ring'); if (ring){ ring.style.animation = 'none'; void ring.offsetWidth; ring.style.animation = ''; }
+      showSuccess(form.dataset.pane);
+    });
+    /* clear error on focus */
+    form.addEventListener('focusin', (e) => {
+      const f = e.target.closest('input, select, textarea'); if (f) f.style.boxShadow = '';
+    });
+  });
+
+  /* ── footer date stamp ── */
+  const base = document.querySelector('.foot__base span');
+  if (base) base.textContent = '© 2026 AgrosIQ. All rights reserved.';
+
+  /* ── observe cards for in animation ── */
+  const cio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); cio.unobserve(e.target); } }), { threshold: .25 });
+  document.querySelectorAll('.get-card').forEach(c => cio.observe(c));
+})();
+</script>
+</body>
+</html>

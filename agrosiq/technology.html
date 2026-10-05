@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Technology · AgrosIQ</title>
+<meta name="description" content="Inside the AgrosIQ Engine: how orbit, cloud-proof vision, a decade of memory and proprietary crop models turn every field into a clear instruction.">
+<link rel="icon" type="image/svg+xml" href="assets/brand/agrosiq-mark-dark.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/brand/png/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/brand/png/apple-touch-icon-180.png">
+<meta name="theme-color" content="#000000">
+<meta property="og:url" content="https://lumen8.ai/agrosiq/technology.html">
+<meta property="og:title" content="AgrosIQ · Technology">
+<meta property="og:image" content="https://lumen8.ai/agrosiq/assets/brand/png/social-card-1200x630.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+  /* ── phero ── */
+  .phero .veil--l{opacity:.7}
+
+  /* ── orbit story: left text, right sticky visual ── */
+  #how{height:480vh; position:relative}
+  #how .story__sticky{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.05fr); gap:clamp(28px,5vw,72px); align-items:center; padding:0 var(--gut); max-width:var(--max); margin:0 auto}
+  #how .story__visual{position:relative; height:min(74vh,640px); border-radius:24px; overflow:hidden; background:radial-gradient(120% 90% at 50% 50%, #0c1610 0%, #030405 70%); box-shadow:inset 0 0 0 1px var(--line-2), 0 40px 100px -40px rgba(169,214,70,.25)}
+  #how .story__visual::after{content:""; position:absolute; inset:0; pointer-events:none; background:repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 4px)}
+  #how .story__steps{position:relative; align-self:center; max-width:520px}
+  #how .story__step{padding:0 0 36px}
+  #how .story__step::before{counter-increment:002; content:""; display:block; font:500 12px/1 var(--mono); letter-spacing:.06em; color:var(--sprout); text-transform:uppercase; margin-bottom:14px; opacity:.65}
+  #how .story__step h2{font-size:clamp(28px,3.4vw,46px); letter-spacing:-.04em; line-height:1.02; margin:0 0 14px}
+  #how .story__step p{font-size:clamp(15px,1.25vw,18px); line-height:1.55; color:var(--text-2); max-width:46ch; margin:0}
+  #how .story__step .ch-n{display:inline-flex; align-items:center; gap:10px; font:500 11.5px/1 var(--mono); color:var(--text-3); letter-spacing:.06em; text-transform:uppercase; margin-bottom:18px}
+  #how .story__step .ch-n i{width:7px; height:7px; border-radius:50%; background:var(--text-4); transition:all .5s var(--ease)}
+  #how .story__step.on .ch-n{color:var(--sprout)}
+  #how .story__step.on .ch-n i{background:var(--sprout); box-shadow:0 0 0 4px var(--sprout-wash), 0 0 12px var(--sprout)}
+  #how[data-step="0"] .visual .vstep-1,
+  #how[data-step="1"] .visual .vstep-2,
+  #how[data-step="2"] .visual .vstep-3,
+  #how[data-step="3"] .visual .vstep-4{opacity:1; transform:none}
+  #how .visual .vstep{position:absolute; inset:0; opacity:0; transform:scale(.96); transition:opacity .8s var(--ease), transform 1.1s var(--ease)}
+  #how .story__visual .aerial{position:absolute; inset:0}
+  #how .howtop{position:absolute; z-index:3; left:18px; top:18px; display:flex; gap:8px}
+  #how .howtop .chip{background:rgba(8,10,12,.78)}
+  #how .gnote{z-index:3; position:absolute; left:18px; bottom:18px; font:500 11px/1.4 var(--mono); color:var(--text-3); letter-spacing:.06em; text-transform:uppercase; padding:8px 12px; border-radius:999px; background:rgba(8,10,12,.7); box-shadow:inset 0 0 0 1px var(--line-2); display:flex; gap:8px; align-items:center}
+  #how .gnote i{width:6px; height:6px; border-radius:50%; background:var(--sprout); box-shadow:0 0 10px var(--sprout); animation:blink 1.6s infinite}
+  @media (max-width:980px){ #how .story__sticky{grid-template-columns:minmax(0,1fr); gap:24px} #how .story__visual{height:60vh; order:-1} #how .story__steps{max-width:none} }
+
+  /* step 1: orbit ring with satellite dot */
+  .vorbit{position:absolute; inset:0; display:grid; place-items:center}
+  .vorbit .ring{position:absolute; border-radius:50%; border:1px dashed rgba(255,255,255,.16); animation:spin 60s linear infinite}
+  .vorbit .ring.s1{width:480px; height:480px}
+  .vorbit .ring.s2{width:300px; height:300px; border-style:dotted; border-color:rgba(169,214,70,.3); animation-duration:30s; animation-direction:reverse}
+  .vorbit .ring.s3{width:160px; height:160px; border-color:rgba(169,214,70,.5)}
+  .vorbit .planet{width:120px; height:120px; border-radius:50%; background:radial-gradient(circle at 35% 30%, #2a6f3e, #0c2a17 75%, #061408); box-shadow:inset -10px -16px 30px rgba(0,0,0,.6), 0 0 60px rgba(169,214,70,.18)}
+  .vorbit .sat{position:absolute; left:50%; top:50%; width:380px; height:1px; margin-left:-190px; transform:rotate(-32deg); transform-origin:center}
+  .vorbit .sat i{position:absolute; left:0; top:-3px; width:14px; height:8px; border-radius:2px; background:var(--sprout); box-shadow:0 0 14px var(--sprout-glow), 0 0 28px var(--sprout)}
+  .vorbit .sat i::after, .vorbit .sat i::before{content:""; position:absolute; top:-3px; height:14px; width:38px; background:rgba(169,214,70,.18); border:1px solid rgba(169,214,70,.35); border-radius:2px}
+  .vorbit .sat i::before{right:100%; margin-right:4px}
+  .vorbit .sat i::after{left:100%; margin-left:4px}
+  @keyframes spin{to{transform:rotate(1turn)}}
+
+  /* step 2: cloud parting */
+  .vclouds{position:absolute; inset:0; display:grid; place-items:center}
+  .vclouds .field{position:absolute; inset:14% 14% 14% 14%; border-radius:18px; background:radial-gradient(120% 80% at 30% 30%, rgba(169,214,70,.18), rgba(27,138,76,.08) 50%, rgba(13,92,52,.05)); box-shadow:inset 0 0 0 1px rgba(169,214,70,.18)}
+  .vclouds .field::after{content:""; position:absolute; inset:14%; border-radius:12px; background:repeating-linear-gradient(0deg, rgba(169,214,70,.08) 0 1px, transparent 1px 8px), repeating-linear-gradient(90deg, rgba(169,214,70,.08) 0 1px, transparent 1px 8px)}
+  .vclouds .cloud{position:absolute; width:200px; height:60px; border-radius:60px; background:radial-gradient(circle at 30% 50%, rgba(255,255,255,.18), rgba(255,255,255,.05) 60%, transparent 75%); filter:blur(6px); animation:drift 14s linear infinite}
+  .vclouds .cloud.c1{top:30%; left:-10%; animation-delay:-4s}
+  .vclouds .cloud.c2{top:55%; left:30%; width:260px; animation-delay:-9s}
+  .vclouds .cloud.c3{top:18%; right:-15%; width:220px; animation-delay:-2s}
+  .vclouds .beam{position:absolute; inset:0; background:linear-gradient(180deg, transparent 0%, transparent 40%, rgba(169,214,70,.18) 50%, transparent 60%, transparent 100%); mix-blend-mode:screen; animation:scan 4s var(--ease) infinite}
+  .vclouds .alert{position:absolute; left:62%; top:64%; width:14px; height:14px; border-radius:3px; background:var(--harvest); box-shadow:0 0 14px var(--harvest); animation:pulse 1.8s infinite}
+  @keyframes drift{0%{transform:translateX(0)} 50%{transform:translateX(40px)} 100%{transform:translateX(0)}}
+  @keyframes scan{0%,100%{transform:translateY(-30%)} 50%{transform:translateY(30%)}}
+
+  /* step 3: stacked season layers */
+  .vlayers{position:absolute; inset:0; display:grid; place-items:center; perspective:1400px}
+  .vlayers .stack{position:relative; width:380px; height:380px; transform-style:preserve-3d; transform:rotateX(54deg) rotateZ(-26deg)}
+  .vlayers .stack i{position:absolute; inset:0; border-radius:14px; box-shadow:inset 0 0 0 1px rgba(255,255,255,.1); transform-origin:center; opacity:.85}
+  .vlayers .stack i:nth-child(1){transform:translateZ(0); background:radial-gradient(120% 80% at 30% 30%, rgba(169,214,70,.35), rgba(27,138,76,.15))}
+  .vlayers .stack i:nth-child(2){transform:translateZ(40px); background:radial-gradient(120% 80% at 50% 30%, rgba(169,214,70,.22), rgba(27,138,76,.1))}
+  .vlayers .stack i:nth-child(3){transform:translateZ(80px); background:radial-gradient(120% 80% at 70% 30%, rgba(169,214,70,.16), rgba(27,138,76,.06))}
+  .vlayers .stack i:nth-child(4){transform:translateZ(120px); background:radial-gradient(120% 80% at 40% 60%, rgba(169,214,70,.1), rgba(27,138,76,.04))}
+  .vlayers .stack i:nth-child(5){transform:translateZ(160px); background:radial-gradient(120% 80% at 60% 50%, rgba(169,214,70,.06), rgba(27,138,76,.02))}
+  .vlayers .yr{position:absolute; right:-30px; top:50%; transform:translateY(-50%) rotateZ(26deg); font:500 12px/1 var(--mono); color:var(--sprout); letter-spacing:.06em; padding:8px 12px; border-radius:8px; background:rgba(8,10,12,.7); box-shadow:inset 0 0 0 1px rgba(169,214,70,.3)}
+  .vlayers .yrs{position:absolute; left:18px; display:flex; flex-direction:column; gap:8px; font:500 10.5px/1 var(--mono); color:var(--text-3); letter-spacing:.06em; text-transform:uppercase}
+  .vlayers .yrs i{display:flex; align-items:center; gap:8px}
+  .vlayers .yrs i::before{content:""; width:30px; height:1px; background:var(--line-3)}
+
+  /* step 4: pixel grid lighting up */
+  .vpixels{position:absolute; inset:0; display:grid; place-items:center}
+  .vpixels .gwrap{position:relative; width:380px; height:380px}
+  .vpixels .grid{position:absolute; inset:0; display:grid; grid-template-columns:repeat(19,1fr); gap:2px; transform:perspective(800px) rotateX(20deg); transform-origin:center}
+  .vpixels .grid i{border-radius:2px; background:var(--canopy); opacity:0; animation:lit 3s var(--ease) infinite; animation-delay:calc(var(--k) * 22ms)}
+  .vpixels .grid i.h{background:var(--sprout); box-shadow:0 0 8px var(--sprout-glow)}
+  .vpixels .grid i.w{background:var(--harvest); box-shadow:0 0 18px var(--harvest); animation-delay:0s; animation:none; opacity:1}
+  @keyframes lit{0%, 100%{opacity:.45} 50%{opacity:.9}}
+  .vpixels .pin{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%) translate(40px,30px); display:flex; flex-direction:column; align-items:center; gap:6px}
+  .vpixels .pin i{display:block; width:14px; height:14px; border-radius:3px; background:var(--harvest); box-shadow:0 0 20px var(--harvest); animation:pulse 1.6s infinite}
+  .vpixels .pin b{font:600 10.5px/1.4 var(--mono); letter-spacing:.06em; text-transform:uppercase; color:var(--harvest); background:rgba(8,10,12,.85); padding:8px 12px; border-radius:8px; box-shadow:inset 0 0 0 1px rgba(243,169,60,.35); white-space:nowrap}
+
+  /* ── engine bento ── */
+  .engine-bento .card{overflow:hidden}
+  .eng-vis{position:relative; height:240px; overflow:hidden; border-bottom:1px solid var(--line); background:radial-gradient(120% 90% at 50% 0%, rgba(169,214,70,.06), transparent 60%)}
+  .eng-vis .lbl{position:absolute; left:18px; bottom:14px; font:500 10.5px/1 var(--mono); letter-spacing:.06em; text-transform:uppercase; color:var(--text-3)}
+
+  /* 10m detail: pixel grid zoom-in */
+  .vis-pix{position:absolute; inset:0; display:grid; place-items:center}
+  .vis-pix .box{position:relative; width:280px; height:200px; border-radius:12px; overflow:hidden; box-shadow:inset 0 0 0 1px var(--line-2)}
+  .vis-pix .grid{position:absolute; inset:0; display:grid; grid-template-columns:repeat(14,1fr); gap:1px}
+  .vis-pix .grid i{background:var(--c); border-radius:1px; opacity:.75; transform:scale(.4); transition:opacity .6s, transform .8s var(--ease); transition-delay:calc(var(--k) * 8ms)}
+  .in .vis-pix .grid i{opacity:1; transform:none}
+  .vis-pix .box::after{content:""; position:absolute; inset:0; pointer-events:none; background:radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,.15), transparent 30%)}
+  .vis-pix .pin{position:absolute; left:64%; top:62%; width:18px; height:18px; border-radius:3px; box-shadow:0 0 16px var(--harvest), 0 0 0 4px rgba(243,169,60,.15); background:var(--harvest); animation:pulse 1.8s infinite}
+  .vis-pix .pin::after{content:"10 m"; position:absolute; left:130%; top:50%; transform:translateY(-50%); white-space:nowrap; font:500 10.5px/1 var(--mono); letter-spacing:.06em; text-transform:uppercase; color:var(--harvest); padding:6px 9px; border-radius:6px; background:rgba(8,10,12,.85); box-shadow:inset 0 0 0 1px rgba(243,169,60,.3)}
+  .vis-pix .ruler{position:absolute; left:18px; bottom:18px; display:flex; align-items:center; gap:8px; font:500 10.5px/1 var(--mono); color:var(--text-3); letter-spacing:.06em; text-transform:uppercase}
+  .vis-pix .ruler i{display:block; width:50px; height:2px; background:var(--sprout)}
+
+  /* cloud-proof: radar wave */
+  .vis-radar{position:absolute; inset:0; display:grid; place-items:center}
+  .vis-radar .wave{position:absolute; width:380px; height:380px; border-radius:50%; box-shadow:inset 0 0 0 1px rgba(169,214,70,.18); background:radial-gradient(circle, transparent 58%, rgba(169,214,70,.06) 60%, transparent 62%)}
+  .vis-radar .wave.w2{transform:scale(.66); box-shadow:inset 0 0 0 1px rgba(169,214,70,.24)}
+  .vis-radar .wave.w3{transform:scale(.33); box-shadow:inset 0 0 0 1px rgba(169,214,70,.35)}
+  .vis-radar .pulse2{position:absolute; width:380px; height:380px; border-radius:50%; border:1px solid rgba(169,214,70,.45); animation:ringp 2.6s var(--ease) infinite}
+  .vis-radar .pulse2.p2{animation-delay:1.3s}
+  .vis-radar .cloud{position:absolute; width:120px; height:38px; border-radius:40px; background:radial-gradient(circle at 30% 50%, rgba(255,255,255,.22), rgba(255,255,255,.04) 60%, transparent 75%); filter:blur(4px); animation:drift 9s linear infinite}
+  .vis-radar .cloud.c1{top:22%; left:18%; animation-delay:-2s}
+  .vis-radar .cloud.c2{top:64%; right:18%; width:140px; animation-delay:-5s}
+  .vis-radar .beacon{position:absolute; left:50%; top:50%; width:14px; height:14px; margin:-7px 0 0 -7px; border-radius:50%; background:var(--sprout); box-shadow:0 0 20px var(--sprout); animation:blink 1.6s infinite}
+  @keyframes ringp{0%{transform:scale(.4); opacity:.8} 100%{transform:scale(1); opacity:0}}
+
+  /* 10 years deep: timeline stack */
+  .vis-years{position:absolute; inset:24px; display:flex; flex-direction:column; justify-content:flex-end; gap:10px}
+  .vis-years .row{display:flex; align-items:center; gap:12px; font:500 10.5px/1 var(--mono); color:var(--text-3); letter-spacing:.06em; text-transform:uppercase}
+  .vis-years .row b{width:34px; color:var(--text-2)}
+  .vis-years .row .bar{flex:1; height:6px; border-radius:3px; background:var(--surface-2); overflow:hidden}
+  .vis-years .row .bar i{display:block; height:100%; width:0; background:linear-gradient(90deg, var(--canopy), var(--sprout)); border-radius:3px; transition:width 1.4s var(--ease); transition-delay:calc(var(--k) * 80ms)}
+  .vis-years .row.cur b{color:var(--sprout)}
+  .vis-years .row.cur .bar i{background:linear-gradient(90deg, #fff, var(--sprout))}
+  .in .vis-years .row .bar i{width:var(--w)}
+
+  /* crop models: branching cards */
+  .vis-models{position:absolute; inset:0; display:grid; place-items:center}
+  .vis-models svg{width:88%; height:auto}
+
+  /* field AI: question mark + bubble */
+  .vis-qa{position:absolute; inset:0; display:grid; place-items:center; padding:24px}
+  .vis-qa .qa{width:84%; border-radius:16px; padding:18px; background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01)); box-shadow:inset 0 0 0 1px var(--line-2); display:flex; flex-direction:column; gap:12px}
+  .qa .qb{align-self:flex-end; max-width:80%; padding:9px 13px; border-radius:12px; font-size:13px; background:var(--surface-2); box-shadow:inset 0 0 0 1px var(--line); border-bottom-right-radius:4px}
+  .qa .ab{align-self:flex-start; max-width:88%; padding:11px 13px; border-radius:12px; font-size:13px; background:rgba(169,214,70,.08); box-shadow:inset 0 0 0 1px rgba(169,214,70,.22); border-bottom-left-radius:4px; line-height:1.45}
+  .qa .ab b{color:var(--sprout); font-weight:500}
+  .vis-qa .ev{display:flex; gap:6px; flex-wrap:wrap; margin-top:10px}
+  .vis-qa .ev .chip{height:22px; padding:0 9px; font-size:10.5px}
+
+  /* weather: mini bar + arrow */
+  .vis-wx{position:absolute; inset:24px; display:grid; grid-template-rows:auto 1fr auto; gap:14px}
+  .vis-wx .top{display:flex; justify-content:space-between; align-items:center; font:500 10.5px/1 var(--mono); color:var(--text-3); letter-spacing:.06em; text-transform:uppercase}
+  .vis-wx .chart{position:relative; display:flex; align-items:flex-end; gap:6px}
+  .vis-wx .chart i{flex:1; border-radius:3px 3px 0 0; background:linear-gradient(180deg, rgba(169,214,70,.6), rgba(27,138,76,.25)); height:0; transition:height 1.2s var(--ease); transition-delay:calc(var(--k) * 50ms)}
+  .vis-wx .chart i.cur{background:linear-gradient(180deg, #fff, var(--sprout))}
+  .vis-wx .chart i.amber{background:linear-gradient(180deg, var(--harvest), rgba(243,169,60,.3))}
+  .in .vis-wx .chart i{height:var(--h)}
+  .vis-wx .bot{display:flex; align-items:center; gap:8px; font:500 10.5px/1 var(--mono); color:var(--text-3); letter-spacing:.06em; text-transform:uppercase}
+  .vis-wx .bot b{color:var(--sprout); margin-left:auto}
+
+  /* ── scrub statement ── */
+  .scrub-sec{padding:clamp(120px,16vw,220px) 0}
+  .scrub-sec .quote{font-size:clamp(28px,4.6vw,72px); letter-spacing:-.045em; line-height:1.05; text-wrap:balance; max-width:24ch; margin:0 auto; text-align:center; font-weight:500}
+  .scrub-sec .quote .lit{color:var(--text)}
+  .scrub-sec .quote .sw{color:var(--text-4); transition:color .4s, text-shadow .4s}
+  .scrub-sec .quote .sw.lit{color:var(--text); text-shadow:0 0 24px rgba(169,214,70,.25)}
+  .scrub-sec .meta{margin-top:48px; display:flex; justify-content:center; gap:18px; flex-wrap:wrap; color:var(--text-3); font:500 12px/1 var(--mono); letter-spacing:.06em; text-transform:uppercase}
+  .scrub-sec .meta i{width:6px; height:6px; border-radius:50%; background:var(--sprout); box-shadow:0 0 0 4px var(--sprout-wash); align-self:center}
+
+  /* ── security split ── */
+  .sec-sec{padding:clamp(96px,13vw,180px) 0}
+  .sec-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(40px,5vw,72px); align-items:center}
+  .sec-list{display:flex; flex-direction:column; gap:14px; margin-top:14px; padding:0; list-style:none}
+  .sec-list li{display:grid; grid-template-columns:36px minmax(0,1fr); gap:14px; align-items:flex-start; padding:18px 20px; border-radius:16px; background:var(--surface); box-shadow:inset 0 0 0 1px var(--line); transition:background .4s, transform .6s var(--ease)}
+  .sec-list li:hover{background:var(--surface-2); transform:translateY(-3px)}
+  .sec-list li i{display:grid; place-items:center; width:36px; height:36px; border-radius:10px; color:var(--sprout); background:linear-gradient(180deg, rgba(169,214,70,.16), rgba(169,214,70,.04)); box-shadow:inset 0 0 0 1px rgba(169,214,70,.22)}
+  .sec-list li b{display:block; font-size:16px; letter-spacing:-.02em; margin-bottom:4px; font-weight:500}
+  .sec-list li span{color:var(--text-2); font-size:14.5px; line-height:1.5}
+  .sec-vis{position:relative; aspect-ratio:1/1; border-radius:32px; overflow:hidden; background:radial-gradient(120% 100% at 50% 50%, #0a1208 0%, #030405 70%); box-shadow:inset 0 0 0 1px var(--line-2)}
+  @media (max-width:980px){ .sec-grid{grid-template-columns:minmax(0,1fr)} .sec-vis{max-width:520px; margin:0 auto} }
+  .pix-shield{position:absolute; inset:0; display:grid; place-items:center}
+  .pix-shield svg{width:78%; height:auto}
+</style>
+</head>
+<body data-page="technology">
+<header id="nav"></header>
+<main>
+
+<!-- ═════════ HERO ═════════ -->
+<section class="phero" aria-label="Technology">
+  <div class="aerial" data-aerial="stack" data-seed="3" data-shift=".34,.04"></div>
+  <div class="veil veil--hero"></div>
+  <div class="veil veil--l"></div>
+  <div class="wrap phero__in">
+    <span class="eyebrow" data-r>Technology</span>
+    <h1 class="t-hero" data-split><span class="silver">Intelligence, from</span><br><span class="hl">orbit to every square metre</span></h1>
+    <p class="t-lede" data-r style="--d:4">The AgrosIQ Engine is what turns a sky full of satellites into one clear instruction for the farmer walking the field. Built for the people who grow things, never the people who write about them.</p>
+    <div class="btns" data-r style="--d:6"><a class="btn btn--primary btn--lg" href="start.html">Start free <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn btn--glass btn--lg" href="#how">See how it works</a></div>
+  </div>
+  <div class="scroll-cue" aria-hidden="true"></div>
+</section>
+
+<!-- ═════════ HOW IT WORKS · PINNED STORY ═════════ -->
+<section class="story" id="how" aria-label="How the AgrosIQ Engine works">
+  <div class="story__sticky">
+    <div class="story__steps">
+      <div class="story__step on" data-k="0">
+        <span class="ch-n"><i></i>01 · Capture</span>
+        <h2 class="silver">A sky full of eyes for every field.</h2>
+        <p>AgrosIQ listens to multiple satellites at once and reads every pass over your farm. Multi-satellite imaging, every few days. No satellite you have to book. No pass you ever miss.</p>
+      </div>
+      <div class="story__step" data-k="1">
+        <span class="ch-n"><i></i>02 · Clarity</span>
+        <h2 class="silver">A clear view, even when the sky is not.</h2>
+        <p>Cloudy week? The Engine sees straight through it, then cleans and aligns every image until each pixel means the same thing every time you look at it.</p>
+      </div>
+      <div class="story__step" data-k="2">
+        <span class="ch-n"><i></i>03 · Memory</span>
+        <h2 class="silver">A decade of seasons, loaded on day one.</h2>
+        <p>Every field you add arrives with about ten years of its own archived imagery already inside. The Engine stacks the seasons and knows what a great year, a tough year, and a normal year look like — for that exact patch of ground.</p>
+      </div>
+      <div class="story__step" data-k="3">
+        <span class="ch-n"><i></i>04 · Insight</span>
+        <h2 class="silver">From pixels to one clear instruction.</h2>
+        <p>Proprietary crop models and field AI turn every fresh pass into the one thing a farmer needs to know: walk here. The amber pixel on the exact 10-metre spot. Nothing more, nothing less.</p>
+      </div>
+    </div>
+
+    <div class="story__visual visual" aria-hidden="true">
+      <div class="aerial" id="howGL" data-aerial="earth" data-drive="manual" data-seed="3"></div>
+      <div class="howtop"><span class="chip chip--ok" id="howChip">Live pass</span><span class="chip chip--plain" id="howYr">Season 2026</span></div>
+      <div class="gnote" id="vnote"><i></i><span data-n="0">Reading pass</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ ENGINE BENTO ═════════ -->
+<section class="sec engine-bento" id="engine">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" data-r>The AgrosIQ Engine</span>
+      <h2 class="t-h2" data-split><span class="silver">Six superpowers, one engine</span></h2>
+      <p class="t-lede" data-r style="--d:3">Everything AgrosIQ knows about your fields comes from the same engine, tuned for one job: telling you what needs you, before it costs you.</p>
+    </div>
+    <div class="bento">
+
+      <article class="card s-4" data-r>
+        <div class="eng-vis">
+          <div class="vis-pix">
+            <div class="box">
+              <div class="grid" id="visPix"></div>
+              <div class="pin"></div>
+              <div class="ruler"><i></i>10 metres</div>
+            </div>
+          </div>
+          <div class="lbl">10 m pixels · one amber pin</div>
+        </div>
+        <div class="card__body"><h3 class="t-h4">10-metre detail</h3><p>Every image resolves to a 10-metre pixel — small enough to mean a corner of a paddock, big enough to plan from the office.</p></div>
+      </article>
+
+      <article class="card s-4" data-r style="--d:1">
+        <div class="eng-vis">
+          <div class="vis-radar">
+            <div class="wave w3"></div>
+            <div class="wave w2"></div>
+            <div class="wave"></div>
+            <div class="pulse2"></div>
+            <div class="pulse2 p2"></div>
+            <div class="cloud c1"></div>
+            <div class="cloud c2"></div>
+            <div class="beacon"></div>
+          </div>
+          <div class="lbl">Cloud-proof</div>
+        </div>
+        <div class="card__body"><h3 class="t-h4">Cloud-proof</h3><p>Cloudy season? The Engine sees straight through it, so your alerts keep coming through the wettest weeks of the year.</p></div>
+      </article>
+
+      <article class="card s-4" data-r style="--d:2">
+        <div class="eng-vis">
+          <div class="vis-years" id="visYears"></div>
+          <div class="lbl">Ten seasons · ranked</div>
+        </div>
+        <div class="card__body"><h3 class="t-h4">Ten years deep</h3><p>A decade of seasons is already loaded for every field. See strong years, weak years, and what this year looks like against both.</p></div>
+      </article>
+
+      <article class="card s-6" data-r>
+        <div class="eng-vis">
+          <div class="vis-models">
+            <svg viewBox="0 0 360 220" aria-hidden="true">
+              <defs>
+                <linearGradient id="branchGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#1B8A4C"/>
+                  <stop offset="1" stop-color="#A9D646"/>
+                </linearGradient>
+              </defs>
+              <line x1="30" y1="110" x2="160" y2="110" stroke="url(#branchGrad)" stroke-width="2"/>
+              <line x1="160" y1="110" x2="220" y2="60" stroke="url(#branchGrad)" stroke-width="1.6" opacity=".75"/>
+              <line x1="160" y1="110" x2="220" y2="110" stroke="url(#branchGrad)" stroke-width="1.6" opacity=".85"/>
+              <line x1="160" y1="110" x2="220" y2="160" stroke="url(#branchGrad)" stroke-width="1.6" opacity=".75"/>
+              <line x1="220" y1="60" x2="320" y2="40" stroke="url(#branchGrad)" stroke-width="1.2" opacity=".55"/>
+              <line x1="220" y1="60" x2="320" y2="80" stroke="url(#branchGrad)" stroke-width="1.2" opacity=".55"/>
+              <line x1="220" y1="110" x2="320" y2="110" stroke="url(#branchGrad)" stroke-width="1.2" opacity=".55"/>
+              <line x1="220" y1="160" x2="320" y2="140" stroke="url(#branchGrad)" stroke-width="1.2" opacity=".55"/>
+              <line x1="220" y1="160" x2="320" y2="180" stroke="url(#branchGrad)" stroke-width="1.2" opacity=".55"/>
+              <g fill="#0A1018" stroke-width="1.4">
+                <rect x="14" y="20" width="64" height="22" rx="11" fill="#A9D646" stroke="#A9D646"/>
+                <rect x="14" y="20" width="64" height="22" rx="11" fill="none" stroke="#A9D646" stroke-opacity=".3"/>
+              </g>
+              <text x="46" y="35" text-anchor="middle" font-family="Geist Mono, monospace" font-size="10" font-weight="600" fill="#0b1206">CANOPY</text>
+              <text x="46" y="125" text-anchor="middle" font-family="Geist Mono, monospace" font-size="10" font-weight="600" fill="#0b1206">PHENOLOGY</text>
+              <g font-family="Geist Mono, monospace" font-size="10" font-weight="500" fill="#eef0f2">
+                <text x="190" y="55" text-anchor="end">stress</text>
+                <text x="190" y="115" text-anchor="end">vitality</text>
+                <text x="190" y="165" text-anchor="end">density</text>
+              </g>
+              <g font-family="Geist Mono, monospace" font-size="9" font-weight="500" fill="#a3a9b2">
+                <text x="328" y="44" text-anchor="end">water</text>
+                <text x="328" y="84" text-anchor="end">nitrogen</text>
+                <text x="328" y="114" text-anchor="end">disease</text>
+                <text x="328" y="144" text-anchor="end">pest</text>
+                <text x="328" y="184" text-anchor="end">lodging</text>
+              </g>
+              <g fill="#A9D646">
+                <circle cx="30" cy="110" r="4"/>
+                <circle cx="160" cy="110" r="5"/>
+                <circle cx="220" cy="60" r="3.5"/>
+                <circle cx="220" cy="110" r="3.5"/>
+                <circle cx="220" cy="160" r="3.5"/>
+                <circle cx="320" cy="40" r="2.5"/>
+                <circle cx="320" cy="80" r="2.5"/>
+                <circle cx="320" cy="110" r="2.5"/>
+                <circle cx="320" cy="140" r="2.5"/>
+                <circle cx="320" cy="180" r="2.5"/>
+              </g>
+            </svg>
+          </div>
+          <div class="lbl">Proprietary crop models</div>
+        </div>
+        <div class="card__body"><h3 class="t-h4">Crop models for any crop</h3><p>The same Engine speaks wheat, maize, soybean, cotton, sugarcane, vines, pasture and more. Built on field AI that has watched millions of hectares, calibrated on yours.</p></div>
+      </article>
+
+      <article class="card s-6" data-r style="--d:1">
+        <div class="eng-vis">
+          <div class="vis-qa">
+            <div class="qa">
+              <div class="qb">Why is the north block behind this week?</div>
+              <div class="ab"><b>Rainfall is 38% below</b> this field's own 10-year average for the last month. Canopy is recovering, expect on-track by next pass.
+                <div class="ev"><span class="chip chip--ok">10-yr history</span><span class="chip chip--ok">30-day window</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="lbl">Ask in plain English</div>
+        </div>
+        <div class="card__body"><h3 class="t-h4">Field AI you can ask</h3><p>Ask your farm anything in plain language. Get an answer with the maps and dates behind it, so you can see exactly why it said what it said.</p></div>
+      </article>
+
+      <article class="card s-12" data-r>
+        <div class="eng-vis" style="height:280px">
+          <div class="vis-wx">
+            <div class="top"><span>Rainfall · last 10 weeks</span><span style="color:var(--harvest)">Drier than 7 of 10 yrs</span></div>
+            <div class="chart" id="visWx"></div>
+            <div class="bot"><span>Creek Flat · field 04</span><b>Watch this week</b></div>
+          </div>
+          <div class="lbl">Weather intelligence · per field</div>
+        </div>
+        <div class="card__body" style="display:grid; grid-template-columns:1fr 1fr; gap:clamp(24px,3vw,48px); align-items:start">
+          <div><h3 class="t-h4">Weather intelligence</h3><p style="margin-top:10px">Rainfall, heat and dry spells tracked for every field and set against its own decade of memory. You know when the season is turning against you — before it does.</p></div>
+          <div style="display:flex; flex-direction:column; gap:12px; padding-top:8px">
+            <div style="display:flex; justify-content:space-between; gap:14px"><span class="t-mono" style="color:var(--text-3)">Per-field history</span><span class="ok">10 years</span></div>
+            <div style="display:flex; justify-content:space-between; gap:14px"><span class="t-mono" style="color:var(--text-3)">Heat &amp; dry stress</span><span class="ok">Automatic</span></div>
+            <div style="display:flex; justify-content:space-between; gap:14px"><span class="t-mono" style="color:var(--text-3)">Field-by-field alerts</span><span class="ok">Yes</span></div>
+            <div style="display:flex; justify-content:space-between; gap:14px"><span class="t-mono" style="color:var(--text-3)">Forecast ahead</span><span class="ok">14 days</span></div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ SCRUB STATEMENT ═════════ -->
+<section class="sec scrub-sec" aria-label="The promise">
+  <div class="wrap">
+    <p class="quote" data-scrub>Every pixel of every field, every few days, compared with ten years of its own history, and turned into one clear instruction: walk here.</p>
+    <div class="meta" data-r><span>Capture</span><i></i><span>Clarity</span><i></i><span>Memory</span><i></i><span>Insight</span></div>
+  </div>
+</section>
+
+<!-- ═════════ STATS ═════════ -->
+<section class="sec sec--tight">
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat" data-r><div class="stat__n"><span data-count="10">0</span><small>years</small></div><p class="stat__l">of history for every field, the day you add it</p></div>
+      <div class="stat" data-r style="--d:1"><div class="stat__n"><span data-count="10">0</span><small>m</small></div><p class="stat__l">pixel detail, so you see the corner, not just the field</p></div>
+      <div class="stat" data-r style="--d:2"><div class="stat__n">&lt;<span data-count="5">0</span><small>days</small></div><p class="stat__l">between fresh looks at every hectare you farm</p></div>
+      <div class="stat" data-r style="--d:3"><div class="stat__n"><span data-count="0">0</span><small>hardware</small></div><p class="stat__l">no sensors, no drones, no installs. Just sign in.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ SECURITY ═════════ -->
+<section class="sec sec-sec" id="security" aria-label="Security and data ownership">
+  <div class="wrap sec-grid">
+    <div>
+      <span class="eyebrow" data-r>Your data is yours</span>
+      <h2 class="t-h2" data-split><span class="silver">Owned by you. Built to stay that way.</span></h2>
+      <p class="t-lede" data-r style="--d:3">Every field you add, every season that loads, every question you ask — that's your data. AgrosIQ keeps it private by default, encrypted end to end, and entirely under your control.</p>
+      <ul class="sec-list" data-r style="--d:4">
+        <li><i class="ic" data-ic="lock"></i><div><b>Private by default</b><span>Your fields, your seasons, your questions. Never visible to anyone you have not invited.</span></div></li>
+        <li><i class="ic" data-ic="shield"></i><div><b>Never sold, never shared</b><span>Your data is not the product. It is not aggregated, brokered or traded. It is yours.</span></div></li>
+        <li><i class="ic" data-ic="zap"></i><div><b>Encrypted in transit and at rest</b><span>Modern encryption on the wire and on disk. Only the people you trust hold the keys.</span></div></li>
+        <li><i class="ic" data-ic="file"></i><div><b>Export any time</b><span>Take everything with you — maps, alerts, season data — as CSV, KML or shapefile.</span></div></li>
+        <li><i class="ic" data-ic="eye"></i><div><b>Delete any time</b><span>One click, full erasure, no questions asked. Your farm, your call.</span></div></li>
+        <li><i class="ic" data-ic="users"></i><div><b>Role-based access</b><span>Invite your agronomist, your manager or your banker. Each sees only what you allow.</span></div></li>
+      </ul>
+    </div>
+    <div class="sec-vis" data-r style="--d:2">
+      <div class="pix-shield">
+        <svg viewBox="0 0 400 400" aria-hidden="true">
+          <defs>
+            <linearGradient id="shieldG" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#A9D646" stop-opacity=".5"/>
+              <stop offset="1" stop-color="#A9D646" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <!-- pixel grid forming a shield silhouette -->
+          <g id="shieldPixels"></g>
+          <!-- glow -->
+          <path d="M200 60 L320 100 L320 220 C320 290 270 290 200 340 C130 290 80 290 80 220 L80 100 Z" fill="url(#shieldG)" opacity=".25"/>
+          <!-- inner lock dot -->
+          <g transform="translate(200,210)">
+            <rect x="-32" y="-10" width="64" height="56" rx="10" fill="#030405" stroke="#A9D646" stroke-width="2.2"/>
+            <path d="M-18 -10 L-18 -28 a18 18 0 0 1 36 0 L18 -10" fill="none" stroke="#A9D646" stroke-width="2.2" stroke-linecap="round"/>
+            <circle cx="0" cy="14" r="5" fill="#A9D646"/>
+            <rect x="-1.5" y="14" width="3" height="14" rx="1.5" fill="#A9D646"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ CTA ═════════ -->
+<section class="sec" style="padding-top:0">
+  <div class="wrap">
+    <div class="cta-band" data-r>
+      <div class="aerial" data-aerial="season" data-seed="9"></div>
+      <div class="cta-band__in">
+        <span class="eyebrow">See it on your farm</span>
+        <h2 class="t-h2" data-split><span class="silver">Your fields. From up there.</span></h2>
+        <p class="t-lede">Draw your first 40 hectares free, forever. Watch a decade of seasons load in minutes, and your first amber pin land on the map.</p>
+        <div class="btns" style="justify-content:center"><a class="btn btn--primary btn--lg" href="start.html">Start free <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn btn--glass btn--lg" href="start.html#demo">Book a demo</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer id="foot"></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  'use strict';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ── the how-it-works story, played on the live farm ──
+  const how = document.getElementById('how'), hostH = document.getElementById('howGL');
+  const notes = ['Reading pass', 'Clearing cloud', 'Loading ten seasons', 'Walk here'], chips = ['Live pass', 'Cloud-proof', 'Memory', 'Insight'];
+  const sm = (a, b, v) => { const t = Math.max(0, Math.min(1, (v - a) / (b - a))); return t * t * (3 - 2 * t); };
+  const lerp = (a, b, t) => a + (b - a) * t;
+  (function wire(){
+    const A = window.AerialGL && AerialGL.get(hostH); if (!A){ setTimeout(wire, 60); return; }
+    const AL = AerialGL.ALERT; let sp = 0, lastK = -1;
+    A.onframe = (t, dt) => {
+      const p = how._p || 0; sp += (p - sp) * Math.min(1, dt * 5);
+      const k = Math.min(3, Math.floor(sp * 4 * .9999)), f = sp * 4 - k;
+      const P = A.p; P.sat = 1.1; P.season = .45; P.shift = [0, 0]; P.stars = 0; P.cloud = 0; P.health = 0; P.scanOn = 0; P.patch = 0; P.alert = 0; P.outline = 0; P.pix = 1;
+      // camera: orbit, then down through the weather, then over the farm, then onto one pixel
+      const D = [Math.exp(lerp(Math.log(52000), Math.log(5200), sm(.05, .3, sp))), 3600, 2000, 420];
+      const dist = sp < .3 ? D[0] : sp < .5 ? lerp(5200, 3600, sm(.3, .4, sp)) : sp < .75 ? lerp(3600, 2000, sm(.5, .6, sp)) : lerp(2000, 420, sm(.75, .85, sp));
+      const el = sp < .3 ? lerp(.36, .66, sm(.05, .3, sp)) : sp < .75 ? lerp(.66, .85, sm(.4, .6, sp)) : lerp(.85, 1.08, sm(.75, .85, sp));
+      Object.assign(A.cam, AerialGL.lookCam(AL[0], AL[1], 0, -1.9 + t * .006 + sp * .4, el, dist, 36));
+      if (k === 0){ P.stars = 1 - sm(.05, .2, sp); P.cloud = .6; P.scanOn = 1; P.scan = -3000 + ((t * .12) % 1) * 6400; P.health = 1; }
+      if (k === 1){ P.cloud = .75 * (1 - sm(.15, .85, f)); P.health = sm(.3, .9, f); P.outline = .4 * f; }
+      if (k === 2){ P.season = (.3 + t * .09) % 1; }
+      if (k === 3){ P.health = 1; P.patch = 1; P.alert = sm(.1, .4, f); }
+      if (k === 2) document.getElementById('howYr').textContent = 'Season ' + (2016 + Math.min(10, Math.floor(f * 11)));
+      if (k !== lastK){ lastK = k; document.querySelector('#vnote [data-n]').textContent = notes[k]; document.getElementById('howChip').textContent = chips[k];
+        document.getElementById('howChip').className = 'chip ' + (k === 3 ? 'chip--warn' : 'chip--ok'); if (k !== 2) document.getElementById('howYr').textContent = 'Season 2026'; }
+    };
+  })();
+
+  // ── 10 m pixel zoom tile ──
+  const vp = document.getElementById('visPix');
+  if (vp){
+    const veg = (v) => { v = Math.max(0, Math.min(1, v));
+      const s = [[0,[59,43,33]],[.35,[92,77,43]],[.55,[13,92,53]],[.78,[28,148,80]],[1,[179,224,71]]];
+      for (let i = 1; i < s.length; i++) if (v <= s[i][0]){ const t = (v - s[i-1][0])/(s[i][0]-s[i-1][0]); return 'rgb(' + s[i-1][1].map((x,k)=>Math.round(x+(s[i][1][k]-x)*t)).join(',') + ')'; }
+      return 'rgb(179,224,71)';
+    };
+    const W = 14, H = 10;
+    let h = '', k = 0;
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++){
+      const v = .55 + .28 * Math.sin(x*.5 + 1.7) * Math.cos(y*.6 - 1.1) + .1 * Math.sin((x+y)*.7);
+      h += '<i style="--c:' + veg(v) + ';--k:' + (k++) + '"></i>';
+    }
+    vp.innerHTML = h;
+    vp.style.gridTemplateRows = 'repeat(' + H + ',1fr)';
+    // spotlight follows amber pin
+    const box = vp.closest('.box');
+    if (box) box.addEventListener('pointermove', (e) => {
+      const r = box.getBoundingClientRect();
+      box.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+      box.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+    });
+  }
+
+  // ── ten-year bars ──
+  const vy = document.getElementById('visYears');
+  if (vy){
+    const yrs = [
+      ['2017', 46], ['2018', 64], ['2019', 32], ['2020', 78],
+      ['2021', 58], ['2022', 71], ['2023', 49], ['2024', 84],
+      ['2025', 67], ['2026', 88],
+    ];
+    vy.innerHTML = yrs.map((y, i) => '<div class="row' + (i === yrs.length-1 ? ' cur' : '') + '"><b>' + y[0] + '</b><div class="bar"><i style="--w:' + y[1] + '%;--k:' + i + '"></i></div></div>').join('');
+  }
+
+  // ── weather chart bars ──
+  const wx = document.getElementById('visWx');
+  if (wx){
+    const vals = [42, 56, 38, 64, 48, 71, 35, 22, 58, 30];
+    wx.innerHTML = vals.map((v, i) => {
+      const cls = (i === 6 || i === 9) ? ' class="amber"' : (i === vals.length - 2 ? ' class="cur"' : '');
+      return '<i style="--h:' + v + '%;--k:' + i + '"' + cls + '></i>';
+    }).join('');
+  }
+
+  // ── shield pixel grid ──
+  const sp = document.getElementById('shieldPixels');
+  if (sp){
+    const W = 28, H = 28, cell = 12;
+    let h = '';
+    // build mask points for shield silhouette
+    const inside = (x, y) => {
+      const cx = W / 2, cy = H / 2 + 1;
+      const tx = (x - cx) / (W * 0.42);
+      const ty = (y - 4) / (H - 4);
+      if (ty < 0) return false;
+      if (ty > 1) return 1;
+      // shield curve: top is rounded dome, body widens then tapers to point
+      let w;
+      if (ty < 0.18) w = Math.sqrt(Math.max(0, 1 - Math.pow((ty - 0.18) / 0.18, 2))) * 1.05;
+      else if (ty < 0.55) w = 1;
+      else w = Math.max(0, 1 - Math.pow((ty - 0.55) / 0.55, 2));
+      return Math.abs(tx) < w * 0.78;
+    };
+    let k = 0;
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++){
+      if (!inside(x, y)) continue;
+      const dx = x - W/2, dy = y - H/2;
+      const d = Math.sqrt(dx*dx + dy*dy);
+      const op = Math.min(1, (1 - d / (W*0.6)) * 1.4);
+      const c = op > .85 ? '#A9D646' : op > .55 ? 'rgba(169,214,70,.55)' : 'rgba(169,214,70,.22)';
+      h += '<rect x="' + (x*cell+50) + '" y="' + (y*cell+50) + '" width="' + (cell-1) + '" height="' + (cell-1) + '" rx="2" fill="' + c + '" style="opacity:0;animation:lit ' + (3 + (k%6)*0.2) + 's var(--ease) infinite;animation-delay:' + (k*22 % 800) + 'ms"/>';
+      k++;
+    }
+    sp.innerHTML = h;
+  }
+})();
+</script>
+</body>
+</html>
