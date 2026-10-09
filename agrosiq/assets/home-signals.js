@@ -28,18 +28,18 @@
 
   /* ════════ WHAT IT CATCHES ════════ */
   const SIG = [
-    { ic: 'sprout', kind: 'Patchy emergence', sub: 'Gaps in the stand, while there is still time to re-sow', season: .12, date: '14 Apr', time: '06:12', vs: -31, area: 2.3,
-      what: 'The south end came up thin and uneven.', act: 'Check seed depth and crusting this week. The re-sow window closes in about ten days.' },
-    { ic: 'drop', kind: 'Water stress', sub: 'Drying out faster than it should', season: .47, date: '24 Jun', time: '05:58', vs: -22, area: 4.1,
-      what: 'Drying faster than its ten-year normal for late June.', act: 'Move this block up the irrigation roster and check the end of the pivot line.' },
-    { ic: 'leaf', kind: 'Nutrient shortfall', sub: 'Pale patches that point to a missed pass', season: .3, date: '21 May', time: '06:04', vs: -17, area: 1.6,
-      what: 'A pale band about 40 m wide along the old fence line.', act: 'Looks like a spreader miss. Top-dress the band before the next growth stage.' },
-    { ic: 'waves', kind: 'Waterlogging', sub: 'Low ground still holding water after rain', season: .36, date: '3 Jun', time: '06:20', vs: -27, area: .9, river: true,
-      what: 'The low corner by the creek is still wet four days after rain.', act: 'Keep machinery off it for now and mark the drain for a look after harvest.' },
-    { ic: 'storm', kind: 'Storm damage', sub: 'Hail and wind, mapped the morning after', season: .56, date: '13 Jul', time: '06:09', vs: -38, area: 3.8,
-      what: 'Crop flattened in a band through the middle after Saturday\'s storm.', act: 'Before-and-after maps are already in the field record, ready for your insurer.' },
-    { ic: 'wheat', kind: 'Ready to harvest', sub: 'Which paddock to start the header in', season: .75, date: '2 Oct', time: '06:15', ready: true,
-      what: 'Drying down evenly, about four days ahead of its neighbours.', act: 'Start the header here. The rest of the farm follows in the order on your phone.' },
+    { ic: 'sprout', kind: 'Uneven early growth', sub: 'Thin or patchy ground early in the season', season: .12, date: '14 Apr', time: '06:12', vs: -31, area: 2.3,
+      what: 'The south end is greening up thinner than the rest of the field.', act: 'Walk the south end and look at the stand. AgrosIQ shows where and how much, not why.' },
+    { ic: 'drop', kind: 'Drying faster than normal', sub: 'Greenness falling faster than its own history', season: .47, date: '24 Jun', time: '05:58', vs: -22, area: 4.1,
+      what: 'Falling faster than its ten-year normal for late June.', act: 'Check the block on the ground before deciding anything. The water balance is in beta.' },
+    { ic: 'leaf', kind: 'Pale band', sub: 'A strip greening up less than the ground around it', season: .3, date: '21 May', time: '06:04', vs: -17, area: 1.6,
+      what: 'A pale band about 40 m wide along the old fence line.', act: 'Walk the band. The pin gives its position and width; the cause is for you or your agronomist to find.' },
+    { ic: 'waves', kind: 'Low ground lagging', sub: 'Low ground behind the rest after rain', season: .36, date: '3 Jun', time: '06:20', vs: -27, area: .9, river: true,
+      what: 'The low corner by the creek is lagging the rest of the field four days after rain.', act: 'Check the corner on the ground when it is safe to get there.' },
+    { ic: 'storm', kind: 'Sudden drop', sub: 'A sharp fall between two passes', season: .56, date: '13 Jul', time: '06:09', vs: -38, area: 3.8,
+      what: 'A band through the middle fell sharply between the passes before and after Saturday\'s storm.', act: 'Before-and-after maps are in the field record. Check the band on the ground.' },
+    { ic: 'wheat', kind: 'Drying down first', sub: 'Which paddock is browning off first', season: .75, date: '2 Oct', time: '06:15', ready: true,
+      what: 'Drying down evenly, about four days ahead of its neighbours.', act: 'Check it on the ground. When to harvest is your call.' },
   ];
   const sigList = $('sigList'), sigStage = $('sigStage');
   sigList.innerHTML = SIG.map((s, i) => '<button class="sig__item" role="tab" type="button" aria-selected="' + (i === 0) + '" aria-controls="sigStage" id="sigT' + i + '" tabindex="' + (i ? -1 : 0) + '">' +
@@ -128,11 +128,11 @@
   /* ════════ MORNING BRIEF ════════ */
   const STEPS = [
     { t: '05:58', v: 'lock', n: 1, b: 'A fresh look, overnight', p: 'A new pass over the farm is read before you are up. All 33 fields are checked against their own history.' },
-    { t: '06:12', v: 'lock', n: 2, b: 'Two fields flagged', p: 'Only what matters reaches your phone. Today it is Ridge Paddock first, then Creek Flat.' },
+    { t: '06:12', v: 'lock', n: 2, b: 'Two fields flagged', p: 'Only what matters goes on the list. Today it is Ridge Paddock first, then Creek Flat.' },
     { t: '06:15', v: 'map', b: 'Open it, see it', p: 'The map opens on the problem, with its size and how far it has slipped below normal.' },
-    { t: '06:38', v: 'walk', b: 'Walk straight there', p: 'Your phone guides you from the gate to the exact 10 m spot. No zig-zagging across the paddock.' },
-    { t: '06:41', v: 'note', b: 'Snap it, note it', p: 'Photo and note are pinned to the spot and saved to the field record, so next season remembers.' },
-    { t: '06:45', v: 'share', b: 'Everyone on the same page', p: 'Your agronomist sees the same map and the same photo, and can plan the fix from their desk.' },
+    { t: '06:38', v: 'walk', b: 'Walk straight there', p: 'The pin gives the exact 10 m spot and its coordinates. Walking directions on the phone are coming later.' },
+    { t: '06:41', v: 'note', b: 'Note it', p: 'Record what you found against the spot, so next season remembers. Photos are coming later.' },
+    { t: '06:45', v: 'share', b: 'Everyone on the same page', p: 'Send your agronomist a read-only link to the same map. Team accounts are coming later.' },
   ];
   const NOTES = [
     ['New pass read · North Farm', '33 fields checked, cloud-free. 31 on track.', ''],

@@ -59,12 +59,12 @@
   if (nav){
     nav.className = 'nav';
     const MEGA = {
-      platform: { items: [['satellite', 'Field Watch', 'Every field checked on every pass', 'platform.html#watch'], ['layers', 'Field Record', 'Ten years of every field, ranked', 'platform.html#record'],
-                          ['sparkle', 'Field Analyst', 'Ask your farm anything', 'platform.html#analyst'], ['phone', 'Scout', 'Walk straight to the spot', 'platform.html#scout'],
-                          ['grid', 'Zones', 'Strong and weak ground, mapped', 'platform.html'], ['file', 'Reports', 'Share a field in one click', 'platform.html']],
+      platform: { items: [['satellite', 'Field Watch', 'Every field checked on every pass', 'platform.html#watch'], ['layers', 'Field Record', 'Ten years of every field', 'platform.html#record'],
+                          ['sparkle', 'Field Analyst', 'Suggested questions, with the evidence', 'platform.html#analyst'], ['pin', 'Walk here', 'The spot to check first', 'platform.html#scout'],
+                          ['grid', 'Zones', 'Strong and weak ground, mapped', 'platform.html'], ['file', 'Sharing', 'Read-only links to a field', 'platform.html']],
                   feat: ['map', 'Live map', 'Your whole farm on one screen', 'platform.html'] },
       solutions: { items: [['wheat', 'Growers', 'Protect yield, walk less', 'solutions.html#growers'], ['users', 'Agronomists', 'Every client field at once', 'solutions.html#agronomists'],
-                           ['chart', 'Farm managers', 'Thousands of hectares, one screen', 'solutions.html#managers'], ['globe', 'Agribusiness', 'Supply and sourcing, field by field', 'solutions.html#enterprise'],
+                           ['chart', 'Farm managers', 'Thousands of hectares, one screen', 'solutions.html#managers'], ['globe', 'Agribusiness', 'Field evidence across growers', 'solutions.html#enterprise'],
                            ['coins', 'Lenders and insurers', 'Independent field history', 'solutions.html#enterprise'], ['shield', 'Security', 'Your data stays yours', 'technology.html#security']],
                    feat: ['season', 'A season with AgrosIQ', 'From sowing to harvest', 'solutions.html#season'] },
     };
@@ -74,11 +74,11 @@
     nav.innerHTML = '<div class="nav__in">' + LOGO +
       '<nav class="nav__links" aria-label="Primary">' + PAGES.map(([k, h, t]) => MEGA[k] ? '<span class="has-mega"><a href="' + h + '"' + cur(k) + '>' + t + '</a>' + megaHTML(k) + '</span>' : '<a href="' + h + '"' + cur(k) + '>' + t + '</a>').join('') + '</nav>' +
       '<div class="nav__cta"><a class="btn btn--ghost btn--sm nav__signin" href="start.html#signin">Sign in</a>' +
-      '<a class="btn btn--primary btn--sm" href="start.html">Start free ' + ARROW + '</a>' +
+      '<a class="btn btn--primary btn--sm" href="start.html">Join the pilot ' + ARROW + '</a>' +
       '<button class="nav__burger" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button></div></div>';
     const drawer = document.createElement('nav'); drawer.className = 'drawer'; drawer.setAttribute('aria-label', 'Menu');
     drawer.innerHTML = '<a href="index.html"' + cur('home') + '>Home<span>→</span></a>' + PAGES.map(([k, h, t]) => '<a href="' + h + '"' + cur(k) + '>' + t + '<span>→</span></a>').join('') +
-      '<a class="btn btn--primary" href="start.html">Start free</a>';
+      '<a class="btn btn--primary" href="start.html">Join the pilot</a>';
     nav.after(drawer);
     const burger = nav.querySelector('.nav__burger');
     burger.addEventListener('click', () => { const o = drawer.classList.toggle('is-open'); nav.classList.toggle('is-open', o); burger.setAttribute('aria-expanded', String(o)); document.body.style.overflow = o ? 'hidden' : ''; });
@@ -91,15 +91,53 @@
     foot.className = 'foot';
     foot.innerHTML = '<div class="wrap"><div class="foot__grid"><div>' + LOGO +
       '<p class="muted" style="margin:20px 0 0;max-width:34ch;font-size:15px">Crop intelligence from orbit. See every field, catch every problem early, and grow more with less guesswork.</p>' +
-      '<form class="foot__news" onsubmit="event.preventDefault();this.querySelector(\'button\').textContent=\'Subscribed\'"><input type="email" required placeholder="Your email" aria-label="Email for product news"><button class="btn btn--glass btn--sm" style="height:44px">Get updates</button></form></div>' +
+      '<form class="foot__news" id="footNews" data-lead="updates" novalidate><input type="email" name="email" required placeholder="Your email" aria-label="Email for product news"><button class="btn btn--glass btn--sm" style="height:44px">Get updates</button></form>' +
+      '<p class="lead-status" data-lead-status="updates" role="status" aria-live="polite"></p></div>' +
       '<div><h4>Product</h4><ul><li><a href="platform.html">Platform</a></li><li><a href="platform.html#watch">Field Watch</a></li><li><a href="platform.html#record">Field Record</a></li><li><a href="platform.html#analyst">Field Analyst</a></li><li><a href="pricing.html">Pricing</a></li></ul></div>' +
       '<div><h4>Solutions</h4><ul><li><a href="solutions.html#growers">Growers</a></li><li><a href="solutions.html#agronomists">Agronomists</a></li><li><a href="solutions.html#managers">Farm managers</a></li><li><a href="solutions.html#enterprise">Agribusiness</a></li></ul></div>' +
       '<div><h4>Company</h4><ul><li><a href="company.html">About</a></li><li><a href="company.html#careers">Careers</a></li><li><a href="company.html#contact">Contact</a></li><li><a href="technology.html">Technology</a></li></ul></div>' +
-      '<div><h4>Resources</h4><ul><li><a href="technology.html#security">Security</a></li><li><a href="pricing.html#faq">FAQ</a></li><li><a href="start.html">Book a demo</a></li><li><a href="start.html#signin">Sign in</a></li></ul></div>' +
+      '<div><h4>Resources</h4><ul><li><a href="technology.html#security">Security</a></li><li><a href="pricing.html#faq">FAQ</a></li><li><a href="start.html#demo">Book a demo</a></li><li><a href="start.html#signin">Sign in</a></li><li><a href="mailto:hello@lumen8.ai?subject=AgrosIQ%20privacy%20notice">Privacy (on request)</a></li><li><a href="mailto:hello@lumen8.ai?subject=AgrosIQ%20pilot%20terms">Terms (on request)</a></li></ul></div>' +
       '</div><div class="foot__show" aria-hidden="true"><div class="aerial" data-aerial="season" data-seed="5" data-res=".75"></div><div class="foot__mask">Grow with certainty</div></div>' +
-      '<div class="foot__base"><span>© 2026 AgrosIQ. All rights reserved.</span><nav><a href="#">Privacy</a><a href="#">Terms</a><a href="technology.html#security">Security</a></nav></div></div>';
+      '<div class="foot__base"><span>© 2026 AgrosIQ. All rights reserved.</span><nav><a href="mailto:hello@lumen8.ai?subject=AgrosIQ%20privacy%20notice">Privacy (on request)</a><a href="mailto:hello@lumen8.ai?subject=AgrosIQ%20pilot%20terms">Terms (on request)</a><a href="technology.html#security">Security</a></nav></div></div>';
   }
   fillIcons();
+
+  /* ── lead capture (FIX-003). No form backend exists for this static site, so a form never claims it was sent:
+     with no LEAD_ENDPOINT it opens the visitor's e-mail app with the message filled in (they press Send there);
+     with an endpoint, success is shown only after a 2xx and an error otherwise. CONTACT is the one address already
+     published on lumen8.ai; swap it here (one place) when AgrosIQ has its own inbox. ── */
+  const CONTACT = 'hello@lumen8.ai';
+  const LEAD_ENDPOINT = window.AGQ_LEAD_ENDPOINT || '';
+  const mailtoHref = (subject, fields) => 'mailto:' + CONTACT + '?subject=' + encodeURIComponent(subject) +
+    '&body=' + encodeURIComponent(Object.keys(fields).filter(k => fields[k]).map(k => k + ': ' + fields[k]).join('\n'));
+  /* sendLead(kind, subject, fields) → {via:'post', ok:true} after a 2xx · {via:'post', ok:false, error} otherwise ·
+     {via:'mailto', ok:null, href} when there is no endpoint (nothing has been sent yet). Never put passwords in fields. */
+  async function sendLead(kind, subject, fields){
+    if (LEAD_ENDPOINT){
+      try {
+        const r = await fetch(LEAD_ENDPOINT, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(Object.assign({ kind }, fields)) });
+        return r.ok ? { via: 'post', ok: true } : { via: 'post', ok: false, error: 'HTTP ' + r.status };
+      } catch (e) { return { via: 'post', ok: false, error: 'network' }; }
+    }
+    const href = mailtoHref(subject, fields);
+    document.dispatchEvent(new CustomEvent('agq:mailto', { detail: { kind, href } }));
+    location.href = href;
+    return { via: 'mailto', ok: null, href };
+  }
+  const MAILTO_NOTE = 'Your e-mail app should open with this message to ' + CONTACT + '. Nothing is sent until you press Send there. No e-mail app? Write to ' + CONTACT + '.';
+  const ERROR_NOTE = (e) => 'We could not send this (' + e + '). Please e-mail ' + CONTACT + ' instead.';
+  window.AGQ.CONTACT = CONTACT; window.AGQ.sendLead = sendLead; window.AGQ.MAILTO_NOTE = MAILTO_NOTE; window.AGQ.ERROR_NOTE = ERROR_NOTE;
+  document.querySelectorAll('a[data-contact]').forEach(a => { a.href = 'mailto:' + CONTACT + (a.dataset.contact ? '?subject=' + encodeURIComponent(a.dataset.contact) : ''); });
+  document.querySelectorAll('[data-contact-text]').forEach(el => { el.textContent = CONTACT; });
+  const news = document.getElementById('footNews');
+  if (news) news.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const inp = news.querySelector('input'), st = document.querySelector('[data-lead-status="updates"]');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inp.value.trim())){ inp.style.boxShadow = 'inset 0 0 0 1px var(--harvest)'; return; }
+    inp.style.boxShadow = '';
+    const r = await sendLead('updates', 'AgrosIQ product news', { 'Please add me to product news': inp.value.trim() });
+    st.textContent = r.via === 'mailto' ? MAILTO_NOTE : r.ok ? 'Thanks, you are on the product news list.' : ERROR_NOTE(r.error);
+  });
 
   /* ── first-visit intro (pages with data-intro): holds until the 3-D farm is drawing, never longer than 4.5 s ── */
   let seen = false; try { seen = sessionStorage.getItem('agq-intro') === '1'; } catch (e) {}

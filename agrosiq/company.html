@@ -136,7 +136,7 @@
     <div class="manifesto__inner">
       <span class="eyebrow" data-r>The manifesto</span>
       <h2 class="sr">The thing</h2>
-      <p class="manifesto__p" data-r data-scrub style="--d:2">A farmer's most important work happens before anyone can see it. The way a canopy thins in late spring, the way a low spot drowns out the row before the season turns, the way one corner of a field quietly falls behind. We believe every grower should see those signals the moment they happen — instantly, in plain language, on every field they farm — so good seasons become great ones and bad ones don't have to be.</p>
+      <p class="manifesto__p" data-r data-scrub style="--d:2">A farmer's most important work happens before anyone can see it. The way a canopy thins in late spring, the way a low spot drowns out the row before the season turns, the way one corner of a field quietly falls behind. We believe every grower should see those signals soon after they happen — after each satellite pass, in plain language, on every field they farm — so good seasons become great ones and bad ones don't have to be.</p>
     </div>
   </div>
 </section>
@@ -168,10 +168,10 @@
         <div class="card__vis" style="overflow:hidden">
           <div class="wn-ai">
             <div class="bub bub--q">Why is the north block behind?</div>
-            <div class="bub bub--a"><b>It's 18% below its normal.</b> A dry patch in the NE corner worth a walk today.</div>
+            <div class="bub bub--a"><b>It's 18% below its normal.</b> The NE corner is the spot to walk first.</div>
           </div>
         </div>
-        <div class="card__body"><h3 class="t-h4">AI got useful</h3><p>The same models that write sentences can read a season of imagery and tell you, in three lines, what your farm is trying to say. Plain English. No jargon.</p></div>
+        <div class="card__body"><h3 class="t-h4">AI got useful</h3><p>Language models can now turn a season of measurements into a few plain sentences, with the maps and dates behind every number. Plain English. No jargon.</p></div>
       </article>
       <article class="card s-4" data-r style="--d:2">
         <div class="card__vis" style="overflow:hidden">
@@ -230,7 +230,7 @@
         <div class="val__bg val__bg--lock"></div>
         <span class="ic-tile"><i class="ic" data-ic="lock"></i></span>
         <h3>Your data is yours</h3>
-        <p>Private by default, encrypted in transit and at rest, never sold, exported or deleted on your word. The fields you trust us with belong to you, not to us.</p>
+        <p>Never sold, sent over encrypted connections, and deleted from the live service when you ask (deletion from backups, and export, are being built). The fields you trust us with belong to you, not to us.</p>
       </article>
       <article class="val s-4" data-r>
         <div class="val__bg val__bg--spark"></div>
@@ -242,7 +242,7 @@
         <div class="val__bg val__bg--dots"></div>
         <span class="ic-tile"><i class="ic" data-ic="globe"></i></span>
         <h3>Built for every farm</h3>
-        <p>A forty-hectare plot and a forty-thousand-hectare estate use the same product, on the same terms. We don't gate features behind tiers; we make sure the small farm isn't a stripped-down version of anyone else's.</p>
+        <p>A forty-hectare plot and a forty-thousand-hectare estate get the same field record and the same evidence. Bigger plans will add ground and team features; the small farm is never a stripped-down version of anyone else's.</p>
       </article>
     </div>
   </div>
@@ -265,7 +265,7 @@
       <div class="tl-step" data-r style="--d:1">
         <span class="tl-n">02</span>
         <h4 class="tl-h">Watch every pass</h4>
-        <p class="tl-p">If a satellite reads a field, we read it. Nothing is missed on purpose. Every alert we send is one a careful farmer would have sent themselves if they had the time.</p>
+        <p class="tl-p">If a satellite reads a field, we read it. Nothing is missed on purpose. Every spot we flag is one a careful farmer would want to check if they had the time.</p>
       </div>
       <div class="tl-step" data-r style="--d:2">
         <span class="tl-n">03</span>
@@ -310,12 +310,12 @@
     <div class="sec-head">
       <span class="eyebrow" data-r>Contact</span>
       <h2 class="t-h2" data-split><span class="silver">Let's talk</span></h2>
-      <p class="t-lede" data-r style="--d:3">Sales, partnerships, press, careers — pick a topic and we'll route it to the right team.</p>
+      <p class="t-lede" data-r style="--d:3">Pilot, partnerships, press, careers — pick a topic and it reaches the right person.</p>
     </div>
     <div class="contact" data-r>
       <div class="form-card">
         <h3>Send us a note</h3>
-        <p class="sub">We read everything. A real human will get back to you within a working day.</p>
+        <p class="sub">We read everything and reply by e-mail. Pressing the button opens your e-mail app with this filled in; nothing is sent until you press Send there.</p>
         <form id="contactForm" novalidate>
           <div class="form-grid">
             <label class="field"><span>Name</span><input type="text" name="name" required placeholder="Your name"></label>
@@ -324,7 +324,7 @@
             <label class="field full"><span>Topic</span>
               <select name="topic" required>
                 <option value="" disabled selected>Choose one…</option>
-                <option>Sales</option>
+                <option>Pilot</option>
                 <option>Partnerships</option>
                 <option>Press</option>
                 <option>Careers</option>
@@ -334,27 +334,28 @@
             <label class="field full"><span>Message</span><textarea name="message" required placeholder="What can we help with?"></textarea></label>
           </div>
           <div class="btns" style="justify-content:flex-end">
-            <button type="submit" class="btn btn--primary">Send message <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <button type="submit" class="btn btn--primary">E-mail this message <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
           </div>
         </form>
+        <p class="lead-status" id="leadStatus" role="status" aria-live="polite"></p>
         <div class="form-success" id="formSuccess" role="status" aria-live="polite">
-          <b>Message sent</b>
-          <h4>Thanks — we'll be in touch.</h4>
-          <p>A real person from the AgrosIQ team will reply within a working day. Watch your inbox.</p>
+          <b>Message received</b>
+          <h4>Thanks — we will reply by e-mail.</h4>
+          <p>Shown only after our server confirmed it received your message.</p>
         </div>
       </div>
       <div class="contact-side">
         <div class="contact-card">
-          <span class="label">Sales</span>
+          <span class="label">Pilot</span>
           <h4>See it on your farm</h4>
           <p>Book a guided walkthrough on your own fields. We bring the maps, you bring the questions.</p>
           <a href="start.html#demo">Book a demo <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </div>
         <div class="contact-card">
           <span class="label">Support</span>
-          <h4>Already a customer</h4>
-          <p>Your support team is inside the app — every field has a help button that goes straight to a human.</p>
-          <a href="start.html#signin">Sign in <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <h4>Already a pilot partner</h4>
+          <p>Questions about your fields go to the people who build AgrosIQ. In-app help is coming later.</p>
+          <a data-contact="AgrosIQ pilot support" href="#contact">E-mail us <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </div>
         <div class="contact-card">
           <span class="label">Partnerships</span>
@@ -406,17 +407,24 @@
     tlSteps.forEach(s => io.observe(s));
   }
 
-  /* ── contact form: no network request; swap to success card ── */
+  /* ── contact form (FIX-003): AGQ.sendLead opens the visitor's e-mail app while no endpoint exists; the success card
+        is shown only after a 2xx from a real endpoint, an error line otherwise ── */
   const form = document.getElementById('contactForm');
   const success = document.getElementById('formSuccess');
+  const status = document.getElementById('leadStatus');
   if (form && success){
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      /* basic native validity, since the brief forbids any backend */
+      status.textContent = ''; status.classList.remove('is-err');
       if (!form.checkValidity()){ form.reportValidity(); return; }
-      form.style.display = 'none';
-      success.classList.add('show');
-      success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      const v = (n) => String((form.elements[n] || {}).value || '').trim();
+      const r = await AGQ.sendLead('contact', 'AgrosIQ: ' + (v('topic') || 'contact'), { Name: v('name'), Email: v('email'), Organisation: v('org'), Topic: v('topic'), Message: v('message') });
+      if (r.via === 'post' && r.ok){
+        form.style.display = 'none';
+        success.classList.add('show');
+        success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else if (r.via === 'post'){ status.textContent = AGQ.ERROR_NOTE(r.error); status.classList.add('is-err'); }
+      else status.textContent = AGQ.MAILTO_NOTE;
     });
   }
 

@@ -35,17 +35,17 @@
 
   /* ── audiences: each card is its own small live farm ── */
   const AUD = [['Growers', 'growers', 'Spot problems early, walk less, and squeeze more out of every paddock you farm.', 'truth', 2],
-    ['Agronomists', 'agronomists', 'Watch every client field at once and turn up with the answer before they call.', 'health', 4],
-    ['Farm managers', 'managers', 'Run thousands of hectares from one screen, with the whole team on the same map.', 'map', 6],
-    ['Agribusiness', 'enterprise', 'Supply forecasts, sourcing and grower programs, backed by field-level evidence.', 'orbit', 8],
-    ['Lenders and insurers', 'enterprise', 'Independent, field-by-field history for faster, fairer decisions.', 'season', 9]];
+    ['Agronomists', 'agronomists', 'See every client farm in one list and turn up with the evidence before they call.', 'health', 4],
+    ['Farm managers', 'managers', 'Run thousands of hectares from one screen, with everyone looking at the same evidence.', 'map', 6],
+    ['Agribusiness', 'enterprise', 'Sourcing and grower programs, backed by field-level evidence.', 'orbit', 8],
+    ['Lenders and insurers', 'enterprise', 'Independent, field-by-field history, with the maps and dates behind it.', 'season', 9]];
   $('aud').innerHTML = AUD.map((a, i) => '<article class="card aud"><div class="aud__art"><div class="aerial" data-aerial="' + a[3] + '" data-seed="' + a[4] + '" data-res=".7"></div><div class="veil veil--b"></div></div>' +
     '<div class="card__body"><span class="t-mono">0' + (i + 1) + '</span><h3 class="t-h3" style="margin-top:12px">' + a[0] + '</h3><p>' + a[2] + '</p><a href="solutions.html#' + a[1] + '">Learn more ' + AGQ.ARROW + '</a></div></article>').join('');
 
   /* ── analyst chat loop ── */
   const CONV = [
-    ['Why is Ridge Paddock behind?', 'Ridge is <b>24% below its normal</b> for early June, concentrated in a 1.1 ha patch in the NE corner. The rest of the field is on track. Rain there was well below the farm average over the last 30 days.', ['NE corner · 1.1 ha', 'Pass · 2 Jun', 'vs. 10-yr normal']],
-    ['Which block yields best, year after year?', '<b>Top Pivot.</b> It finished in the top three on this farm in 8 of the last 10 seasons, and it is tracking ahead of its normal again this year.', ['10 seasons', 'Ranked on farm']],
+    ['Where is Ridge Paddock behind?', 'Ridge is <b>24% below its normal</b> for early June, concentrated in a 1.1 ha patch in the NE corner. The rest of the field is on track. AgrosIQ does not say why; the patch is the place to look.', ['NE corner · 1.1 ha', 'Pass · 2 Jun', 'vs. 10-yr normal']],
+    ['Which block is greenest at this point, year after year?', '<b>Top Pivot.</b> At this point in the season it was among the three greenest on this farm in 8 of the last 10 seasons, and it is ahead of its normal again this year.', ['10 seasons', 'Greenness at this date']],
     ['Was this dry spell worse than 2019?', 'Not yet. The last 45 days are <b>drier than 7 of 10 years</b>, but 2019 was drier still at this point. Creek Flat is the field to watch.', ['45-day window', '10-yr weather']],
   ];
   const log = $('chatlog'), inp = $('chatin'); let ci = 0;
@@ -55,7 +55,7 @@
       const [q, a, ev] = CONV[ci++ % CONV.length];
       if (log.children.length > 3) log.innerHTML = '';
       for (let i = 0; i <= q.length; i++){ inp.innerHTML = q.slice(0, i) + '<span class="caret"></span>'; await wait(reduce ? 0 : 34); }
-      await wait(400); inp.textContent = 'Ask about any field…';
+      await wait(400); inp.textContent = 'Pick a suggested question…';
       log.insertAdjacentHTML('beforeend', '<div class="bub bub--q">' + q + '</div><div class="bub bub--a" id="typing"><span class="dots"><i></i><i></i><i></i></span></div>');
       await wait(1300);
       const t = $('typing'); t.removeAttribute('id'); t.innerHTML = a + '<div class="chat__ev">' + ev.map(e => '<span class="chip chip--ok">' + e + '</span>').join('') + '</div>';

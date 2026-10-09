@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pricing · AgrosIQ</title>
-<meta name="description" content="Start free on your first 40 hectares. Simple plans for every size of farm, from family operations to agribusiness.">
+<meta name="description" content="AgrosIQ plans and the design-partner pilot. Pilot pricing on request.">
 <link rel="icon" type="image/svg+xml" href="assets/brand/agrosiq-mark-dark.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/png/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/brand/png/apple-touch-icon-180.png">
@@ -24,6 +24,7 @@
   .plan__save{font:600 11px/1 var(--mono); color:var(--sprout); letter-spacing:.04em; opacity:0; transform:translateY(-4px); transition:all .4s var(--ease)}
   .annual .plan__save{opacity:1; transform:none}
   .price__n{display:inline-block; min-width:2ch}
+  .plans .plan .btn{margin-top:0}  /* lists differ in length now; keep every CTA under its price */
   .price__n.tick{animation:tick .5s var(--ease)}
   @keyframes tick{0%{transform:translateY(0); filter:blur(0)} 40%{transform:translateY(-6px); filter:blur(3px); opacity:.4} 100%{transform:none; filter:none}}
   .plan__ha{display:flex; align-items:center; gap:8px; padding:10px 12px; border-radius:12px; background:var(--surface-2); font-size:13.5px; color:var(--text)}
@@ -87,17 +88,12 @@
   <div class="wrap">
     <div class="sec-head">
       <span class="eyebrow" data-r>Pricing</span>
-      <h1 class="t-hero" data-split style="font-size:clamp(44px,7vw,104px)"><span class="silver">Simple pricing.</span><br><span class="hl">Serious returns.</span></h1>
-      <p class="t-lede" data-r style="--d:4">Start free on your first 40 hectares. Upgrade when AgrosIQ has already paid for itself. No contracts, cancel any time.</p>
-      <div class="billing" data-r style="--d:5" role="group" aria-label="Billing period">
-        <span class="billing__pill" id="pill"></span>
-        <button type="button" aria-pressed="true" data-bill="m">Monthly</button>
-        <button type="button" aria-pressed="false" data-bill="y">Yearly <span class="save">−20%</span></button>
-      </div>
+      <h1 class="t-hero" data-split style="font-size:clamp(44px,7vw,104px)"><span class="silver">Simple plans.</span><br><span class="hl">Honest numbers.</span></h1>
+      <p class="t-lede" data-r style="--d:4">AgrosIQ is in a design-partner pilot. These are the plans we intend to sell; during the pilot we set up each partner by hand and agree pricing directly. Self sign-up, trials and billing are not open yet.</p>
     </div>
     <div class="plans-wrap">
       <div class="plans" id="plans"></div>
-      <p class="center dim" style="margin-top:22px; font-size:14px" data-r>Prices in USD, excluding tax. Hectare limits are per account, across all your farms.</p>
+      <p class="center dim" style="margin-top:22px; font-size:14px" data-r>Hectare limits will count the fields you add, across all your farms. Beta means it works but is still being measured; check in the field before acting.</p>
     </div>
   </div>
 </section>
@@ -118,10 +114,10 @@
       </div>
       <div class="calc__r">
         <span class="t-mono">Your best fit</span>
-        <div class="rec"><div class="rec__plan silver" id="recPlan">Farm</div><div class="rec__price muted" id="recPrice">$99 per month</div></div>
-        <div class="rec__per" id="recPer"><b id="recHa">$1.83</b> per hectare, per year</div>
-        <p class="muted" style="margin:6px 0 0; font-size:15px" id="recWhy">Every field watched, every pass, with the Field Analyst on call.</p>
-        <div class="btns" style="margin-top:8px"><a class="btn btn--primary" href="start.html" id="recCta">Start with Farm <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+        <div class="rec"><div class="rec__plan silver" id="recPlan">Farm</div><div class="rec__price muted" id="recPrice">Pilot pricing on request</div></div>
+        
+        <p class="muted" style="margin:6px 0 0; font-size:15px" id="recWhy">Every field watched every pass, with zones, weather and suggested questions.</p>
+        <div class="btns" style="margin-top:8px"><a class="btn btn--primary" href="start.html" id="recCta">Ask about the pilot <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
       </div>
     </div>
   </div>
@@ -137,7 +133,7 @@
     </div>
     <div class="grid-3">
       <article class="card" data-r><div class="card__vis"><div class="coinstack"><i style="--h:40px;--k:0"></i><i style="--h:62px;--k:1"></i><i style="--h:88px;--k:2"></i><i style="--h:120px;--k:3"></i></div></div>
-        <div class="card__body"><h3 class="t-h4">Protect the yield you planted</h3><p>Stress spotted weeks earlier is stress you can still do something about, before it costs you at the weighbridge.</p></div></article>
+        <div class="card__body"><h3 class="t-h4">Protect the yield you planted</h3><p>A field falling behind its own normal shows up after the next pass, while there may still be time to look and act.</p></div></article>
       <article class="card" data-r style="--d:1"><div class="card__vis"><div class="clock"><b></b></div></div>
         <div class="card__body"><h3 class="t-h4">Get your days back</h3><p>Stop driving every paddock to find the one that needs you. Go straight there, then get on with the rest of the farm.</p></div></article>
       <article class="card" data-r style="--d:2"><div class="card__vis"><div class="target"></div></div>
@@ -166,18 +162,19 @@
       <div class="aerial" data-aerial="map" data-seed="9"></div>
       <div style="display:flex;flex-direction:column;gap:20px;align-items:flex-start">
         <span class="eyebrow">AgrosIQ Enterprise</span>
-        <h2 class="t-h2 silver" style="font-size:clamp(34px,4.2vw,60px)">Field intelligence at portfolio scale</h2>
+        <h2 class="t-h2 silver" style="font-size:clamp(34px,4.2vw,60px)">Field evidence across many farms</h2>
         <p class="t-lede">For agribusiness, food companies, lenders and insurers watching thousands of fields across regions and countries.</p>
-        <div class="btns"><a class="btn btn--primary" href="start.html#demo">Talk to sales <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn btn--glass" href="solutions.html#enterprise">Enterprise solutions</a></div>
+        <div class="btns"><a class="btn btn--primary" href="start.html#demo">Talk to us <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn btn--glass" href="solutions.html#enterprise">Enterprise solutions</a></div>
       </div>
+      <div style="display:flex;flex-direction:column;gap:18px">
       <ul>
-        <li><i class="ic" data-ic="globe"></i>Unlimited fields across regions and countries</li>
-        <li><i class="ic" data-ic="layers"></i>Portfolio dashboards and grower programs</li>
-        <li><i class="ic" data-ic="lock"></i>Single sign-on and advanced permissions</li>
-        <li><i class="ic" data-ic="zap"></i>API and data feeds into your systems</li>
-        <li><i class="ic" data-ic="shield"></i>Uptime commitment and security review</li>
-        <li><i class="ic" data-ic="users"></i>A dedicated success team</li>
+        <li><i class="ic" data-ic="globe"></i>Fields in any region (crop names for US Corn Belt fields only)</li>
+        <li><i class="ic" data-ic="layers"></i>Many farms under one account</li>
+        <li><i class="ic" data-ic="clock"></i>Ten years of history for every field</li>
+        <li><i class="ic" data-ic="users"></i>Pilot set up with our team</li>
       </ul>
+      <p class="later"><b>Coming later:</b> portfolio dashboards, single sign-on, API and data feeds.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -187,12 +184,12 @@
   <div class="wrap wrap--narrow">
     <div class="sec-head"><h2 class="t-h2" data-split><span class="silver">Pricing questions</span></h2></div>
     <div class="faq" data-r>
-      <details open><summary>Is the Free plan really free?</summary><div>Yes. Up to 40 hectares, free forever, no card needed. It's the full health map on every pass, so you can see AgrosIQ working on your own fields before you spend a cent.</div></details>
-      <details><summary>Can I try a paid plan first?</summary><div>Every paid plan starts with a 14-day free trial. Pick a plan, add your fields and see everything it can do. If it isn't for you, you drop back to Free automatically.</div></details>
-      <details><summary>How are hectares counted?</summary><div>We count the area of the fields you add, across all your farms. Roads, yards and bush you don't draw aren't counted. You can add or remove fields at any time.</div></details>
-      <details><summary>Can I change plans later?</summary><div>Any time. Upgrades apply straight away; downgrades take effect at the end of your billing period. Your history always stays with your fields.</div></details>
-      <details><summary>Is there a contract?</summary><div>No lock-in. Pay monthly and cancel whenever you like, or pay yearly and save 20%.</div></details>
-      <details><summary>What happens to my data if I cancel?</summary><div>It's yours. Export everything with one click, and if you ask us to delete it, we delete it.</div></details>
+      <details open><summary>Can I sign up today?</summary><div>Not on your own yet. AgrosIQ is in a design-partner pilot: we set up each partner's account and fields with them and agree pilot pricing directly. Self sign-up, the Free tier and online billing come later.</div></details>
+      <details><summary>Why are there no prices?</summary><div>Pilot pricing is agreed with each partner while we measure what AgrosIQ is worth on real farms. We will publish prices when self sign-up opens.</div></details>
+      <details><summary>Is there a free trial?</summary><div>Not yet. During the pilot we agree terms with each partner instead.</div></details>
+      <details><summary>How will hectares be counted?</summary><div>By the area of the fields you add, across all your farms. Roads, yards and bush you don't draw won't count.</div></details>
+      <details><summary>Is there a contract?</summary><div>Pilot terms are agreed in writing with each partner. Our draft terms, the starting point, are <a href="mailto:hello@lumen8.ai?subject=AgrosIQ%20pilot%20terms" style="color:var(--sprout)">available on request</a>.</div></details>
+      <details><summary>What happens to my data if I leave?</summary><div>It's yours. Ask and we delete your fields from the live service. Deletion from backups and data export are being built; until then we tell you what remains and for how long.</div></details>
     </div>
   </div>
 </section>
@@ -202,10 +199,10 @@
     <div class="cta-band" data-r>
       <div class="aerial" data-aerial="truth" data-seed="7"></div>
       <div class="cta-band__in">
-        <span class="eyebrow">Free for your first 40 hectares</span>
-        <h2 class="t-h2" data-split><span class="silver">Start watching your fields today</span></h2>
-        <p class="t-lede">Ten years of history and your first health map in minutes. No card, no hardware, no contract.</p>
-        <div class="btns" style="justify-content:center"><a class="btn btn--primary btn--lg" href="start.html">Start free <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn btn--glass btn--lg" href="start.html#demo">Book a demo</a></div>
+        <span class="eyebrow">Design-partner pilot</span>
+        <h2 class="t-h2" data-split><span class="silver">Watch your fields with us</span></h2>
+        <p class="t-lede">Ten years of history and your first health map in minutes once your fields are in. No card, no hardware.</p>
+        <div class="btns" style="justify-content:center"><a class="btn btn--primary btn--lg" href="start.html">Join the pilot <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn btn--glass btn--lg" href="start.html#demo">Book a demo</a></div>
       </div>
     </div>
   </div>
@@ -220,54 +217,40 @@
   'use strict';
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const ARROW = '<svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  // one place for every price and limit on this page
+  // One place for every plan and limit on this page. Paid prices are deliberately absent: the pilot gate is not green and
+  // the site and back-office price books disagree (FIX-002, owner decision). Every item string is mapped to a capability
+  // verdict in tools/claims-check.mjs; 'later' lists things that do not exist yet.
   const PLANS = [
-    { id: 'free', name: 'Free', m: 0, ha: 40, cap: 'Up to 40 ha', for: 'See AgrosIQ working on your own fields.', cta: 'Start free', style: 'glass',
-      inc: 'Includes', items: ['One farm, up to 40 hectares', 'Crop health map after every pass', 'This season\'s history', 'Weekly email summary', 'Web and mobile app'] },
-    { id: 'grower', name: 'Grower', m: 20, ha: 400, cap: 'Up to 400 ha', for: 'For family farms that want every field watched.', cta: 'Start 14-day trial', style: 'glass',
-      inc: 'Everything in Free, plus', items: ['Up to 400 hectares', 'Instant alerts every pass', 'Cloud-proof monitoring', 'Ten years of history per field', 'Walk-here pins and the Scout app', 'Field reports to share'] },
-    { id: 'farm', name: 'Farm', m: 99, ha: 2000, cap: 'Up to 2,000 ha', for: 'For commercial operations that run on data.', cta: 'Start 14-day trial', style: 'primary', pop: true,
-      inc: 'Everything in Grower, plus', items: ['Up to 2,000 hectares', 'Field Analyst: ask anything', 'Strong and weak zones', 'Weather and water stress', 'Season rankings for every field', '5 team seats', 'CSV, KML and shapefile export'] },
-    { id: 'pro', name: 'Pro', m: 249, ha: Infinity, cap: 'Unlimited hectares', for: 'For large operations, agronomists and advisers.', cta: 'Start 14-day trial', style: 'glass',
-      inc: 'Everything in Farm, plus', items: ['Unlimited hectares and farms', 'Unlimited seats and roles', 'Client workspaces for advisers', 'Custom alert rules', 'Branded reports', 'Priority support and onboarding', 'API access'] },
+    { id: 'free', name: 'Free', m: 0, ha: 40, cap: 'Up to 40 ha', for: 'See AgrosIQ working on your own fields.', cta: 'Join the pilot', style: 'glass',
+      inc: 'Includes', items: ['One farm, up to 40 hectares', 'Crop health map after every pass (±0.02 typical)', 'This season\'s history', 'Web app for desktop browsers'],
+      later: 'weekly e-mail summary, phone app' },
+    { id: 'grower', name: 'Grower', m: null, ha: 400, cap: 'Up to 400 ha', for: 'For family farms that want every field watched.', cta: 'Join the pilot', style: 'glass',
+      inc: 'Everything in Free, plus', items: ['Up to 400 hectares', 'Spots to check after every pass, in the app (beta)', 'Radar estimate on cloudy passes, with its error range', 'Ten years of history per field (2016–2021 in beta)', 'Walk-here pins with coordinates', 'Read-only share links'],
+      later: 'e-mail and push alerts, the Scout phone app, PDF reports' },
+    { id: 'farm', name: 'Farm', m: null, ha: 2000, cap: 'Up to 2,000 ha', for: 'For commercial operations that run on data.', cta: 'Join the pilot', style: 'primary', pop: true,
+      inc: 'Everything in Grower, plus', items: ['Up to 2,000 hectares', 'Field Analyst suggested questions (beta)', 'Strong and weak zones (single-field outlines)', 'Weather history and rain against normal', 'Water balance (beta)', 'Crop type for US Corn Belt fields'],
+      later: 'team seats, CSV, KML and shapefile export' },
+    { id: 'pro', name: 'Pro', m: null, ha: Infinity, cap: 'Unlimited hectares', for: 'For large operations, agronomists and advisers.', cta: 'Talk to us', style: 'glass',
+      inc: 'Everything in Farm, plus', items: ['Unlimited hectares and farms', 'Onboarding with our team'],
+      later: 'seats and roles, client workspaces, custom alert rules, branded reports, API access' },
   ];
-  const yr = (m) => Math.round(m * .8);
-  let annual = false;
   const root = document.getElementById('plans');
   root.innerHTML = PLANS.map((p, i) =>
     '<article class="plan' + (p.pop ? ' plan--pop' : '') + '" data-plan="' + p.id + '" data-r style="--d:' + i + '">' +
-      '<div class="plan__name">' + p.name + (p.pop ? '<span class="badge">Most popular</span>' : '') + '</div>' +
+      '<div class="plan__name">' + p.name + '</div>' +
       '<p class="plan__for">' + p.for + '</p>' +
-      '<div><div class="price"><span class="price__cur">$</span><span class="price__n" data-m="' + p.m + '">' + p.m + '</span><span class="price__per">' + (p.m ? 'per month' : 'forever') + '</span></div></div>' +
-      '<div class="price__note" data-note="' + p.m + '">' + (p.m ? 'Billed monthly' : 'No card needed') + '</div>' +
+      (p.m === 0
+        ? '<div><div class="price"><span class="price__cur">$</span><span class="price__n">0</span><span class="price__per">planned</span></div></div><div class="price__note">Opens with self sign-up</div>'
+        : '<div><div class="price"><span class="price__n" style="font-size:34px; letter-spacing:-.04em; line-height:58px">Pilot</span><span class="price__per">pricing on request</span></div></div><div class="price__note">Agreed with each partner</div>') +
       '<div class="plan__ha"><i class="ic" data-ic="map"></i>' + p.cap + '</div>' +
-      '<a class="btn btn--' + p.style + ' btn--block" href="start.html">' + p.cta + ' ' + ARROW + '</a>' +
+      '<a class="btn btn--' + p.style + ' btn--block" href="start.html' + (p.id === 'pro' ? '#demo' : '') + '">' + p.cta + ' ' + ARROW + '</a>' +
       '<div class="plan__div"></div><div class="plan__inc">' + p.inc + '</div>' +
       '<ul>' + p.items.map(t => '<li>' + t + '</li>').join('') + '</ul>' +
+      (p.later ? '<p class="later"><b>Coming later:</b> ' + p.later + '.</p>' : '') +
     '</article>').join('');
   AGQ.fillIcons(root);
   root.querySelectorAll('[data-r]').forEach(el => setTimeout(() => el.classList.add('in'), 200 + (+el.style.getPropertyValue('--d')) * 90));
 
-  /* billing toggle */
-  const pill = document.getElementById('pill'), btns = document.querySelectorAll('[data-bill]');
-  const placePill = () => { const on = [...btns].find(b => b.getAttribute('aria-pressed') === 'true'); pill.style.width = on.offsetWidth + 'px'; pill.style.transform = 'translateX(' + (on.offsetLeft - 4) + 'px)'; };
-  function roll(el, to){
-    const from = +el.textContent; if (from === to) return;
-    el.classList.remove('tick'); void el.offsetWidth; el.classList.add('tick');
-    const t0 = performance.now(), D = reduce ? 1 : 520;
-    const step = (now) => { const k = Math.min(1, (now - t0) / D); el.textContent = Math.round(from + (to - from) * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(step); };
-    requestAnimationFrame(step);
-  }
-  function setBill(y){
-    annual = y; document.body.classList.toggle('annual', y);
-    btns.forEach(b => b.setAttribute('aria-pressed', String((b.dataset.bill === 'y') === y)));
-    placePill();
-    document.querySelectorAll('.price__n').forEach(el => roll(el, y ? yr(+el.dataset.m) : +el.dataset.m));
-    document.querySelectorAll('[data-note]').forEach(el => { const m = +el.dataset.note; el.textContent = !m ? 'No card needed' : y ? '$' + (yr(m) * 12).toLocaleString('en-US') + ' billed yearly' : 'Billed monthly'; });
-    updateCalc();
-  }
-  btns.forEach(b => b.addEventListener('click', () => setBill(b.dataset.bill === 'y')));
-  addEventListener('resize', placePill); document.fonts && document.fonts.ready.then(placePill); placePill();
 
   /* calculator: log slider 10 → 10,000 ha */
   const inp = document.getElementById('haIn'), fill = document.getElementById('sFill'), knob = document.getElementById('sKnob');
@@ -278,8 +261,8 @@
   const N = innerWidth < 600 ? 320 : 480;
   fp.innerHTML = Array.from({ length: N }, (_, i) => { const x = i % 40, y = (i / 40) | 0, v = .55 + .3 * Math.sin(x * .35 + 1) * Math.cos(y * .6) + .12 * Math.sin((x + y) * .8); return '<i style="--c:' + veg(Math.max(.1, Math.min(1, v))) + '"></i>'; }).join('');
   const cells = fp.children;
-  const recPlan = document.getElementById('recPlan'), recPrice = document.getElementById('recPrice'), recHa = document.getElementById('recHa'), recWhy = document.getElementById('recWhy'), recCta = document.getElementById('recCta'), recPer = document.getElementById('recPer');
-  const WHY = { free: 'Your whole farm fits in the Free plan. Every field, every pass, free forever.', grower: 'Every field watched, with instant alerts and ten years of history.', farm: 'Every field watched, every pass, with the Field Analyst on call.', pro: 'Unlimited hectares, unlimited team, and priority support.' };
+  const recPlan = document.getElementById('recPlan'), recPrice = document.getElementById('recPrice'), recWhy = document.getElementById('recWhy'), recCta = document.getElementById('recCta');
+  const WHY = { free: 'Your whole farm fits the planned Free tier.', grower: 'Every field watched, with a ranked list of spots to check and ten years of history.', farm: 'Every field watched every pass, with zones, weather and suggested questions.', pro: 'Unlimited hectares, with onboarding by our team.' };
   function updateCalc(){
     const ha = toHa(+inp.value), k = +inp.value / 1000;
     haN.textContent = ha >= 10000 ? '10,000+' : ha.toLocaleString('en-US');
@@ -287,48 +270,50 @@
     const lit = Math.round(N * Math.min(1, Math.log10(ha) / 4));
     for (let i = 0; i < N; i++) cells[i].classList.toggle('on', i < lit);
     const plan = PLANS.find(p => ha <= p.ha) || PLANS[3];
-    const m = annual ? yr(plan.m) : plan.m;
     recPlan.textContent = plan.name;
-    recPrice.textContent = plan.m ? '$' + m + ' per month' + (annual ? ', billed yearly' : '') : 'Free forever';
-    recPer.style.display = plan.m ? '' : 'none';
-    if (plan.m) recHa.textContent = '$' + (m * 12 / ha).toFixed(ha > 2000 ? 3 : 2);
+    recPrice.textContent = plan.m === 0 ? 'Planned free tier' : 'Pilot pricing on request';
     recWhy.textContent = WHY[plan.id];
-    recCta.innerHTML = (plan.m ? 'Start with ' + plan.name : 'Start free') + ' ' + ARROW;
+    recCta.innerHTML = 'Ask about the pilot ' + ARROW;
     document.querySelectorAll('.plan').forEach(el => el.classList.toggle('is-match', el.dataset.plan === plan.id));
   }
   inp.addEventListener('input', updateCalc); updateCalc();
 
   /* comparison table */
   const Y = '<span class="y">●</span>', X = '<span class="n">—</span>';
+  const LATER = 'later';  // a row for something that does not exist yet
   const ROWS = [
     ['Monitoring'],
     ['Hectares', '40', '400', '2,000', 'Unlimited'],
-    ['Crop health map every pass', Y, Y, Y, Y],
-    ['Cloud-proof monitoring', X, Y, Y, Y],
-    ['Instant alerts', 'Weekly', Y, Y, Y],
-    ['Walk-here pins and Scout app', X, Y, Y, Y],
-    ['Custom alert rules', X, X, X, Y],
+    ['Crop health map every pass (±0.02 typical)', Y, Y, Y, Y],
+    ['Radar estimate on cloudy passes, with its error range', X, Y, Y, Y],
+    ['Spots to check after each pass, in the app (beta)', X, Y, Y, Y],
+    ['Walk-here pins with coordinates', X, Y, Y, Y],
     ['History and insight'],
-    ['Field history', 'This season', '10 years', '10 years', '10 years'],
-    ['Season rankings', X, X, Y, Y],
+    ['Field history (2016–2021 in beta)', 'This season', '10 years', '10 years', '10 years'],
     ['Strong and weak zones', X, X, Y, Y],
-    ['Weather and water stress', X, X, Y, Y],
+    ['Weather history and rain against normal', X, X, Y, Y],
+    ['Water balance (beta)', X, X, Y, Y],
+    ['Crop type, US Corn Belt fields', X, X, Y, Y],
     ['Field Analyst'],
-    ['Ask in plain English', X, X, Y, Y],
-    ['Answers with maps and dates', X, X, Y, Y],
-    ['Team and sharing'],
-    ['Team seats', '1', '2', '5', 'Unlimited'],
-    ['Field reports (PDF)', X, Y, Y, 'Branded'],
-    ['CSV, KML and shapefile export', X, X, Y, Y],
-    ['Client workspaces', X, X, X, Y],
-    ['API access', X, X, X, Y],
-    ['Support'],
-    ['Help centre and email', Y, Y, Y, Y],
-    ['Priority support and onboarding', X, X, X, Y],
+    ['Suggested questions, with maps and dates (beta)', X, X, Y, Y],
+    ['Sharing and support'],
+    ['Read-only share links', X, Y, Y, Y],
+    ['E-mail support from our team', Y, Y, Y, Y],
+    ['Coming later (not available yet)'],
+    ['E-mail and push alerts', LATER],
+    ['Scout phone app: photos, GPS, offline', LATER],
+    ['Team seats and roles', LATER],
+    ['PDF field reports', LATER],
+    ['CSV, KML and shapefile export', LATER],
+    ['Client workspaces', LATER],
+    ['Custom alert rules', LATER],
+    ['API access', LATER],
   ];
   const cmp = document.getElementById('cmp');
   cmp.innerHTML = '<thead><tr><th scope="col"><span class="sr">Feature</span></th>' + PLANS.map(p => '<th scope="col">' + p.name + '</th>').join('') + '</tr></thead><tbody>' +
-    ROWS.map(r => r.length === 1 ? '<tr class="grp"><td colspan="5">' + r[0] + '</td></tr>' : '<tr><td>' + r[0] + '</td>' + r.slice(1).map(c => '<td>' + c + '</td>').join('') + '</tr>').join('') + '</tbody>';
+    ROWS.map(r => r.length === 1 ? '<tr class="grp"><td colspan="5">' + r[0] + '</td></tr>'
+      : r[1] === LATER ? '<tr data-later><td>' + r[0] + '</td><td colspan="4" class="dim">Coming later</td></tr>'
+      : '<tr><td>' + r[0] + '</td>' + r.slice(1).map(c => '<td>' + c + '</td>').join('') + '</tr>').join('') + '</tbody>';
 })();
 </script>
 </body>
