@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HelioAtlas · Product</title>
+<meta name="description" content="Find the roof, lay out every face in 3-D, run seven engineering analyses, model 8,760 hours with P50 and P90, price the bill and send a proposal your customer signs online.">
+<meta name="theme-color" content="#000000">
+<link rel="icon" type="image/svg+xml" href="assets/brand/favicon.svg"><link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png"><link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+<meta property="og:title" content="HelioAtlas · Product">
+<meta property="og:description" content="Roof to signature, in one studio: prospect, design, engineer, model, price and propose.">
+<meta property="og:image" content="https://lumen8.ai/helioatlas/assets/brand/social-card.png">
+<meta property="og:url" content="https://lumen8.ai/helioatlas/product.html">
+<link rel="canonical" href="https://lumen8.ai/helioatlas/product.html">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="assets/fonts/Geist-latin-var.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="assets/fonts/GeistMono-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/ha.css">
+<script src="assets/ha.js" defer></script>
+<style>
+/* product v12: layout only. Colours, type roles and components come from ha.css. */
+.ph__row{display:grid; grid-template-columns:repeat(12, minmax(0, 1fr)); column-gap:clamp(16px, 2vw, 32px); row-gap:28px; align-items:end}
+.ph__row .h1{grid-column:1 / span 7}
+.ph__side{grid-column:9 / span 4; display:flex; flex-direction:column; gap:24px}
+.ph .ph__side .row{margin-top:0}
+@media (max-width:980px){ .ph__row .h1, .ph__side{grid-column:1 / -1} }
+
+/* zoom crop: shows one region of a capture (--w width, --l/--t offset of the full image inside the frame) */
+.zc{aspect-ratio:var(--ar)}
+.shot.zc img{position:absolute; max-width:none; width:var(--w); height:auto; left:var(--l); top:var(--t)}
+
+/* notes without hotspot numbers */
+.notes--plain .note{grid-template-columns:minmax(0, 1fr)}
+.notes--plain .note p{grid-column:1}
+.split__text .tlink{margin-top:4px}
+
+/* design feature: capture with zooming hotspots, notes in one row beneath */
+.fhs .notes{grid-template-columns:repeat(3, minmax(0, 1fr)); column-gap:clamp(20px, 3vw, 48px); margin-top:24px}
+.fhs .note{align-content:start; border-bottom:1px solid var(--line)}
+@media (max-width:860px){ .fhs .notes{grid-template-columns:minmax(0, 1fr)} .fhs .note + .note{border-top:0} }
+
+/* system: auto-inverter instrument */
+.inv .inst__hd .seg{margin-left:auto}
+.inv .inst__body{padding-bottom:8px}
+.inv .inst__ft p{margin:0; font:inherit}
+
+/* workbench: vertical tabs beside one cropped capture */
+.wb{display:grid; grid-template-columns:minmax(0, 330px) minmax(0, 1fr); gap:clamp(28px, 3.5vw, 56px); align-items:start}
+.wb .vtabs{position:sticky; top:calc(var(--nav-h) + 72px)}
+.wb .vtabs .kb{font:500 12px/1 var(--m); color:var(--fg-3); border:1px solid var(--line-2); border-radius:5px; padding:4px 7px}
+.wb .vtabs button[aria-selected="true"] .kb{color:var(--sol); border-color:var(--sol-line)}
+.wb__shots{display:grid; min-width:0}
+@media (max-width:980px){ .wb{grid-template-columns:minmax(0, 1fr)} .wb .vtabs{position:static} }
+.keys{display:flex; flex-wrap:wrap; gap:6px}
+.kbd{display:inline-flex; align-items:center; gap:7px; font:500 12px/1 var(--m); color:var(--fg-2); border:1px solid var(--line-2); border-radius:6px; padding:7px 9px; background:var(--bg-2)}
+.kbd b{color:var(--sol); font-weight:500}
+
+/* energy: chart beside three notes */
+.xgrid{display:grid; grid-template-columns:minmax(0, 8fr) minmax(0, 4fr); gap:clamp(28px, 4vw, 72px); align-items:start}
+.chart__hd{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline; gap:6px 16px; padding-bottom:12px; margin-bottom:10px; border-bottom:1px solid var(--line)}
+.chart__plot:focus-visible{outline-offset:8px}
+@media (max-width:980px){ .xgrid{grid-template-columns:minmax(0, 1fr)} }
+
+/* savings instrument */
+.bill .inst__body{display:flex; flex-direction:column; gap:18px}
+
+/* proposal: sign-off diagram (inputs → SHA-256 → record) */
+.sig__body{display:grid; grid-template-columns:minmax(0, 1fr) 44px minmax(0, 1.05fr); align-items:center}
+.sig__in{display:flex; flex-direction:column; gap:8px}
+.sig__in li{position:relative; height:42px; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:0 12px; border:1px solid var(--line-2); border-radius:8px; background:var(--bg-2); font-size:14px; color:var(--fg)}
+.sig__in li span{font:400 12px/1 var(--m); color:var(--fg-3)}
+.sig__in li::after{content:''; position:absolute; left:100%; top:50%; width:22px; height:1px; background:var(--line-3)}
+.sig__bus{position:relative; align-self:stretch}
+.sig__bus::before{content:''; position:absolute; left:21px; top:21px; bottom:21px; width:1px; background:var(--line-3)}
+.sig__bus::after{content:''; position:absolute; left:21px; right:0; top:50%; height:1px; background:var(--sol-line)}
+.sig__out{display:flex; flex-direction:column; gap:14px; min-width:0}
+.sig__hash{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:12px 14px; border:1px solid var(--sol-line); border-radius:8px; background:var(--sol-dim); font:500 14px/1.2 var(--m); color:var(--sol)}
+.sig__hash span{font:400 12px/1.3 var(--m); color:var(--fg-2)}
+@media (max-width:640px){ .sig__body{grid-template-columns:minmax(0, 1fr); row-gap:0} .sig__in li::after{display:none}
+  .sig__bus{height:36px} .sig__bus::before{top:0; bottom:0; left:50%} .sig__bus::after{display:none} }
+
+/* platform: one compact block */
+.plat .cell{gap:10px}
+.plat .keys{margin-top:auto; padding-top:10px}
+
+/* specs appendix */
+.specs{margin-top:clamp(48px, 4vw, 64px)}
+.specs .spec{grid-template-columns:minmax(0, 1fr) minmax(0, 1.5fr)}
+.specs .spec > dt, .specs .spec > dd{padding:11px 0; font-size:14px}
+.specs__lim{grid-column:1 / -1; max-width:52em}
+.specs > summary .label{margin-left:auto; margin-right:16px}
+@media (max-width:620px){ .specs > summary .label{display:none} }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header data-ha-nav></header>
+<main id="main">
+
+<!-- HEADER -->
+<section class="ph">
+ <div class="ph__grid"></div>
+ <div class="wrap">
+  <div class="crumbs"><a href="index.html">HelioAtlas</a><span>/</span><span>Product</span></div>
+  <div class="ph__row">
+   <h1 class="h1">Roof to signature, in one studio.</h1>
+   <div class="ph__side">
+    <p class="lede">Find the roof, lay out every face in 3-D, check it in an engineering workbench, model every hour of the year and send a proposal your customer signs online.</p>
+    <div class="row"><a class="btn btn--p btn--lg" href="start.html">Request access <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn btn--g btn--lg" href="start.html#demo">Book a demo</a></div>
+   </div>
+  </div>
+ </div>
+</section>
+<nav class="toc" aria-label="On this page"><div class="wrap"><a href="#prospect">Prospect</a><a href="#design">Design</a><a href="#system">System</a><a href="#workbench">Workbench</a><a href="#energy">Energy</a><a href="#savings">Savings</a><a href="#proposal">Proposal</a><a href="#platform">Platform</a><a href="#specs">Specs</a></div></nav>
+
+<!-- 01 · PROSPECT (split) -->
+<section class="sec sec--tight sec--flush" id="prospect" aria-labelledby="h-prospect">
+ <div class="wrap">
+  <div class="split">
+   <div class="split__media">
+    <figure data-rv="fade">
+     <div class="shot shot--crop" style="--ar:3/2; --op:0% 50%" data-zoom><img src="assets/shots/crop-area-scan.webp" width="2000" height="1041" alt="Area scan in the studio: the panel Score every roof in view, 50 roofs scored, a note that size and energy are indicative only, and a ranked list starting with Roof 1 at 613 square metres, 87.3 kWp and 147,171 kWh a year, score 100, beside a satellite map of the street with every building outline drawn and the top roofs filled amber" loading="lazy" decoding="async"></div>
+     <figcaption class="cap"><span><b>Area scan</b> · 50 roofs in view scored by size, kWp and yearly energy; the top ones light amber on the map</span><span>The streets around the Johannesburg example · indicative, as the panel says</span></figcaption>
+    </figure>
+   </div>
+   <div class="split__text">
+    <span class="label" data-rv><span class="idx">01</span>Prospect</span>
+    <h2 class="h3" id="h-prospect" data-rv>Find the roof worth your time.</h2>
+    <p class="body" data-rv>Search an address, click a building or scan the street you are looking at. Outlines come from a global building-footprint layer.</p>
+    <div class="notes notes--plain" data-rv style="--i:1">
+     <div class="note"><h4>Click, and the roof is yours</h4><p>From street zoom every outline lights up as you hover. An address within 18 m picks its building, and split outlines merge into one roof.</p></div>
+     <div class="note"><h4>No outline? Trace it</h4><p>An imagery assist proposes the roof edge when it is at least 65 % sure, and shows the score. Otherwise draw it by hand, then square it up or snap it to the picture.</p></div>
+     <div class="note"><h4>Scan the street</h4><p>Area scan scores the largest outlines in view by roof size, kWp and yearly energy, ranks the top 50 and opens a design on the one you click.</p></div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 02 · DESIGN (feature, zooming hotspots) -->
+<section class="feature" id="design" aria-labelledby="h-design">
+ <div class="wrap">
+  <div class="sh sh--stack">
+   <span class="label" data-rv><span class="idx">02</span>Design</span>
+   <div class="sh__t">
+    <h2 class="h2" id="h-design" data-rv>Every face laid out, best first.</h2>
+    <p class="lede" data-rv style="--i:1">Pick the shape and the studio fills the roof inside the setbacks and around the obstacles you draw, best-facing face first, then builds it in 3-D as you go.</p>
+   </div>
+  </div>
+ </div>
+ <div class="wide feature__media">
+  <div class="fhs">
+   <figure data-rv="fade">
+    <div class="film" style="--ar:16/10"><video muted playsinline loop preload="none" poster="assets/film/fill.webp" width="1200" height="750" aria-label="Screen recording of studio step 2 on the Johannesburg house example in 3-D: the pitch is dragged from 26 to 40 degrees and back, and auto-fill re-fills the roof faces on every change, North going from 9 to 10 panels and West from 11 to 10"><source src="assets/film/fill.mp4" type="video/mp4"></video></div>
+    <figcaption class="cap"><span><b>Step 2, Roof and layout</b> · the pitch dragged from 26° to 40° and back: auto-fill re-fills the faces on every edit, North 9 → 10 panels, West 11 → 10, still 20 in all</span><span>Johannesburg house · 8.6 kWp · example · loop</span></figcaption>
+   </figure>
+   <div class="notes notes--plain" data-rv>
+    <div class="note"><h4>Five shapes, ground mounts too</h4><p>Flat, mono-pitch, gable, hip or ground mount; the pitch reads Assumed until you set it. Ground mounts take fixed tables or a single-axis tracker to 90°, seven ground surfaces and a bifacial rear side.</p></div>
+    <div class="note"><h4>Each face, its own yield</h4><p>The faces list runs best first. At the default 26°, North carries 9 of 9 panels at about 1,737 kWh/kWp and West 11 of 22 at about 1,539. A face left empty says why.</p></div>
+    <div class="note"><h4>Built in 3-D as you draw</h4><p>Map, Split or 3-D. The stage builds the real roof kind, panels and rack rows on satellite ground and redraws on every edit.</p></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 03 · SYSTEM (split, media right) -->
+<section class="sec sec--tight sec--band xm" id="system" aria-labelledby="h-system">
+ <div class="wrap">
+  <div class="split split--rev">
+   <div class="split__media">
+    <figure class="inst inv" id="inv" data-tabs data-rv="fade">
+     <div class="inst__hd"><span class="label">Auto inverter · eight generic units</span>
+      <div class="seg" role="tablist" aria-label="Example project">
+       <button type="button" role="tab" id="iv-t1" aria-controls="iv-p1" aria-selected="true">House · 8.6 kWp</button>
+       <button type="button" role="tab" id="iv-t2" aria-controls="iv-p2" aria-selected="false">Warehouse · 301 kWp</button>
+      </div>
+     </div>
+     <div class="inst__body"><div class="chart"><div class="chart__plot" id="ivPlot" style="--h:250px"></div></div></div>
+     <figcaption class="inst__ft">
+      <p class="panel" id="iv-p1" role="tabpanel" aria-labelledby="iv-t1">8.6 kWp needs <b>6.1 kW</b> or more to keep DC:AC at or under 1.4. Auto takes <b>1 × 8 kW</b> single-phase: DC:AC <b>1.07</b>. Johannesburg house, example.</p>
+      <p class="panel" id="iv-p2" role="tabpanel" aria-labelledby="iv-t2" hidden>301 kWp needs <b>215 kW</b> or more. No single unit is enough, so Auto takes <b>3 × 100 kW</b> three-phase: DC:AC <b>1.00</b>. Cikarang warehouse, example.</p>
+     </figcaption>
+    </figure>
+   </div>
+   <div class="split__text">
+    <span class="label" data-rv><span class="idx">03</span>System</span>
+    <h2 class="h3" id="h-system" data-rv>Pick the kit, or start from a preset.</h2>
+    <p class="body" data-rv>Good, Better and Best set the module, the DC:AC ratio and the battery in one click. Change any part and the preset reads Custom.</p>
+    <div class="notes notes--plain" data-rv style="--i:1">
+     <div class="note"><h4>Generic, and labelled so</h4><p>Eight modules from 410 to 660 Wp, three mono and five bifacial, each tagged not a datasheet. Change the model and every face refills.</p></div>
+     <div class="note"><h4>Inverter on Auto</h4><p>Auto takes the smallest unit that keeps DC:AC at or under 1.4 and adds units when one is not enough. Faces more than 10° apart never share an MPPT input.</p></div>
+     <div class="note"><h4>A battery sized to your use</h4><p>None, 5, 10 or 20 kWh, or your own size. After the energy run each size shows the share of your use it covers.</p></div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 04 · ENGINEERING WORKBENCH (vertical tabs) -->
+<section class="sec xm" id="workbench" aria-labelledby="h-wb">
+ <div class="wrap">
+  <div class="sh sh--split">
+   <span class="label" data-rv><span class="idx">04</span>Engineering workbench</span>
+   <div class="sh__t"><h2 class="h2" id="h-wb" data-rv>Seven analyses, one key apart.</h2></div>
+   <div class="sh__side" data-rv style="--i:1">
+    <p class="body">Open it from any step. Every analysis reads the design you drew, and Shading writes its loss back to the energy model in one click.</p>
+    <div class="keys"><span class="kbd"><b>1–7</b>analyses</span><span class="kbd"><b>⌘/Ctrl K</b>palette</span></div>
+   </div>
+  </div>
+ </div>
+ <div class="wide">
+  <div class="wb" data-tabs>
+   <div class="vtabs" role="tablist" aria-orientation="vertical" aria-label="Workbench analyses">
+    <button type="button" role="tab" id="wb-t1" aria-controls="wb-p1" aria-selected="true"><span class="n">01</span><span class="t">3-D twin</span><span class="kb" aria-hidden="true">1</span><span class="d">Live shadows on satellite ground. Scrub any day and hour, play the year, snapshot the view.</span></button>
+    <button type="button" role="tab" id="wb-t2" aria-controls="wb-p2" aria-selected="false"><span class="n">02</span><span class="t">Shading</span><span class="kb" aria-hidden="true">2</span><span class="d">The direct beam ray-cast at 15- or 30-minute steps: per-panel heatmap, worst panels, then Apply to energy model.</span></button>
+    <button type="button" role="tab" id="wb-t3" aria-controls="wb-p3" aria-selected="false"><span class="n">03</span><span class="t">Sun path</span><span class="kb" aria-hidden="true">3</span><span class="d">The year on a polar diagram: four key days, the site's horizon and each plane's normal.</span></button>
+    <button type="button" role="tab" id="wb-t4" aria-controls="wb-p4" aria-selected="false"><span class="n">04</span><span class="t">Electrical</span><span class="kb" aria-hidden="true">4</span><span class="d">Voltage, current and DC:AC checks, cables, a live single-line diagram and a bill of materials. Compare inverters on clipping.</span></button>
+    <button type="button" role="tab" id="wb-t5" aria-controls="wb-p5" aria-selected="false"><span class="n">05</span><span class="t">Energy analytics</span><span class="kb" aria-hidden="true">5</span><span class="d">P50 to P99, PR, an 8,760-hour heatmap on the solar clock, the loss waterfall and yield per plane.</span></button>
+    <button type="button" role="tab" id="wb-t6" aria-controls="wb-p6" aria-selected="false"><span class="n">06</span><span class="t">Storage</span><span class="kb" aria-hidden="true">6</span><span class="d">Hour-by-hour self-consumption dispatch: autarky, cycles, throughput and a capacity sweep that finds the knee.</span></button>
+    <button type="button" role="tab" id="wb-t7" aria-controls="wb-p7" aria-selected="false"><span class="n">07</span><span class="t">Report</span><span class="kb" aria-hidden="true">7</span><span class="d">A 20-section A4 report with a numbered contents page and your logo. Exports PDF, the 8,760-hour CSV, JSON, the diagram as SVG and 3-D stills.</span></button>
+   </div>
+   <div class="wb__shots">
+    <figure class="panel" id="wb-p1" role="tabpanel" aria-labelledby="wb-t1"><div class="film" style="--ar:16/10"><video muted playsinline loop preload="none" poster="assets/film/wb-twin.webp" width="1200" height="750" aria-label="Screen recording of the workbench 3-D twin of the Johannesburg house example: the sun crosses 21 June from morning to evening and the panels' shadows move with it"><source src="assets/film/wb-twin.mp4" type="video/mp4"></video></div>
+     <figcaption class="cap"><span><b>3-D twin</b> · 21 June, the sun swept from morning to evening with live shadows</span><span>Johannesburg house · example · loop</span></figcaption></figure>
+    <figure class="panel" id="wb-p2" role="tabpanel" aria-labelledby="wb-t2" hidden><div class="film" style="--ar:16/10"><video muted playsinline loop preload="none" poster="assets/film/wb-shade.webp" width="1200" height="750" aria-label="Screen recording of the workbench shading analysis on the Cikarang warehouse example, sped up: Run full is clicked, the progress ring fills, then the per-panel solar-access map, the worst panels and near shading of 0.4 percent appear, with the Apply to energy model button"><source src="assets/film/wb-shade.mp4" type="video/mp4"></video></div>
+     <figcaption class="cap"><span><b>Shading</b> · a full run, the ray-cast sped up: per-panel solar access, worst panels, near shading 0.4 %, then Apply to energy model</span><span>Cikarang warehouse · example · 575 sun positions · loop</span></figcaption></figure>
+    <figure class="panel" id="wb-p3" role="tabpanel" aria-labelledby="wb-t3" hidden><div class="shot zc" data-zoom style="--ar:1.6; --w:136.8%; --l:-8.48%; --t:-12.31%"><img src="assets/shots/jhb-wb-sunpath-1400.webp" srcset="assets/shots/jhb-wb-sunpath-1400.webp 1400w, assets/shots/jhb-wb-sunpath.webp 2400w" sizes="(max-width:980px) 140vw, 1400px" width="2400" height="1500" alt="Workbench sun path: polar diagram for 21 June with the solstice and equinox arcs and the plane normals, beside sunrise, noon, sunset and day length for four key days and the year's shortest and longest day" loading="lazy" decoding="async"></div>
+     <figcaption class="cap"><span><b>Sun path</b> · 21 June at 26.14° S: 10 h 30 min of day, 5.7 peak sun hours a day on average</span><span>Johannesburg house · example</span></figcaption></figure>
+    <figure class="panel" id="wb-p4" role="tabpanel" aria-labelledby="wb-t4" hidden><div class="film" style="--ar:16/10"><video muted playsinline loop preload="none" poster="assets/film/wb-electrical.webp" width="1200" height="750" aria-label="Screen recording of the workbench single-line diagram of the Johannesburg house example at 118 percent: the pointer hovers string S01, then S02, each string lights up and the hover readout names it; the symbol key, the string key and the bill of materials sit below"><source src="assets/film/wb-electrical.mp4" type="video/mp4"></video></div>
+     <figcaption class="cap"><span><b>Electrical</b> · the live single-line diagram: hover a string and it lights up and is named, S01 West, S02 North</span><span>Johannesburg house · example · 8 kW inverter, DC:AC 1.07 · loop</span></figcaption></figure>
+    <figure class="panel" id="wb-p5" role="tabpanel" aria-labelledby="wb-t5" hidden><div class="shot shot--crop" data-zoom style="--ar:1.6; --op:50% 0%"><img src="assets/shots/crop-heatmap.webp" width="2000" height="1351" alt="Workbench energy analytics: yearly energy P50 14.0 MWh, P75 13.5, bad-year P90 13.0, performance ratio 78.0 percent, specific yield 1,628 kWh/kWp, 8.60 kWp, near shading 0 percent, and the 8,760-hour heatmap of every day by hour" loading="lazy" decoding="async"></div>
+     <figcaption class="cap"><span><b>Energy analytics</b> · P50 14.0 MWh, P90 13.0 MWh, PR 78.0 %; every hour of the year, day by hour</span><span>Johannesburg house · example</span></figcaption></figure>
+    <figure class="panel" id="wb-p6" role="tabpanel" aria-labelledby="wb-t6" hidden><div class="shot zc" data-zoom style="--ar:1.6; --w:136.8%; --l:-8.48%; --t:-21.2%"><img src="assets/shots/jhb-wb-storage-1400.webp" srcset="assets/shots/jhb-wb-storage-1400.webp 1400w, assets/shots/jhb-wb-storage.webp 2400w" sizes="(max-width:980px) 140vw, 1400px" width="2400" height="1500" alt="Workbench storage with a 10 kWh battery: the battery sliders with efficiency, depth and starting charge marked assumed, autarky 63.3 percent, self-consumption 66.0 percent, 309 cycles, 6,173 kWh a year and the typical-day dispatch chart" loading="lazy" decoding="async"></div>
+     <figcaption class="cap"><span><b>Storage</b> · 10 kWh: autarky 63.3 %, self-consumption 66.0 %, 309 cycles a year</span><span>Johannesburg house · example</span></figcaption></figure>
+    <figure class="panel" id="wb-p7" role="tabpanel" aria-labelledby="wb-t7" hidden><div class="shot zc" data-zoom style="--ar:1.6; --w:136.43%; --l:-8.19%; --t:-9.55%"><img src="assets/shots/jhb-wb-report-1400.webp" srcset="assets/shots/jhb-wb-report-1400.webp 1400w, assets/shots/jhb-wb-report.webp 2400w" sizes="(max-width:980px) 140vw, 1400px" width="2400" height="1500" alt="Workbench report: the compute pipeline at 7 of 7 computed, and a live preview of the A4 engineering report, 20 sections ready, from the cover to the energy yield" loading="lazy" decoding="async"></div>
+     <figcaption class="cap"><span><b>Report</b> · 7 of 7 computed, 20 sections ready to export</span><span>Johannesburg house · example</span></figcaption></figure>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 05 · ENERGY (instrument) -->
+<section class="sec sec--tight sec--band xm" id="energy" aria-labelledby="h-energy">
+ <div class="wrap">
+  <div class="sh">
+   <span class="label" data-rv><span class="idx">05</span>Energy and P90</span>
+   <div class="sh__t">
+    <h2 class="h2" id="h-energy" data-rv>The year, hour by hour, with its spread.</h2>
+    <p class="lede" data-rv style="--i:1">Every face runs through all 8,760 hours of a typical year built from the site's own weather record. The answer is a range: P50, P75, P90 and P99.</p>
+   </div>
+  </div>
+  <div class="xgrid">
+   <figure class="chart" id="xc" data-rv="fade">
+    <div class="chart__hd"><span class="label">Exceedance curve · Johannesburg house · example</span><span class="readout" id="xRead" aria-live="polite">Hover the curve, or focus it and use the arrow keys</span></div>
+    <div class="chart__plot" tabindex="0" role="img" aria-label="Exceedance curve of yearly energy for the Johannesburg house example: P50 14,004 kWh is reached in half of years, P90 12,954 kWh in nine years out of ten. Use the left and right arrow keys to read any point." style="--h:330px"></div>
+    <figcaption class="chart__ft"><span>P50 <b>14,004 kWh</b></span><span>P90 <b>12,954 kWh</b></span><span>σ <b>5.85 %</b></span><span>P90 = P50 × (1 − 1.2816 σ)</span></figcaption>
+   </figure>
+   <div class="stack" style="--g:22px">
+    <div class="notes notes--plain" data-rv>
+     <div class="note"><h4>Estimate, then Simulated</h4><p>The live card reads Estimate on every step until the hourly run finishes, then Simulated. Change the design and older numbers are flagged stale, with the cause named.</p></div>
+     <div class="note"><h4>8,760 hours, 13 named losses</h4><p>Sun position, sky model, far horizon, incidence, temperature, low light, inverter part-load and clipping, face by face. PR follows the IEC definition, and every hour exports as a CSV.</p></div>
+     <div class="note"><h4>Open any energy figure</h4><p>Each one opens to its weather record and years, the engine version, the loss sources and the uncertainty terms.</p></div>
+    </div>
+    <a class="tlink tlink--sol" href="science.html#p90" data-rv>How P90 is built <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 06 · SAVINGS + 07 · PROPOSAL (two splits) -->
+<section class="sec sec--tight xm" aria-label="Savings and proposal">
+ <div class="wrap">
+  <div class="split" id="savings">
+   <div class="split__media">
+    <figure class="inst bill" data-rv="fade">
+     <div class="inst__hd"><span class="label">Johannesburg house · cash purchase</span><span class="readout">example · ZAR a year</span></div>
+     <div class="inst__body">
+      <div class="chart"><div class="chart__plot" id="billPlot" style="--h:164px"></div></div>
+      <div class="chart"><div class="chart__plot" id="payPlot" style="--h:88px"></div></div>
+     </div>
+     <figcaption class="inst__ft"><span>Bill <b>ZAR 39,740</b> → <b>ZAR 17,088</b> a year, simple payback <b>5.7 yr</b></span><span>System ZAR 129,000: 8.6 kWp at ZAR 15 per W, an assumed default you can edit</span></figcaption>
+    </figure>
+   </div>
+   <div class="split__text">
+    <span class="label" data-rv><span class="idx">06</span>Savings</span>
+    <h2 class="h3" id="h-savings" data-rv>The bill, before and after.</h2>
+    <p class="body" data-rv>Pick a tariff preset or set your own rate, fixed fee, export credit and export mode, then enter a monthly bill or yearly kWh. The studio runs the bill with and without the system and prices it over 25 years. Add a loan for the monthly payment.</p>
+    <dl class="spec" data-rv style="--i:1">
+     <dt>IRR</dt><dd class="sol">18.6<em>%</em></dd>
+     <dt>25-year net value</dt><dd>ZAR 216,062</dd>
+     <dt>Levelised cost</dt><dd>ZAR 0.88<em>/kWh</em></dd>
+     <dt>Self-use</dt><dd>42.6<em>%</em></dd>
+    </dl>
+   </div>
+  </div>
+
+  <div class="split split--rev" id="proposal">
+   <div class="split__media">
+    <figure class="inst sig" data-rv="fade">
+     <div class="inst__hd"><span class="label">Sign-off record</span><span class="readout">kept on the server</span></div>
+     <div class="inst__body sig__body">
+      <ol class="sig__in" aria-label="What the hash covers">
+       <li>Link token<span>online link</span></li>
+       <li>Name<span>typed by the customer</span></li>
+       <li>Email<span>typed by the customer</span></li>
+       <li>Time<span>from the server</span></li>
+       <li>Proposal<span>stored copy, hashed</span></li>
+      </ol>
+      <div class="sig__bus" aria-hidden="true"></div>
+      <div class="sig__out">
+       <div class="sig__hash">SHA-256<span>over all five</span></div>
+       <dl class="spec">
+        <dt>Signed</dt><dd>time stamped</dd>
+        <dt>Accepted with</dt><dd>name · email · tick</dd>
+        <dt>Second signature</dt><dd>refused</dd>
+       </dl>
+      </div>
+     </div>
+     <figcaption class="inst__ft"><span>Signing happens on the online link; the offline snapshot is for reading</span></figcaption>
+    </figure>
+   </div>
+   <div class="split__text">
+    <span class="label" data-rv><span class="idx">07</span>Proposal</span>
+    <h2 class="h3" id="h-proposal" data-rv>A proposal your customer signs.</h2>
+    <p class="body" data-rv>Add your name, colour and logo, check six A4 pages in a live preview, then send the link.</p>
+    <div class="notes notes--plain" data-rv style="--i:1">
+     <div class="note"><h4>Six A4 pages</h4><p>A cover with a 3-D render of the roof, the system with P50 and P90 per face, savings, investment, equipment and assumptions, next steps and acceptance. Five pages without the investment page.</p></div>
+     <div class="note"><h4>An estimate, and it says so</h4><p>Every proposal states that it is a design estimate, not a quotation, and prints a valid-until date.</p></div>
+     <div class="note"><h4>A page made to sign</h4><p>The link opens your header, the yearly saving, size, output, payback and self-use, the bill before and after, and the finance card. The customer signs with name, email and a tick.</p></div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 08 · PLATFORM + SPECS APPENDIX -->
+<section class="sec sec--tight sec--band xm" id="platform" aria-labelledby="h-platform">
+ <div class="wrap">
+  <div class="sh">
+   <span class="label" data-rv><span class="idx">08</span>Platform</span>
+   <div class="sh__t"><h2 class="h2" id="h-platform" data-rv>It saves itself.</h2></div>
+  </div>
+  <div class="lattice plat" style="--n:3" data-rv>
+   <div class="cell"><span class="label">Autosave</span><h3>Saved 1.2 s after your last edit.</h3><p>The header reads Saved, Saving, Saved on this device or Save failed. Offline, the design keeps to this device and the three examples still open.</p></div>
+   <div class="cell"><span class="label">Projects</span><h3>Every project in one drawer.</h3><p>Search, rename, duplicate or delete. Each project carries its stage, Lead, Designed, Proposed or Signed, and Mark as sent moves it to Proposed.</p></div>
+   <div class="cell"><span class="label">Keyboard</span><h3>The flow runs from the keys.</h3><div class="keys"><span class="kbd"><b>Enter</b>next step</span><span class="kbd"><b>Alt ←</b>back</span><span class="kbd"><b>Esc</b>close</span><span class="kbd"><b>← →</b>nudge 0.1 m</span><span class="kbd"><b>[ ]</b>rotate 1°</span><span class="kbd"><b>?</b>help</span></div></div>
+  </div>
+
+  <details class="specs" id="specs">
+   <summary><span class="h3">Full specification</span><span class="label">Eight groups</span></summary>
+   <div class="specs__grid">
+    <div><h4>Prospect</h4><dl class="spec">
+     <dt>Address search</dt><dd>6 suggestions · arrow keys and Enter</dd>
+     <dt>Street-before-number addresses</dt><dd>34<em>countries</em></dd>
+     <dt>Recent places, kept on this device</dt><dd>5</dd>
+     <dt>Building outlines drawn from</dt><dd>map zoom 16</dd>
+     <dt>Address picks a building within</dt><dd>18<em>m</em></dd>
+     <dt>Imagery roof-edge assist</dt><dd>30, 70 or 160 m radius · shown at ≥ 65 %</dd>
+     <dt>Imagery history</dt><dd>latest or dated past captures, where available</dd>
+     <dt>Area scan</dt><dd>300 largest outlines ≥ 80 m² in view, top 50 listed</dd>
+     <dt>Area scan row</dt><dd>m² · kWp · kWh/yr · score 0–100</dd>
+     <dt>Example projects</dt><dd>house, warehouse, barn · open offline</dd>
+    </dl></div>
+    <div><h4>Design</h4><dl class="spec">
+     <dt>Roof shapes</dt><dd>flat · mono-pitch · gable · hip · ground mount</dd>
+     <dt>Pitch</dt><dd>0–60° · Assumed until set</dd>
+     <dt>Default pitch</dt><dd>ZA 26° · DE, GB 35° · US 30° · AU 22.5° · IN, ID, BR, PH, MY, TH, VN 15° · AE, SA 5° · else 25°</dd>
+     <dt>Fill target</dt><dd>max · N panels · N kWp · portrait, landscape or auto</dd>
+     <dt>Setback rulesets</dt><dd>8: two US fire-code sets at 0.91 m, six at an assumed 0.30 m</dd>
+     <dt>Obstacles</dt><dd>drawn by you · 0.3 m clearance</dd>
+     <dt>Outline editor</dt><dd>move · rotate · corners · square up · snap · 50 undo steps</dd>
+     <dt>Tracker</dt><dd>single-axis, 10–90° (60° default), backtracking</dd>
+     <dt>Table layouts · lowest edge</dt><dd>1P 2P 3P 1L 2L 3L 4L · 0.2–4 m</dd>
+     <dt>Ground cover</dt><dd>0.05–0.98 (0.40 fixed, 0.33 tracker) or set the pitch</dd>
+     <dt>Ground surfaces · boundary</dt><dd>7 presets, albedo 0.12–0.60, or custom · 0–20 m</dd>
+     <dt>Bifacial rear side</dt><dd>view-factor model · 10 % rear derate assumed</dd>
+     <dt>Eave height, unless set</dt><dd>3 m · 6 m barn or over 400 m² · 8 m warehouse</dd>
+    </dl></div>
+    <div><h4>System</h4><dl class="spec">
+     <dt>Modules</dt><dd>8 generic, 410–660 Wp · bifaciality 0.70–0.85</dd>
+     <dt>Good</dt><dd>410 Wp · DC:AC 1.10 · no battery</dd>
+     <dt>Better</dt><dd>430 Wp · DC:AC 1.20 · 5 kWh</dd>
+     <dt>Best</dt><dd>460 Wp · DC:AC 1.30 · 10 kWh</dd>
+     <dt>Inverters</dt><dd>Auto, or 3 · 5 · 8 kW single-phase, 15 · 30 · 50 · 80 · 100 kW three-phase</dd>
+     <dt>DC:AC</dt><dd>1.00–1.50<em>1.20 default</em></dd>
+     <dt>Battery</dt><dd>none · 5 · 10 · 20 kWh or custom · kW = kWh ÷ 2</dd>
+     <dt>Loss defaults, editable</dt><dd>soiling 2 · mismatch 2 · DC wiring 2 · connections 0.5 · LID 1.5 · nameplate 1 · availability 0.5 · near shading 0<em>%</em></dd>
+    </dl></div>
+    <div><h4>Workbench</h4><dl class="spec">
+     <dt>3-D twin</dt><dd>Iso · Top · South · day 1–365 · play 1× or 4× · snapshot PNG</dd>
+     <dt>Shading run</dt><dd>Fast 30 min, 5 rays a panel · Full 15 min, 9 rays</dd>
+     <dt>Shading occluders</dt><dd>walls, roof planes, drawn obstacles, racks</dd>
+     <dt>Electrical checks</dt><dd>Voc cold · Vmp hot · Isc × 1.25 · DC:AC 1.0–1.4</dd>
+     <dt>Cables</dt><dd>≤ 1 % DC, ≤ 1.5 % AC drop</dd>
+     <dt>Electrical outputs</dt><dd>single-line diagram · bill of materials · inverter clipping compare</dd>
+     <dt>Storage dispatch</dt><dd>self-consumption · efficiency 90 %, depth 90 %, start 50 %</dd>
+     <dt>Report</dt><dd>cover, numbered contents, 20 sections · your name, logo PNG ≤ 300 KB</dd>
+     <dt>Exports</dt><dd>PDF · 8,760-hour CSV · project JSON · diagram SVG · 3-D stills ZIP</dd>
+    </dl></div>
+    <div><h4>Energy</h4><dl class="spec">
+     <dt>Typical year</dt><dd>12 months from a 2005–2023 record, each anchored to its 19-year mean</dd>
+     <dt>Weather</dt><dd>satellite-derived where covered, reanalysis elsewhere</dd>
+     <dt>Hourly chain</dt><dd>sun position · anisotropic sky · 360-step far horizon · incidence · temperature · low light · inverter</dd>
+     <dt>Loss stages · PR</dt><dd>13 named · IEC definition</dd>
+     <dt>P90</dt><dd>P50 × (1 − 1.2816 σ)</dd>
+     <dt>σ terms</dt><dd>resource 4 % satellite or 8 % reanalysis · year-to-year from the site · model 3 % · geometry 1 % · degradation 0.2 %</dd>
+     <dt>σ in the examples</dt><dd>house 5.85 % · warehouse 9.6 % · barn 6.7 %</dd>
+     <dt>CSV columns</dt><dd>hour · utc · pv_ac_kw · load_kw · grid_import_kw · grid_export_kw · soc</dd>
+    </dl></div>
+    <div><h4>Savings</h4><dl class="spec">
+     <dt>Tariff presets, assumed and editable</dt><dd>ZA · DE · ID · US · GB · AU</dd>
+     <dt>Export modes</dt><dd>net metering · net billing · zero export</dd>
+     <dt>Use</dt><dd>monthly bill or yearly kWh · Home, Business or Flat profile</dd>
+     <dt>Price per W, editable</dt><dd>USD 1.10 · EUR 1.30 · GBP 1.20 · AUD 1.40 · ZAR 15 · IDR 10,000</dd>
+     <dt>Battery per kWh, editable</dt><dd>USD 700 · EUR 750 · GBP 600 · AUD 1,100 · ZAR 12,000 · IDR 11 M</dd>
+     <dt>Opex</dt><dd>1 %<em>editable</em></dd>
+     <dt>Escalation · discount · degradation</dt><dd>3 % · 6 % · 0.5 % a year, over 25 years</dd>
+     <dt>Loan</dt><dd>8 %, 10 years, 20 % deposit → monthly payment</dd>
+     <dt>Assumed-use banner</dt><dd>shown until you enter a bill or yearly kWh</dd>
+    </dl></div>
+    <div><h4>Proposal</h4><dl class="spec">
+     <dt>PDF</dt><dd>6 A4 pages · 5 without investment</dd>
+     <dt>Cover render</dt><dd>3-D, March equinox 10:00 solar · or a 2-D site plan</dd>
+     <dt>Your brand</dt><dd>company · colour · logo PNG, JPEG or SVG ≤ 300 KB</dd>
+     <dt>Online link</dt><dd>signable</dd>
+     <dt>Offline snapshot</dt><dd>≤ 4 MB · logo kept if ≤ 30 KB · read only</dd>
+     <dt>Sign-off hash</dt><dd>SHA-256 over token, name, email, time and the stored proposal</dd>
+     <dt>Mark as sent</dt><dd>stage → Proposed</dd>
+    </dl></div>
+    <div><h4>Platform</h4><dl class="spec">
+     <dt>Autosave</dt><dd>1.2 s after the last edit · this device when offline</dd>
+     <dt>Projects drawer</dt><dd>search · rename · duplicate · delete</dd>
+     <dt>Stages</dt><dd>Lead · Designed · Proposed · Signed</dd>
+     <dt>Studio keys</dt><dd>Enter · Alt ← · Esc</dd>
+     <dt>Workbench keys</dt><dd>1–7 · ⌘/Ctrl K · ? · Space</dd>
+     <dt>Outline keys</dt><dd>arrows 0.1 m · Shift 1 m · [ ] 1° · Shift-rotate 15°</dd>
+    </dl></div>
+    <p class="small specs__lim"><b class="em">Limits, stated once.</b> Area scan ranks by roof size: one estimate on the largest roof, scaled by area, and the panel says Indicative only. Setbacks apply the largest edge value on every edge, and the US pathway is not drawn. Shading leaves out trees, neighbours and diffuse blocking. Cable runs are assumed at 30 m DC and 10 m AC, and the design-low temperature is an estimate you can override. Storage efficiency, depth and starting charge are fixed. The full list is on <a class="tlink tlink--sol" href="science.html#limits">Science, Limits <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
+   </div>
+  </details>
+ </div>
+</section>
+
+<!-- ENDCAP -->
+<section class="endcap" aria-labelledby="h-end">
+ <div class="wrap endcap__in">
+  <div class="endcap__copy">
+   <span class="label">Request access</span>
+   <h2 class="h2" id="h-end">Bring us your next roof.</h2>
+   <p class="lede">Request access for your team, or book a demo and watch one design go from map to signature.</p>
+   <div class="row"><a class="btn btn--p btn--lg" href="start.html">Request access <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn btn--g btn--lg" href="start.html#demo">Book a demo</a></div>
+  </div>
+  <div class="endcap__media">
+   <figure data-rv="fade">
+    <div class="shot shot--crop" style="--ar:1.8; --op:50% 0%" data-zoom><img src="assets/shots/jhb-03-roof-split-1400.webp" srcset="assets/shots/jhb-03-roof-split-1400.webp 1400w, assets/shots/jhb-03-roof-split.webp 2400w" sizes="(max-width:980px) 100vw, 700px" width="2400" height="1500" alt="The studio at step 2 in split view: roof faces, the satellite map with the outlined roof and the live 3-D stage" loading="lazy" decoding="async"></div>
+    <figcaption class="cap"><span><b>Step 2, split view</b> · faces, map and 3-D on one screen</span><span>Johannesburg house · example</span></figcaption>
+   </figure>
+  </div>
+ </div>
+</section>
+</main>
+<footer data-ha-foot></footer>
+<script>
+/* Product page instruments. ha.js loads with defer, so wait for DOMContentLoaded. Every chart uses HA.chart and the .ch-* classes. */
+document.addEventListener('DOMContentLoaded', function(){
+ var HA = window.HA; if (!HA || !HA.chart) return;
+ var fmt = function(n){ return Math.round(n).toLocaleString('en-US'); };
+ var T = function(svg, cls, x, y, txt, anchor){ var t = HA.svg('text', { class: cls, x: x, y: y, 'text-anchor': anchor || 'start' }, svg); t.textContent = txt; return t; };
+
+ /* 03 · Auto inverter: the eight generic units on a log kW axis; the shaded band keeps DC:AC at or under 1.4 */
+ (function(){
+  var fig = document.getElementById('inv'), plot = document.getElementById('ivPlot'); if (!fig || !plot) return;
+  var EX = [{ kwp: 8.6, pick: 8, n: 1 }, { kwp: 301, pick: 100, n: 3 }], cur = 0, ONE = [3, 5, 8], THREE = [15, 30, 50, 80, 100];
+  var ch = HA.chart(plot, function(o){
+   var svg = o.svg, w = o.w, h = o.h, e = EX[cur], need = e.kwp / 1.4, narrow = w < 520;
+   var m = { l: 12, r: 18, t: 44, b: 44 }, L0 = Math.log10(2), L1 = Math.log10(400), base = h - m.b;
+   var x = function(v){ return m.l + (Math.log10(v) - L0) / (L1 - L0) * (w - m.l - m.r); };
+   var yA = m.t + (base - m.t) * 0.26, yB = m.t + (base - m.t) * 0.8, xn = x(need), right = xn > w * 0.62;
+   HA.svg('rect', { class: 'ch-fill-p50', x: xn, y: 16, width: Math.max(0, w - m.r - xn), height: base - 16 }, svg);
+   HA.svg('line', { class: 'ch-lead', x1: xn, x2: xn, y1: 16, y2: base }, svg);
+   T(svg, 'ch-l', right ? xn - 8 : xn + 8, 30, (narrow ? '≥ ' : 'DC:AC ≤ 1.4 from ') + (need < 20 ? need.toFixed(1) : fmt(need)) + ' kW', right ? 'end' : 'start');
+   [[yA, 'Single-phase'], [yB, 'Three-phase']].forEach(function(r){ HA.svg('line', { class: 'ch-grid', x1: m.l, x2: w - m.r, y1: r[0], y2: r[0] }, svg); T(svg, 'ch-t', m.l, r[0] + 22, r[1]); });
+   HA.svg('line', { class: 'ch-axis', x1: m.l, x2: w - m.r, y1: base, y2: base }, svg);
+   [3, 10, 30, 100, 300].forEach(function(v){ HA.svg('line', { class: 'ch-axis', x1: x(v), x2: x(v), y1: base, y2: base + 5 }, svg); T(svg, 'ch-t', x(v), base + 19, String(v), 'middle'); });
+   T(svg, 'ch-t', w - m.r, h - 4, narrow ? 'AC kW, log scale' : 'Inverter AC rating, kW · log scale', 'end');
+   if (e.n > 1){
+    HA.svg('path', { class: 'ch-p50', d: 'M' + x(e.pick) + ' ' + yB + 'H' + x(e.pick * e.n) }, svg);
+    for (var k = 2; k <= e.n; k++) HA.svg('circle', { class: 'ch-bar--sol', cx: x(e.pick * k), cy: yB, r: 4 }, svg);
+    T(svg, 'ch-a', x(e.pick * e.n), narrow ? yB + 22 : yB - 13, e.n + ' × ' + e.pick + ' = ' + (e.pick * e.n) + ' kW', 'end');
+   }
+   ONE.concat(THREE).forEach(function(v){
+    var y = ONE.indexOf(v) >= 0 ? yA : yB, pk = v === e.pick, ok = v >= need;
+    HA.svg('circle', { class: pk ? 'ch-bar--sol' : ok ? 'ch-bar--ref' : 'ch-bar', cx: x(v), cy: y, r: pk ? 7 : narrow ? 4 : 5 }, svg);
+    if (narrow && v === 80 && !pk) return;   /* 80 and 100 kW sit 13 px apart on a phone: label the larger one */
+    T(svg, pk ? 'ch-a' : 'ch-t', x(v), y - 13, pk && e.n === 1 && !narrow ? '1 × ' + v + ' kW' : String(v), 'middle');
+   });
+  });
+  fig.addEventListener('ha:tab', function(ev){ cur = ev.detail.index; ch.redraw(); });
+ })();
+
+ /* The specs appendix opens when a link points at it */
+ (function(){
+  var sp = document.getElementById('specs'); if (!sp) return;
+  var open = function(){ sp.open = true; };
+  if (location.hash === '#specs') open();
+  document.querySelectorAll('a[href="#specs"]').forEach(function(a){ a.addEventListener('click', open); });
+  window.addEventListener('hashchange', function(){ if (location.hash === '#specs') open(); });
+ })();
+
+ /* 05 · Exceedance curve: share of years whose energy reaches x, from P50 14,004 kWh and σ 5.85 % (normal spread) */
+ (function(){
+  var fig = document.getElementById('xc'); if (!fig) return;
+  var plot = fig.querySelector('.chart__plot'), read = document.getElementById('xRead'), idle = read.innerHTML;
+  var P50 = 14004, SG = 0.0585, S = P50 * SG, X0 = 11500, X1 = 16500, cv = null, g = null;
+  var erf = function(z){ var t = 1 / (1 + 0.3275911 * Math.abs(z)), r = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-z * z); return z >= 0 ? r : -r; };
+  var ex = function(v){ return 0.5 * (1 - erf((v - P50) / (S * Math.SQRT2))); };
+  var PT = [['P99', 2.3263, 'ch-bar--ref'], ['P90', 1.2816, 'ch-bar--sky'], ['P75', 0.6745, 'ch-bar--ref'], ['P50', 0, 'ch-bar--sol']];
+  var place = function(v){
+   if (!g) return; cv = Math.max(X0, Math.min(X1, v));
+   var X = g.x(cv), Y = g.y(ex(cv));
+   g.cur.setAttribute('x1', X); g.cur.setAttribute('x2', X); g.dot.setAttribute('cx', X); g.dot.setAttribute('cy', Y);
+   fig.classList.add('is-hover');
+   read.innerHTML = '<b>' + fmt(Math.round(cv / 10) * 10) + ' kWh</b> or more in <b>' + Math.round(ex(cv) * 100) + ' %</b> of years';
+  };
+  var clear = function(){ cv = null; fig.classList.remove('is-hover'); read.innerHTML = idle; };
+  HA.chart(plot, function(o){
+   var svg = o.svg, w = o.w, h = o.h, narrow = w < 520, m = { l: 46, r: 16, t: 28, b: 46 };
+   var x = HA.scale(X0, X1, m.l, w - m.r), y = HA.scale(0, 1, h - m.b, m.t);
+   [0, 0.25, 0.5, 0.75, 1].forEach(function(p){ HA.svg('line', { class: p ? 'ch-grid' : 'ch-axis', x1: m.l, x2: w - m.r, y1: y(p), y2: y(p) }, svg); T(svg, 'ch-t', m.l - 8, y(p) + 4, Math.round(p * 100) + ' %', 'end'); });
+   (narrow ? [12000, 14000, 16000] : [12000, 13000, 14000, 15000, 16000]).forEach(function(v){ HA.svg('line', { class: 'ch-axis', x1: x(v), x2: x(v), y1: y(0), y2: y(0) + 5 }, svg); T(svg, 'ch-t', x(v), y(0) + 19, fmt(v), 'middle'); });
+   T(svg, 'ch-t', w - m.r, h - 4, 'Yearly energy, kWh', 'end');
+   T(svg, 'ch-t', m.l, 12, 'Share of years that reach it');
+   var d = '';
+   for (var v = X0; v <= X1; v += 25) d += (d ? 'L' : 'M') + x(v).toFixed(1) + ' ' + y(ex(v)).toFixed(1);
+   HA.svg('path', { class: 'ch-fill-p50', d: d + 'L' + x(X1) + ' ' + y(0) + 'L' + x(X0) + ' ' + y(0) + 'Z' }, svg);
+   HA.svg('path', { class: 'ch-p50', d: d }, svg);
+   PT.forEach(function(p){
+    var val = P50 * (1 - p[1] * SG), X = x(val), Y = y(ex(val)), key = p[0] === 'P50' || p[0] === 'P90';
+    if (key){ HA.svg('line', { class: 'ch-lead', x1: X, x2: X, y1: Y, y2: y(0) }, svg); HA.svg('line', { class: 'ch-lead', x1: m.l, x2: X, y1: Y, y2: Y }, svg); }
+    HA.svg('circle', { class: p[2], cx: X, cy: Y, r: key ? 5 : 3.5 }, svg);
+    if (p[0] === 'P50'){ T(svg, 'ch-a', X + 10, narrow ? Y - 10 : Y - 26, 'P50 · ' + fmt(val) + ' kWh'); if (!narrow) T(svg, 'ch-t', X + 10, Y - 10, 'the typical year: half of years reach it'); }
+    else if (p[0] === 'P90'){ T(svg, 'ch-a', X + 10, narrow ? Y - 10 : Y - 26, 'P90 · ' + fmt(val) + ' kWh'); if (!narrow) T(svg, 'ch-t', X + 10, Y - 10, 'nine years in ten reach it'); }
+    else if (p[0] === 'P75'){ if (narrow) T(svg, 'ch-l', X + 9, Y - 5, 'P75'); else T(svg, 'ch-l', X - 10, Y + 18, 'P75', 'end'); }
+    else T(svg, 'ch-l', X + 8, Y + 18, 'P99');
+   });
+   g = { x: x, y: y };
+   g.cur = HA.svg('line', { class: 'ch-cur', x1: -10, x2: -10, y1: y(1), y2: y(0) }, svg);
+   g.dot = HA.svg('circle', { class: 'ch-dot', r: 4, cx: -10, cy: -10 }, svg);
+   if (cv != null) place(cv);
+  });
+  plot.addEventListener('pointermove', function(e){ if (!g) return; var r = plot.getBoundingClientRect(); place(g.x.invert(e.clientX - r.left)); });
+  plot.addEventListener('pointerleave', clear);
+  plot.addEventListener('focus', function(){ if (cv == null) place(P50); });
+  plot.addEventListener('blur', clear);
+  plot.addEventListener('keydown', function(e){
+   var k = e.key, st = e.shiftKey ? 500 : 100;
+   if (k === 'ArrowRight' || k === 'ArrowLeft'){ e.preventDefault(); place((cv == null ? P50 : cv) + (k === 'ArrowRight' ? st : -st)); }
+   else if (k === 'Home'){ e.preventDefault(); place(X0); }
+   else if (k === 'End'){ e.preventDefault(); place(X1); }
+   else if (k === 'Escape') clear();
+  });
+ })();
+
+ /* 06 · Savings: the yearly bill before and after, to scale, and simple payback on the 25-year horizon */
+ (function(){
+  var a = document.getElementById('billPlot'), b = document.getElementById('payPlot'); if (!a || !b) return;
+  var BEFORE = 39740, AFTER = 17088, SAVE = BEFORE - AFTER, PAY = 5.7;
+  HA.chart(a, function(o){
+   var svg = o.svg, w = o.w, narrow = w < 520, x = HA.scale(0, 42000, 0, w - 4), r1 = 26, r2 = 92, bh = 22, base = r2 + bh + 14;
+   (narrow ? [0, 20000, 40000] : [0, 10000, 20000, 30000, 40000]).forEach(function(v){ HA.svg('line', { class: 'ch-grid', x1: x(v), x2: x(v), y1: 8, y2: base }, svg); T(svg, 'ch-t', x(v), base + 18, fmt(v), v ? 'middle' : 'start'); });
+   HA.svg('line', { class: 'ch-axis', x1: 0, x2: w - 4, y1: base, y2: base }, svg);
+   HA.svg('rect', { class: 'ch-bar--ref', x: 0, y: r1, width: x(BEFORE), height: bh, rx: 2 }, svg);
+   T(svg, 'ch-l', 0, r1 - 9, 'Bill before'); T(svg, 'ch-a', x(BEFORE), r1 - 9, 'ZAR ' + fmt(BEFORE), 'end');
+   HA.svg('rect', { class: 'ch-bar--sol', x: 0, y: r2, width: x(AFTER), height: bh, rx: 2 }, svg);
+   HA.svg('rect', { class: 'ch-lead', x: x(AFTER) + 0.5, y: r2 + 0.5, width: x(BEFORE) - x(AFTER) - 1, height: bh - 1 }, svg);
+   T(svg, 'ch-l', 0, r2 - 9, 'Bill after');
+   T(svg, 'ch-a', x(AFTER) > 190 ? x(AFTER) : x(BEFORE), r2 - 9, 'ZAR ' + fmt(AFTER), 'end');
+   T(svg, 'ch-l', (x(AFTER) + x(BEFORE)) / 2, r2 + 15, narrow ? '−57 %' : 'saves ZAR ' + fmt(SAVE) + ' · 57 %', 'middle');
+  });
+  HA.chart(b, function(o){
+   var svg = o.svg, w = o.w, narrow = w < 520, x = HA.scale(0, 25, 0, w - 4), ay = 46;
+   HA.svg('rect', { class: 'ch-bar--ref', x: 0, y: ay - 3, width: x(PAY), height: 6 }, svg);
+   HA.svg('rect', { class: 'ch-bar--sol', x: x(PAY), y: ay - 3, width: x(25) - x(PAY), height: 6 }, svg);
+   HA.svg('line', { class: 'ch-lead', x1: x(PAY), x2: x(PAY), y1: 22, y2: ay + 8 }, svg);
+   T(svg, 'ch-a', x(PAY) + 8, 18, 'Pays back in ' + PAY + ' years');
+   if (!narrow) T(svg, 'ch-t', w - 4, 18, '25-year horizon', 'end');
+   [0, 5, 10, 15, 20, 25].forEach(function(v){ T(svg, 'ch-t', x(v), ay + 26, v === 25 ? '25 yr' : String(v), v ? (v === 25 ? 'end' : 'middle') : 'start'); });
+  });
+ })();
+});
+</script>
+</body>
+</html>

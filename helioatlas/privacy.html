@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HelioAtlas · Privacy</title>
+<meta name="description" content="What the code of this website keeps in your browser, what it sends (nothing), what it loads from elsewhere, and how to clear it.">
+<meta name="theme-color" content="#000000">
+<link rel="icon" type="image/svg+xml" href="assets/brand/favicon.svg"><link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png"><link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+<meta property="og:title" content="HelioAtlas · What this site keeps.">
+<meta property="og:description" content="In plain words: what this website stores in your browser, what it sends and how to clear it.">
+<meta property="og:image" content="https://lumen8.ai/helioatlas/assets/brand/social-card.png">
+<meta property="og:url" content="https://lumen8.ai/helioatlas/privacy.html">
+<link rel="canonical" href="https://lumen8.ai/helioatlas/privacy.html">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="assets/fonts/Geist-latin-var.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="assets/fonts/GeistMono-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/ha.css">
+<script src="assets/ha.js" defer></script>
+<style>
+/* privacy: layout only; every colour, type role and component comes from ha.css */
+.ph--c{padding-top:calc(var(--nav-h) + clamp(48px, 6vw, 96px)); padding-bottom:clamp(40px, 4.4vw, 64px)}
+.ph--c .sh{margin-bottom:0}
+#policy{padding-block:clamp(56px, 6vw, 96px) clamp(80px, 9vw, 136px)}
+#policy .label{display:block; padding-top:.4em}
+.essay h2.h3{color:var(--fg); margin:1.9em 0 .5em}
+.essay > .pull:first-child{margin-top:0}
+.essay ul + p{margin-top:1.1em}
+.essay code{font-family:var(--m); font-size:.88em; color:var(--fg); background:var(--bg-3); border:1px solid var(--line-2); border-radius:5px; padding:1px 6px}
+.essay ul{display:flex; flex-direction:column; gap:.5em; margin-top:1.1em; padding-left:1.1em; list-style:disc}
+.essay ul li::marker{color:var(--fg-3)}
+.store{margin-top:1.4em}
+.store .btn:disabled{opacity:.45; cursor:default}
+.store .inst__body{display:flex; flex-direction:column; gap:16px}
+.store .row{--g:12px 20px}
+.fns{margin-top:2em; padding-top:18px; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:8px}
+
+/* endcap */
+.next{border-top:1px solid var(--line-2)}
+.next a{display:grid; grid-template-columns:minmax(0, 8em) minmax(0, 1fr) 14px; gap:4px 24px; align-items:baseline; padding:22px 0; border-bottom:1px solid var(--line)}
+.next a > span:nth-child(2){display:flex; flex-direction:column; gap:4px}
+.next svg{width:14px; height:14px; color:var(--fg-3); transition:transform var(--dur-2) var(--ease), color var(--dur-1)}
+.next a:hover svg{color:var(--fg); transform:translateX(3px)}
+@media (max-width:620px){ .next a{grid-template-columns:minmax(0, 1fr) 14px} .next a > .label{grid-column:1 / -1} }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header data-ha-nav></header>
+
+<main id="main">
+
+<!-- ═════ HEADER ═════ -->
+<section class="ph ph--c" aria-labelledby="pv-h">
+  <div class="ph__grid" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="crumbs"><a href="index.html">HelioAtlas</a><span aria-hidden="true">/</span><span>Privacy</span></div>
+    <div class="sh sh--stack">
+      <div class="sh__t">
+        <h1 class="h1" id="pv-h">What this site keeps.</h1>
+        <p class="lede">In plain words: what the code of this website stores in your browser, what it sends, and what it loads from elsewhere.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ THE POLICY ═════ -->
+<section class="sec xm" id="policy" aria-label="What this site stores and sends">
+  <div class="wrap grid">
+    <div class="c-3"><span class="label">Updated 9 October 2026</span></div>
+    <div class="c-9">
+      <div class="essay">
+        <p class="pull">Nothing you type into this site leaves your browser.</p>
+        <p>This page covers the code of the pages in this site's menu. It does not cover the server that delivers them, or the HelioAtlas studio itself.</p>
+
+        <h2 class="h3" id="kept">The forms keep your entry here</h2>
+        <p>The two forms on the start page, Request access and Book a demo, are not yet connected to an inbox, so submitting one sends nothing. The entry is kept in your browser's local storage under one key, <code>ha.forms</code>, which holds your 20 most recent entries. Each records the form, the time, the page and what you filled in:</p>
+        <ul>
+          <li><strong>Request access:</strong> work email, company, country and what you design.</li>
+          <li><strong>Book a demo:</strong> name, work email, company, country, team size and an optional message.</li>
+        </ul>
+        <p>Local storage stays in this browser on this device until you clear it, and other websites cannot read it.<a class="fnr" href="#fn1">1</a></p>
+
+        <h2 class="h3" id="not">No cookies, no analytics</h2>
+        <p>The site's own code sets no cookies and runs no analytics, tracking or advertising scripts. It does not ask for your location, camera or microphone. Copy details, on the start page, writes to your clipboard only when you press it.</p>
+
+        <h2 class="h3" id="loads">What loads from where</h2>
+        <p>Pages, styles, scripts, fonts, images and films are served from this site itself, with one exception: the 3-D scene at the top of the home page loads a 3-D graphics library from a public content-delivery network. On that page your browser requests the script from that network's servers and, as with any web request, sends your IP address and the name of your browser. The scene's terrain and imagery files come from this site.</p>
+
+        <h2 class="h3" id="clear">How to clear it</h2>
+        <p>Press the button below, or clear this site's stored data in your browser's settings. A private browsing session keeps nothing once you close it.</p>
+        <div class="inst store">
+          <div class="inst__hd"><span class="label">In this browser now</span></div>
+          <div class="inst__body">
+            <p class="small" id="st-read" aria-live="polite">Reading what this site has stored…</p>
+            <div class="row"><button class="btn btn--g btn--sm" type="button" id="st-clear">Clear what this site stored</button></div>
+          </div>
+        </div>
+
+        <div class="fns">
+          <p class="fn" id="fn1">1 · An earlier version of the start page kept entries under <code>ha.start.account</code> and <code>ha.start.demo</code>. The clear button removes those too.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ ENDCAP ═════ -->
+<section class="endcap" aria-labelledby="end-h">
+  <div class="wrap endcap__in">
+    <div class="endcap__copy">
+      <span class="label">HelioAtlas</span>
+      <h2 class="h2" id="end-h">Back to the roofs.</h2>
+      <p class="lede">See what the studio does with a roof, or request access to try it on your own.</p>
+      <div class="row"><a class="btn btn--p btn--lg" href="start.html">Request access <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn btn--g btn--lg" href="start.html#demo">Book a demo</a></div>
+    </div>
+    <div class="endcap__media">
+      <nav class="next" aria-label="Elsewhere on this site">
+        <a href="product.html"><span class="label">Product</span><span><span class="h4">The studio and the workbench</span><span class="small">From the roof outline to the signed proposal.</span></span><svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="company.html#contact"><span class="label">Contact</span><span><span class="h4">How to reach us</span><span class="small">The two ways in, and what each one does today.</span></span><svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </nav>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer data-ha-foot></footer>
+
+<script>
+/* Reads and clears only the keys this site's own code writes: ha.forms (HA.send) and the two keys an earlier start page used. */
+(function(){
+  'use strict';
+  var KEYS = ['ha.forms', 'ha.start.account', 'ha.start.demo'];
+  var read = document.getElementById('st-read'), btn = document.getElementById('st-clear');
+  var NAME = { access: 'Request access', demo: 'Book a demo', account: 'Request access' };
+  function count(){
+    var n = 0, kinds = {};
+    KEYS.forEach(function(k){
+      var v = localStorage.getItem(k); if (v == null) return;
+      var list; try { list = JSON.parse(v); } catch (e){ list = null; }
+      if (k !== 'ha.forms' && list && !Array.isArray(list)) list = [list];
+      if (!Array.isArray(list)){ n++; return; }
+      list.forEach(function(r){ n++; var t = NAME[(r && (r.kind || r.form)) || ''] || 'Form'; kinds[t] = (kinds[t] || 0) + 1; });
+    });
+    return { n: n, kinds: kinds };
+  }
+  function paint(after){
+    try {
+      var c = count();
+      if (!c.n){ read.textContent = after ? 'Cleared. This site has nothing stored in this browser.' : 'This site has nothing stored in this browser.'; btn.disabled = true; return; }
+      var parts = Object.keys(c.kinds).map(function(k){ return c.kinds[k] + ' from ' + k; });
+      read.innerHTML = 'This site has <b>' + c.n + '</b> form ' + (c.n === 1 ? 'entry' : 'entries') + ' stored in this browser' + (parts.length ? ': ' + parts.join(', ') : '') + '.';
+      btn.disabled = false;
+    } catch (e){ read.textContent = 'This browser does not let the page read its storage, so this site cannot have stored anything here.'; btn.disabled = true; }
+  }
+  btn.addEventListener('click', function(){ try { KEYS.forEach(function(k){ localStorage.removeItem(k); }); } catch (e){} paint(true); });
+  paint(false);
+})();
+</script>
+</body>
+</html>

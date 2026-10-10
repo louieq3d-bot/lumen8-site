@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HelioAtlas · Start</title>
+<meta name="description" content="Request access to the HelioAtlas studio or book a demo. Every account opens with three example projects: a house, a warehouse and a barn.">
+<meta name="theme-color" content="#000000">
+<link rel="icon" type="image/svg+xml" href="assets/brand/favicon.svg"><link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png"><link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+<meta property="og:title" content="HelioAtlas · Request access.">
+<meta property="og:description" content="Request access to the studio, or book a demo of a design built end to end.">
+<meta property="og:image" content="https://lumen8.ai/helioatlas/assets/brand/social-card.png">
+<meta property="og:url" content="https://lumen8.ai/helioatlas/start.html">
+<link rel="canonical" href="https://lumen8.ai/helioatlas/start.html">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="assets/fonts/Geist-latin-var.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="assets/fonts/GeistMono-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/ha.css">
+<script src="assets/ha.js" defer></script>
+<style>
+/* start: layout only; every colour, type role and component comes from ha.css */
+.ph--c{padding-top:calc(var(--nav-h) + clamp(36px, 4.4vw, 64px)); padding-bottom:clamp(36px, 4vw, 56px)}
+.ph--c .sh{margin-bottom:0}
+#signin{padding-top:0; border-top:0}
+
+/* 00 · request access: the form beside what happens next */
+.acc{display:grid; grid-template-columns:minmax(0, 7fr) minmax(0, 5fr); gap:clamp(28px, 5vw, 88px); align-items:start}
+@media (max-width:980px){ .acc{grid-template-columns:minmax(0, 1fr)} }
+
+/* forms */
+.form{display:grid; gap:20px}
+.frow{display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:20px}
+.frow--3{grid-template-columns:repeat(3, minmax(0, 1fr))}
+.form fieldset{border:0; margin:0; padding:0; min-width:0}
+.form legend{padding:0; margin-bottom:12px; font-size:13.5px; color:var(--fg-2)}
+.checks{display:flex; flex-wrap:wrap; gap:12px 26px}
+.form__act{display:flex; flex-wrap:wrap; align-items:center; gap:14px 20px}
+.btn[aria-busy="true"]{opacity:.6; pointer-events:none}
+.notice{display:flex; flex-direction:column; gap:12px}
+.notice[hidden]{display:none}
+.notice p{margin:0}
+.notice .textarea{min-height:0; color:var(--fg-2); resize:none}
+.notice .row{--g:10px 16px}
+@media (max-width:760px){ .frow, .frow--3{grid-template-columns:minmax(0, 1fr)} }
+
+.ilink{color:var(--fg); text-decoration:underline; text-decoration-color:var(--line-3); text-underline-offset:3px; transition:text-decoration-color var(--dur-1)}
+.ilink:hover{text-decoration-color:var(--fg)}
+
+/* what happens next */
+.seqhd{padding-bottom:14px}
+.seq{border-top:1px solid var(--line-2)}
+.seq li{display:grid; grid-template-columns:44px minmax(0, 1fr); gap:0 8px; padding:24px 0; border-bottom:1px solid var(--line)}
+.seq .label{padding-top:.35em}
+.seq h3{margin-bottom:8px}
+.seq .tlink{margin-top:12px}
+
+/* 01 · demo: a wide form under a split header */
+.covers{display:flex; flex-direction:column; border-top:1px solid var(--line)}
+.covers li{padding:10px 0; border-bottom:1px solid var(--line)}
+.demo{max-width:1040px}
+
+/* endcap */
+.next{border-top:1px solid var(--line-2)}
+.next a{display:grid; grid-template-columns:minmax(0, 8em) minmax(0, 1fr) 14px; gap:4px 24px; align-items:baseline; padding:22px 0; border-bottom:1px solid var(--line)}
+.next a > span:nth-child(2){display:flex; flex-direction:column; gap:4px}
+.next svg{width:14px; height:14px; color:var(--fg-3); transition:transform var(--dur-2) var(--ease), color var(--dur-1)}
+.next a:hover svg{color:var(--fg); transform:translateX(3px)}
+@media (max-width:620px){ .next a{grid-template-columns:minmax(0, 1fr) 14px} .next a > .label{grid-column:1 / -1} }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header data-ha-nav></header>
+
+<main id="main">
+
+<!-- ═════ HEADER ═════ -->
+<section class="ph ph--c" aria-labelledby="start-h">
+  <div class="ph__grid" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="crumbs"><a href="index.html">HelioAtlas</a><span aria-hidden="true">/</span><span aria-current="page">Start</span></div>
+    <div class="sh sh--stack">
+      <div class="sh__t">
+        <h1 class="h1" id="start-h">Request access.</h1>
+        <p class="lede">There is no self-serve sign-up. Tell us who you are and what you design, or <a class="ilink" href="#demo">book a demo</a> of the studio.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ 00 · REQUEST ACCESS ═════ -->
+<section class="sec" id="signin" aria-label="Request access">
+  <div class="wrap acc">
+    <div class="inst">
+      <div class="inst__hd"><h2 class="label">Request access</h2></div>
+      <div class="inst__body">
+        <form class="form" id="f-access" data-kind="access" novalidate>
+          <div class="field" data-f="email" data-rule="email">
+            <label for="a-email">Work email</label>
+            <input class="input" id="a-email" name="email" type="email" autocomplete="email" required aria-describedby="a-email-e">
+            <p class="err" id="a-email-e" hidden></p>
+          </div>
+          <div class="frow">
+            <div class="field" data-f="company" data-rule="req">
+              <label for="a-company">Company</label>
+              <input class="input" id="a-company" name="company" type="text" autocomplete="organization" required aria-describedby="a-company-e">
+              <p class="err" id="a-company-e" hidden></p>
+            </div>
+            <div class="field" data-f="country" data-rule="req">
+              <label for="a-country">Country</label>
+              <select class="select" id="a-country" name="country" autocomplete="country-name" required aria-describedby="a-country-e">
+                <option value="" selected disabled>Choose a country</option>
+                <option>South Africa</option><option>Germany</option><option>Indonesia</option><option>United States</option><option>United Kingdom</option><option>Australia</option><option>Another country</option>
+              </select>
+              <p class="err" id="a-country-e" hidden></p>
+            </div>
+          </div>
+          <fieldset class="field" data-f="focus" data-rule="group" aria-describedby="a-focus-e">
+            <legend>What do you design?</legend>
+            <div class="checks">
+              <label class="check"><input type="checkbox" name="focus" value="Homes"><span>Homes</span></label>
+              <label class="check"><input type="checkbox" name="focus" value="Commercial roofs"><span>Commercial roofs</span></label>
+              <label class="check"><input type="checkbox" name="focus" value="Farms and ground mounts"><span>Farms and ground mounts</span></label>
+            </div>
+            <p class="err" id="a-focus-e" hidden></p>
+          </fieldset>
+          <div class="form__act"><button class="btn btn--p btn--lg" type="submit">Request access <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+          <div class="notice" role="status" aria-live="polite" hidden></div>
+        </form>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="label seqhd">What happens next</h2>
+      <ol class="seq">
+        <li><span class="label"><span class="idx">01</span></span><div><h3 class="h4">Your entry stays in this browser.</h3><p class="small">This form is not yet connected to an inbox. When you press Request access, the page keeps your entry in this browser only and sends nothing, then shows your details so you can copy them.</p></div></li>
+        <li><span class="label"><span class="idx">02</span></span><div><h3 class="h4">The studio opens with three examples.</h3><p class="small">A house, a warehouse and a barn, fully designed, so you can check the figures on this site against the screen. They open offline.</p></div></li>
+        <li><span class="label"><span class="idx">03</span></span><div><h3 class="h4">The trial runs on Team quotas.</h3><p class="small">Every feature, with 5 seats and 200 designs a month. Billing opens at launch.</p><a class="tlink" href="pricing.html#plans">Compare plans <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ 01 · DEMO ═════ -->
+<section class="sec xm sec--band" id="demo" aria-labelledby="demo-h">
+  <div class="wrap">
+    <div class="sh sh--split">
+      <span class="label" data-rv><span class="idx">01</span>Book a demo</span>
+      <div class="sh__t">
+        <h2 class="h2" id="demo-h" data-rv>See a design built end to end.</h2>
+        <p class="lede" data-rv style="--i:1">One roof, from the outline to the signed proposal. Tell us your team size and what you design so the demo starts in the right place.</p>
+      </div>
+      <div class="sh__side" data-rv style="--i:2">
+        <h3 class="label">The demo covers</h3>
+        <ul class="covers small">
+          <li>The area scan and how roofs are ranked</li>
+          <li>The seven workbench analyses</li>
+          <li>How P90 is built from the site's weather record</li>
+          <li>The proposal, the online link and the sign-off</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="inst demo">
+      <div class="inst__hd"><span class="label">Book a demo</span></div>
+      <div class="inst__body">
+        <form class="form" id="f-demo" data-kind="demo" novalidate>
+          <div class="frow frow--3">
+            <div class="field" data-f="name" data-rule="req">
+              <label for="d-name">Name</label>
+              <input class="input" id="d-name" name="name" type="text" autocomplete="name" required aria-describedby="d-name-e">
+              <p class="err" id="d-name-e" hidden></p>
+            </div>
+            <div class="field" data-f="email" data-rule="email">
+              <label for="d-email">Work email</label>
+              <input class="input" id="d-email" name="email" type="email" autocomplete="email" required aria-describedby="d-email-e">
+              <p class="err" id="d-email-e" hidden></p>
+            </div>
+            <div class="field" data-f="company" data-rule="req">
+              <label for="d-company">Company</label>
+              <input class="input" id="d-company" name="company" type="text" autocomplete="organization" required aria-describedby="d-company-e">
+              <p class="err" id="d-company-e" hidden></p>
+            </div>
+          </div>
+          <div class="frow frow--3">
+            <div class="field" data-f="country" data-rule="req">
+              <label for="d-country">Country</label>
+              <select class="select" id="d-country" name="country" autocomplete="country-name" required aria-describedby="d-country-e">
+                <option value="" selected disabled>Choose a country</option>
+                <option>South Africa</option><option>Germany</option><option>Indonesia</option><option>United States</option><option>United Kingdom</option><option>Australia</option><option>Another country</option>
+              </select>
+              <p class="err" id="d-country-e" hidden></p>
+            </div>
+            <div class="field" data-f="team" data-rule="req">
+              <label for="d-team">Team size</label>
+              <select class="select" id="d-team" name="team" required aria-describedby="d-team-e">
+                <option value="" selected disabled>Choose a team size</option>
+                <option value="1">Just me</option><option value="2 to 5">2 to 5</option><option value="6 to 15">6 to 15</option><option value="16 or more">16 or more</option>
+              </select>
+              <p class="err" id="d-team-e" hidden></p>
+            </div>
+          </div>
+          <div class="field" data-f="message" data-rule="opt">
+            <label for="d-msg">What would you like to see? <span class="dim">(optional)</span></label>
+            <textarea class="textarea" id="d-msg" name="message" rows="3" placeholder="Roof types, markets, what you use today."></textarea>
+          </div>
+          <div class="form__act"><button class="btn btn--p btn--lg" type="submit">Book a demo <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+          <div class="notice" role="status" aria-live="polite" hidden></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ ENDCAP ═════ -->
+<section class="endcap" aria-labelledby="end-h">
+  <div class="wrap endcap__in">
+    <div class="endcap__copy">
+      <span class="label">Before you ask</span>
+      <h2 class="h2" id="end-h">Check the working first.</h2>
+      <p class="lede">Every figure on this site comes from three example designs. See how they were made, and what the numbers leave out.</p>
+      <div class="row"><a class="btn btn--p btn--lg" href="product.html">See the product <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn btn--g btn--lg" href="science.html#method">Read the method</a></div>
+    </div>
+    <div class="endcap__media">
+      <nav class="next" aria-label="More about HelioAtlas">
+        <a href="pricing.html"><span class="label">Pricing</span><span><span class="h4">Every feature on every plan</span><span class="small">Solo, Team and Growth differ by seats and designs a month.</span></span><svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="company.html#principles"><span class="label">Company</span><span><span class="h4">Three rules the product keeps</span><span class="small">Real physics every hour, assumptions labelled, limits published.</span></span><svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="privacy.html"><span class="label">Privacy</span><span><span class="h4">What this site keeps</span><span class="small">Where your form entries are stored, and how to clear them.</span></span><svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </nav>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer data-ha-foot></footer>
+
+<script>
+/* Forms: validate, then hand the entry to HA.send(kind, data). With no endpoint configured (the case today) HA.send keeps the
+   entry in this browser's local storage and resolves { sent: false }: the notice then says plainly that nothing was sent,
+   checks whether the browser really kept the copy, and offers the details for copying. */
+(function(){
+  'use strict';
+  var EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  var MSG = { email: 'Enter your work email.', emailBad: 'Enter a complete email address, with an @ and a domain.', company: 'Enter your company name.',
+    name: 'Enter your name.', country: 'Choose a country.', team: 'Choose a team size.', focus: 'Choose at least one.' };
+  var LABEL = { email: 'Work email', company: 'Company', country: 'Country', focus: 'Designs', name: 'Name', team: 'Team size', message: 'Message' };
+  var TITLE = { access: 'HelioAtlas · Request access', demo: 'HelioAtlas · Book a demo' };
+  var esc = function(s){ return String(s).replace(/[&<>"]/g, function(c){ return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var ctls = function(f){ return [].slice.call(f.querySelectorAll('input, select, textarea')); };
+
+  function check(f){
+    var rule = f.dataset.rule, key = f.dataset.f, msg = '';
+    if (rule === 'group'){ if (!f.querySelector('input:checked')) msg = MSG[key]; }
+    else if (rule !== 'opt'){
+      var v = ctls(f)[0].value.trim();
+      if (!v) msg = MSG[key]; else if (rule === 'email' && !EMAIL.test(v)) msg = MSG.emailBad;
+    }
+    var m = f.querySelector('.err');
+    if (m){ m.hidden = !msg; m.textContent = msg; }
+    ctls(f).forEach(function(c){ if (msg) c.setAttribute('aria-invalid', 'true'); else c.removeAttribute('aria-invalid'); });
+    return !msg;
+  }
+
+  function collect(form){
+    var data = {};
+    [].slice.call(form.elements).forEach(function(el){
+      if (!el.name) return;
+      if (el.type === 'checkbox'){ if (el.checked) (data[el.name] = data[el.name] || []).push(el.value); }
+      else data[el.name] = el.value.trim();
+    });
+    return data;
+  }
+
+  function asText(kind, data){
+    var out = [TITLE[kind]];
+    Object.keys(data).forEach(function(k){ var v = data[k]; if (Array.isArray(v)) v = v.join(', '); if (v) out.push((LABEL[k] || k) + ': ' + v); });
+    return out.join('\n');
+  }
+
+  /* did the browser really keep it? HA.send swallows storage errors, so read the newest entry back */
+  function kept(kind, data){
+    try { var a = JSON.parse(localStorage.getItem('ha.forms') || '[]'), r = a[a.length - 1]; return !!r && r.kind === kind && r.email === data.email; }
+    catch (e){ return false; }
+  }
+
+  function copyBlock(text){
+    var rows = Math.min(8, text.split('\n').length);
+    return '<textarea class="textarea" readonly rows="' + rows + '" aria-label="Your details">' + esc(text) + '</textarea>' +
+      '<div class="row"><button class="btn btn--g btn--sm" type="button" data-copy>Copy details</button><span class="small" data-copied aria-live="polite"></span></div>';
+  }
+
+  function show(box, state, text){
+    var html;
+    if (state === 'sent') html = '<p><b>Request submitted.</b> The server accepted your entry.</p>';
+    else if (state === 'kept') html = '<p><b>Saved in this browser only. Nothing was sent.</b> This form is not yet connected to an inbox, so no one has received your request. Here are your details:</p>' +
+      copyBlock(text) + '<p class="small">What this site keeps, and how to clear it: <a class="ilink" href="privacy.html">Privacy</a></p>';
+    else if (state === 'failed') html = '<p><b>Nothing was sent.</b> The form could not reach its inbox, and no copy was kept. Copy your details so they are not lost:</p>' + copyBlock(text);
+    else html = '<p><b>Nothing was sent, and nothing was kept.</b> This form is not yet connected to an inbox, and this browser did not let the page keep a copy. Copy your details before you leave the page:</p>' + copyBlock(text);
+    box.innerHTML = html; box.hidden = false;
+    box.scrollIntoView({ block: 'nearest', behavior: (window.HA && HA.reduced) ? 'auto' : 'smooth' });
+  }
+
+  function copy(box){
+    var ta = box.querySelector('textarea'), out = box.querySelector('[data-copied]'); if (!ta) return;
+    var select = function(){
+      ta.focus(); ta.select(); try { ta.setSelectionRange(0, ta.value.length); } catch (e){}
+      var ok = false; try { ok = document.execCommand('copy'); } catch (e){}
+      out.textContent = ok ? 'Copied.' : 'Selected. Press Ctrl+C, or Cmd+C on a Mac, to copy.';
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(ta.value).then(function(){ out.textContent = 'Copied to your clipboard.'; }, select);
+    } else select();
+  }
+
+  function wire(form){
+    var kind = form.dataset.kind, box = form.querySelector('.notice'), btn = form.querySelector('[type="submit"]');
+    var fields = [].slice.call(form.querySelectorAll('[data-f]'));
+    fields.forEach(function(f){
+      var re = function(){ if (f.querySelector('[aria-invalid="true"]')) check(f); };
+      f.addEventListener('input', re); f.addEventListener('change', re);
+    });
+    box.addEventListener('click', function(e){ if (e.target.closest('[data-copy]')) copy(box); });
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var bad = null; fields.forEach(function(f){ if (!check(f) && !bad) bad = f; });
+      if (bad){ box.hidden = true; ctls(bad)[0].focus(); return; }
+      var data = collect(form), text = asText(kind, data);
+      btn.setAttribute('aria-busy', 'true');
+      var done = function(state){ btn.removeAttribute('aria-busy'); show(box, state, text); };
+      if (!(window.HA && HA.send)){ done('lost'); return; }
+      HA.send(kind, data).then(function(r){ done(r && r.sent ? 'sent' : (kept(kind, data) ? 'kept' : 'lost')); }, function(){ done('failed'); });
+    });
+  }
+  [].slice.call(document.querySelectorAll('form[data-kind]')).forEach(wire);
+})();
+</script>
+</body>
+</html>

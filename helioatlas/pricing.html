@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HelioAtlas · Pricing</title>
+<meta name="description" content="Solo $49, Team $199 and Growth $499 a month, in US dollars. Every feature is on every plan; plans differ by seats and designs a month.">
+<meta name="theme-color" content="#000000">
+<link rel="icon" type="image/svg+xml" href="assets/brand/favicon.svg"><link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png"><link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+<meta property="og:title" content="HelioAtlas · Every feature on every plan.">
+<meta property="og:description" content="Three plans that differ by seats and designs a month, not by features. Prices in US dollars.">
+<meta property="og:image" content="https://lumen8.ai/helioatlas/assets/brand/social-card.png">
+<meta property="og:url" content="https://lumen8.ai/helioatlas/pricing.html">
+<link rel="canonical" href="https://lumen8.ai/helioatlas/pricing.html">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="assets/fonts/Geist-latin-var.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="assets/fonts/GeistMono-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/ha.css">
+<script src="assets/ha.js" defer></script>
+<style>
+/* pricing: layout only; every colour, type role and component comes from ha.css */
+.ph--c{padding-top:calc(var(--nav-h) + clamp(36px, 4.4vw, 64px)); padding-bottom:clamp(32px, 3.6vw, 52px)}
+.ph--c .sh{margin-bottom:0}
+.ph--c .sh__t .h1{max-width:13ch}
+
+/* 00 · the plans sit directly under the header, inside the first viewport */
+#plans{padding-top:0; border-top:0; padding-bottom:clamp(88px, 10vw, 152px)}
+.tiers{display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); border-top:1px solid var(--line-2); border-left:1px solid var(--line)}
+.tier{padding:clamp(24px, 2.4vw, 36px); border-right:1px solid var(--line); border-bottom:1px solid var(--line); display:flex; flex-direction:column; gap:22px; min-width:0}
+.tier--p{background:var(--bg-1); box-shadow:inset 0 2px 0 var(--sol)}
+.tier__hd{display:flex; justify-content:space-between; align-items:center; gap:12px; min-height:26px}
+.tier__p{display:flex; align-items:baseline; gap:10px}
+.tier .btn{width:100%; margin-top:auto}
+.fine{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:12px 32px; margin-top:26px}
+@media (max-width:900px){ .tiers{grid-template-columns:minmax(0, 1fr)} }
+
+/* 01 · compare: what differs (small, sticky) beside what is the same (long) */
+.cmpx{display:grid; grid-template-columns:minmax(0, 4fr) minmax(0, 8fr); gap:clamp(32px, 5vw, 96px); align-items:start}
+.cmpx__diff{position:sticky; top:calc(var(--nav-h) + 40px); display:flex; flex-direction:column; gap:18px; min-width:0}
+.cmpx__inc{display:flex; flex-direction:column; gap:28px; min-width:0}
+.diff{min-width:0; table-layout:fixed}
+.diff th, .diff td{padding:14px 0 14px 12px}
+.diff th:first-child{padding-left:0; width:44%}
+.diff td, .diff thead th:not(:first-child){text-align:right}
+.diff tbody th{font-weight:400; color:var(--fg-2); text-align:left}
+.diff td.num{color:var(--fg)}
+.diff thead th.t{color:var(--sol)}
+.inc{display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:44px clamp(24px, 3vw, 48px)}
+.inc h4{margin-bottom:6px}
+.inc ul{border-top:1px solid var(--line-2)}
+.inc li{display:flex; flex-direction:column; gap:3px; padding:14px 0; border-bottom:1px solid var(--line)}
+@media (max-width:980px){ .cmpx{grid-template-columns:minmax(0, 1fr)} .cmpx__diff{position:static} }
+@media (max-width:640px){ .inc{grid-template-columns:minmax(0, 1fr); gap:36px} }
+
+#faq .stack{--g:20px}
+
+/* endcap: where to read before choosing */
+.next{border-top:1px solid var(--line-2)}
+.next a{display:grid; grid-template-columns:minmax(0, 8em) minmax(0, 1fr) 14px; gap:4px 24px; align-items:baseline; padding:22px 0; border-bottom:1px solid var(--line)}
+.next a > span:nth-child(2){display:flex; flex-direction:column; gap:4px}
+.next svg{width:14px; height:14px; color:var(--fg-3); transition:transform var(--dur-2) var(--ease), color var(--dur-1)}
+.next a:hover svg{color:var(--fg); transform:translateX(3px)}
+@media (max-width:620px){ .next a{grid-template-columns:minmax(0, 1fr) 14px} .next a > .label{grid-column:1 / -1} }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header data-ha-nav></header>
+
+<main id="main">
+
+<!-- ═════ HEADER ═════ -->
+<section class="ph ph--c" aria-labelledby="pr-h">
+  <div class="ph__grid" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="crumbs"><a href="index.html">HelioAtlas</a><span aria-hidden="true">/</span><span>Pricing</span></div>
+    <div class="sh sh--split">
+      <div class="sh__t"><h1 class="h1" id="pr-h">Every feature on every plan.</h1></div>
+      <div class="sh__side"><p class="lede">Plans differ by seats and designs a month, and by nothing else. Prices are in US dollars.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ 00 · PLANS ═════ -->
+<section class="sec" id="plans" aria-label="Plans">
+  <div class="wrap">
+    <div class="tiers">
+      <div class="tier" data-rv>
+        <div class="tier__hd"><h2 class="label"><b>Solo</b></h2></div>
+        <p class="tier__p"><span class="h2 num">$49</span><span class="small">a month</span></p>
+        <dl class="spec">
+          <dt>Seats</dt><dd>1</dd>
+          <dt>Designs a month</dt><dd>30</dd>
+        </dl>
+        <a class="btn btn--g" href="start.html" aria-label="Request access, Solo plan">Request access <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <div class="tier tier--p" data-rv style="--i:1">
+        <div class="tier__hd"><h2 class="label"><b>Team</b></h2><span class="chip chip--sol">Trial quotas</span></div>
+        <p class="tier__p"><span class="h2 num">$199</span><span class="small">a month</span></p>
+        <dl class="spec">
+          <dt>Seats</dt><dd>5</dd>
+          <dt>Designs a month</dt><dd>200</dd>
+        </dl>
+        <a class="btn btn--p" href="start.html" aria-label="Request access, Team plan">Request access <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <div class="tier" data-rv style="--i:2">
+        <div class="tier__hd"><h2 class="label"><b>Growth</b></h2></div>
+        <p class="tier__p"><span class="h2 num">$499</span><span class="small">a month</span></p>
+        <dl class="spec">
+          <dt>Seats</dt><dd>15</dd>
+          <dt>Designs a month</dt><dd>1,000</dd>
+        </dl>
+        <a class="btn btn--g" href="start.html" aria-label="Request access, Growth plan">Request access <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+    <div class="fine">
+      <p class="small">The trial runs on Team quotas. Billing opens at launch.</p>
+      <a class="tlink" href="#compare">What every plan includes <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ 01 · COMPARE ═════ -->
+<section class="sec xm" id="compare" aria-labelledby="cmp-h">
+  <div class="wrap">
+    <div class="sh sh--stack">
+      <span class="label" data-rv><span class="idx">01</span>Compare</span>
+      <div class="sh__t">
+        <h2 class="h2" id="cmp-h" data-rv>Two limits change. Nothing else does.</h2>
+        <p class="lede" data-rv style="--i:1">Seats and designs a month set the plan. The studio, the workbench, the report, the proposal and every export are the same on Solo, Team and Growth.</p>
+      </div>
+    </div>
+
+    <div class="cmpx">
+      <div class="cmpx__diff" data-rv>
+        <h3 class="label">What differs</h3>
+        <table class="tbl diff">
+          <caption class="sr">What differs between the plans</caption>
+          <thead><tr><th scope="col"><span class="sr">Limit</span></th><th scope="col">Solo</th><th scope="col" class="t">Team</th><th scope="col">Growth</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Price a month</th><td class="num">$49</td><td class="num">$199</td><td class="num">$499</td></tr>
+            <tr><th scope="row">Seats</th><td class="num">1</td><td class="num">5</td><td class="num">15</td></tr>
+            <tr><th scope="row">Designs a month</th><td class="num">30</td><td class="num">200</td><td class="num">1,000</td></tr>
+          </tbody>
+        </table>
+        <p class="small">The trial runs on Team quotas. Prices are in US dollars, per month.</p>
+      </div>
+
+      <div class="cmpx__inc">
+        <h3 class="label" data-rv>Included on every plan</h3>
+        <div class="inc">
+          <div data-rv>
+            <h4 class="h4">Studio</h4>
+            <ul>
+              <li><span class="em">Six guided steps</span><span class="small">Locate, roof and layout, system, energy, savings and proposal.</span></li>
+              <li><span class="em">Area scan</span><span class="small">Scores the 300 largest outlines in view, from 80&thinsp;m², by roof size, kWp and yearly energy, and ranks the top 50.</span></li>
+              <li><span class="em">Three example projects</span><span class="small">A house, a warehouse and a barn, fully designed. They open offline.</span></li>
+              <li><span class="em">Autosave</span><span class="small">Saves 1.2&thinsp;s after your last edit, and to this device when the engine cannot be reached.</span></li>
+              <li><span class="em">Projects drawer</span><span class="small">Search, rename, duplicate and delete, with stages: Lead, Designed, Proposed, Signed.</span></li>
+            </ul>
+          </div>
+          <div data-rv style="--i:1">
+            <h4 class="h4">Engineering</h4>
+            <ul>
+              <li><span class="em">Seven workbench analyses</span><span class="small">3-D twin, shading, sun path, electrical, energy, storage and report.</span></li>
+              <li><span class="em">P50 and P90</span><span class="small">On every energy figure, with the uncertainty terms behind the P90.</span></li>
+              <li><span class="em">20-section engineering report</span><span class="small">A cover, a numbered contents page and 20 sections, with your name and logo.</span></li>
+            </ul>
+          </div>
+          <div data-rv>
+            <h4 class="h4">Proposal</h4>
+            <ul>
+              <li><span class="em">Branded proposal</span><span class="small">Six A4 pages, five without the investment page, with your logo, colour and name. The cover carries a 3-D render.</span></li>
+              <li><span class="em">Signable online link</span><span class="small">The customer opens it with no account and signs with a name, an email and a tick.</span></li>
+              <li><span class="em">Validity and assumptions</span><span class="small">Each proposal states that it is a design estimate, not a quotation, with a valid-until date and its assumptions.</span></li>
+            </ul>
+          </div>
+          <div data-rv style="--i:1">
+            <h4 class="h4">Exports</h4>
+            <ul>
+              <li><span class="em">PDF</span><span class="small">The engineering report and the proposal.</span></li>
+              <li><span class="em">8,760-hour CSV</span><span class="small">PV output, load, grid import and export, and battery charge, hour by hour.</span></li>
+              <li><span class="em">Project file</span><span class="small">The whole design as JSON.</span></li>
+              <li><span class="em">Single-line diagram</span><span class="small">The electrical diagram as an SVG file.</span></li>
+              <li><span class="em">3-D stills</span><span class="small">Four views in one ZIP: isometric, top, south and golden hour.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ 02 · FAQ ═════ -->
+<section class="sec xm sec--band" id="faq" aria-labelledby="faq-h">
+  <div class="wrap grid">
+    <div class="c-4 stack"><span class="label"><span class="idx">02</span>Questions</span><h2 class="h2" id="faq-h">About the plans.</h2></div>
+    <div class="c-8 faq">
+      <details><summary>What does the trial include?</summary><div>Every feature, on Team quotas: 5 seats and 200 designs a month.</div></details>
+      <details><summary>When does billing start?</summary><div>Billing opens at launch. Until then the Account drawer in the studio shows the plans and your usage.</div></details>
+      <details><summary>What currency are the prices in?</summary><div>US dollars, per month. The country presets inside the studio set the currency of your customer's savings and proposal, not the price of a plan.</div></details>
+      <details><summary>Does my customer need a seat?</summary><div>No. The customer opens the online proposal link in a browser, with no account, and signs with a name, an email and a tick. Seats are for the people who design.</div></details>
+      <details><summary>How do I get access?</summary><div>Request access on the start page. There is no self-serve sign-up, and the start page says exactly what happens to your request.</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ ENDCAP ═════ -->
+<section class="endcap" aria-labelledby="end-h">
+  <div class="wrap endcap__in">
+    <div class="endcap__copy">
+      <span class="label">HelioAtlas</span>
+      <h2 class="h2" id="end-h">One studio, priced by seat and volume.</h2>
+      <p class="lede">Request access to try every feature on Team quotas, or book a demo of a design built end to end.</p>
+      <div class="row"><a class="btn btn--p btn--lg" href="start.html">Request access <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn btn--g btn--lg" href="start.html#demo">Book a demo</a></div>
+    </div>
+    <div class="endcap__media">
+      <nav class="next" aria-label="Read before you choose">
+        <a href="product.html"><span class="label">Product</span><span><span class="h4">The studio and the workbench</span><span class="small">Six guided steps and seven analyses, on real captures.</span></span><svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="science.html"><span class="label">Science</span><span><span class="h4">How the numbers are made</span><span class="small">The hourly method, P50 and P90, and the published limits.</span></span><svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="index.html#examples"><span class="label">Examples</span><span><span class="h4">Three finished designs</span><span class="small">A house, a warehouse and a barn, with their numbers.</span></span><svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </nav>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer data-ha-foot></footer>
+</body>
+</html>

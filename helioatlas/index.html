@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HelioAtlas</title>
+<meta name="description" content="HelioAtlas finds the roofs worth your time, designs them in 3-D, models every hour of the year and turns the result into a proposal your customer signs online.">
+<meta name="theme-color" content="#000000">
+<link rel="icon" type="image/svg+xml" href="assets/brand/favicon.svg"><link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png"><link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+<meta property="og:title" content="HelioAtlas · Any roof on Earth, scored.">
+<meta property="og:description" content="Solar prospecting and design. Find the roof, design it in 3-D, prove the yield hour by hour, price it and close it.">
+<meta property="og:image" content="https://lumen8.ai/helioatlas/assets/brand/social-card.png">
+<meta property="og:url" content="https://lumen8.ai/helioatlas/">
+<link rel="canonical" href="https://lumen8.ai/helioatlas/">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preload" href="assets/fonts/Geist-latin-var.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="assets/fonts/GeistMono-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/ha.css">
+<link rel="preload" as="image" href="assets/world/world-earth.webp" fetchpriority="high">
+<link rel="modulepreload" href="assets/world.js">
+<script src="assets/ha.js" defer></script>
+<style>
+/* home — layout only; every colour, type size and component comes from ha.css */
+.hero__first .display{max-width:11ch}
+.hero__first .mono-line{font:400 12px/1.6 var(--m); color:rgba(243,242,238,.6); letter-spacing:.02em; display:flex; flex-wrap:wrap; gap:4px 18px}
+.hero__first .mono-line b{color:var(--fg); font-weight:500}
+
+/* 01 film: the stacked header sits directly on the media */
+#film .sh{margin-bottom:0}
+
+/* 02 step rail: one capture per step, then a quiet line to the workbench */
+.steps__stage{margin-top:clamp(20px, 2.4vw, 32px)}
+.steps__stage .shot--crop{--ar:2 / 1}   /* rail + capture fit one 1440×900 screen; the lightbox shows the full frame */
+@media (max-width:760px){ .steps__stage .shot--crop{--ar:16 / 10} }
+.steps__wb{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:12px 32px; margin-top:clamp(28px, 3vw, 40px); padding-top:20px; border-top:1px solid var(--line)}
+
+/* 03 examples: the capture left; tabs and one morphing spec block right (tabs above the capture on phones) */
+.ex{display:grid; grid-template-columns:minmax(0, 7fr) minmax(0, 5fr); grid-template-areas:"media tabs" "media nums"; grid-template-rows:auto 1fr; gap:28px clamp(28px, 4vw, 64px); align-items:start}
+.ex__media{grid-area:media; display:grid; min-width:0}
+.ex__media > .panel{grid-area:1 / 1}
+.ex__tabs{grid-area:tabs; display:flex; flex-direction:column; gap:18px; min-width:0}
+.ex__tabs .seg{align-self:flex-start}
+.ex__name{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px 12px}
+.ex__nums{grid-area:nums; display:flex; flex-direction:column; gap:24px; min-width:0}
+.ex__big{display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:16px; padding-top:20px; border-top:1px solid var(--line-2)}
+.ex__big > div{display:flex; flex-direction:column; gap:10px; min-width:0}
+.ex__big .h2{white-space:nowrap}
+@media (max-width:980px){ .ex{grid-template-columns:minmax(0, 1fr); grid-template-areas:"tabs" "media" "nums"} }
+
+/* 04 P50 / P90: the chart left, its terms right */
+.dist{display:grid; grid-template-columns:minmax(0, 8fr) minmax(0, 4fr); gap:clamp(28px, 4vw, 64px); align-items:start}
+.dist__hd{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline; gap:8px 16px; padding-bottom:14px; border-bottom:1px solid var(--line)}
+.dist__side{display:flex; flex-direction:column; gap:22px; min-width:0}
+#dPlot{--h:340px; margin-top:10px; cursor:crosshair}
+#dPlot .is-p50{fill:var(--sol)} #dPlot .is-p90{fill:var(--sky)}
+@media (max-width:980px){ .dist{grid-template-columns:minmax(0, 1fr)} }
+@media (max-width:600px){ #dPlot{--h:270px} }
+
+/* 05 proposal: a label on the reader's nav row */
+.reader__nav .readout{margin-right:auto; align-self:center}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header data-ha-nav></header>
+
+<main id="main">
+
+<!-- ═════ HERO · a scroll-driven descent from orbit to one roof (assets/world.js) ═════ -->
+<section class="chapter hero" id="hero" data-steps="7" aria-label="From orbit to one roof in a Western Cape valley">
+  <div class="chapter__stage">
+    <div class="hero__world" id="heroWorld" aria-hidden="true"></div>
+    <div class="hero__shade" aria-hidden="true"></div>
+
+    <div class="hero__copy">
+      <div class="wrap" style="position:relative; height:100%">
+        <div class="beat beat--first is-on hero__first" data-beat="0">
+          <div class="beat__in">
+            <span class="label">Solar prospecting and design</span>
+            <h1 class="display">Any roof on Earth, scored.</h1>
+            <p class="lede">HelioAtlas finds the roofs worth your time, designs them in 3-D, models every hour of the year and turns the result into a proposal your customer signs online.</p>
+            <div class="row"><a class="btn btn--p btn--lg" href="start.html">Request access <svg viewBox="0 0 14 14" fill="none"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn btn--g btn--lg" href="start.html#demo">Book a demo</a></div>
+            <p class="mono-line"><span><b>8,760</b> hours per design</span><span><b>P50 + P90</b> on every energy figure</span><span><b>6</b> country presets</span></p>
+          </div>
+        </div>
+        <div class="beat" data-beat="1"><div class="beat__in"><span class="label"><span class="idx">01</span>Locate</span><h2 class="h1">From orbit to one roof.</h2><p class="lede">Search an address or click a building. Outlines come from a global footprint layer, and the map lands at street level ready to design.</p></div></div>
+        <div class="beat" data-beat="2"><div class="beat__in"><span class="label"><span class="idx">02</span>Survey</span><h2 class="h1">A valley, read roof by roof.</h2><p class="lede">Scan the view and up to 300 of the largest outlines, from 80 m² up, become candidates. Packhouses, cellars, barns and homesteads, each with its own roof size, kWp and yearly energy.</p></div></div>
+        <div class="beat" data-beat="3"><div class="beat__in"><span class="label"><span class="idx">03</span>Score</span><h2 class="h1">Scored before you drive out.</h2><p class="lede">A first-pass yield on the largest roof sets the scale, and every other roof is scored from its area. The biggest earners light up.</p></div></div>
+        <div class="beat" data-beat="4"><div class="beat__in"><span class="label"><span class="idx">04</span>Rank</span><h2 class="h1">The top fifty, ranked.</h2><p class="lede">Biggest yield first. Click a row and the design starts on that roof.</p></div></div>
+        <div class="beat" data-beat="5"><div class="beat__in"><span class="label"><span class="idx">05</span>Design</span><h2 class="h1">Open it in 3-D.</h2><p class="lede">Roof faces, setbacks and obstacles. Panels fill the best face first, strings are checked against the inverter, and every hour of the year is modelled.</p></div></div>
+        <div class="beat" data-beat="6"><div class="beat__in"><span class="label"><span class="idx">06</span>Close</span><h2 class="h1">Prove it. Price it. Sign it.</h2><p class="lede">P50 and P90 energy, the bill before and after, payback and IRR. Then a branded six-page proposal and a link the customer signs.</p><div class="row"><a class="btn btn--p btn--lg" href="start.html">Request access <svg viewBox="0 0 14 14" fill="none"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn btn--g btn--lg" href="product.html">See the product</a></div></div></div>
+      </div>
+    </div>
+
+    <!-- instruments that appear on their beat (filled from the scene) -->
+    <div class="hud hud--terr panel-glass" data-at="2" aria-hidden="true">
+      <div><span>Roofs in view</span><b id="hTerrN">—</b></div>
+      <div><span>Listed</span><b id="hTerrL">—</b></div>
+      <div><span>Smallest kept</span><b>80<em>m²</em></b></div>
+    </div>
+    <div class="hud hud--rank panel-glass" data-at="4" aria-hidden="true">
+      <div class="hd"><span>Area scan · <span id="hRankOf">example</span></span><b>By yearly energy</b></div>
+      <div id="hRank"></div>
+    </div>
+    <div class="hud hud--focus panel-glass" data-at="5" aria-hidden="true">
+      <h5><span>Selected roof</span><b>Design</b></h5>
+      <div class="nm" id="hfName">Packhouse and cold store</div>
+      <div class="co">33.47° S · 19.63° E · two roof faces</div>
+      <dl>
+        <div><dt>Panels</dt><dd><span id="hfMod">—</span></dd></div>
+        <div><dt>Size</dt><dd><span id="hfKwp">—</span><em>kWp</em></dd></div>
+        <div><dt>Faces</dt><dd><span id="hfInv">—</span></dd></div>
+      </dl>
+      <ol class="fc">
+        <li><span class="k">1</span><span id="hfF1">Cold-store roof · racks at 10°</span><b id="hfN1">—</b></li>
+        <li><span class="k">2</span><span id="hfF2">Hall roof · flush at 6°</span><b id="hfN2">—</b></li>
+      </ol>
+      <p class="note2" id="hfNote">Example site. Auto-fill takes the best face first, inside 1.5 m setbacks.</p>
+    </div>
+    <div class="hud hud--focus hud--close panel-glass" data-at="6" aria-hidden="true">
+      <h5><span>Hourly run</span><b>8,760 hours</b></h5>
+      <dl>
+        <div><dt>P50</dt><dd><span id="hcP50">—</span><em>MWh/yr</em></dd></div>
+        <div><dt>P90</dt><dd><span id="hcP90">—</span><em>MWh/yr</em></dd></div>
+        <div><dt>Payback</dt><dd><span id="hcPay">—</span><em>yr</em></dd></div>
+      </dl>
+      <dl>
+        <div><dt>IRR</dt><dd><span id="hcIrr">—</span><em>%</em></dd></div>
+        <div><dt>Yield</dt><dd><span id="hcYld">—</span><em>kWh/kWp</em></dd></div>
+        <div><dt>Self-use</dt><dd><span id="hcSelf">—</span><em>%</em></dd></div>
+      </dl>
+      <p class="note2" id="hcNote">Example site.</p>
+    </div>
+    <button class="skipintro" type="button" id="hSkip">Skip the descent <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <div class="pin" id="pin0" aria-hidden="true"><i></i><span>01</span></div>
+    <div class="pin" id="pin1" aria-hidden="true"><i></i><span>02</span></div>
+    <div class="pin" id="pin2" aria-hidden="true"><i></i><span>03</span></div>
+
+    <div class="hero__meta">
+      <div class="wrap">
+        <div class="scene"><span><b>Example site</b> · Western Cape, South Africa</span><span>33.47° S · 19.63° E · <span id="hAlt">orbit</span></span></div>
+        <div class="row" style="--g:22px"><div class="prog" id="hProg" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="cue" id="hCue"><span></span>Scroll</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ 01 · THE STUDIO ═════ -->
+<!-- 01 · film: the studio in motion (assets/film/studio.*; chapter times are set in the home script below) -->
+<style>
+/* fidelity pass (kept out of <head>): on phones a step-rail frame that carries a 4:5 phone crop shows that crop whole */
+@media (max-width:640px){ .steps__stage .shot--crop.has-m{--ar:4 / 5} }
+</style>
+<section class="feature xm" id="film" aria-labelledby="film-h">
+  <div class="wrap">
+    <div class="sh sh--stack">
+      <span class="label" data-rv><span class="idx">01</span>Watch the studio</span>
+      <div class="sh__t">
+        <h2 class="h2" id="film-h" data-rv>An address in, a proposal out.</h2>
+        <p class="lede" data-rv style="--i:1">One session in the studio, start to finish: find the roof, lay out the panels, pick the kit, model the year, price it and build the proposal.</p>
+      </div>
+    </div>
+  </div>
+  <div class="wide feature__media">
+    <figure data-rv="fade">
+      <div class="film" id="studio-film" style="--ar:16/10">
+        <video muted playsinline loop preload="none" poster="assets/film/studio.webp" width="1600" height="1000" aria-label="Screen recording of a live session in the HelioAtlas studio: an address search, one house roof picked on the map and designed from scratch with the studio defaults, the system, the energy run, the savings and the proposal preview">
+          <source src="assets/film/studio.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="chaps" data-film="studio-film" style="--n:7" role="group" aria-label="Film chapters">
+        <button type="button" data-t="0"><span class="n">00:00</span><span class="t">Locate</span></button>
+        <button type="button" data-t="7"><span class="n">00:07</span><span class="t">Select the roof</span></button>
+        <button type="button" data-t="14"><span class="n">00:14</span><span class="t">Design</span></button>
+        <button type="button" data-t="24"><span class="n">00:24</span><span class="t">System</span></button>
+        <button type="button" data-t="30"><span class="n">00:30</span><span class="t">Energy</span></button>
+        <button type="button" data-t="34"><span class="n">00:34</span><span class="t">Savings</span></button>
+        <button type="button" data-t="39"><span class="n">00:39</span><span class="t">Proposal</span></button>
+      </div>
+      <figcaption class="cap"><span><b>Studio</b> · a live session: an address search, one house roof picked on the map and designed from scratch with the studio defaults, through to the proposal preview</span><span>Recorded in the product · a new design, not one of the examples · played at 1.18× with three loading waits cut · muted</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- 02 · the six steps as a step rail, each tied to one capture -->
+<section class="sec xm" id="studio" aria-labelledby="studio-h">
+  <div class="wrap">
+    <div class="sh">
+      <span class="label" data-rv><span class="idx">02</span>Six steps</span>
+      <div class="sh__t">
+        <h2 class="h2" id="studio-h" data-rv>One guided flow for every roof.</h2>
+        <p class="lede" data-rv style="--i:1">Six steps on a full-screen satellite map. The same flow designs an 8.6 kWp house and a 301 kWp warehouse.</p>
+      </div>
+    </div>
+    <div class="steps" data-tabs data-auto="7000">
+      <div class="rail" role="tablist" aria-label="Studio steps" style="--n:6">
+        <button type="button" role="tab" id="st-1" aria-controls="sp-1" aria-selected="true"><span class="n">01</span><span class="t">Locate</span><span class="d">Search an address or click a building outline.</span></button>
+        <button type="button" role="tab" id="st-2" aria-controls="sp-2" aria-selected="false"><span class="n">02</span><span class="t">Roof and layout</span><span class="d">Pick the roof shape; panels fill the best face first.</span></button>
+        <button type="button" role="tab" id="st-3" aria-controls="sp-3" aria-selected="false"><span class="n">03</span><span class="t">System</span><span class="d">Panels, inverter and battery, or a ready preset.</span></button>
+        <button type="button" role="tab" id="st-4" aria-controls="sp-4" aria-selected="false"><span class="n">04</span><span class="t">Energy</span><span class="d">Every hour of a typical year, with P50 and P90.</span></button>
+        <button type="button" role="tab" id="st-5" aria-controls="sp-5" aria-selected="false"><span class="n">05</span><span class="t">Savings</span><span class="d">The bill before and after, payback and IRR.</span></button>
+        <button type="button" role="tab" id="st-6" aria-controls="sp-6" aria-selected="false"><span class="n">06</span><span class="t">Proposal</span><span class="d">Your brand on six A4 pages and a link to sign.</span></button>
+      </div>
+      <div class="steps__stage">
+        <figure class="panel" id="sp-1" role="tabpanel" aria-labelledby="st-1">
+          <div class="shot shot--crop" data-zoom><img src="assets/shots/jhb-01-locate-1400.webp" srcset="assets/shots/jhb-01-locate-1400.webp 1400w, assets/shots/jhb-01-locate.webp 2400w" sizes="(max-width:1360px) 100vw, 1240px" width="2400" height="1500" alt="HelioAtlas studio start screen: an address search over a satellite world map, with the three example projects below it" loading="lazy" decoding="async"></div>
+          <figcaption class="cap"><span><b>Step 1 · Locate</b> · search an address, or open one of the three example projects</span><span>Studio start screen</span></figcaption>
+        </figure>
+        <figure class="panel" id="sp-2" role="tabpanel" aria-labelledby="st-2" hidden>
+          <div class="shot shot--crop has-m" data-zoom><picture style="display:contents"><source media="(max-width: 640px)" srcset="assets/shots/jhb-02-roof-m.webp" width="1080" height="1350"><img src="assets/shots/jhb-02-roof-1400.webp" srcset="assets/shots/jhb-02-roof-1400.webp 1400w, assets/shots/jhb-02-roof.webp 2400w" sizes="(max-width:1360px) 100vw, 1240px" width="2400" height="1500" alt="Studio step 2, roof and layout, on the Johannesburg house example in map view: the hip roof outlined in amber with its corner handles and 20 panels on two faces, the outline tools above it, and the roof faces listed with their yields" loading="lazy" decoding="async"></picture></div>
+          <figcaption class="cap"><span><b>Step 2 · Roof and layout</b> · the roof outlined on the map with its corner handles, 20 panels on the North and West faces</span><span>Johannesburg house · example</span></figcaption>
+        </figure>
+        <figure class="panel" id="sp-3" role="tabpanel" aria-labelledby="st-3" hidden>
+          <div class="shot shot--crop" data-zoom><img src="assets/shots/jhb-04-system-1400.webp" srcset="assets/shots/jhb-04-system-1400.webp 1400w, assets/shots/jhb-04-system.webp 2400w" sizes="(max-width:1360px) 100vw, 1240px" width="2400" height="1500" alt="Studio step 3, system: Good, Better and Best presets with the design reading Custom, and a generic 430 Wp panel marked not a datasheet, beside the house and its panels in 3-D" loading="lazy" decoding="async"></div>
+          <figcaption class="cap"><span><b>Step 3 · System</b> · Good, Better and Best presets; every panel is marked generic, not a datasheet</span><span>Johannesburg house · example</span></figcaption>
+        </figure>
+        <figure class="panel" id="sp-4" role="tabpanel" aria-labelledby="st-4" hidden>
+          <div class="shot shot--crop" data-zoom><img src="assets/shots/jhb-05-energy-1400.webp" srcset="assets/shots/jhb-05-energy-1400.webp 1400w, assets/shots/jhb-05-energy.webp 2400w" sizes="(max-width:1360px) 100vw, 1240px" width="2400" height="1500" alt="Studio step 4, energy and shading: typical year 14,004 kWh, bad year 12,954 kWh, 1,628 kWh/kWp, performance ratio 78.0 percent, monthly energy bars and the list of where energy is lost" loading="lazy" decoding="async"></div>
+          <figcaption class="cap"><span><b>Step 4 · Energy</b> · P50 14,004 kWh, P90 12,954 kWh, PR 78.0 %; each loss is shown as its share of the total loss</span><span>Johannesburg house · example</span></figcaption>
+        </figure>
+        <figure class="panel" id="sp-5" role="tabpanel" aria-labelledby="st-5" hidden>
+          <div class="shot shot--crop has-m" data-zoom><picture style="display:contents"><source media="(max-width: 640px)" srcset="assets/shots/jhb-06-savings-m.webp" width="1080" height="1350"><img src="assets/shots/jhb-06-savings-1400.webp" srcset="assets/shots/jhb-06-savings-1400.webp 1400w, assets/shots/jhb-06-savings.webp 2400w" sizes="(max-width:1360px) 100vw, 1240px" width="2400" height="1500" alt="Studio step 5, savings: yearly bill ZAR 39,740 before and ZAR 17,088 after solar, you save ZAR 22,652, payback 5.7 years, IRR 18.6 percent, and the monthly bill chart" loading="lazy" decoding="async"></picture></div>
+          <figcaption class="cap"><span><b>Step 5 · Savings</b> · bill ZAR 39,740 → 17,088 a year, payback 5.7 yr, IRR 18.6 %</span><span>Johannesburg house · example, South Africa preset prices, assumed</span></figcaption>
+        </figure>
+        <figure class="panel" id="sp-6" role="tabpanel" aria-labelledby="st-6" hidden>
+          <div class="shot shot--crop has-m" data-zoom><picture style="display:contents"><source media="(max-width: 640px)" srcset="assets/shots/jhb-07-proposal-m.webp" width="1080" height="1350"><img src="assets/shots/jhb-07-proposal-1400.webp" srcset="assets/shots/jhb-07-proposal-1400.webp 1400w, assets/shots/jhb-07-proposal.webp 2400w" sizes="(max-width:1360px) 100vw, 1240px" width="2400" height="1500" alt="Studio step 6, proposal: customer, company and brand fields beside a live preview of the proposal cover, with a 3-D render of the roof and R22,652 estimated annual savings" loading="lazy" decoding="async"></picture></div>
+          <figcaption class="cap"><span><b>Step 6 · Proposal</b> · the live preview of the cover: a 3-D render of the roof and R22,652 estimated savings a year</span><span>Johannesburg house · example</span></figcaption>
+        </figure>
+      </div>
+      <p class="steps__wb"><span class="small">Behind the six steps sits the engineering workbench: 3-D twin, shading, sun path, electrical, energy, storage and report.</span><a class="tlink" href="product.html#workbench">See the workbench <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ 03 · EXAMPLES ═════ -->
+<section class="sec xm" id="examples" aria-labelledby="ex-h">
+  <div class="wrap" data-tabs id="exBox">
+    <div class="sh sh--split">
+      <span class="label" data-rv><span class="idx">03</span>Three examples</span>
+      <div class="sh__t"><h2 class="h2" id="ex-h" data-rv>Three real designs. Their real outputs.</h2></div>
+      <div class="sh__side"><p class="body" data-rv style="--i:1">Every account opens with these projects, and they run offline. The figures are the studio's own, unedited; tariffs and prices are country presets, marked assumed.</p></div>
+    </div>
+    <div class="ex">
+      <div class="ex__media">
+        <figure class="panel" id="ex-p-house" role="tabpanel" aria-labelledby="ex-t-house">
+          <div class="shot shot--crop" style="--ar:6/5; --op:100% 50%" data-zoom><picture style="display:contents"><source media="(max-width: 640px)" srcset="assets/shots/jhb-03-roof-3d-m.webp" width="1080" height="1350"><img src="assets/shots/jhb-03-roof-3d-1400.webp" srcset="assets/shots/jhb-03-roof-3d-1400.webp 1400w, assets/shots/jhb-03-roof-3d.webp 2400w" sizes="(max-width:980px) 100vw, 58vw" width="2400" height="1500" alt="HelioAtlas studio, 3-D view of the Johannesburg house example: a hip roof with panels on its north and west faces" loading="lazy" decoding="async"></picture></div>
+          <figcaption class="cap"><span><b>Studio</b> · roof and layout in 3-D: hip roof, panels on the north and west faces</span><span>Johannesburg house, South Africa · example</span></figcaption>
+        </figure>
+        <figure class="panel" id="ex-p-ware" role="tabpanel" aria-labelledby="ex-t-ware" hidden>
+          <div class="shot shot--crop" style="--ar:6/5; --op:100% 50%" data-zoom><img src="assets/shots/jkt-03-roof-3d-1400.webp" srcset="assets/shots/jkt-03-roof-3d-1400.webp 1400w, assets/shots/jkt-03-roof-3d.webp 2400w" sizes="(max-width:980px) 100vw, 58vw" width="2400" height="1500" alt="HelioAtlas studio, 3-D view of the Cikarang warehouse example: a long flat roof with 700 panels in rack rows" loading="lazy" decoding="async"></div>
+          <figcaption class="cap"><span><b>Studio</b> · roof and layout in 3-D: flat roof, 700 panels on racks at 10°</span><span>Cikarang warehouse, Indonesia · example</span></figcaption>
+        </figure>
+        <figure class="panel" id="ex-p-barn" role="tabpanel" aria-labelledby="ex-t-barn" hidden>
+          <div class="shot shot--crop" style="--ar:6/5; --op:100% 50%" data-zoom><img src="assets/shots/bav-03-roof-3d-1400.webp" srcset="assets/shots/bav-03-roof-3d-1400.webp 1400w, assets/shots/bav-03-roof-3d.webp 2400w" sizes="(max-width:980px) 100vw, 58vw" width="2400" height="1500" alt="HelioAtlas studio, 3-D view of the Bavarian barn example: a long gable roof with two rows of panels on the near, south-east slope and one row along the ridge of the far, north-west slope" loading="lazy" decoding="async"></div>
+          <figcaption class="cap"><span><b>Studio</b> · roof and layout in 3-D: gable roof, 60 panels on the south-east slope, 24 along the north-west</span><span>Bavarian barn, Germany · example</span></figcaption>
+        </figure>
+      </div>
+      <div class="ex__tabs">
+        <div class="seg" role="tablist" aria-label="Example project">
+          <button type="button" role="tab" id="ex-t-house" aria-controls="ex-p-house" aria-selected="true">House</button>
+          <button type="button" role="tab" id="ex-t-ware" aria-controls="ex-p-ware" aria-selected="false">Warehouse</button>
+          <button type="button" role="tab" id="ex-t-barn" aria-controls="ex-p-barn" aria-selected="false">Barn</button>
+        </div>
+        <div class="ex__name"><h3 class="h3" id="exName">Johannesburg house</h3><span class="chip" id="exRoof">Hip roof · 26°</span></div>
+        <p class="small" id="exWhere">South Africa · satellite-derived weather</p>
+      </div>
+      <div class="ex__nums">
+        <div class="ex__big">
+          <div><span class="label">Energy · P50</span><span class="h2 num" data-m="p50">14,004</span><span class="readout">kWh a year</span></div>
+          <div><span class="label">Payback</span><span class="h2 num" data-m="pay">5.7</span><span class="readout">years</span></div>
+        </div>
+        <dl class="spec">
+          <dt>System</dt><dd><span data-m="kwp">8.6</span> kWp<em><span data-m="n">20</span> × 430 Wp</em></dd>
+          <dt>Energy · P90</dt><dd class="sky"><span data-m="p90">12,954</span><em>kWh/yr</em></dd>
+          <dt>Specific yield · PR</dt><dd><span data-m="sy">1,628</span><em>kWh/kWp</em> · <span data-m="pr">78.0</span> %</dd>
+          <dt>Yearly bill, before → after</dt><dd><span data-c>ZAR</span> <span data-m="b0">39,740</span> → <span data-m="b1">17,088</span></dd>
+          <dt>IRR</dt><dd><span data-m="irr">18.6</span> %</dd>
+          <dt>25-year net value</dt><dd><span data-c>ZAR</span> <span data-m="npv">216,062</span></dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ 04 · P50 / P90 ═════ -->
+<section class="sec xm" id="proof" aria-labelledby="pf-h">
+  <div class="wrap">
+    <div class="sh sh--stack">
+      <span class="label" data-rv><span class="idx">04</span>P50 and P90</span>
+      <div class="sh__t">
+        <h2 class="h2" id="pf-h" data-rv>The typical year, and the bad one.</h2>
+        <p class="lede" data-rv style="--i:1">P50 is the typical year. P90 is the year the system beats nine times in ten. The spread comes from the site's own weather record and stated model terms, so a lender sees both.</p>
+      </div>
+    </div>
+    <div class="dist">
+      <figure class="chart" id="dChart" data-rv="fade">
+        <div class="dist__hd"><span class="label">Yearly energy · Johannesburg house, example</span><span class="readout" id="dRead" aria-live="polite">P50 <b>14,004</b> · P90 <b>12,954</b> kWh a year</span></div>
+        <div class="chart__plot" id="dPlot" tabindex="0" role="group" aria-roledescription="chart" aria-label="Spread of yearly energy for the Johannesburg house example. Use the left and right arrow keys to read how often a year reaches a given energy." aria-describedby="dRead dAlt"></div>
+        <p class="sr" id="dAlt">Modelled spread of yearly energy: a normal distribution around P50 14,004 kWh with sigma 5.85 percent. P90 is 12,954 kWh; nine years in ten reach it.</p>
+        <figcaption class="chart__ft"><span>σ <b>5.85 %</b></span><span>P90 = P50 × (1 − 1.2816 σ)</span><span>Shaded: the years that reach P90</span><span>Hover, tap or use ← → to read any year</span></figcaption>
+      </figure>
+      <div class="dist__side">
+        <dl class="spec" data-rv>
+          <dt>Weather resource</dt><dd>4 %<em>satellite-derived</em></dd>
+          <dt>Year to year</dt><dd>measured<em>site record</em></dd>
+          <dt>Model</dt><dd>3 %</dd>
+          <dt>Geometry</dt><dd>1 %</dd>
+          <dt>Degradation</dt><dd>0.2 %</dd>
+          <dt>Combined, σ</dt><dd class="sol">5.85 %</dd>
+        </dl>
+        <p class="small" data-rv>Terms combine as a root sum of squares; reanalysis sites carry 8 % for the resource. Payback and savings are worked from P50.</p>
+        <a class="tlink tlink--sol" href="science.html#p90" data-rv>How P90 is built <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ 05 · PROPOSAL ═════ -->
+<section class="sec xm" id="proposal" aria-labelledby="pr-h">
+  <div class="wrap">
+    <div class="sh sh--split">
+      <span class="label" data-rv><span class="idx">05</span>Proposal</span>
+      <div class="sh__t">
+        <h2 class="h2" id="pr-h" data-rv>Six pages, signed online.</h2>
+        <p class="lede" data-rv style="--i:1">Your logo and colour on an A4 proposal built from the design. Each one carries a valid-until date and says it is a design estimate, not a quotation.</p>
+      </div>
+      <div class="sh__side">
+        <dl class="spec" data-rv style="--i:2">
+          <dt>The customer signs with</dt><dd>name, email, tick</dd>
+          <dt>The server stamps</dt><dd>time, SHA-256</dd>
+          <dt>A second signature</dt><dd>refused</dd>
+        </dl>
+      </div>
+    </div>
+    <div class="reader" data-rv="fade">
+      <div class="reader__track" tabindex="0" role="region" aria-label="The six proposal pages">
+        <figure class="reader__page"><img src="assets/shots/proposal-p1.webp" width="1240" height="1754" alt="Proposal page 1 of 6, the cover: a 3-D render of the roof, R22,652 estimated annual savings, 8.6 kWp, 14,004 kWh a year, pays for itself in 5.7 years, and the date the estimate is valid until" loading="lazy" decoding="async" data-zoom><figcaption><b>Page 1</b> · Cover: 3-D render, R22,652 saved a year, 8.6 kWp, 14,004 kWh, 5.7 yr payback</figcaption></figure>
+        <figure class="reader__page"><img src="assets/shots/proposal-p2.webp" width="1240" height="1754" alt="Proposal page 2 of 6, your solar system: roof plan with 20 panels on two faces, a table of the west and north slopes with their panels and energy, P50 14,004 kWh, P90 12,954 kWh, 1,628 kWh per kWp, performance ratio 78.0 percent, and energy month by month" loading="lazy" decoding="async" data-zoom><figcaption><b>Page 2</b> · Your solar system: roof plan, each face's panels and energy, P50 14,004 and P90 12,954 kWh</figcaption></figure>
+        <figure class="reader__page"><img src="assets/shots/proposal-p3.webp" width="1240" height="1754" alt="Proposal page 3 of 6, your savings: the yearly bill R39,740 without solar and R17,088 with it, monthly bills before and after, and 42.6 percent of the solar used on site" loading="lazy" decoding="async" data-zoom><figcaption><b>Page 3</b> · Your savings: R39,740 → R17,088 a year, monthly bills, 42.6 % self-use</figcaption></figure>
+        <figure class="reader__page"><img src="assets/shots/proposal-p4.webp" width="1240" height="1754" alt="Proposal page 4 of 6, your investment: system cost R129,000, pays for itself in 5.7 years, IRR 18.6 percent, net gain over 25 years R216,062, the cumulative cash position and the assumptions behind it" loading="lazy" decoding="async" data-zoom><figcaption><b>Page 4</b> · Your investment: R129,000, 5.7 yr, IRR 18.6 %, cumulative cash; a page you can leave out</figcaption></figure>
+        <figure class="reader__page"><img src="assets/shots/proposal-p5.webp" width="1240" height="1754" alt="Proposal page 5 of 6, equipment and assumptions: the generic 430 Wp panel, an 8 kW inverter at DC:AC 1.07, the loss assumptions and where the main numbers come from" loading="lazy" decoding="async" data-zoom><figcaption><b>Page 5</b> · Equipment and assumptions: generic 430 Wp, 8 kW at DC:AC 1.07, the loss table; no battery, as the house has none</figcaption></figure>
+        <figure class="reader__page"><img src="assets/shots/proposal-p6.webp" width="1240" height="1754" alt="Proposal page 6 of 6, next steps and acceptance: the proposal summary, how the numbers were worked out, and terms stating a design estimate, not a quotation, with its valid-until date" loading="lazy" decoding="async" data-zoom><figcaption><b>Page 6</b> · Next steps and acceptance: summary, method, terms</figcaption></figure>
+      </div>
+      <div class="reader__nav"><span class="readout">Johannesburg house · example proposal, app defaults · A4 PDF</span><button type="button" data-dir="-1" aria-label="Previous page"><svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M13 7H2M6 3L2 7l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" data-dir="1" aria-label="Next page"><svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ 06 · ENDCAP ═════ -->
+<section class="endcap" id="access" aria-labelledby="end-h">
+  <div class="wrap endcap__in">
+    <div class="endcap__copy">
+      <span class="label" data-rv>Request access</span>
+      <h2 class="h2" id="end-h" data-rv>Find the next roof worth your time.</h2>
+      <p class="lede" data-rv style="--i:1">Request access to the studio, or book a demo and watch the full flow run on the three example projects.</p>
+      <div class="row" data-rv style="--i:2"><a class="btn btn--p btn--lg" href="start.html">Request access <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn btn--g btn--lg" href="start.html#demo">Book a demo</a></div>
+    </div>
+    <div class="endcap__media">
+      <figure data-rv="fade">
+        <div class="shot shot--crop" style="--ar:4/3; --op:50% 55%" data-zoom><img src="assets/shots/jhb-01-locate-1400.webp" srcset="assets/shots/jhb-01-locate-1400.webp 1400w, assets/shots/jhb-01-locate.webp 2400w" sizes="(max-width:980px) 100vw, 56vw" width="2400" height="1500" alt="HelioAtlas studio start screen: the address search, with the three example projects ready to open" loading="lazy" decoding="async"></div>
+        <figcaption class="cap"><span><b>Studio</b> · where every project starts: an address, or an example</span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer data-ha-foot></footer>
+
+<script>
+/* HOME sections 01-05 (not the hero): film chapters, the example switcher, the P50/P90 chart. Every figure is from the truth sheet. */
+(function(){
+  'use strict';
+  const d = document, $ = (id) => d.getElementById(id);
+
+  /* 01 · film chapters: [label, start in seconds]. Edit the seconds here when the film changes; buttons and timestamps follow. */
+  const CHAPTERS = [['Locate', 0], ['Select the roof', 7], ['Design', 14], ['System', 24], ['Energy', 30], ['Savings', 34], ['Proposal', 39]];
+  const mmss = (s) => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+  d.querySelectorAll('.chaps[data-film="studio-film"] [data-t]').forEach((b, i) => {
+    const c = CHAPTERS[i]; if (!c) return;
+    b.dataset.t = String(c[1]); b.querySelector('.n').textContent = mmss(c[1]); b.querySelector('.t').textContent = c[0];
+    b.setAttribute('aria-label', 'Play from ' + c[0] + ', ' + mmss(c[1]));
+  });
+
+  /* 03 · three examples: one spec block whose values morph when the tab changes (truth sheet, table B) */
+  const EX = {
+    'ex-p-house': { name: 'Johannesburg house', roof: 'Hip roof · 26°', where: 'South Africa · satellite-derived weather', cur: 'ZAR',
+      v: { p50: [14004, 0], pay: [5.7, 1], kwp: [8.6, 1], n: [20, 0], p90: [12954, 0], sy: [1628, 0], pr: [78.0, 1], b0: [39740, 0], b1: [17088, 0], irr: [18.6, 1], npv: [216062, 0] } },
+    'ex-p-ware': { name: 'Cikarang warehouse', roof: 'Flat roof · racks at 10°', where: 'Indonesia · reanalysis weather', cur: 'IDR',
+      v: { p50: [422661, 0], pay: [5.1, 1], kwp: [301, 0], n: [700, 0], p90: [370615, 0], sy: [1404, 0], pr: [74.1, 1], b0: [633.99, 2, ' M'], b1: [28.73, 2, ' M'], irr: [20.3, 1], npv: [3.94, 2, ' bn'] } },
+    'ex-p-barn': { name: 'Bavarian barn', roof: 'Gable roof · 22°', where: 'Germany · satellite-derived weather', cur: 'EUR',
+      v: { p50: [36256, 0], pay: [6.8, 1], kwp: [36.12, 2], n: [84, 0], p90: [33149, 0], sy: [1004, 0], pr: [78.7, 1], b0: [11021, 0], b1: [3935, 0], irr: [14.9, 1], npv: [32928, 0] } },
+  };
+  const exBox = $('exBox');
+  if (exBox) exBox.addEventListener('ha:tab', (e) => {
+    const x = EX[e.detail && e.detail.id]; if (!x || !window.HA) return;
+    $('exName').textContent = x.name; $('exRoof').textContent = x.roof; $('exWhere').textContent = x.where;
+    exBox.querySelectorAll('[data-c]').forEach((el) => { el.textContent = x.cur; });
+    exBox.querySelectorAll('[data-m]').forEach((el) => { const s = x.v[el.dataset.m]; if (s) HA.morph(el, s[0], { dec: s[1], suf: s[2] || '' }); });
+  });
+
+  /* 04 · P50/P90: the normal spread implied by the house's P50 and σ = 5.85 % (P90 = P50 × (1 − 1.2816 σ) = 12,954 kWh).
+     Hover, tap or arrow keys read how often a year reaches a value. Drawn with HA.chart at the plot's real pixel size. */
+  function distChart(){
+    const plot = $('dPlot'), fig = $('dChart'), read = $('dRead'); if (!plot || !fig || !read || !window.HA) return;
+    const P50 = 14004, SIG = 0.0585, S = P50 * SIG, P90 = Math.round(P50 * (1 - 1.2816 * SIG)), X0 = 11000, X1 = 17000;
+    const f = (v) => Math.exp(-0.5 * ((v - P50) / S) ** 2);
+    const erf = (z) => { const t = 1 / (1 + 0.3275911 * Math.abs(z)), r = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-z * z); return z >= 0 ? r : -r; };
+    const reach = (v) => 0.5 * (1 - erf((v - P50) / (S * Math.SQRT2)));   /* share of years at or above v */
+    const kwh = (v) => Math.round(v).toLocaleString('en-US');
+    const REST = read.innerHTML;
+    let geo = null, cur = P50;
+    const place = () => { if (!geo) return; const px = geo.x(cur);
+      geo.cl.setAttribute('x1', px); geo.cl.setAttribute('x2', px); geo.dot.setAttribute('cx', px); geo.dot.setAttribute('cy', geo.y(cur)); };
+    const show = (v) => {
+      cur = Math.max(X0, Math.min(X1, v)); place(); fig.classList.add('is-hover');
+      const r = reach(cur) * 100, pct = r > 99.5 ? 'over 99 %' : r < 0.5 ? 'under 1 %' : Math.round(r) + ' %';
+      read.innerHTML = '<b>' + kwh(cur) + ' kWh</b> or more in <b>' + pct + '</b> of years';
+    };
+    const hide = () => { fig.classList.remove('is-hover'); read.innerHTML = REST; };
+
+    const api = HA.chart(plot, ({ svg, w, h }) => {
+      const m = { l: 26, r: 22, t: 50, b: 50 }, base = h - m.b, top = m.t + 10;
+      const x = HA.scale(X0, X1, m.l, w - m.r), y = (v) => base - f(v) * (base - top);
+      /* x grid, ticks and the axis title */
+      HA.ticks(X0, X1, w < 560 ? 3 : 6).forEach((v) => {
+        HA.svg('line', { class: 'ch-grid', x1: x(v), x2: x(v), y1: m.t, y2: base }, svg);
+        HA.svg('text', { class: 'ch-t', x: x(v), y: base + 20, 'text-anchor': 'middle' }, svg).textContent = v.toLocaleString('en-US');
+      });
+      HA.svg('text', { class: 'ch-t', x: (m.l + w - m.r) / 2, y: base + 40, 'text-anchor': 'middle' }, svg).textContent = 'Energy in one year, kWh';
+      /* the years that reach P90, the curve, the axis */
+      let area = 'M' + x(P90).toFixed(1) + ' ' + base + 'L' + x(P90).toFixed(1) + ' ' + y(P90).toFixed(1), line = '';
+      for (let px = Math.ceil(x(P90)); px <= w - m.r; px += 2) area += 'L' + px + ' ' + y(x.invert(px)).toFixed(1);
+      area += 'L' + (w - m.r) + ' ' + base + 'Z';
+      for (let px = m.l; px <= w - m.r; px += 2) line += (line ? 'L' : 'M') + px + ' ' + y(x.invert(px)).toFixed(1);
+      HA.svg('path', { class: 'ch-fill-p90', d: area }, svg);
+      HA.svg('line', { class: 'ch-p90', x1: x(P90), x2: x(P90), y1: y(P90), y2: base }, svg);
+      HA.svg('path', { class: 'ch-p50', d: line }, svg);
+      HA.svg('line', { class: 'ch-axis', x1: m.l, x2: w - m.r, y1: base, y2: base }, svg);
+      /* direct labels above the curve: P90 to the left of its leader, P50 to the right of its leader */
+      const label = (v, name, cls, side) => {
+        const px = x(v), tx = px + (side < 0 ? -8 : 8), anchor = side < 0 ? 'end' : 'start';
+        HA.svg('line', { class: 'ch-lead', x1: px, x2: px, y1: 12, y2: y(v) - 6 }, svg);
+        HA.svg('circle', { cx: px, cy: y(v), r: 3.5, class: cls }, svg);
+        HA.svg('text', { class: 'ch-l ' + cls, x: tx, y: 20, 'text-anchor': anchor }, svg).textContent = name;
+        HA.svg('text', { class: 'ch-a', x: tx, y: 37, 'text-anchor': anchor }, svg).textContent = kwh(v) + ' kWh';
+      };
+      label(P90, 'P90', 'is-p90', -1); label(P50, 'P50', 'is-p50', 1);
+      /* annotation inside the shaded area, kept clear of the curve: the longest wording that fits */
+      for (const s of ['9 years in 10 reach P90', '9 years in 10', '90 %']){
+        const t = HA.svg('text', { class: 'ch-a', x: x(P90) + 12, y: base - 14 }, svg); t.textContent = s;
+        const x0 = x(P90) + 12, x1 = x0 + t.getComputedTextLength(), topY = base - 14 - 13;
+        let fits = x1 < w - m.r - 4; for (let px = x0; fits && px <= x1; px += 2) if (y(x.invert(px)) > topY - 6) fits = false;
+        if (fits) break; t.remove();
+      }
+      geo = { x, y, cl: HA.svg('line', { class: 'ch-cur', x1: 0, x2: 0, y1: m.t, y2: base }, svg), dot: HA.svg('circle', { class: 'ch-dot', r: 4, cx: 0, cy: 0 }, svg) };
+      place();
+    });
+    if (d.fonts && d.fonts.ready) d.fonts.ready.then(() => api.redraw());
+
+    const at = (e) => { const r = plot.getBoundingClientRect(); return Math.round(geo.x.invert(e.clientX - r.left) / 10) * 10; };
+    plot.addEventListener('pointermove', (e) => { if (geo) show(at(e)); });
+    plot.addEventListener('pointerdown', (e) => { if (geo) show(at(e)); });
+    plot.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse' && d.activeElement !== plot) hide(); });
+    d.addEventListener('pointerdown', (e) => { if (!plot.contains(e.target) && d.activeElement !== plot) hide(); });
+    plot.addEventListener('focus', () => show(cur));
+    plot.addEventListener('blur', hide);
+    plot.addEventListener('keydown', (e) => {
+      const st = e.shiftKey ? 500 : 100, k = e.key;
+      const v = k === 'ArrowRight' ? cur + st : k === 'ArrowLeft' ? cur - st : k === 'Home' ? X0 : k === 'End' ? X1 : null;
+      if (v != null){ e.preventDefault(); show(v); }
+    });
+  }
+  if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', distChart); else distChart();
+})();
+</script>
+
+<script type="module">
+/* HOME hero driver: mount the world, map the 7 copy beats onto the engine's stations, fill the instruments from the scene. */
+import { mount } from './assets/world.js';
+const $ = (id) => document.getElementById(id);
+const hero = $('hero'), beats = [...hero.querySelectorAll('.beat')], huds = [...hero.querySelectorAll('.hud')], ticks = [...$('hProg').children];
+const YIELD = 1550;   /* area-scan first pass at the ZA preset: one estimate scaled by roof size (the scan's method) */
+/* One real engine run of this example design (audit/PACKHOUSE_RUN.json, engine commit 9c74cfc9): requests built by the studio's own code,
+   South Africa preset (R 2.65/kWh net billing, R 15/W), business profile with an ASSUMED 1.6 GWh/yr use, studio default losses. */
+const RUN = { wp: 575, racks: 330, slope: 1368, kwp: 976.35, p50: 1673008, p90: 1554589, sigma: 5.52, yield: 1713.5, pr: 77.66,
+  billBefore: 4242640, billAfter: 1302392, payback: 4.99, irr: 21.25, rackYield: 1815.6, slopeYield: 1688.9 };
+const fmt = (n, d = 0) => Number(n).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+let world = null, ranked = [];
+
+/* beat centres → engine progress (stations: valley .28, survey .42, score .49, rank .56, design .70, close .84); 7 beats, one screen each */
+const MAP = [[0, 0], [0.10, 0.015], [0.1429, 0.05], [0.214, 0.132], [0.268, 0.225], [0.2857, 0.28], [0.38, 0.42], [0.4286, 0.45], [0.50, 0.49], [0.5714, 0.525], [0.643, 0.56], [0.7143, 0.63], [0.786, 0.70], [0.857, 0.77], [0.929, 0.84], [1, 1]];
+const toWorld = (p) => { for (let i = 1; i < MAP.length; i++){ const [x0, y0] = MAP[i - 1], [x1, y1] = MAP[i]; if (p <= x1) return y0 + (y1 - y0) * Math.max(0, (p - x0) / (x1 - x0)); } return 1; };
+const ALT = (p) => p < 0.06 ? 'orbit' : p < 0.16 ? 'descending' : p < 0.25 ? 'valley' : p < 0.6 ? 'survey altitude' : 'roof level';
+
+let lastStep = -1;
+function onChapter(p, step){
+  if (world) world.setProgress(toWorld(p));
+  if (step !== lastStep){
+    lastStep = step;
+    beats.forEach((b, i) => b.classList.toggle('is-on', i === step));
+    huds.forEach(h => h.classList.toggle('is-on', +h.dataset.at === step));
+    hero.classList.toggle('is-rank', step === 4);
+    hero.classList.toggle('is-late', step >= 2);
+    $('hCue').style.opacity = step === 0 ? '' : '0';
+  }
+  $('hAlt').textContent = ALT(toWorld(p));
+  const f = p * beats.length; ticks.forEach((t, i) => { t.style.setProperty('--f', Math.max(0, Math.min(1, f - i)).toFixed(3)); t.classList.toggle('is-on', i === step); });
+}
+const hook = () => window.HA && HA.onChapter ? HA.onChapter(hero, onChapter) : setTimeout(hook, 30);
+hook();
+$('hSkip').addEventListener('click', () => { scrollTo({ top: hero.offsetTop + hero.offsetHeight, behavior: 'auto' }); const nx = hero.nextElementSibling; if (nx){ nx.setAttribute('tabindex', '-1'); nx.focus({ preventScroll: true }); } });
+
+function fill(){
+  const city = world && world.city; if (!city || !city.ranked) return;
+  ranked = city.ranked.slice().sort((a, b) => (b.kwp || 0) - (a.kwp || 0));
+  const n = (city.buildings || []).length;
+  $('hTerrN').textContent = fmt(n); $('hTerrL').textContent = fmt(Math.min(50, n)); $('hRankOf').textContent = 'top 5 of ' + fmt(Math.min(50, n));
+  $('hRank').innerHTML = ranked.slice(0, 5).map((r, i) => '<div class="rk"><span class="i">' + String(i + 1).padStart(2, '0') + '</span><span class="n"><b>' + String(r.name).replace('&', 'and') + '</b><em>' +
+    fmt(r.area || r.w * r.d) + ' m²</em></span><span class="v">' + fmt(r.kwp) + ' kWp<em>' + fmt(r.kwp * YIELD / 1000) + ' MWh/yr</em></span></div>').join('');
+  const f = city.focus || ranked[0];
+  $('hfName').textContent = String(f.name || '').replace('&', 'and');
+  /* DESIGN: the scene's two faces, best first (the engine run's per-face yields decide the order) */
+  $('hfMod').textContent = fmt(RUN.racks + RUN.slope); $('hfKwp').textContent = fmt(RUN.kwp); $('hfInv').textContent = '2';
+  $('hfN1').textContent = fmt(RUN.racks); $('hfN2').textContent = fmt(RUN.slope);
+  $('hfF1').textContent = 'Cold-store roof · racks at 10° · ' + fmt(RUN.rackYield) + ' kWh/kWp';
+  $('hfF2').textContent = 'Hall roof · flush at 6° · ' + fmt(RUN.slopeYield) + ' kWh/kWp';
+  $('hfNote').textContent = 'Example site. Auto-fill takes the best face first, inside 1.5 m setbacks: ' + fmt(RUN.wp) + ' W modules.';
+  /* CLOSE: the hourly run */
+  $('hcP50').textContent = fmt(RUN.p50 / 1000); $('hcP90').textContent = fmt(RUN.p90 / 1000); $('hcPay').textContent = fmt(RUN.payback, 1);
+  $('hcIrr').textContent = fmt(RUN.irr, 1); $('hcYld').textContent = fmt(RUN.yield); $('hcSelf').textContent = fmt((1 - RUN.billAfter / RUN.billBefore) * 100);
+  $('hcSelf').closest('div').querySelector('dt').textContent = 'Bill cut';
+  $('hcNote').textContent = 'Example site, one engine run (uncertainty ' + fmt(RUN.sigma, 2) + ' %). South Africa preset (R 2.65/kWh, R 15/W) and an assumed 1.6 GWh a year of use. Then a six-page proposal the customer signs online.';
+  const pins = [$('pin0'), $('pin1'), $('pin2')];
+  world.onFrame(() => {
+    for (let i = 0; i < 3; i++){
+      const r = ranked[i], el = pins[i]; if (!r) continue;
+      const xy = world.project([r.x, (r.top || (r.y || 0) + 12) + 2, r.z]);
+      if (xy && Number.isFinite(xy[0])) el.style.transform = 'translate3d(' + (xy[0] - 4.5).toFixed(1) + 'px,' + (xy[1] - 4.5).toFixed(1) + 'px,0)';
+    }
+  });
+}
+
+requestAnimationFrame(() => {
+  try {
+    world = mount($('heroWorld'), { seed: 7, poster: 'assets/world/world-earth.webp', pv: { wp: RUN.wp, mw: 1.134, ml: 2.278, first: RUN.rackYield >= RUN.slopeYield ? 'racks' : 'slope' } });
+    window.__world = world;
+    const shift = () => { world.setViewShift && world.setViewShift(innerWidth > 900 ? 0.19 : 0); world.setSubjectShift && world.setSubjectShift(innerWidth > 900 ? 0.2 : 0, 0.62, 0.70); };
+    shift(); addEventListener('resize', shift, { passive: true });
+    world.cityReady.then(fill).catch(() => {});
+  } catch (e){ console.warn('[hero] world unavailable', e); }
+});
+</script>
+</body>
+</html>

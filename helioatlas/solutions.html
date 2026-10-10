@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HelioAtlas · Solutions</title>
+<meta name="description" content="One studio for residential installers, solar with a battery, commercial and industrial roofs, farms and rural sites. Six country presets, every value editable.">
+<meta name="theme-color" content="#000000">
+<link rel="icon" type="image/svg+xml" href="assets/brand/favicon.svg"><link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png"><link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+<meta property="og:title" content="HelioAtlas · Solutions">
+<meta property="og:description" content="A roof, a warehouse or a farm. The same studio and engineering workbench, set up for the work you sell.">
+<meta property="og:image" content="https://lumen8.ai/helioatlas/assets/brand/social-card.png">
+<meta property="og:url" content="https://lumen8.ai/helioatlas/solutions.html">
+<link rel="canonical" href="https://lumen8.ai/helioatlas/solutions.html">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="assets/fonts/Geist-latin-var.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="assets/fonts/GeistMono-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/ha.css">
+<script src="assets/ha.js" defer></script>
+<style>
+/* solutions — layout only; colours, type and components come from ha.css. Page additions: a chart header, a close-up crop. */
+.ph .h1{max-width:16ch}
+.split__text{top:calc(var(--nav-h) + 88px)}
+.sub{margin-top:clamp(48px, 6vw, 88px)}
+.duo{display:grid; grid-template-columns:minmax(0, 7fr) minmax(0, 5fr); gap:clamp(28px, 4vw, 72px); align-items:start}
+.duo__side{display:flex; flex-direction:column; gap:20px; min-width:0}
+@media (max-width:980px){ .duo{grid-template-columns:minmax(0, 1fr)} }
+
+/* chart frame + the marks the kit lacks */
+.chart__hd{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline; gap:6px 20px; padding-bottom:14px; margin-bottom:18px; border-bottom:1px solid var(--line)}
+.chart__hd .readout{min-height:1.5em}
+.chart__plot{cursor:crosshair}
+.chart__plot:focus-visible{outline:2px solid var(--sol); outline-offset:8px; border-radius:6px}
+.ch-hl{fill:rgba(255,255,255,.045); visibility:hidden}
+.chart.is-hover .ch-hl{visibility:visible}
+
+/* close-up: one panel of a capture at a legible scale (--w width, --l / --t offset, all in % of the frame) */
+.shot--zoom{aspect-ratio:var(--ar)}
+.shot--zoom img{position:absolute; max-width:none; height:auto; width:var(--w); left:var(--l); top:var(--t)}
+
+/* commercial: four notes in a row under the wide capture */
+.notes--row{grid-template-columns:repeat(4, minmax(0, 1fr)); column-gap:clamp(20px, 2.4vw, 40px); margin-top:28px}
+.notes--row .note:last-child{border-bottom:0}
+.notes--row .note{border-bottom:0}
+@media (max-width:980px){ .notes--row{grid-template-columns:repeat(2, minmax(0, 1fr))} }
+@media (max-width:620px){ .notes--row{grid-template-columns:minmax(0, 1fr)} .notes--row .note:last-child{border-bottom:1px solid var(--line)} }
+
+/* farms */
+.pair2{display:grid; grid-template-columns:minmax(0, 4fr) minmax(0, 7fr); gap:clamp(20px, 3vw, 40px); align-items:start}
+@media (max-width:860px){ .pair2{grid-template-columns:minmax(0, 1fr)} }
+.ground{display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:32px clamp(24px, 4vw, 72px)}
+.ground h3{margin-bottom:6px}
+.ground .label{display:block; margin-bottom:12px}
+@media (max-width:860px){ .ground{grid-template-columns:minmax(0, 1fr)} }
+
+/* country presets */
+.tbl{min-width:900px}
+.tbl td:first-child{white-space:nowrap}
+.tbl thead th small{display:block; margin-top:4px; text-transform:none; letter-spacing:0; font-weight:400; color:var(--fg-3)}
+.tbl td em{font:400 12.5px var(--m); font-style:normal; color:var(--fg-3); margin-left:8px}
+.tbl tbody tr:hover td{background:rgba(255,255,255,.025)}
+.mk-notes{display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:16px clamp(24px, 4vw, 64px); margin-top:32px}
+@media (max-width:760px){ .mk-notes{grid-template-columns:minmax(0, 1fr)} }
+@media (max-width:620px){ .spec{grid-template-columns:minmax(0, 1fr) minmax(0, 1.35fr)} }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header data-ha-nav></header>
+
+<main id="main">
+
+<!-- ═════ PAGE HEADER ═════ -->
+<section class="ph" aria-label="Solutions">
+  <div class="ph__grid"></div>
+  <div class="wrap">
+    <div class="crumbs"><a href="index.html">HelioAtlas</a><span aria-hidden="true">/</span><span>Solutions</span></div>
+    <h1 class="h1">A roof, a warehouse or a farm. One studio.</h1>
+    <p class="lede">The same six guided steps and engineering workbench design an 8.6&nbsp;kWp house, a 301&nbsp;kWp warehouse and a 36&nbsp;kWp barn. What changes is the roof, the electrical design and the tariff you sell into.</p>
+    <div class="row"><a class="btn btn--p btn--lg" href="start.html">Request access <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn btn--g btn--lg" href="start.html#demo">Book a demo</a></div>
+  </div>
+</section>
+
+<nav class="toc" aria-label="On this page"><div class="wrap"><a href="#residential">Residential</a><a href="#storage">Solar and battery</a><a href="#commercial">Commercial</a><a href="#farms">Farms</a><a href="#markets">Country presets</a></div></nav>
+
+<!-- ═════ 01 · RESIDENTIAL (instrument) ═════ -->
+<section class="sec xm" id="residential" aria-labelledby="res-h">
+  <div class="wrap">
+    <div class="sh sh--split">
+      <span class="label" data-rv><span class="idx">01</span>Residential installers</span>
+      <div class="sh__t"><h2 class="h2" id="res-h" data-rv>Sell a home from its own roof faces.</h2></div>
+      <div class="sh__side"><p class="lede" data-rv style="--i:1">A hip or gable roof is split into faces, each with its own yield. The customer sees the bill before and after in their currency, then signs a proposal on a link.</p></div>
+    </div>
+    <div class="duo">
+      <figure class="chart" id="c-faces" data-rv="fade">
+        <div class="chart__hd"><span class="label">Johannesburg house · yield per roof face · kWh/kWp</span><span class="readout" aria-live="polite">Hover a face, or use ↑ ↓</span></div>
+        <div class="chart__plot" style="--h:170px" tabindex="0" role="img" aria-label="Yield per roof face on the Johannesburg house example: north face, 9 panels, 1,737 kWh per kWp and 6,723 kWh a year; west face, 11 panels, 1,539 kWh per kWp and 7,281 kWh a year; whole roof, 20 panels, 1,628 kWh per kWp and 14,004 kWh a year."></div>
+        <figcaption class="chart__ft"><span>Hip roof at 26°, the South Africa default, marked assumed</span><span>Example design · P50 energy</span></figcaption>
+      </figure>
+      <div class="duo__side" data-rv style="--i:1">
+        <span class="label">Johannesburg house · example</span>
+        <dl class="spec">
+          <dt>System</dt><dd>8.6 kWp<em>20 × 430 Wp</em></dd>
+          <dt>Energy P50 · P90</dt><dd>14,004 · <span class="sky">12,954</span><em>kWh/yr</em></dd>
+          <dt>Bill before → after</dt><dd>R 39,740 → R 17,088</dd>
+          <dt>Payback · IRR</dt><dd class="sol">5.7 yr · 18.6&nbsp;%</dd>
+          <dt>25-year net value</dt><dd>R 216,062</dd>
+        </dl>
+        <p class="small">The customer saves R 22,652 a year, 57&nbsp;% of today's bill, on the South Africa preset tariff and a system price of R 15 per watt, both marked assumed and editable.</p>
+        <a class="tlink tlink--sol" href="product.html#design">How a roof is designed, step by step <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+    <div class="lattice sub" style="--n:3">
+      <a class="cell" href="product.html#design" data-rv><span class="label">Outline</span><h3>Fix the outline in seconds.</h3><p>Click a building to take its outline. Move, rotate, drag corners, square up or snap to imagery, nudge 0.1&nbsp;m with the arrow keys, and undo up to 50 steps.</p></a>
+      <a class="cell" href="product.html#design" data-rv style="--i:1"><span class="label">Fill</span><h3>Panels fill inside the setbacks.</h3><p>Best-facing face first. Target the maximum, a panel count or kWp, in portrait, landscape or Auto, which tries both. Every edit re-fills.</p></a>
+      <a class="cell" href="product.html#proposal" data-rv style="--i:2"><span class="label">Proposal</span><h3>A proposal the customer signs.</h3><p>Six A4 pages with your logo and colour, marked a design estimate, not a quotation, with a valid-until date. Signing runs on the online link.</p></a>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ 02 · SOLAR AND BATTERY (split) ═════ -->
+<section class="sec xm sec--band" id="storage" aria-labelledby="st-h">
+  <div class="wrap">
+    <div class="split" data-hs>
+      <div class="split__media">
+        <figure>
+          <div class="shot shot--crop" style="--ar:5/4; --op:22% 50%" data-zoom>
+            <img src="assets/shots/jhb-wb-storage-1400.webp" srcset="assets/shots/jhb-wb-storage-1400.webp 1400w, assets/shots/jhb-wb-storage.webp 2400w" sizes="(max-width:980px) 100vw, 60vw" width="2400" height="1500" alt="Workbench storage with a 10 kWh battery on the Johannesburg house example: battery size and the locked assumptions, autarky 63.3 percent, self-consumption 66.0 percent, 309 cycles, 6,173 kWh throughput and a typical-day dispatch chart" loading="lazy" decoding="async">
+            <button type="button" class="hs" data-n="1" style="--x:21.4%; --y:21.5%" aria-label="1: Battery size">1</button>
+            <button type="button" class="hs" data-n="2" style="--x:67.8%; --y:21.3%" aria-label="2: Locked assumptions">2</button>
+            <button type="button" class="hs" data-n="3" style="--x:20.7%; --y:46%" aria-label="3: Key metrics">3</button>
+          </div>
+          <figcaption class="cap"><span><b>Workbench</b> · Storage: battery size, the locked assumptions, four key metrics and the typical day on the solar clock</span><span>Johannesburg house · 10 kWh · example · click to open full size</span></figcaption>
+        </figure>
+      </div>
+      <div class="split__text" data-rv>
+        <span class="label"><span class="idx">02</span>Solar and battery</span>
+        <h2 class="h3" id="st-h">A battery, sized by the hour.</h2>
+        <p class="body">Pick 5, 10 or 20 kWh, or a custom size. The workbench dispatches it hour by hour for self-consumption, and the Savings step runs the bill with and without it.</p>
+        <div class="notes">
+          <div class="note" data-n="1" tabindex="0"><span class="k">1</span><h4>Size, and power with it</h4><p>Power follows at kW = kWh ÷ 2, so 10 kWh is 5 kW. A capacity sweep marks the knee where extra kilowatt-hours stop paying back.</p></div>
+          <div class="note" data-n="2" tabindex="0"><span class="k">2</span><h4>Assumptions, locked and shown</h4><p>Round-trip efficiency 90&nbsp;%, depth 90&nbsp;% and a 50&nbsp;% starting charge are labelled assumed and cannot be moved.</p></div>
+          <div class="note" data-n="3" tabindex="0"><span class="k">3</span><h4>Four numbers for the customer</h4><p>Autarky 63.3&nbsp;%, self-consumption 66.0&nbsp;%, 309 full cycles and 6,173 kWh a year through the battery.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ 03 · COMMERCIAL (feature) ═════ -->
+<section class="feature xm" id="commercial" aria-labelledby="com-h">
+  <div class="wrap">
+    <div class="sh sh--stack">
+      <span class="label" data-rv><span class="idx">03</span>Commercial and industrial</span>
+      <div class="sh__t">
+        <h2 class="h2" id="com-h" data-rv>A 301&nbsp;kWp roof, checked string by string.</h2>
+        <p class="lede" data-rv style="--i:1">Flat roofs take racks at 10° to start, with row-to-row shading modelled. The workbench then sizes the strings, runs every electrical check and writes a 20-section engineering report.</p>
+      </div>
+    </div>
+  </div>
+  <div class="wide feature__media" data-hs data-hs-zoom="1.8">
+    <figure data-rv="fade">
+      <div class="shot" data-zoom>
+        <img src="assets/shots/jkt-02-roof-1400.webp" srcset="assets/shots/jkt-02-roof-1400.webp 1400w, assets/shots/jkt-02-roof.webp 2400w" sizes="(max-width:1600px) 100vw, 1560px" width="2400" height="1500" alt="Studio step 2 on the Cikarang warehouse example: a flat roof with 700 of 1,300 panels in rack rows at a 10 degree tilt, the Indonesia setback rule, the outline on the map and the rows in 3-D" loading="lazy" decoding="async">
+        <button type="button" class="hs" data-n="1" style="--x:21%; --y:27%" aria-label="1: Setback rule">1</button>
+        <button type="button" class="hs" data-n="2" style="--x:9.5%; --y:46.7%" aria-label="2: Rack tilt">2</button>
+        <button type="button" class="hs" data-n="3" style="--x:14.5%; --y:68.2%" aria-label="3: Panels on the face">3</button>
+        <button type="button" class="hs" data-n="4" style="--x:82%; --y:52%" aria-label="4: Rack rows in 3-D">4</button>
+      </div>
+      <figcaption class="cap"><span><b>Studio</b> · Step 2, roof and layout, split view: the outline on the map, the rack rows in 3-D, 301 kWp</span><span>Cikarang warehouse · example</span></figcaption>
+    </figure>
+    <div class="wrap" style="padding-inline:0">
+      <div class="notes notes--row">
+        <div class="note" data-n="1" tabindex="0"><span class="k">1</span><h4>Setbacks follow the country</h4><p>Indonesia here, at an assumed 0.30 m. Eight rulesets apply per face, per project or per country.</p></div>
+        <div class="note" data-n="2" tabindex="0"><span class="k">2</span><h4>Racks start at 10°</h4><p>The default is marked assumed. Rack tilt is yours to change, like every face's tilt from 0 to 60°.</p></div>
+        <div class="note" data-n="3" tabindex="0"><span class="k">3</span><h4>The roof fits more than you place</h4><p>1,300 panels fit. The fill target is 700: 301 kWp at about 1,404 kWh/kWp.</p></div>
+        <div class="note" data-n="4" tabindex="0"><span class="k">4</span><h4>Rack rows in 3-D</h4><p>The stage draws the rows on satellite ground. Row-to-row shading is modelled for racks.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="wrap sub">
+    <div class="duo">
+      <figure data-rv="fade">
+        <div class="shot shot--zoom" style="--ar:1/1; --w:252.5%; --l:-15.15%; --t:-50.2%" data-zoom>
+          <img src="assets/shots/jkt-wb-electrical-1400.webp" srcset="assets/shots/jkt-wb-electrical-1400.webp 1400w, assets/shots/jkt-wb-electrical.webp 2400w" sizes="(max-width:980px) 250vw, 140vw" width="2400" height="1500" alt="Workbench electrical on the Cikarang warehouse example, engineering checks: Voc cold 962.6 V against 1,000 V, Vmp hot 609.9 V against a 200 V MPPT floor, Vmp cold 800.9 V against 1,000 V, Isc times 1.25 at 35.46 A against 40 A on all 15 MPPT inputs, DC:AC 1.00, all 700 modules in 30 strings" loading="lazy" decoding="async">
+        </div>
+        <figcaption class="cap"><span><b>Workbench</b> · Electrical, the engineering checks, every one passing</span><span>Cikarang warehouse · example · click to open full size</span></figcaption>
+      </figure>
+      <div class="duo__side" data-rv style="--i:1">
+        <span class="label">Cikarang warehouse · example</span>
+        <dl class="spec">
+          <dt>Inverters</dt><dd>3 × 100 kW<em>DC:AC 1.00</em></dd>
+          <dt>Strings</dt><dd>30<em>of 23 and 24 modules</em></dd>
+          <dt>Isc × 1.25</dt><dd>35.46 A<em>limit 40, all 15 inputs</em></dd>
+          <dt>Design low</dt><dd>14&nbsp;°C<em>estimated</em></dd>
+          <dt>Energy P50 · P90</dt><dd>422,661 · <span class="sky">370,615</span><em>kWh/yr</em></dd>
+          <dt>Bill before → after</dt><dd>Rp 633.99 M → Rp 28.73 M</dd>
+          <dt>Payback · IRR</dt><dd class="sol">5.1 yr · 20.3&nbsp;%</dd>
+        </dl>
+        <p class="small">Auto picks the smallest unit with DC:AC up to 1.4, or compare eight generic models, 3 kW single-phase to 100 kW three-phase, on units, DC:AC and clipping from the simulated year. Cables are sized to 1&nbsp;% DC and 1.5&nbsp;% AC drop over assumed runs of 30 m and 10 m.</p>
+        <a class="tlink tlink--sol" href="science.html#electrical">How each check is computed <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ 04 · FARMS (split, reversed) ═════ -->
+<section class="sec xm sec--band" id="farms" aria-labelledby="farm-h">
+  <div class="wrap">
+    <div class="split split--rev">
+      <div class="split__media">
+        <figure data-rv="fade">
+          <div class="shot shot--crop" style="--ar:7/6; --op:100% 50%" data-zoom>
+            <img src="assets/shots/bav-03-roof-3d-1400.webp" srcset="assets/shots/bav-03-roof-3d-1400.webp 1400w, assets/shots/bav-03-roof-3d.webp 2400w" sizes="(max-width:980px) 100vw, 60vw" width="2400" height="1500" alt="Studio step 2 on the Bavarian barn example, full 3-D stage: the long gable roof with two rows of panels on the near, south-east slope and one row along the ridge of the far, north-west slope" loading="lazy" decoding="async">
+          </div>
+          <figcaption class="cap"><span><b>Studio</b> · Step 2, roof and layout, 3-D stage: 60 panels on the near, south-east slope, 24 along the far, north-west one</span><span>Bavarian barn · example · click to open full size</span></figcaption>
+        </figure>
+      </div>
+      <div class="split__text" data-rv>
+        <span class="label"><span class="idx">04</span>Farms and rural sites</span>
+        <h2 class="h3" id="farm-h">A barn is a roof like any other.</h2>
+        <p class="body">Each slope is a face with its own yield. On the example barn a 22° gable carries 60 panels on the south-east slope, facing 155°, and 24 on the north-west, facing 335°: 36.12&nbsp;kWp in all.</p>
+        <dl class="spec">
+          <dt>South-east face · 60 panels</dt><dd>1,107<em>kWh/kWp</em></dd>
+          <dt>North-west face · 24 panels</dt><dd>745<em>kWh/kWp</em></dd>
+          <dt>Energy P50 · P90</dt><dd>36,256 · <span class="sky">33,149</span><em>kWh/yr</em></dd>
+          <dt>Payback · IRR</dt><dd class="sol">6.8 yr · 14.9&nbsp;%</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="pair2 sub">
+      <figure data-rv="fade">
+        <div class="shot shot--zoom" style="--ar:2/3; --w:420.2%; --l:-2.52%; --t:-58.5%" data-zoom>
+          <img src="assets/shots/bav-02-roof-1400.webp" srcset="assets/shots/bav-02-roof-1400.webp 1400w, assets/shots/bav-02-roof.webp 2400w" sizes="(max-width:860px) 420vw, 1840px" width="2400" height="1500" alt="Studio step 2 on the Bavarian barn example: roof shape gable, pitch 22 degrees, ridge along the long side, fill target 84 panels, and the two roof faces: south-east, 25.80 kWp, 60 of 216 panels, about 1,107 kWh/kWp; north-west, 10.32 kWp, 24 of 216 panels, about 745 kWh/kWp" loading="lazy" decoding="async">
+        </div>
+        <figcaption class="cap"><span><b>Studio</b> · Step 2, the two roof faces: south-east 60 of 216 panels at ~1,107 kWh/kWp, north-west 24 at ~745</span><span>Bavarian barn · example</span></figcaption>
+      </figure>
+      <figure data-rv="fade" style="--i:1">
+        <div class="shot shot--crop" style="--ar:6/5; --op:21% 0%" data-zoom>
+          <img src="assets/shots/bav-wb-energy-1400.webp" srcset="assets/shots/bav-wb-energy-1400.webp 1400w, assets/shots/bav-wb-energy.webp 2400w" sizes="(max-width:860px) 100vw, 60vw" width="2400" height="1500" alt="Workbench energy on the Bavarian barn example: yearly energy P50 36.3 MWh, P75 34.6, bad-year P90 33.1, performance ratio 78.7 percent, 1,004 kWh/kWp, 36.1 kWp, and the 8,760-hour heatmap of every day by hour" loading="lazy" decoding="async">
+        </div>
+        <figcaption class="cap"><span><b>Workbench</b> · Energy, P50 36.3 MWh · P90 33.1 MWh · PR 78.7&nbsp;% · 1,004 kWh/kWp, every hour of the year</span><span>Bavarian barn · example</span></figcaption>
+      </figure>
+    </div>
+    <p class="small" style="margin-top:24px; max-width:52em" data-rv>The barn's bill falls from € 11,021 to € 3,935 a year on the Germany preset tariff, with a 25-year net value of € 32,928. The 3-D stage and the shading run assume a 6 m eave for a barn until you set it.</p>
+
+    <div class="ground sub">
+      <div data-rv>
+        <span class="label">Open ground</span>
+        <h3 class="h3">Fixed tilt or a tracker, row by row.</h3>
+        <dl class="spec" style="margin-top:18px">
+          <dt>Mounting</dt><dd>fixed tilt · single-axis tracker</dd>
+          <dt>Tracker angle</dt><dd>10–90°<em>60° default · backtracking</em></dd>
+          <dt>Table layouts</dt><dd>1P 2P 3P · 1L 2L 3L 4L</dd>
+          <dt>Lowest module edge</dt><dd>0.2–4<em>m</em></dd>
+          <dt>Ground cover ratio</dt><dd>0.05–0.98<em>0.40 fixed · 0.33 tracker</em></dd>
+        </dl>
+      </div>
+      <div data-rv style="--i:1">
+        <span class="label">Surface and spacing</span>
+        <h3 class="h3">Bifacial, with the ground underneath.</h3>
+        <dl class="spec" style="margin-top:18px">
+          <dt>Ground surfaces</dt><dd>7 presets<em>albedo 0.12–0.60, or custom</em></dd>
+          <dt>Bifacial rear side</dt><dd>modelled<em>10&nbsp;% rear derate, assumed</em></dd>
+          <dt>Boundary clearance</dt><dd>0–20<em>m · 2 m default</em></dd>
+          <dt>No-shade pitch hint</dt><dd>10:00–14:00<em>winter solstice</em></dd>
+          <dt>Standard ↔ bifacial</dt><dd>keeps the layout</dd>
+        </dl>
+      </div>
+    </div>
+    <p class="small" style="margin-top:20px" data-rv>Flat-roof racks share the same row controls.</p>
+  </div>
+</section>
+
+<!-- ═════ 05 · COUNTRY PRESETS (data) ═════ -->
+<section class="sec xm" id="markets" aria-labelledby="mk-h">
+  <div class="wrap">
+    <div class="sh">
+      <span class="label" data-rv><span class="idx">05</span>Country presets</span>
+      <div class="sh__t">
+        <h2 class="h2" id="mk-h" data-rv>Six countries, ready to edit.</h2>
+        <p class="lede" data-rv style="--i:1">Pick a country and the studio loads a tariff, export terms, a roof pitch, a setback ruleset and prices. Every value is a placeholder marked assumed, and you can change any of them.</p>
+      </div>
+    </div>
+    <div class="tbl-wrap" data-rv>
+      <table class="tbl">
+        <caption class="sr">Country presets: tariff, roof pitch, setback ruleset and price defaults. All values are assumed and editable.</caption>
+        <thead><tr><th scope="col">Country</th><th scope="col">Currency</th><th scope="col">Energy rate<small>per kWh</small></th><th scope="col">Export mode</th><th scope="col">Export credit<small>per kWh</small></th><th scope="col">Default pitch</th><th scope="col">Setback ruleset</th><th scope="col">System price<small>per W</small></th><th scope="col">Battery price<small>per kWh</small></th></tr></thead>
+        <tbody>
+          <tr><td>South Africa</td><td class="num">ZAR</td><td class="num">2.65</td><td>Net billing</td><td class="num">0.85</td><td class="num">26°</td><td>South Africa<em>0.30 m assumed</em></td><td class="num">15</td><td class="num">12,000</td></tr>
+          <tr><td>Germany</td><td class="num">EUR</td><td class="num">0.32</td><td>Net billing</td><td class="num">0.08</td><td class="num">35°</td><td>Germany<em>0.30 m assumed</em></td><td class="num">1.30</td><td class="num">750</td></tr>
+          <tr><td>Indonesia</td><td class="num">IDR</td><td class="num">1,500</td><td>Net metering</td><td class="num n">–</td><td class="num">15°</td><td>Indonesia<em>0.30 m assumed</em></td><td class="num">10,000</td><td class="num">11,000,000</td></tr>
+          <tr><td>United States</td><td class="num">USD</td><td class="num">0.15</td><td>Net billing</td><td class="num">0.05</td><td class="num">30°</td><td>US IFC 2021<em>0.91 m</em></td><td class="num">1.10</td><td class="num">700</td></tr>
+          <tr><td>United Kingdom</td><td class="num">GBP</td><td class="num">0.28</td><td>Net billing</td><td class="num">0.06</td><td class="num">35°</td><td>UK / EU<em>0.30 m assumed</em></td><td class="num">1.20</td><td class="num">600</td></tr>
+          <tr><td>Australia</td><td class="num">AUD</td><td class="num">0.30</td><td>Net billing</td><td class="num">0.05</td><td class="num">22.5°</td><td>Australia<em>0.30 m assumed</em></td><td class="num">1.40</td><td class="num">1,100</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mk-notes">
+      <p class="small" data-rv>Eight setback rulesets: two US fire-code sets at 0.91&nbsp;m (US IFC 2021 and US California) and six regional sets at an assumed 0.30&nbsp;m (generic, UK / EU, Australia, Germany, South Africa and Indonesia). Indonesia nets imports and exports each month, so it has no separate export credit.</p>
+      <p class="small" data-rv style="--i:1">System cost is kWp × price per watt, plus battery kWh × price per kWh. Elsewhere the pitch default is 15° for IN, ID, BR, PH, MY, TH and VN, 5° for AE and SA, and 25° everywhere else.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ ENDCAP ═════ -->
+<section class="endcap" aria-labelledby="end-h">
+  <div class="wrap endcap__in">
+    <div class="endcap__copy">
+      <span class="label">Your roof next</span>
+      <h2 class="h2" id="end-h">Start with the roof in front of you.</h2>
+      <p class="lede">House, warehouse or barn: the same studio designs it, proves the yield and prices it in your market.</p>
+      <div class="row"><a class="btn btn--p btn--lg" href="start.html">Request access <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn btn--g btn--lg" href="start.html#demo">Book a demo</a></div>
+    </div>
+    <div class="endcap__media">
+      <figure>
+        <div class="shot shot--crop" style="--ar:6/5; --op:21% 50%" data-zoom>
+          <img src="assets/shots/jkt-wb-twin-1400.webp" srcset="assets/shots/jkt-wb-twin-1400.webp 1400w, assets/shots/jkt-wb-twin.webp 2400w" sizes="(max-width:980px) 100vw, 60vw" width="2400" height="1500" alt="Workbench 3-D twin of the Cikarang warehouse example: the long flat roof with 700 rack-mounted panels on satellite ground, the camera, shadow, sun path and play-year controls above it and the year timeline below" loading="lazy" decoding="async">
+        </div>
+        <figcaption class="cap"><span><b>Workbench</b> · 3-D twin, 21 June at 08:30 local solar time, shadows on</span><span>Cikarang warehouse · 301 kWp · example</span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer data-ha-foot></footer>
+
+<script>
+/* Per-face yield chart: HA.chart at the plot's real pixel size, .ch-* marks, read-out on hover and on the arrow keys. */
+document.addEventListener('DOMContentLoaded', function(){
+'use strict';
+if (!window.HA || !HA.chart) return;
+const d = document, S = HA.svg, fig = d.getElementById('c-faces'), plot = fig.querySelector('.chart__plot'), rd = fig.querySelector('.readout'), rest = rd.innerHTML;
+const nf = v => v.toLocaleString('en-US');
+const T = (p, cls, x, y, s, a) => { const e = S('text', { class: cls, x: +x.toFixed(1), y: +y.toFixed(1), 'text-anchor': a || 'start' }, p); e.textContent = s; return e; };
+const rows = [
+  { l: 'North face · 10°', v: 1737, kwh: 6723, n: 9, cls: 'ch-bar--sol' },
+  { l: 'West face · 280°', v: 1539, kwh: 7281, n: 11, cls: 'ch-bar--sol' },
+  { l: 'Whole roof', v: 1628, kwh: 14004, n: 20, cls: 'ch-bar--ref' }];
+const st = {}; let cur = null;
+const show = i => { cur = i; fig.classList.toggle('is-hover', i != null);
+  if (i == null || !st.hl){ rd.innerHTML = rest; return; }
+  const r = rows[i]; st.hl.setAttribute('y', st.top + i * st.rh); st.hl.setAttribute('height', st.rh);
+  rd.innerHTML = '<b>' + r.l + '</b> · ' + r.n + ' panels · <b>' + nf(r.kwh) + '</b> kWh a year · <b>' + nf(r.v) + '</b> kWh/kWp'; };
+const pick = e => { const b = plot.getBoundingClientRect(), i = Math.floor((e.clientY - b.top - st.top) / st.rh); return i >= 0 && i < rows.length ? i : null; };
+plot.addEventListener('pointermove', e => show(pick(e)));
+plot.addEventListener('pointerdown', e => show(pick(e)));
+plot.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') show(null); });
+plot.addEventListener('blur', () => show(null));
+plot.addEventListener('keydown', e => { const k = e.key; let i;
+  if (k === 'ArrowDown' || k === 'ArrowRight') i = cur == null ? 0 : Math.min(rows.length - 1, cur + 1);
+  else if (k === 'ArrowUp' || k === 'ArrowLeft') i = cur == null ? 0 : Math.max(0, cur - 1);
+  else if (k === 'Home') i = 0; else if (k === 'End') i = rows.length - 1; else if (k === 'Escape') i = null; else return;
+  e.preventDefault(); show(i); });
+HA.chart(plot, ({ svg, w, h }) => {
+  const wide = w >= 560, lw = wide ? Math.min(220, Math.round(w * .3)) : 0, rh = wide ? 44 : 56, top = 2, ax = top + rows.length * rh;
+  if (Math.abs(h - (ax + 28)) > 1){ plot.style.height = (ax + 28) + 'px'; return; }
+  const x = HA.scale(0, 2000, lw, w - (wide ? 150 : 4));
+  st.top = top; st.rh = rh; st.hl = S('rect', { class: 'ch-hl', x: 0, y: 0, width: w, height: 0 }, svg);
+  [0, 500, 1000, 1500, 2000].forEach((v, j) => { S('line', { class: 'ch-grid', x1: x(v), x2: x(v), y1: top, y2: ax }, svg); T(svg, 'ch-t', x(v), ax + 18, nf(v), j === 0 ? 'start' : 'middle'); });
+  S('line', { class: 'ch-axis', x1: lw, x2: lw, y1: top, y2: ax }, svg);
+  rows.forEach((r, i) => { const t = top + i * rh, yc = wide ? t + rh / 2 : t + rh - 17, vl = nf(r.v) + ' · ' + nf(r.kwh) + ' kWh';
+    if (wide){ T(svg, 'ch-a', 0, yc + 4, r.l); T(svg, 'ch-l', x(r.v) + 10, yc + 4, vl); }
+    else { T(svg, 'ch-a', 0, t + 19, r.l); T(svg, 'ch-l', w, t + 19, vl, 'end'); }
+    S('rect', { class: r.cls, x: lw, y: yc - 6, width: x(r.v) - lw, height: 12 }, svg); });
+  if (cur != null) show(cur);
+});
+});
+</script>
+</body>
+</html>
