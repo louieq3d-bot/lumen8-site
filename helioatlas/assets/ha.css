@@ -106,6 +106,9 @@ ol,ul{padding:0; list-style:none}
 .nav__links a[aria-current="page"]{color:var(--fg)}
 .nav__end{margin-left:auto; display:flex; align-items:center; gap:8px}
 .nav__end .lnk{font-size:14px; color:var(--fg-2); padding:8px 12px} .nav__end .lnk:hover{color:var(--fg)}
+.nav__lang{height:32px; padding:0 8px; border-radius:8px; background:transparent; color:var(--fg-2); border:1px solid rgba(255,255,255,.14); font:inherit; font-size:13px; cursor:pointer; max-width:150px}
+.nav__lang:hover{color:var(--fg)} .nav__lang option{color:#111}
+.sheet .nav__lang{margin-top:12px; height:40px; max-width:none; width:100%}
 .nav__burger{display:none; width:40px; height:40px; position:relative; border-radius:8px}
 .nav__burger span{position:absolute; left:11px; width:18px; height:1.5px; background:var(--fg); transition:transform .35s var(--ease), opacity .2s}
 .nav__burger span:nth-child(1){top:15px} .nav__burger span:nth-child(2){top:23px}
@@ -117,7 +120,7 @@ ol,ul{padding:0; list-style:none}
 .sheet > a[aria-current]{color:var(--sol)}
 .sheet .row{margin-top:24px}
 .nav.is-open + .sheet{opacity:1; visibility:visible; transition:opacity .35s var(--ease)}
-@media (max-width:900px){ .nav__links, .nav__end .lnk{display:none} .nav__burger{display:block} .nav__end .btn{display:none} }
+@media (max-width:900px){ .nav__links, .nav__end .lnk, .nav__end .nav__lang{display:none} .nav__burger{display:block} .nav__end .btn{display:none} }
 
 /* ── buttons ──────────────────────────────────────────────────────────────────────────────── */
 .btn{display:inline-flex; align-items:center; justify-content:center; gap:10px; height:44px; padding:0 20px; border-radius:8px; font:500 15px/1 var(--f); letter-spacing:-.01em;

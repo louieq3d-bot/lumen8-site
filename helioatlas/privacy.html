@@ -67,11 +67,11 @@
 <!-- ═════ THE POLICY ═════ -->
 <section class="sec xm" id="policy" aria-label="What this site stores and sends">
   <div class="wrap grid">
-    <div class="c-3"><span class="label">Updated 9 October 2026</span></div>
+    <div class="c-3"><span class="label">Updated 16 October 2026</span></div>
     <div class="c-9">
       <div class="essay">
         <p class="pull">Nothing you type into this site leaves your browser.</p>
-        <p>This page covers the code of the pages in this site's menu. It does not cover the server that delivers them, or the HelioAtlas studio itself.</p>
+        <p>This page covers the code of the pages in this site's menu and, in the last part, your account in the HelioAtlas studio at app.helioatlas.io. It does not cover the server that delivers this site.</p>
 
         <h2 class="h3" id="kept">The forms keep your entry here</h2>
         <p>The two forms on the start page, Request access and Book a demo, are not yet connected to an inbox, so submitting one sends nothing. The entry is kept in your browser's local storage under one key, <code>ha.forms</code>, which holds your 20 most recent entries. Each records the form, the time, the page and what you filled in:</p>
@@ -86,6 +86,16 @@
 
         <h2 class="h3" id="loads">What loads from where</h2>
         <p>Pages, styles, scripts, fonts, images and films are served from this site itself, with one exception: the 3-D scene at the top of the home page loads a 3-D graphics library from a public content-delivery network. On that page your browser requests the script from that network's servers and, as with any web request, sends your IP address and the name of your browser. The scene's terrain and imagery files come from this site.</p>
+
+        <h2 class="h3" id="account">Your studio account</h2>
+        <p>When you start a free trial, the studio at app.helioatlas.io keeps what it needs to run your account, on HelioAtlas's own server:</p>
+        <ul>
+          <li><strong>You:</strong> name, work email, company, country, the language you picked, and a one-way scrypt hash of your password. The password itself is never stored.</li>
+          <li><strong>Signing in:</strong> one cookie, <code>ha_sid</code>, keeps you signed in for 30 days. Scripts cannot read it and it is sent only to app.helioatlas.io. The server keeps a hash of it, the time and your IP address for that session.</li>
+          <li><strong>Your work:</strong> the projects and proposals your company saves, and a monthly count of designs and searches for the plan limits.</li>
+          <li><strong>Email:</strong> we write only to confirm your address, to reset your password, or to deliver a colleague's invitation.</li>
+        </ul>
+        <p>Address searches go to OpenStreetMap's Photon and Nominatim services through our server, so they see our server, not you. Weather for a design comes from the European Commission's PVGIS service, or from Open-Meteo where PVGIS has no data, asked by our server with the site's coordinates only. Traffic to the studio passes through Cloudflare's network. To close your account and delete its data, write to <a href="mailto:hello@helioatlas.io">hello@helioatlas.io</a>.</p>
 
         <h2 class="h3" id="clear">How to clear it</h2>
         <p>Press the button below, or clear this site's stored data in your browser's settings. A private browsing session keeps nothing once you close it.</p>
@@ -112,7 +122,7 @@
       <span class="label">HelioAtlas</span>
       <h2 class="h2" id="end-h">Back to the roofs.</h2>
       <p class="lede">See what the studio does with a roof, or request access to try it on your own.</p>
-      <div class="row"><a class="btn btn--p btn--lg" href="start.html">Request access <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn btn--g btn--lg" href="start.html#demo">Book a demo</a></div>
+      <div class="row"><a class="btn btn--p btn--lg" href="https://app.helioatlas.io/?signup=1">Start free trial <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="btn btn--g btn--lg" href="start.html#demo">Book a demo</a></div>
     </div>
     <div class="endcap__media">
       <nav class="next" aria-label="Elsewhere on this site">

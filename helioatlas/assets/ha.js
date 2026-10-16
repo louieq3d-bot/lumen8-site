@@ -18,23 +18,52 @@
   const MARK = '<svg viewBox="12 12 96 96" aria-hidden="true" focusable="false"><defs><linearGradient id="ha-mark-g" gradientUnits="userSpaceOnUse" x1="0" y1="14" x2="0" y2="106">' +
     '<stop offset="0" stop-color="#FFD25A"/><stop offset=".5" stop-color="#FF7A1A"/><stop offset="1" stop-color="#E2291F"/></linearGradient></defs>' +
     '<path d="M15.46 71.5A46 46 0 1 1 104.54 71.5ZM17.06 76.5L102.94 76.5A46 46 0 0 1 96.5 88L23.5 88A46 46 0 0 1 17.06 76.5ZM88.64 96A46 46 0 0 1 31.36 96Z" fill="url(#ha-mark-g)"/></svg>';
+  /* Words the script writes. A translated page sets window.HA_L10N (same keys) before this file loads,
+     plus HA_LANG (its code), HA_BASE ('/hi') and HA_LANGS ([{code, native, href}]) for the language menu. */
+  const L = Object.assign({
+    product: 'Product', solutions: 'Solutions', science: 'Science', pricing: 'Pricing', company: 'Company',
+    demo: 'Book a demo', signin: 'Sign in', trial: 'Start free trial', menu: 'Menu', main: 'Main', home: 'HelioAtlas home',
+    language: 'Language', tagline: 'Solar prospecting and design. Find the roof, design it, prove the yield, price it, close it.',
+    f_prospect: 'Prospect', f_design: 'Design', f_workbench: 'Engineering workbench', f_energy: 'Energy and P90', f_savings: 'Savings',
+    f_proposal: 'Proposal', f_residential: 'Residential installers', f_commercial: 'Commercial and industrial', f_farms: 'Farms and rural',
+    f_storage: 'Solar and battery', f_markets: 'Country presets', f_method: 'Method', f_p90: 'P50 and P90', f_sunpath: 'Sun path',
+    f_losses: 'Losses', f_electrical: 'Electrical checks', f_about: 'About', f_contact: 'Contact', f_privacy: 'Privacy',
+    rights: 'HelioAtlas. Example projects and figures are labelled as examples.',
+    sun_now: 'Sun now over the Johannesburg example house', sun_el: 'elevation', sun_az: 'azimuth', sun_below: 'below the horizon',
+    play: 'Play', pause: 'Pause', play_film: 'Play the film', pause_film: 'Pause the film', close: 'Close',
+  }, W.HA_L10N || {});
+  const BASE = W.HA_BASE || '';
+  /* The app: sign in, or start the free trial; a translated page opens the app in its own language. */
+  const APP = 'https://app.helioatlas.io/';
+  const HL = W.HA_LANG && W.HA_LANG !== 'en' ? '#/helioatlas?hl=' + encodeURIComponent(W.HA_LANG) : '';
+  const SIGNIN = APP + HL, TRIAL = APP + '?signup=1' + HL;
   /* the wordmark is outlined paths in one cached file: "heli" + sun + "atlas" */
-  const LOGO = '<a class="logo" href="index.html" aria-label="HelioAtlas home"><img src="assets/brand/helioatlas-logo-dark.svg" alt="" width="144" height="19"></a>';
-  const PAGES = [['product.html', 'Product'], ['solutions.html', 'Solutions'], ['science.html', 'Science'], ['pricing.html', 'Pricing'], ['company.html', 'Company']];
-  const here = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  const LOGO = '<a class="logo" href="' + (BASE ? BASE + '/' : 'index.html') + '" aria-label="' + L.home + '"><img src="assets/brand/helioatlas-logo-dark.svg" alt="" width="144" height="19"></a>';
+  const PAGES = [['product.html', L.product], ['solutions.html', L.solutions], ['science.html', L.science], ['pricing.html', L.pricing], ['company.html', L.company]];
+  const pageName = (p) => (String(p).split('#')[0].split('/').pop() || 'index').replace(/\.html$/, '').toLowerCase() || 'index';
+  const here = pageName(location.pathname);
+  const href = (h) => BASE + h;
+  const cur = (h) => (pageName(h) === here ? ' aria-current="page"' : '');
+  function langMenu(){
+    const langs = W.HA_LANGS;
+    if (!Array.isArray(langs) || langs.length < 2) return '';
+    return '<select class="nav__lang" aria-label="' + L.language + '" onchange="location.href=this.value">' +
+      langs.map(x => '<option value="' + x.href + '"' + (x.code === W.HA_LANG ? ' selected' : '') + ' lang="' + x.code + '">' + x.native + '</option>').join('') + '</select>';
+  }
 
   /* ── nav + footer ─────────────────────────────────────────────────────────────────────── */
   function renderShell(){
     const nav = d.querySelector('[data-ha-nav]');
     if (nav && !nav.dataset.done){
       nav.dataset.done = '1'; nav.classList.add('nav');
-      const links = PAGES.map(([h, t]) => '<a href="' + h + '"' + (h === here ? ' aria-current="page"' : '') + '>' + t + '</a>').join('');
-      nav.innerHTML = '<div class="wrap nav__in">' + LOGO + '<nav class="nav__links" aria-label="Main">' + links + '</nav>' +
-        '<div class="nav__end"><a class="lnk" href="start.html#demo">Book a demo</a><a class="btn btn--p btn--sm" href="start.html">Request access ' + ARROW + '</a>' +
-        '<button class="nav__burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="ha-sheet"><span></span><span></span></button></div></div>';
+      const links = PAGES.map(([h, t]) => '<a href="' + href(h) + '"' + cur(h) + '>' + t + '</a>').join('');
+      nav.innerHTML = '<div class="wrap nav__in">' + LOGO + '<nav class="nav__links" aria-label="' + L.main + '">' + links + '</nav>' +
+        '<div class="nav__end">' + langMenu() + '<a class="lnk" href="' + SIGNIN + '">' + L.signin + '</a><a class="btn btn--p btn--sm" href="' + TRIAL + '">' + L.trial + ' ' + ARROW + '</a>' +
+        '<button class="nav__burger" type="button" aria-label="' + L.menu + '" aria-expanded="false" aria-controls="ha-sheet"><span></span><span></span></button></div></div>';
       const sheet = d.createElement('div'); sheet.className = 'sheet'; sheet.id = 'ha-sheet';
-      sheet.innerHTML = PAGES.map(([h, t]) => '<a href="' + h + '"' + (h === here ? ' aria-current="page"' : '') + '>' + t + '</a>').join('') +
-        '<div class="row"><a class="btn btn--p" href="start.html">Request access ' + ARROW + '</a><a class="btn btn--g" href="start.html#demo">Book a demo</a></div>';
+      sheet.innerHTML = PAGES.map(([h, t]) => '<a href="' + href(h) + '"' + cur(h) + '>' + t + '</a>').join('') +
+        '<div class="row"><a class="btn btn--p" href="' + TRIAL + '">' + L.trial + ' ' + ARROW + '</a><a class="btn btn--g" href="' + SIGNIN + '">' + L.signin + '</a></div>' +
+        '<a href="' + href('start.html') + '#demo">' + L.demo + '</a>' + langMenu();
       nav.after(sheet);
       const burger = nav.querySelector('.nav__burger');
       burger.addEventListener('click', () => {
@@ -47,14 +76,14 @@
     const foot = d.querySelector('[data-ha-foot]');
     if (foot && !foot.dataset.done){
       foot.dataset.done = '1'; foot.classList.add('foot');
-      const col = (t, items) => '<div><h6>' + t + '</h6><ul>' + items.map(([h, x]) => '<li><a href="' + h + '">' + x + '</a></li>').join('') + '</ul></div>';
+      const col = (t, items) => '<div><h6>' + t + '</h6><ul>' + items.map(([h, x]) => '<li><a href="' + href(h) + '">' + x + '</a></li>').join('') + '</ul></div>';
       foot.innerHTML = '<div class="wrap"><div class="foot__top"><div class="foot__brand">' + LOGO +
-        '<p>Solar prospecting and design. Find the roof, design it, prove the yield, price it, close it.</p></div>' +
-        col('Product', [['product.html#prospect', 'Prospect'], ['product.html#design', 'Design'], ['product.html#workbench', 'Engineering workbench'], ['product.html#energy', 'Energy and P90'], ['product.html#savings', 'Savings'], ['product.html#proposal', 'Proposal']]) +
-        col('Solutions', [['solutions.html#residential', 'Residential installers'], ['solutions.html#commercial', 'Commercial and industrial'], ['solutions.html#farms', 'Farms and rural'], ['solutions.html#storage', 'Solar and battery'], ['solutions.html#markets', 'Country presets']]) +
-        col('Science', [['science.html#method', 'Method'], ['science.html#p90', 'P50 and P90'], ['science.html#sunpath', 'Sun path'], ['science.html#losses', 'Losses'], ['science.html#electrical', 'Electrical checks']]) +
-        col('Company', [['company.html', 'About'], ['pricing.html', 'Pricing'], ['start.html#demo', 'Book a demo'], ['company.html#contact', 'Contact'], ['privacy.html', 'Privacy']]) +
-        '</div><div class="foot__bot"><span>© ' + new Date().getFullYear() + ' HelioAtlas. Example projects and figures are labelled as examples.</span>' +
+        '<p>' + L.tagline + '</p></div>' +
+        col(L.product, [['product.html#prospect', L.f_prospect], ['product.html#design', L.f_design], ['product.html#workbench', L.f_workbench], ['product.html#energy', L.f_energy], ['product.html#savings', L.f_savings], ['product.html#proposal', L.f_proposal]]) +
+        col(L.solutions, [['solutions.html#residential', L.f_residential], ['solutions.html#commercial', L.f_commercial], ['solutions.html#farms', L.f_farms], ['solutions.html#storage', L.f_storage], ['solutions.html#markets', L.f_markets]]) +
+        col(L.science, [['science.html#method', L.f_method], ['science.html#p90', L.f_p90], ['science.html#sunpath', L.f_sunpath], ['science.html#losses', L.f_losses], ['science.html#electrical', L.f_electrical]]) +
+        col(L.company, [['company.html', L.f_about], ['pricing.html', L.pricing], ['start.html#demo', L.demo], ['company.html#contact', L.f_contact], ['privacy.html', L.f_privacy]]) +
+        '</div><div class="foot__bot"><span>© ' + new Date().getFullYear() + ' ' + L.rights + '</span>' +
         '<span class="foot__sun" id="ha-sun" aria-live="off"></span></div></div>';
     }
   }
@@ -78,7 +107,7 @@
   function tickSun(){
     const el = d.getElementById('ha-sun'); if (!el) return;
     const s = sun(-26.138, 28.019);
-    el.innerHTML = 'Sun now over the Johannesburg example house · elevation <b>' + s.el.toFixed(1) + '°</b> · azimuth <b>' + s.az.toFixed(1) + '°</b>' + (s.el < 0 ? ' · below the horizon' : '');
+    el.innerHTML = L.sun_now + ' · ' + L.sun_el + ' <b>' + s.el.toFixed(1) + '°</b> · ' + L.sun_az + ' <b>' + s.az.toFixed(1) + '°</b>' + (s.el < 0 ? ' · ' + L.sun_below : '');
   }
 
   /* ── reveals, drawings, count-ups ────────────────────────────────────────────────────── */
@@ -217,7 +246,7 @@
       const prog = f.querySelector('.film__prog') || f.appendChild(Object.assign(d.createElement('div'), { className: 'film__prog', innerHTML: '<i></i>' }));
       const chaps = f.id ? [...d.querySelectorAll('.chaps[data-film="' + f.id + '"] [data-t]')] : [];
       let held = false;
-      const paint = () => { ctl.innerHTML = v.paused ? PLAY + 'Play' : PAUSE + 'Pause'; ctl.setAttribute('aria-label', v.paused ? 'Play the film' : 'Pause the film'); };
+      const paint = () => { ctl.innerHTML = v.paused ? PLAY + L.play : PAUSE + L.pause; ctl.setAttribute('aria-label', v.paused ? L.play_film : L.pause_film); };
       ctl.addEventListener('click', () => { if (v.paused){ held = false; v.play().catch(() => {}); } else { held = true; v.pause(); } });
       v.addEventListener('play', paint); v.addEventListener('pause', paint); paint();
       v.addEventListener('timeupdate', () => {
@@ -245,7 +274,7 @@
       const img = z.tagName === 'IMG' ? z : z.querySelector('img'); if (!img) return;
       if (!dlg){
         dlg = d.createElement('dialog'); dlg.className = 'lb';
-        dlg.innerHTML = '<img alt=""><button class="lb__x" type="button">Close</button><p class="lb__cap"></p>';
+        dlg.innerHTML = '<img alt=""><button class="lb__x" type="button">' + L.close + '</button><p class="lb__cap"></p>';
         d.body.appendChild(dlg);
         dlg.addEventListener('click', ev => { if (ev.target === dlg || ev.target.closest('.lb__x') || ev.target.tagName === 'IMG') dlg.close(); });
         dlg.addEventListener('close', () => { if (back) back.focus(); });
