@@ -107,7 +107,8 @@
      with an endpoint, success is shown only after a 2xx and an error otherwise. CONTACT is the one address already
      published on lumen8.ai; swap it here (one place) when AgrosIQ has its own inbox. ── */
   const CONTACT = 'hello@lumen8.ai';
-  const LEAD_ENDPOINT = window.AGQ_LEAD_ENDPOINT || '';
+  // agrosiq.com has a form backend (the site Worker's POST /api/lead mails the lead); any other host keeps the mail-app fallback
+  const LEAD_ENDPOINT = window.AGQ_LEAD_ENDPOINT || (/(^|\.)agrosiq\.com$/.test(location.hostname) ? '/api/lead' : '');
   const mailtoHref = (subject, fields) => 'mailto:' + CONTACT + '?subject=' + encodeURIComponent(subject) +
     '&body=' + encodeURIComponent(Object.keys(fields).filter(k => fields[k]).map(k => k + ': ' + fields[k]).join('\n'));
   /* sendLead(kind, subject, fields) → {via:'post', ok:true} after a 2xx · {via:'post', ok:false, error} otherwise ·
