@@ -234,7 +234,7 @@
     rail.forEach((r, k) => { const kk = steps[k] && steps[k].querySelector('.k'); if (kk && !r.querySelector('b')) { const b = document.createElement('b'); b.textContent = kk.textContent.replace(/^\d+\s*[·.]\s*/, ''); r.appendChild(b); } r.setAttribute('role', 'tab'); r.setAttribute('title', kk ? kk.textContent : ''); r.addEventListener('click', () => { const total = pipe.offsetHeight - window.innerHeight; const y = pipe.getBoundingClientRect().top + window.scrollY + total * ((k + .5) / n); window.scrollTo({ top: y, behavior: 'smooth' }); }); });
     // each step gets one viewport of scroll
     const spacer = pipe.querySelector('.pipe-spacer');
-    if (spacer) spacer.style.height = (n * 80) + 'svh';
+    if (spacer) spacer.style.height = (n * 60) + 'svh';
     let current = -1;
     const set = (i) => {
       if (i === current) return; current = i;
