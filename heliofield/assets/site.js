@@ -1,4 +1,4 @@
-/* Helioflux Agrivoltaic Studio — shared site behaviour. One source for the brand, the nav and the footer,
+/* HelioField Agrivoltaic Studio — shared site behaviour. One source for the brand, the nav and the footer,
    so every page stays identical. Pages declare <body data-page="…"> and include
    <header id="site-nav"></header> … <footer id="site-foot"></footer>.
    v7: smooth scroll (Lenis), one scroll loop for every scroll-linked effect, headline reveals, word scrub,
@@ -9,7 +9,7 @@
   root.classList.add('js');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const fine = matchMedia('(pointer: fine)').matches;
-  const BRAND = { name: 'Helioflux', product: 'Agrivoltaic Studio', full: 'Helioflux Agrivoltaic Studio' };
+  const BRAND = { name: 'HelioField', product: 'Agrivoltaic Studio', full: 'HelioField Agrivoltaic Studio' };
   const PAGES = [
     ['product',    'product.html',    'Product'],
     ['features',   'features.html',   'Features'],
@@ -20,7 +20,7 @@
   ];
   const page = document.body.dataset.page || '';
   const cur = (k) => k === page ? ' aria-current="page"' : '';
-  const LOGO = (cls, label) => '<a class="' + cls + '" href="index.html" aria-label="' + label + '"><img class="brand__logo" src="assets/helioflux/helioflux-logo-dark.svg" alt="" width="136" height="16"><span class="brand__prod">' + BRAND.product + '</span></a>';
+  const LOGO = (cls, label) => '<a class="' + cls + '" href="index.html" aria-label="' + label + '"><img class="brand__logo" src="assets/heliofield/heliofield-logo-dark.svg" alt="" width="141" height="16"><span class="brand__prod">' + BRAND.product + '</span></a>';
 
   /* ── nav ── */
   const nav = document.getElementById('site-nav');
@@ -69,7 +69,7 @@
         '<li>PVsyst release notes · HelioScope pricing page · PVcase product page · KU Leuven AgriPV · NLR ADAM</li>' +
         '<li>Internal light measurement, 2026-09-23: 2-D view factor vs 3-D ray-traced parcel</li>' +
       '</ul></details></div>' +
-      '<div class="foot__mark" aria-hidden="true" data-par=".12">HELIOFLUX</div></div>';
+      '<div class="foot__mark" aria-hidden="true" data-par=".12">HELIOFIELD</div></div>';
   }
 
   /* ── smooth scroll ── */

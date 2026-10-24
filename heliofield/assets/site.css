@@ -1,4 +1,4 @@
-/* Helioflux Agrivoltaic Studio — marketing site design system. Layers: v3 instrument, v6 journal, v7 observatory, v9 Helioflux brand.
+/* HelioField Agrivoltaic Studio — marketing site design system. Layers: v3 instrument, v6 journal, v7 observatory, v9 HelioField brand.
    Near-black, monochrome, hairline structure. Colour is reserved for signal (--sunleaf) and for data
    (the studio's fixed data palette: energy, crop, water, money, cost, PAR ramp). No gradient text,
    no glow tiles, no tilted mockups. Every page loads this file; page rules live in the page. */
@@ -601,7 +601,7 @@ html{overflow-x:clip}
 @media (max-width:1100px){ .chain li{grid-template-columns:40px minmax(0,1fr) minmax(0,1fr)!important} .chain__out{grid-column:2 / -1} }
 @media (max-width:700px){ .chain li{grid-template-columns:40px minmax(0,1fr)!important} .chain__p, .chain__out{grid-column:2} }
 
-/* ═══ v10: black ground, Helioflux mark, calmer motion ═══
+/* ═══ v10: black ground, HelioField mark, calmer motion ═══
    One reveal for everything: fade and a short rise, no word splitting, wipes, tilts or sideways slides. */
 :root{ --sunleaf-hover:#5fd096; --sunleaf-dim:#2a8a5c; --sunleaf-glow:rgba(61,187,126,.2); --sunleaf-wash:rgba(61,187,126,.07); --on-sunleaf:#04120b;
   --ease-rv:cubic-bezier(.2,.7,.2,1) }
