@@ -8,11 +8,10 @@
 import { MODULES } from '../catalog.js';
 import { portfolio, jarvis, village, telco, maritime, agri, agrivoltaics } from './scenes-a.js';
 import { twin, utility, wind, geothermal, supply, aqua, hydroponics, hydropower } from './scenes-b.js';
-import { rooftop } from './scenes-c.js';
 
 const SCENES = {
   portfolio, jarvis, energy: village, telco, maritime, agri, agrivoltaics,
-  twin, utility, wind, geothermal, supply, aqua, hydroponics, hydropower, rooftop,
+  twin, utility, wind, geothermal, supply, aqua, hydroponics, hydropower,
 };
 
 export const sceneOf = (id) => {

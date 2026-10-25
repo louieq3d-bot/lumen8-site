@@ -1,7 +1,7 @@
 /* LUMEN8 site - every module on the platform, in the order the wheel shows them.
  *
  * Mirrors the platform's own product list (the Home wheel in the app): the same
- * fifteen modules, the same pitch, plus Rooftop (HelioAtlas, which has its own site). Grouped here by the pillar of sustainable
+ * modules, the same pitch. Grouped here by the pillar of sustainable
  * development each one serves, so the wheel reads as five arcs rather than a
  * list. `scene` names the diorama in ./dioramas/ when it is not the id; `href`
  * is where the site explains the module in depth.
@@ -33,10 +33,6 @@ export const MODULES = [
     href: '/utility-scale.html',
     pitch: 'Draw a boundary anywhere on Earth. Get the tracker layout, the electrical design, the yield, the storage, the cost and the drawing set.',
     does: ['Auto-layout from a boundary', 'Hourly yield and storage dispatch', 'Grid connection and cabling'] },
-  { id: 'rooftop', pillar: 'power', title: 'Rooftop', tag: 'Rooftop solar', status: 'live', sdgs: [7, 13, 9],
-    href: '/helioatlas/',
-    pitch: 'Any roof on Earth, scored. Rank every roof in an area, lay the best out face by face in 3-D, and price the savings with P50 and P90 on every number.',
-    does: ['Every roof in an area scored', 'Face-by-face 3-D layout', 'Hourly yield, savings and proposal'] },
   { id: 'wind', pillar: 'power', title: 'Wind', tag: 'Wind atlas and siting', status: 'live', sdgs: [7, 13],
     href: '/modules.html#wind',
     pitch: 'Wind resource, turbine choice and energy yield from one click on the map, down to the wake each turbine casts on the next.',
@@ -63,10 +59,6 @@ export const MODULES = [
     href: '/modules.html#agriculture',
     pitch: 'Every field from orbit: what is growing, how stressed it is, and what the pumps, mills and cold stores around it need.',
     does: ['Satellite crop monitoring', 'Field boundaries by crop', 'Water and yield signals'] },
-  { id: 'agrivoltaics', pillar: 'land', title: 'Agrivoltaics', tag: 'Crops under solar', status: 'live', sdgs: [2, 7, 15],
-    href: '/modules.html#agrivoltaics',
-    pitch: 'Grow food and power on the same land, with light, shade, water and yield modelled under the panels, and the farmer’s offer priced.',
-    does: ['35 crops, 5 structure types', 'Light, shade and water model', 'Checked against 12 national rule sets'] },
   { id: 'aqua', pillar: 'land', title: 'Aqua', tag: 'Aquaculture', status: 'soon', sdgs: [14, 2],
     href: '/modules.html#aqua',
     pitch: 'On the roadmap: fish and shrimp farms sized and powered, from the water to the market.',
