@@ -1349,3 +1349,38 @@ body{font-size:15.5px;line-height:1.58}
   .section.tight{padding:40px 0}
   .card.big{min-height:260px}
 }
+
+/* ---------- legal and offer pages (tools/pages.py: legal.html, terms.html, privacy.html, dpa.html,
+   subprocessors.html, refunds.html, imprint.html, studies.html) ---------- */
+.doc-page .section.doc{padding-top:clamp(120px,14vw,170px)}
+.doc .h-l{margin:14px 0 18px}
+.doc-updated{font-family:var(--font-m);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:18px 0 0}
+.doc-nav{display:flex;flex-wrap:wrap;gap:8px;margin:26px 0 8px}
+.doc-nav a{font-size:14px;padding:7px 14px;border:1px solid var(--line-2);border-radius:999px;color:var(--ink-2)}
+.doc-nav a[aria-current=page],.doc-nav a:hover{border-color:var(--cyan);color:var(--ink)}
+.doc-body{max-width:78ch;margin-top:34px;line-height:1.7;color:var(--ink-2)}
+.doc-body h2{font-size:clamp(22px,2.2vw,28px);color:var(--ink);margin:44px 0 12px;scroll-margin-top:100px}
+.doc-body p{margin:0 0 14px}
+.doc-body a{color:var(--cyan);text-decoration:underline;text-underline-offset:3px}
+.doc-body ul,.doc-body ol{margin:0 0 16px;padding-left:22px}
+.doc-body li{margin:6px 0}
+.doc-summary{border:1px solid var(--line-2);border-radius:14px;padding:18px 22px;background:rgba(var(--fg-rgb),.03);margin-bottom:8px}
+.doc-table{overflow-x:auto;margin:10px 0 22px}
+.doc-table table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:560px}
+.doc-table th,.doc-table td{border-bottom:1px solid var(--line-2);padding:10px 12px;text-align:left;vertical-align:top}
+.doc-table thead th{color:var(--ink);font-family:var(--font-d);font-weight:600}
+.doc-table tbody th{color:var(--ink);font-weight:500;white-space:nowrap}
+.pending{background:rgba(250,204,21,.16);color:var(--ink);border-radius:4px;padding:0 4px}
+.lead-form{display:grid;gap:14px;max-width:560px;margin:16px 0 18px}
+.lead-form label{display:grid;gap:6px;font-size:14px;color:var(--ink)}
+.lead-form input,.lead-form textarea,.lead-form select{font:inherit;font-size:15px;color:var(--ink);background:rgba(var(--fg-rgb),.04);
+  border:1px solid var(--line-2);border-radius:10px;padding:11px 13px;width:100%}
+.lead-form input:focus,.lead-form textarea:focus,.lead-form select:focus{outline:2px solid var(--cyan);outline-offset:1px}
+.lead-form .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.lead-form .btn{justify-self:start}
+.form-note{font-size:13px;color:var(--muted);margin:0}
+.form-status{min-height:1.4em;margin:0;font-size:14px}
+.form-status.err{color:#f87171}
+.foot-legal{display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:center;padding:14px 0 0;font-size:13px}
+.foot-legal a{color:var(--muted)}
+.foot-legal a:hover{color:var(--ink)}

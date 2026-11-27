@@ -1,0 +1,26 @@
+{
+  // lumen8.ai edge Worker: only POST /api/lead (the Request a study form). Pages are GitHub Pages behind Cloudflare;
+  // this Worker is bound to the zone route lumen8.ai/api/* only, so nothing else changes. Deploy with _edge/deploy.sh.
+  "name": "lumen8-site-edge",
+  "main": "./worker.js",
+  "compatibility_date": "2026-10-01",
+  // Every address the binding may send to must be a VERIFIED destination in Email Routing for lumen8.ai
+  // (Cloudflare dashboard > Email > Email Routing > Destination addresses).
+  "send_email": [{ "name": "LEAD_MAIL", "allowed_destination_addresses": ["sales@lumen8.ai", "louie.q3d@gmail.com"] }],
+  "vars": {
+    "LEAD_TO": "sales@lumen8.ai",
+    "LEAD_TO_FALLBACK": "louie.q3d@gmail.com",
+    "CONSENT_VERSION": "study-form-notice-2026-11-27",
+    "LEAD_HOURLY_MAX": "10"
+  },
+  "d1_databases": [{ "binding": "LEADS_DB", "database_name": "lumen8-leads", "database_id": "fbb852d2-4b94-4a83-8629-c5e811d8a295" }],
+  "ratelimits": [{ "name": "LEAD_RL", "namespace_id": "4108", "simple": { "limit": 5, "period": 60 } }],
+  // one row per sent lead (no personal data), read by EMPIRE's funnel
+  "analytics_engine_datasets": [{ "binding": "LEADS", "dataset": "leads" }],
+  "routes": [
+    { "pattern": "lumen8.ai/api/*", "zone_name": "lumen8.ai" },
+    { "pattern": "www.lumen8.ai/api/*", "zone_name": "lumen8.ai" }
+  ],
+  "workers_dev": false,
+  "preview_urls": false
+}

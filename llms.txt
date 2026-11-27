@@ -1,0 +1,31 @@
+# Lumen8
+
+> Lumen8 is a geospatial planning engine and a feasibility-study service for clean power and energy access:
+> utility-scale solar and storage, mini-grids and rural electrification programmes. Lumen8 sells fixed-price
+> feasibility studies (pre-feasibility screens, full feasibility studies, programme plans) built on the engine, gives
+> study customers access to the platform at app.lumen8.ai, and offers an agent API (REST and MCP) at api.lumen8.ai.
+
+Results are planning and feasibility estimates that name their data sources and assumptions; they are not a detailed
+engineering design or an independent engineer's report.
+
+## Pages
+
+- [Home](https://lumen8.ai/): what Lumen8 does, the engine and the modules
+- [Feasibility studies](https://lumen8.ai/studies.html): scope, deliverables, timeline, how to request a study
+- [Utility-scale solar and storage](https://lumen8.ai/utility-scale.html): site screening to feasibility for PV and battery plants
+- [Rural electrification](https://lumen8.ai/rural-electrification.html): national village screening, ranking and mini-grid design
+- [Modules](https://lumen8.ai/modules.html): every module of the platform (wind, hydro, geothermal, agriculture, telecoms, maritime and more)
+
+## Legal
+
+- [Terms of service](https://lumen8.ai/terms.html)
+- [Privacy notice](https://lumen8.ai/privacy.html)
+- [Data processing addendum](https://lumen8.ai/dpa.html)
+- [Subprocessors](https://lumen8.ai/subprocessors.html)
+- [Cancellation and refunds](https://lumen8.ai/refunds.html)
+- [Legal notice](https://lumen8.ai/imprint.html)
+
+## Contact
+
+- Studies and sales: sales@lumen8.ai
+- Everything else: hello@lumen8.ai

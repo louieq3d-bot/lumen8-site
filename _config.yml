@@ -1,0 +1,2 @@
+# GitHub Pages (Jekyll): keep the build inputs and tooling out of the published site.
+exclude: [tools, SEO-NOTES.md, README.md]
