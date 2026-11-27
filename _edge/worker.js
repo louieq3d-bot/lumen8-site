@@ -271,11 +271,48 @@ async function lead(req, env, ctx) {
   return json(200, { ok: true }, origin);
 }
 
+/* Security headers for every lumen8.ai page (ESS-QA-02, L8-L-09 for the site): GitHub Pages cannot set response
+   headers, so this Worker (route lumen8.ai/*) adds them on the way out. The CSP allows exactly what the pages load:
+   Google Fonts, three.js from cdnjs, PostHog EU (loader + capture), Cloudflare's own beacon, and blob: for the
+   investor room's decrypted documents. Inline scripts stay allowed (theme switch before first paint, JSON-LD). */
+export const CSP = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://eu-assets.i.posthog.com https://static.cloudflareinsights.com",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "font-src 'self' data: https://fonts.gstatic.com",
+  "img-src 'self' data: blob: https:",
+  "connect-src 'self' https://eu.i.posthog.com https://eu-assets.i.posthog.com https://cloudflareinsights.com",
+  "media-src 'self' data: blob:",
+  "frame-src 'self' blob:",
+  "object-src 'self' blob:",
+  "worker-src 'self' blob:",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+  'upgrade-insecure-requests',
+].join('; ');
+export const SECURITY_HEADERS = {
+  'x-content-type-options': 'nosniff',
+  'referrer-policy': 'strict-origin-when-cross-origin',
+  'permissions-policy': 'camera=(), microphone=(), geolocation=(), payment=(), usb=()',
+  'x-frame-options': 'DENY',
+  'cross-origin-opener-policy': 'same-origin',
+};
+
+/** Pass a page request through to the origin (GitHub Pages) and add the security headers. */
+export async function page(req, upstream = fetch) {
+  const res = await upstream(req);
+  const out = new Response(res.body, res);
+  for (const [k, v] of Object.entries(SECURITY_HEADERS)) out.headers.set(k, v);
+  if ((out.headers.get('content-type') || '').includes('text/html')) out.headers.set('content-security-policy', CSP);
+  return out;
+}
+
 export default {
   async fetch(req, env, ctx) {
     const path = new URL(req.url).pathname;
     if (path === '/api/lead') return lead(req, env, ctx);
     if (path.startsWith('/api/')) return json(404, { ok: false, error: 'not found' });
-    return fetch(req);   // not ours: pass through to the origin (GitHub Pages)
+    return page(req, env && env.UPSTREAM ? env.UPSTREAM : fetch);   // everything else: GitHub Pages + headers
   },
 };

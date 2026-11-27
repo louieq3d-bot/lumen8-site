@@ -11,7 +11,7 @@ export async function resolve(spec, ctx, next) {
   if (spec === 'cloudflare:email') return { url: 'data:text/javascript,' + encodeURIComponent(${JSON.stringify(STUB)}), shortCircuit: true };
   return next(spec, ctx);
 }`));
-const { default: worker, HONEYPOT, LEADS_SCHEMA, _resetSchemaCache } = await import('./worker.js');
+const { default: worker, CSP, page, HONEYPOT, LEADS_SCHEMA, _resetSchemaCache } = await import('./worker.js');
 
 /** In-memory stand-in for the D1 statements the Worker issues. */
 function fakeD1({ failInsert = false, failSchema = false } = {}) {
@@ -259,4 +259,17 @@ test('the schema is valid SQL-shaped text with the columns the insert uses', () 
     assert.match(create, new RegExp(`\\b${c}\\b`));
   }
   assert.doesNotMatch(create, /\bip\s+TEXT/);
+});
+
+test('pages pass through to the origin with security headers; CSP only on HTML', async () => {
+  const html = await worker.fetch(new Request('https://lumen8.ai/studies.html'),
+    { UPSTREAM: async () => new Response('<html></html>', { headers: { 'content-type': 'text/html; charset=utf-8' } }) });
+  assert.equal(await html.text(), '<html></html>');
+  assert.equal(html.headers.get('content-security-policy'), CSP);
+  assert.equal(html.headers.get('x-content-type-options'), 'nosniff');
+  assert.match(CSP, /frame-ancestors 'none'/);
+  assert.match(CSP, /https:\/\/fonts\.googleapis\.com/);
+  const css = await page(new Request('https://lumen8.ai/site.css'), async () => new Response('a{}', { headers: { 'content-type': 'text/css' } }));
+  assert.equal(css.headers.get('content-security-policy'), null);
+  assert.equal(css.headers.get('referrer-policy'), 'strict-origin-when-cross-origin');
 });

@@ -1,6 +1,7 @@
 {
   // lumen8.ai edge Worker: only POST /api/lead (the Request a study form). Pages are GitHub Pages behind Cloudflare;
-  // this Worker is bound to the zone route lumen8.ai/api/* only, so nothing else changes. Deploy with _edge/deploy.sh.
+  // this Worker runs on the zone route lumen8.ai/*: it answers /api/* and passes every page through,
+  // adding the security headers (CSP etc.) that GitHub Pages cannot set. Deploy with _edge/deploy.sh.
   "name": "lumen8-site-edge",
   "main": "./worker.js",
   "compatibility_date": "2026-10-01",
@@ -18,8 +19,8 @@
   // one row per sent lead (no personal data), read by EMPIRE's funnel
   "analytics_engine_datasets": [{ "binding": "LEADS", "dataset": "leads" }],
   "routes": [
-    { "pattern": "lumen8.ai/api/*", "zone_name": "lumen8.ai" },
-    { "pattern": "www.lumen8.ai/api/*", "zone_name": "lumen8.ai" }
+    { "pattern": "lumen8.ai/*", "zone_name": "lumen8.ai" },
+    { "pattern": "www.lumen8.ai/*", "zone_name": "lumen8.ai" }
   ],
   "workers_dev": false,
   "preview_urls": false
